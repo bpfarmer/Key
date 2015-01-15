@@ -14,6 +14,14 @@
 		EFC6BEAE1A6857D500B0EB8F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEAD1A6857D400B0EB8F /* Images.xcassets */; };
 		EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEAF1A6857D500B0EB8F /* LaunchScreen.xib */; };
 		EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */; };
+		EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEC61A6857E000B0EB8F /* Podfile */; };
+		EFC6BED81A68582200B0EB8F /* KCryptError.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BECB1A68582200B0EB8F /* KCryptError.m */; };
+		EFC6BED91A68582200B0EB8F /* KCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BECD1A68582200B0EB8F /* KCryptor.m */; };
+		EFC6BEDA1A68582200B0EB8F /* KRSACryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BED01A68582200B0EB8F /* KRSACryptor.m */; };
+		EFC6BEDB1A68582200B0EB8F /* KRSACryptorKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BED21A68582200B0EB8F /* KRSACryptorKeyPair.m */; };
+		EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BED61A68582200B0EB8F /* KError.m */; };
+		EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */; };
+		EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +48,21 @@
 		EFC6BEB61A6857D500B0EB8F /* KeyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KeyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFC6BEBB1A6857D500B0EB8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyTests.m; sourceTree = "<group>"; };
+		EFC6BEC61A6857E000B0EB8F /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		EFC6BECA1A68582200B0EB8F /* KCryptError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCryptError.h; sourceTree = "<group>"; };
+		EFC6BECB1A68582200B0EB8F /* KCryptError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCryptError.m; sourceTree = "<group>"; };
+		EFC6BECC1A68582200B0EB8F /* KCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCryptor.h; sourceTree = "<group>"; };
+		EFC6BECD1A68582200B0EB8F /* KCryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCryptor.m; sourceTree = "<group>"; };
+		EFC6BECF1A68582200B0EB8F /* KRSACryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KRSACryptor.h; sourceTree = "<group>"; };
+		EFC6BED01A68582200B0EB8F /* KRSACryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KRSACryptor.m; sourceTree = "<group>"; };
+		EFC6BED11A68582200B0EB8F /* KRSACryptorKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KRSACryptorKeyPair.h; sourceTree = "<group>"; };
+		EFC6BED21A68582200B0EB8F /* KRSACryptorKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KRSACryptorKeyPair.m; sourceTree = "<group>"; };
+		EFC6BED51A68582200B0EB8F /* KError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KError.h; sourceTree = "<group>"; };
+		EFC6BED61A68582200B0EB8F /* KError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KError.m; sourceTree = "<group>"; };
+		EFC6BEDE1A68588100B0EB8F /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		EFC6BEE01A68588100B0EB8F /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +86,7 @@
 		EFC6BE941A6857D400B0EB8F = {
 			isa = PBXGroup;
 			children = (
+				EFC6BEC61A6857E000B0EB8F /* Podfile */,
 				EFC6BE9F1A6857D400B0EB8F /* Key */,
 				EFC6BEB91A6857D500B0EB8F /* KeyTests */,
 				EFC6BE9E1A6857D400B0EB8F /* Products */,
@@ -81,6 +105,7 @@
 		EFC6BE9F1A6857D400B0EB8F /* Key */ = {
 			isa = PBXGroup;
 			children = (
+				EFC6BEC81A68582200B0EB8F /* Library */,
 				EFC6BEA41A6857D400B0EB8F /* AppDelegate.h */,
 				EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */,
 				EFC6BEA71A6857D400B0EB8F /* ViewController.h */,
@@ -117,6 +142,67 @@
 				EFC6BEBB1A6857D500B0EB8F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EFC6BEC81A68582200B0EB8F /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				EFC6BEC91A68582200B0EB8F /* Crypto */,
+				EFC6BED31A68582200B0EB8F /* Error */,
+				EFC6BED71A68582200B0EB8F /* External */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		EFC6BEC91A68582200B0EB8F /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				EFC6BECA1A68582200B0EB8F /* KCryptError.h */,
+				EFC6BECB1A68582200B0EB8F /* KCryptError.m */,
+				EFC6BECC1A68582200B0EB8F /* KCryptor.h */,
+				EFC6BECD1A68582200B0EB8F /* KCryptor.m */,
+				EFC6BECE1A68582200B0EB8F /* RSA */,
+			);
+			path = Crypto;
+			sourceTree = "<group>";
+		};
+		EFC6BECE1A68582200B0EB8F /* RSA */ = {
+			isa = PBXGroup;
+			children = (
+				EFC6BECF1A68582200B0EB8F /* KRSACryptor.h */,
+				EFC6BED01A68582200B0EB8F /* KRSACryptor.m */,
+				EFC6BED11A68582200B0EB8F /* KRSACryptorKeyPair.h */,
+				EFC6BED21A68582200B0EB8F /* KRSACryptorKeyPair.m */,
+			);
+			path = RSA;
+			sourceTree = "<group>";
+		};
+		EFC6BED31A68582200B0EB8F /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				EFC6BED51A68582200B0EB8F /* KError.h */,
+				EFC6BED61A68582200B0EB8F /* KError.m */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
+		EFC6BED71A68582200B0EB8F /* External */ = {
+			isa = PBXGroup;
+			children = (
+				EFC6BEDD1A68588100B0EB8F /* Base64 */,
+			);
+			path = External;
+			sourceTree = "<group>";
+		};
+		EFC6BEDD1A68588100B0EB8F /* Base64 */ = {
+			isa = PBXGroup;
+			children = (
+				EFC6BEDE1A68588100B0EB8F /* NSData+Base64.h */,
+				EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */,
+				EFC6BEE01A68588100B0EB8F /* NSString+Base64.h */,
+				EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */,
+			);
+			path = Base64;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -201,6 +287,7 @@
 			files = (
 				EFC6BEAC1A6857D400B0EB8F /* Main.storyboard in Resources */,
 				EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */,
+				EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */,
 				EFC6BEAE1A6857D500B0EB8F /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -219,9 +306,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */,
+				EFC6BEDB1A68582200B0EB8F /* KRSACryptorKeyPair.m in Sources */,
+				EFC6BED91A68582200B0EB8F /* KCryptor.m in Sources */,
 				EFC6BEA91A6857D400B0EB8F /* ViewController.m in Sources */,
+				EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */,
+				EFC6BEDA1A68582200B0EB8F /* KRSACryptor.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
+				EFC6BED81A68582200B0EB8F /* KCryptError.m in Sources */,
+				EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
