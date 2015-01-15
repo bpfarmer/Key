@@ -10,6 +10,8 @@
 #import "KCryptor.h"
 #import "KRSACryptorKeyPair.h"
 
+@class KRSACryptorKeyPair;
+
 @interface KRSACryptor : KCryptor
 
 
