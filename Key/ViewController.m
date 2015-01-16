@@ -10,6 +10,7 @@
 #import "KRSACryptor.h"
 #import "KRSACryptorKeyPair.h"
 #import "KError.h"
+#import "KKeyPair.h"
 
 @interface ViewController ()
 
@@ -20,9 +21,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [self generateKeysExample];
-
-    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(queue, ^(void) {
+        [self generateKeysExample];
+    });
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,12 +39,21 @@
     
     KRSACryptorKeyPair *RSAKeyPair = [RSACryptor generateKeyPairWithKeyIdentifier:@"key_pair_tag"
                                                                              error:error];
-    
+    NSLog(@"Plain Text: \nKey is great");
     NSLog(@"Private Key:\n%@\n\nPublic Key:\n%@", RSAKeyPair.privateKey, RSAKeyPair.publicKey);
     
     [self encryptionCycleWithRSACryptor:RSACryptor
                                 keyPair:RSAKeyPair
                                   error:error];
+    
+    KKeyPair *keyPair = [[KKeyPair alloc] init];
+    keyPair.privateKey = RSAKeyPair.privateKey;
+    keyPair.publicKey = RSAKeyPair.publicKey;
+    keyPair.encryptionAlgorithm = @"RSA";
+    RLMRealm *realm = [RLMRealm inMemoryRealmWithIdentifier:@"Test"];
+    [realm beginWriteTransaction];
+    [realm addObject:keyPair];
+    [realm commitWriteTransaction];
 }
 
 - (void)encryptionCycleWithRSACryptor:(KRSACryptor *)RSACryptor
@@ -50,7 +61,7 @@
                                 error:(KError *)error
 {
     NSString *cipherText =
-    [RSACryptor encrypt:@"I Love Key"
+    [RSACryptor encrypt:@"Key is great"
                     key:RSAKeyPair.publicKey
                   error:error];
     
