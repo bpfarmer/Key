@@ -7,12 +7,19 @@
 //
 
 #import <Realm/Realm.h>
+#import "KError.h"
+#import "KRSACryptor.h"
+#import "KRSACryptorKeyPair.h"
+
+@class KUser;
 
 @interface KKeyPair : RLMObject
 
 @property NSString *privateKey;
 @property NSString *publicKey;
 @property NSString *encryptionAlgorithm;
+
++ (KKeyPair *)createRSAKeyPair;
 
 @end
 

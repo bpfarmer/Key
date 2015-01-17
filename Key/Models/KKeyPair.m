@@ -24,4 +24,18 @@
 //    return @[];
 //}
 
++ (KKeyPair *)createRSAKeyPair {
+    KError *error = [[KError alloc] init];
+    KRSACryptor *RSACryptor = [[KRSACryptor alloc] init];
+    
+    KRSACryptorKeyPair *RSAKeyPair = [RSACryptor generateKeyPairWithKeyIdentifier:[NSString stringWithFormat:@"kkeypair_%f", [[NSDate date] timeIntervalSince1970]] error:error];
+    
+    KKeyPair *keyPair = [[KKeyPair alloc] init];
+    keyPair.privateKey = RSAKeyPair.privateKey;
+    keyPair.publicKey = RSAKeyPair.publicKey;
+    keyPair.encryptionAlgorithm = @"RSA";
+    
+    return keyPair;
+}
+
 @end

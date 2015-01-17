@@ -25,6 +25,7 @@
 		EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */; };
 		EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */; };
 		EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD341A686A0300973E15 /* KKeyPair.m */; };
+		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,8 @@
 		EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		EFEBDD331A686A0300973E15 /* KKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKeyPair.h; path = Models/KKeyPair.h; sourceTree = "<group>"; };
 		EFEBDD341A686A0300973E15 /* KKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKeyPair.m; path = Models/KKeyPair.m; sourceTree = "<group>"; };
+		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
+		EFEBDD371A68CE9600973E15 /* KUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KUser.m; path = Models/KUser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,6 +249,8 @@
 			children = (
 				EFEBDD331A686A0300973E15 /* KKeyPair.h */,
 				EFEBDD341A686A0300973E15 /* KKeyPair.m */,
+				EFEBDD361A68CE9600973E15 /* KUser.h */,
+				EFEBDD371A68CE9600973E15 /* KUser.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -418,6 +423,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */,
 				EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */,
 				EFC6BEDB1A68582200B0EB8F /* KRSACryptorKeyPair.m in Sources */,

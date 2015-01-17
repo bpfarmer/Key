@@ -11,6 +11,7 @@
 #import "KRSACryptorKeyPair.h"
 #import "KError.h"
 #import "KKeyPair.h"
+#import "KUser.h"
 
 @interface ViewController ()
 
@@ -20,11 +21,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(queue, ^(void) {
-        [self generateKeysExample];
-    });
+    NSString *username = @"brendan";
+    NSString *password = @"password2345";
+    RLMRealm *realm = [RLMRealm defaultRealm];
+    
+    if([KUser isUsernameUnique:username]) {
+        // Do any additional setup after loading the view, typically from a nib.
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        dispatch_async(queue, ^(void) {
+            KUser *user = [KUser createUserWithUsername:username password:password inRealm:realm];
+            KKeyPair *keyPair = [[user keyPairs] objectAtIndex:0];
+            NSLog(@"%@", keyPair.publicKey);
+        });
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,9 +59,13 @@
     keyPair.privateKey = RSAKeyPair.privateKey;
     keyPair.publicKey = RSAKeyPair.publicKey;
     keyPair.encryptionAlgorithm = @"RSA";
-    RLMRealm *realm = [RLMRealm inMemoryRealmWithIdentifier:@"Test"];
+    KUser *user = [[KUser alloc] init];
+    user.username = @"brendan";
+    [user.keyPairs addObject:keyPair];
+    
+    RLMRealm *realm = [RLMRealm defaultRealm];
     [realm beginWriteTransaction];
-    [realm addObject:keyPair];
+    [realm addObject:user];
     [realm commitWriteTransaction];
 }
 

@@ -1,4 +1,4 @@
 key
 ===
 
-Share Privately
+Share Freely
