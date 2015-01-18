@@ -11,6 +11,7 @@
 
 @interface KUser : RLMObject
 
+@property NSString *publicId;
 @property NSString *username;
 @property NSString *password;
 @property RLMArray<KKeyPair> *keyPairs;

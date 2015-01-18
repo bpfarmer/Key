@@ -15,6 +15,7 @@
 
 @interface KKeyPair : RLMObject
 
+@property NSString *publicId;
 @property NSString *privateKey;
 @property NSString *publicKey;
 @property NSString *encryptionAlgorithm;

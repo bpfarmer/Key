@@ -26,6 +26,9 @@
 		EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */; };
 		EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD341A686A0300973E15 /* KKeyPair.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
+		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
+		EFEBDD411A6B2D5E00973E15 /* KMessageCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD401A6B2D5E00973E15 /* KMessageCrypt.m */; };
+		EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD431A6B5C1400973E15 /* KGroup.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +80,12 @@
 		EFEBDD341A686A0300973E15 /* KKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKeyPair.m; path = Models/KKeyPair.m; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
 		EFEBDD371A68CE9600973E15 /* KUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KUser.m; path = Models/KUser.m; sourceTree = "<group>"; };
+		EFEBDD391A6B2C7800973E15 /* KMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMessage.h; path = Models/KMessage.h; sourceTree = "<group>"; };
+		EFEBDD3A1A6B2C7800973E15 /* KMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KMessage.m; path = Models/KMessage.m; sourceTree = "<group>"; };
+		EFEBDD3F1A6B2D5E00973E15 /* KMessageCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMessageCrypt.h; path = Models/KMessageCrypt.h; sourceTree = "<group>"; };
+		EFEBDD401A6B2D5E00973E15 /* KMessageCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KMessageCrypt.m; path = Models/KMessageCrypt.m; sourceTree = "<group>"; };
+		EFEBDD421A6B5C1400973E15 /* KGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KGroup.h; path = Models/KGroup.h; sourceTree = "<group>"; };
+		EFEBDD431A6B5C1400973E15 /* KGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KGroup.m; path = Models/KGroup.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,10 +256,16 @@
 		EFEBDD321A68673D00973E15 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				EFEBDD391A6B2C7800973E15 /* KMessage.h */,
+				EFEBDD3A1A6B2C7800973E15 /* KMessage.m */,
 				EFEBDD331A686A0300973E15 /* KKeyPair.h */,
 				EFEBDD341A686A0300973E15 /* KKeyPair.m */,
 				EFEBDD361A68CE9600973E15 /* KUser.h */,
 				EFEBDD371A68CE9600973E15 /* KUser.m */,
+				EFEBDD3F1A6B2D5E00973E15 /* KMessageCrypt.h */,
+				EFEBDD401A6B2D5E00973E15 /* KMessageCrypt.m */,
+				EFEBDD421A6B5C1400973E15 /* KGroup.h */,
+				EFEBDD431A6B5C1400973E15 /* KGroup.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -427,11 +442,14 @@
 				EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */,
 				EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */,
 				EFC6BEDB1A68582200B0EB8F /* KRSACryptorKeyPair.m in Sources */,
+				EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */,
 				EFC6BED91A68582200B0EB8F /* KCryptor.m in Sources */,
+				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
 				EFC6BEA91A6857D400B0EB8F /* ViewController.m in Sources */,
 				EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */,
 				EFC6BEDA1A68582200B0EB8F /* KRSACryptor.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
+				EFEBDD411A6B2D5E00973E15 /* KMessageCrypt.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
 				EFC6BED81A68582200B0EB8F /* KCryptError.m in Sources */,
 				EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */,
