@@ -47,6 +47,10 @@
     return YES;
 }
 
+- (KKeyPair *)activeKeyPair {
+    return [self.keyPairs objectAtIndex:0];
+}
+
 - (BOOL)saveInRealm:(RLMRealm *)realm {
     //[realm beginWriteTransaction];
     //[realm addObject:self];

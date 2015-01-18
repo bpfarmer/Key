@@ -15,10 +15,11 @@
 @interface KMessageCrypt : RLMObject
 
 @property KMessage *message;
-@property KUser *recipient;
-@property KKeyPair *keyPair;
+@property NSString *recipientId;
+@property NSString *keyPairId;
 @property NSString *bodyCrypt;
 @property NSData *attachmentsCrypt;
+@property NSString *status;
 
 @end
 

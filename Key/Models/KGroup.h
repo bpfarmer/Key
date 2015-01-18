@@ -12,6 +12,8 @@
 
 @property NSString *publicId;
 @property NSString *name;
+@property (readonly) NSArray *users;
+
 
 @end
 

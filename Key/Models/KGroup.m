@@ -24,4 +24,8 @@
 //    return @[];
 //}
 
+- (NSArray *)users {
+    return [self linkingObjectsOfClass:@"User" forProperty:@"groups"];
+}
+
 @end

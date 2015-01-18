@@ -18,6 +18,9 @@
 @property KGroup *group;
 @property NSString *body;
 @property NSData *attachments;
+@property NSString *status;
+
+- (BOOL) sendToServer;
 
 @end
 

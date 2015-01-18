@@ -7,6 +7,9 @@
 //
 
 #import "KKeyPair.h"
+#import "KError.h"
+#import "KRSACryptor.h"
+#import "KRSACryptorKeyPair.h"
 
 @implementation KKeyPair
 
@@ -36,6 +39,23 @@
     keyPair.encryptionAlgorithm = @"RSA";
     
     return keyPair;
+}
+
+- (NSString *)encryptText:(NSString *)text {
+    KRSACryptor *RSACryptor = [[KRSACryptor alloc] init];
+    KError *error = [[KError alloc] init];
+    return [RSACryptor encrypt:text
+                    key:self.publicKey
+                  error:error];
+
+}
+
+- (NSString *)decryptText:(NSString *)textCrypt {
+    KRSACryptor *RSACryptor = [[KRSACryptor alloc] init];
+    KError *error = [[KError alloc] init];
+    return [RSACryptor decrypt:textCrypt
+                           key:self.privateKey
+                         error:error];
 }
 
 @end

@@ -7,9 +7,6 @@
 //
 
 #import <Realm/Realm.h>
-#import "KError.h"
-#import "KRSACryptor.h"
-#import "KRSACryptorKeyPair.h"
 
 @class KUser;
 
@@ -21,6 +18,10 @@
 @property NSString *encryptionAlgorithm;
 
 + (KKeyPair *)createRSAKeyPair;
+- (NSString *)encryptText:(NSString *)text;
+- (NSString *)decryptText:(NSString *)textCrypt;
+- (NSData *)encryptData:(NSData *)data;
+- (NSData *)decryptData:(NSData *)dataCrypt;
 
 @end
 
