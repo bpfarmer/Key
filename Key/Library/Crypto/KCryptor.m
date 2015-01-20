@@ -7,6 +7,8 @@
 //
 
 #import "KCryptor.h"
+#import <CommonCrypto/CommonKeyDerivation.h>
+#import "Util.h"
 
 @implementation KCryptor
 
@@ -24,6 +26,19 @@
                 error:(KError *)error
 {
     return nil;
+}
+
+- (NSDictionary *)encryptOneWay:(NSString *)text {
+    
+    NSData* textData = [text dataUsingEncoding:NSUTF8StringEncoding];
+    NSInteger saltLength = 128;
+    NSData* salt = [Util generateRandomString:saltLength];
+    
+    int rounds = CCCalibratePBKDF(kCCPBKDF2, textData.length, salt.length, kCCPRFHmacAlgSHA256, saltLength, 100);
+    unsigned char key[(size_t)saltLength];
+    CCKeyDerivationPBKDF(kCCPBKDF2, textData.bytes, textData.length, salt.bytes, salt.length, kCCPRFHmacAlgSHA256, rounds, key, saltLength);
+
+    return @{@"key" : [NSData dataWithBytes:key length:sizeof(key)], @"salt" : salt};
 }
 
 

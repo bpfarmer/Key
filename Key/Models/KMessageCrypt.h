@@ -11,15 +11,19 @@
 @class KMessage;
 @class KKeyPair;
 @class KUser;
+@class KGroup;
 
 @interface KMessageCrypt : RLMObject
 
 @property KMessage *message;
-@property NSString *recipientId;
-@property NSString *keyPairId;
+@property KUser *recipient;
+@property KGroup *group;
+@property KKeyPair *keyPair;
 @property NSString *bodyCrypt;
 @property NSData *attachmentsCrypt;
 @property NSString *status;
+
+- (NSDictionary *)toDictionary;
 
 @end
 

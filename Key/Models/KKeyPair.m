@@ -58,4 +58,12 @@
                          error:error];
 }
 
+- (NSData *)encryptData:(NSData *)data {
+    return data;
+}
+
+- (NSData *)decryptData:(NSData *)dataCrypt {
+    return dataCrypt;
+}
+
 @end

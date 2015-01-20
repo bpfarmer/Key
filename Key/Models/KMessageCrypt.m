@@ -7,6 +7,8 @@
 //
 
 #import "KMessageCrypt.h"
+#import "KMessage.h"
+#import "KUser.h"
 
 @implementation KMessageCrypt
 
@@ -23,5 +25,17 @@
 //{
 //    return @[];
 //}
+
+- (NSDictionary *)toDictionary {
+    return @{
+      @"senderId" : self.message.author.publicId,
+      @"recipientId" : self.recipient.publicId,
+      @"groupId" : self.group.publicId,
+      @"keyPairId" : self.keyPair.publicId,
+      @"bodyCrypt" : self.bodyCrypt,
+      @"attachmentsCrypt" : self.attachmentsCrypt
+    };
+    
+}
 
 @end

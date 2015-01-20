@@ -5,6 +5,7 @@ inhibit_all_warnings!
 
 target 'Key', exclusive: true do
     pod 'Realm'
+    pod 'AFNetworking'
 end
 
 target 'KeyTests', exclusive: true do

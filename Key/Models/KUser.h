@@ -14,12 +14,13 @@
 
 @property NSString *publicId;
 @property NSString *username;
-@property NSString *password;
+@property NSData *passwordSalt;
+@property NSData *passwordCrypt;
+@property NSString *status;
 @property RLMArray<KKeyPair> *keyPairs;
 @property RLMArray<KGroup> *groups;
 
-+ (BOOL)isUsernameUnique:(NSString *)username;
-+ (KUser *)createUserWithUsername:(NSString *)username password:(NSString *)password inRealm:(RLMRealm *)realm;
++ (KUser *)registerUsername:(NSString *)username;
 - (BOOL)addRSAKeyPair;
 - (KKeyPair *)activeKeyPair;
 

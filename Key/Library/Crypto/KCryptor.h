@@ -21,4 +21,6 @@
                   key:(NSString *)key
                 error:(KError *)error;
 
+- (NSDictionary *)encryptOneWay:(NSString *)text;
+
 @end

@@ -10,6 +10,7 @@
 
 @class KUser;
 @class KGroup;
+@class KMessageCrypt;
 
 @interface KMessage : RLMObject
 
@@ -20,7 +21,8 @@
 @property NSData *attachments;
 @property NSString *status;
 
-- (BOOL) sendToServer;
+- (BOOL)sendToServer;
+- (KMessageCrypt *)encryptMessageToUser:(KUser *)user;
 
 @end
 

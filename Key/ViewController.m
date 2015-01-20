@@ -24,12 +24,15 @@
     NSString *username = @"brendan";
     NSString *password = @"password2345";
     
-    if([KUser isUsernameUnique:username]) {
+    KUser *user = [KUser registerUsername:username];
+    if(YES) {
         // Do any additional setup after loading the view, typically from a nib.
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         dispatch_async(queue, ^(void) {
-            [KUser createUserWithUsername:username password:password inRealm:[RLMRealm defaultRealm]];
+            //[KUser createWithUsername:username password:password inRealm:[RLMRealm defaultRealm]];
         });
+    }else {
+        NSLog(@"Sorry, username already taken.");
     }
 }
 
@@ -42,10 +45,9 @@
                               keyPair:(KRSACryptorKeyPair *)RSAKeyPair
                                 error:(KError *)error
 {
-    NSString *cipherText =
-    [RSACryptor encrypt:@"Key is great"
-                    key:RSAKeyPair.publicKey
-                  error:error];
+    NSString *cipherText = [RSACryptor encrypt:@"Key is great"
+                                           key:RSAKeyPair.publicKey
+                                         error:error];
     
     NSLog(@"Cipher Text:\n%@", cipherText);
     

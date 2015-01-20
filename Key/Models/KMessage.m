@@ -32,24 +32,29 @@
     KGroup *group = [self group];
     NSMutableArray *messageCrypts = [NSMutableArray array];
     for(KUser *user in group.users) {
-        [messageCrypts addObject:[self encryptMessageToUser:user]];
+        [messageCrypts addObject:[[self encryptMessageToUser:user] toDictionary]];
     }
+    NSDictionary *messagesDictionary =
+    @{
+      @"Messages" : messageCrypts
+    };
     
-    return YES;
+    return [self sendToServerMessageCrypts:messagesDictionary];
 }
 
 - (KMessageCrypt *)encryptMessageToUser:(KUser *)user {
     KKeyPair *keyPair = [user activeKeyPair];
     KMessageCrypt *messageCrypt = [[KMessageCrypt alloc] init];
     messageCrypt.message = self;
-    messageCrypt.recipientId = user.publicId;
-    messageCrypt.keyPairId = keyPair.publicId;
+    messageCrypt.recipient = user;
+    messageCrypt.keyPair = keyPair;
     messageCrypt.bodyCrypt = [keyPair encryptText:self.body];
     messageCrypt.attachmentsCrypt = [keyPair encryptData:self.attachments];
     return messageCrypt;
 }
 
-- (BOOL)sendToServerMessageCrypts:(NSArray *)messageCrypts {
+- (BOOL)sendToServerMessageCrypts:(NSDictionary *)messageCrypts {
+    
     return YES;
 }
 
