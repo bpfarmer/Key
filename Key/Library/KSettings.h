@@ -12,4 +12,6 @@
 
 @end
 
-#define kUsernameRegistrationEndpoint @"http://example.com/resources.json"
+#define kUserUsernameRegistrationEndpoint @"http://localhost:9393/user.json"
+#define kUserFinishRegistrationEndpoint @"http://localhost:9393/user.json"
+#define kUserGetUsersEndpoint @"http://localhost:9393/users.json"

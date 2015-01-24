@@ -21,19 +21,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSString *username = @"brendan";
+    NSString *username = @"brendan2";
     NSString *password = @"password2345";
-    
-    KUser *user = [KUser registerUsername:username];
-    if(YES) {
-        // Do any additional setup after loading the view, typically from a nib.
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        dispatch_async(queue, ^(void) {
-            //[KUser createWithUsername:username password:password inRealm:[RLMRealm defaultRealm]];
-        });
-    }else {
-        NSLog(@"Sorry, username already taken.");
-    }
+    KUser *user = [[KUser alloc] init];
+    [user registerUsername:username password:password];
 }
 
 - (void)didReceiveMemoryWarning {

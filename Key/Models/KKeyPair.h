@@ -15,13 +15,14 @@
 @property NSString *publicId;
 @property NSString *privateKey;
 @property NSString *publicKey;
-@property NSString *encryptionAlgorithm;
+@property NSString *algorithm;
 
 + (KKeyPair *)createRSAKeyPair;
 - (NSString *)encryptText:(NSString *)text;
 - (NSString *)decryptText:(NSString *)textCrypt;
 - (NSData *)encryptData:(NSData *)data;
 - (NSData *)decryptData:(NSData *)dataCrypt;
+- (NSDictionary *)toDictionary;
 
 @end
 

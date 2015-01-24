@@ -27,32 +27,68 @@
 //    return @[];
 //}
 
-+ (KUser *)registerUsername:(NSString *)username {
-    KUser *user = [[KUser alloc] init];
-    user.username = username;
+- (void)registerUsername:(NSString *)username password:(NSString *)password {
+    self.username = username;
     NSDictionary *userDictionary =
     @{
-      @"users" : @[@{
-        @"username" : user.username
-      }]
+      @"user" : @{
+        @"username" : self.username
+      }
     };
-    
+    self.status = @"Registering";
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = userDictionary;
-    [manager POST:kUsernameRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:kUserUsernameRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
+            self.status = @"Failed to reserve username.";
+        }else {
+            self.status = @"Succeeded in reserving username.";
+            self.publicId = responseObject[@"user"][@"publicId"];
+            [self finishRegistrationWithPassword:password];
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+        self.status = @"Failed to reserve username.";
+    }];
+}
+
+- (void)finishRegistrationWithPassword:(NSString *)password {
+    [self generatePasswordCryptFromPassword:password];
+    KKeyPair *keyPair = [self addRSAKeyPair];
+    NSDictionary *updatedUserDictionary = @{
+      @"user" : @{
+        @"publicId" : self.publicId,
+        @"password" : self.passwordCrypt,
+        @"keyPair"  : [keyPair toDictionary]
+      }
+    };
+    
+    NSLog(@"%@", self.passwordCrypt);
+    
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSDictionary *parameters = updatedUserDictionary;
+    [manager POST:kUserFinishRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
-    return user;
 }
 
-- (NSString *)finishRegistrationWithPassword:(NSString *)password {
-    NSDictionary *passwordCryptDictionary = [self generatePasswordCryptFromPassword:password];
-    [self addRSAKeyPair];
-    self.status = @"completed";
-    return self.status;
+- (void)addUserWithUsername:(NSString *)username {
+    NSDictionary *userDictionary = @{
+      @"user": @{
+        @"username" : username
+      }
+    };
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:kUserGetUsersEndpoint parameters:userDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
 }
 
 - (NSDictionary *)generatePasswordCryptFromPassword:(NSString *)password {
@@ -60,15 +96,13 @@
     NSDictionary *encryptedPasswordDictionary = [cryptor encryptOneWay: password];
     self.passwordCrypt = encryptedPasswordDictionary[@"key"];
     self.passwordSalt  = encryptedPasswordDictionary[@"salt"];
-    
-    NSLog(@"%@", self.passwordCrypt);
     return encryptedPasswordDictionary;
 }
 
-- (BOOL)addRSAKeyPair {
+- (KKeyPair *)addRSAKeyPair {
     KKeyPair *keyPair = [KKeyPair createRSAKeyPair];
     [self.keyPairs addObject:keyPair];
-    return YES;
+    return keyPair;
 }
 
 - (KKeyPair *)activeKeyPair {

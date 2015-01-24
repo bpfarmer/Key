@@ -36,7 +36,7 @@
     KKeyPair *keyPair = [[KKeyPair alloc] init];
     keyPair.privateKey = RSAKeyPair.privateKey;
     keyPair.publicKey = RSAKeyPair.publicKey;
-    keyPair.encryptionAlgorithm = @"RSA";
+    keyPair.algorithm = @"RSA";
     
     return keyPair;
 }
@@ -56,6 +56,13 @@
     return [RSACryptor decrypt:textCrypt
                            key:self.privateKey
                          error:error];
+}
+
+- (NSDictionary *)toDictionary {
+    return @{
+      @"publicKey" : self.publicKey,
+      @"algorithm" : self.algorithm
+    };
 }
 
 - (NSData *)encryptData:(NSData *)data {
