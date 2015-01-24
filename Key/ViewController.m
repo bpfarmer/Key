@@ -25,6 +25,7 @@
     NSString *password = @"password2345";
     KUser *user = [[KUser alloc] init];
     [user registerUsername:username password:password];
+    [KUser addUserWithUsername:username];
 }
 
 - (void)didReceiveMemoryWarning {

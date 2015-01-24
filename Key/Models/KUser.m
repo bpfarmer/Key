@@ -10,6 +10,8 @@
 #import "KCryptor.h"
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
 #import "KSettings.h"
+#import "KMessage.h"
+#import "KMessageCrypt.h"
 
 @implementation KUser
 
@@ -35,7 +37,6 @@
         @"username" : self.username
       }
     };
-    self.status = @"Registering";
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = userDictionary;
     [manager POST:kUserUsernameRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -55,7 +56,7 @@
 
 - (void)finishRegistrationWithPassword:(NSString *)password {
     [self generatePasswordCryptFromPassword:password];
-    KKeyPair *keyPair = [self addRSAKeyPair];
+    KKeyPair *keyPair = [self generateRSAKeyPair];
     NSDictionary *updatedUserDictionary = @{
       @"user" : @{
         @"publicId" : self.publicId,
@@ -63,10 +64,6 @@
         @"keyPair"  : [keyPair toDictionary]
       }
     };
-    
-    NSLog(@"%@", self.passwordCrypt);
-    
-    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = updatedUserDictionary;
     [manager POST:kUserFinishRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -76,19 +73,53 @@
     }];
 }
 
-- (void)addUserWithUsername:(NSString *)username {
++ (void)addUserWithUsername:(NSString *)username {
     NSDictionary *userDictionary = @{
-      @"user": @{
+    @"users" : @{
         @"username" : username
-      }
-    };
-    
+    }};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:kUserGetUsersEndpoint parameters:userDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        [KUser createUserFromDictionary:responseObject];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
++ (KUser *)createUserFromDictionary:(NSDictionary *)userDictionary {
+    KUser *user = [[KUser alloc] init];
+    user.publicId = userDictionary[@"publicId"];
+    user.username = userDictionary[@"username"];
+    [user addPublicKey:userDictionary[@"keyPair"]];
+    return user;
+}
+
+- (void)sendMessageText:(NSString *)text toUser:(KUser *)user {
+    KMessage *message = [[KMessage alloc] init];
+    KMessageCrypt *messageCrypt = [message encryptMessageToUser:user];
+    NSDictionary *messageDictionary = @{
+    @"messages" : @[@{
+        @"authorId" : self.publicId,
+        @"recipientId" : user.publicId,
+        @"bodyCrypt" : messageCrypt.bodyCrypt,
+        @"keyPairId" : messageCrypt.keyPair.publicId
+    }]};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:kMessageSendMessagesEndpoint parameters:messageDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+    
+}
+
+- (void)addPublicKey:(NSDictionary *)keyDictionary {
+    KKeyPair *keyPair = [[KKeyPair alloc] init];
+    keyPair.publicId = keyDictionary[@"publicId"];
+    keyPair.publicKey = keyDictionary[@"publicKey"];
+    keyPair.algorithm = keyDictionary[@"algorithm"];
+    [self.keyPairs addObject:keyPair];
 }
 
 - (NSDictionary *)generatePasswordCryptFromPassword:(NSString *)password {
@@ -99,7 +130,7 @@
     return encryptedPasswordDictionary;
 }
 
-- (KKeyPair *)addRSAKeyPair {
+- (KKeyPair *)generateRSAKeyPair {
     KKeyPair *keyPair = [KKeyPair createRSAKeyPair];
     [self.keyPairs addObject:keyPair];
     return keyPair;

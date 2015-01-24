@@ -20,9 +20,12 @@
 @property RLMArray<KKeyPair> *keyPairs;
 @property RLMArray<KGroup> *groups;
 
++ (void)addUserWithUsername:(NSString *)username;
+
 - (void)registerUsername:(NSString *)username password:(NSString *)password;
 - (void)finishRegistrationWithPassword:(NSString *)password;
-- (KKeyPair *)addRSAKeyPair;
+- (void)sendMessageText:(NSString *)text toUser:(KUser *)user;
+- (KKeyPair *)generateRSAKeyPair;
 - (KKeyPair *)activeKeyPair;
 
 @end
