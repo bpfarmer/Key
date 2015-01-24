@@ -45,7 +45,7 @@
             self.status = @"Failed to reserve username.";
         }else {
             self.status = @"Succeeded in reserving username.";
-            self.publicId = responseObject[@"user"][@"publicId"];
+            self.publicId = responseObject[@"user"][@"id"];
             [self finishRegistrationWithPassword:password];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -111,7 +111,6 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
 }
 
 - (void)addPublicKey:(NSDictionary *)keyDictionary {
