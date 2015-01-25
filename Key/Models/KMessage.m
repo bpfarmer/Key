@@ -53,6 +53,10 @@
     return messageCrypt;
 }
 
++ (KMessage *)decryptMessageToUser:(KUser *)user {
+    return [[KMessage alloc] init];
+}
+
 - (BOOL)sendToServerMessageCrypts:(NSDictionary *)messageCrypts {
     
     return YES;

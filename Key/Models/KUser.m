@@ -15,12 +15,15 @@
 
 @implementation KUser
 
-// Specify default values for properties
-
-//+ (NSDictionary *)defaultPropertyValues
-//{
-//    return @{};
-//}
++ (NSDictionary *)defaultPropertyValues
+{
+    return @{
+      @"publicId"       : @"",
+      @"passwordSalt"   : [[NSData alloc] init],
+      @"passwordCrypt"  : [[NSData alloc] init],
+      @"status"         : @""
+    };
+}
 
 // Specify properties to ignore (Realm won't persist these)
 
@@ -31,26 +34,25 @@
 
 - (void)registerUsername:(NSString *)username password:(NSString *)password {
     self.username = username;
+    
     NSDictionary *userDictionary =
     @{
-      @"user" : @{
-        @"username" : self.username
-      }
+        @"user" : @{
+                @"username" : self.username
+                }
     };
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = userDictionary;
     [manager POST:kUserUsernameRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"JSON FROM USERNAME CHECK: %@", responseObject);
         if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
-            self.status = @"Failed to reserve username.";
         }else {
-            self.status = @"Succeeded in reserving username.";
             self.publicId = responseObject[@"user"][@"id"];
             [self finishRegistrationWithPassword:password];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
-        self.status = @"Failed to reserve username.";
     }];
 }
 
@@ -59,7 +61,7 @@
     KKeyPair *keyPair = [self generateRSAKeyPair];
     NSDictionary *updatedUserDictionary = @{
       @"user" : @{
-        @"publicId" : self.publicId,
+        @"id" : self.publicId,
         @"password" : self.passwordCrypt,
         @"keyPair"  : [keyPair toDictionary]
       }
@@ -67,7 +69,12 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = updatedUserDictionary;
     [manager POST:kUserFinishRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"JSON FROM USER PASSWORD: %@", responseObject);
+        keyPair.publicId = responseObject[@"user"][@"keyPair"][@"id"];
+        
+        //For testing purposes only
+        [KUser addUserWithUsername:self.username];
+        [self sendMessageText:@"I deflated the footballs." toUser:self];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -80,24 +87,25 @@
     }};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:kUserGetUsersEndpoint parameters:userDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"JSON FOR ADDITIONAL USER CREATION: %@", responseObject);
         [KUser createUserFromDictionary:responseObject];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
 }
 
-+ (KUser *)createUserFromDictionary:(NSDictionary *)userDictionary {
++ (void)createUserFromDictionary:(NSDictionary *)userDictionary {
     KUser *user = [[KUser alloc] init];
-    user.publicId = userDictionary[@"publicId"];
+    user.publicId = userDictionary[@"id"];
     user.username = userDictionary[@"username"];
     [user addPublicKey:userDictionary[@"keyPair"]];
-    return user;
 }
 
 - (void)sendMessageText:(NSString *)text toUser:(KUser *)user {
     KMessage *message = [[KMessage alloc] init];
+    message.body = text;
     KMessageCrypt *messageCrypt = [message encryptMessageToUser:user];
+    NSLog(@"Testing for KeyPair Pub ID: %@", messageCrypt.keyPair.publicId);
     NSDictionary *messageDictionary = @{
     @"messages" : @[@{
         @"authorId" : self.publicId,
@@ -107,7 +115,8 @@
     }]};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:kMessageSendMessagesEndpoint parameters:messageDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON: %@", responseObject);
+        NSLog(@"JSON FROM SENDING MESSAGES: %@", responseObject);
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -115,7 +124,7 @@
 
 - (void)addPublicKey:(NSDictionary *)keyDictionary {
     KKeyPair *keyPair = [[KKeyPair alloc] init];
-    keyPair.publicId = keyDictionary[@"publicId"];
+    keyPair.publicId = keyDictionary[@"id"];
     keyPair.publicKey = keyDictionary[@"publicKey"];
     keyPair.algorithm = keyDictionary[@"algorithm"];
     [self.keyPairs addObject:keyPair];
@@ -137,15 +146,6 @@
 
 - (KKeyPair *)activeKeyPair {
     return [self.keyPairs objectAtIndex:0];
-}
-
-- (BOOL)saveInRealm:(RLMRealm *)realm {
-    //[realm beginWriteTransaction];
-    //[realm addObject:self];
-    //[realm commitWriteTransaction];
-    
-    NSLog(@"%@", [realm path]);
-    return YES;
 }
 
 @end
