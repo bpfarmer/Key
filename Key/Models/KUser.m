@@ -27,12 +27,28 @@
 }
 
 #pragma mark - User Registration
+-(void)registerUsername:(NSString *)username password:(NSString *)password {
+    RLMRealm *realm = [RLMRealm defaultRealm];
+    KUser *user = [[KUser alloc] init];
+    [user addToRealm:realm];
+    
+    dispatch_queue_t remote_registration_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(remote_registration_queue, ^(void) {
+        [user remoteRegisterUsername:username];
+    });
+    
+    dispatch_queue_t local_registration_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(local_registration_queue, ^(void) {
+        [user localRegistrationWithPassword:password];
+    });
+}
+
+#pragma mark - Local User Registration
 
 - (void)localRegistrationWithPassword:(NSString *)password {
     RLMRealm *realm = [RLMRealm defaultRealm];
-    [self addToRealm:realm];
-    [self generatePasswordCryptFromPassword:password realm:realm];
     [self generateRSAKeyPairInRealm:realm];
+    [self generatePasswordCryptFromPassword:password realm:realm];
 }
 
 - (NSDictionary *)generatePasswordCryptFromPassword:(NSString *)password realm:(RLMRealm *)realm {
@@ -49,7 +65,9 @@
     [self updateKeyPairs:keyPair realm:realm];
 }
 
-- (void)registerUsername:(NSString *)username {
+#pragma mark - Remote User Registration
+
+- (void)remoteRegisterUsername:(NSString *)username {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"user" : @{@"username" : username}};
     [manager POST:kUserUsernameRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -68,7 +86,7 @@
     }];
 }
 
-- (void)finishRemoteRegistration {
+- (void)remoteFinishRegistration {
     NSDictionary *updatedUserDictionary = @{@"id" : self.publicId,
                                             @"password" : self.passwordCrypt,
                                             @"keyPair"  : [self.activeKeyPair toDictionary]};

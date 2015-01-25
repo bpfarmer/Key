@@ -21,10 +21,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSString *username = @"brendan2";
-    NSString *password = @"password2345";
     KUser *user = [[KUser alloc] init];
-    [user registerUsername:username password:password];
+    [user addObserver:self forKeyPath:NSStringFromSelector(@selector(status)) options:0 context:NULL];
+    [user registerUsername:@"brendan" password:@"12345"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -32,22 +31,22 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)encryptionCycleWithRSACryptor:(KRSACryptor *)RSACryptor
-                              keyPair:(KRSACryptorKeyPair *)RSAKeyPair
-                                error:(KError *)error
-{
-    NSString *cipherText = [RSACryptor encrypt:@"Key is great"
-                                           key:RSAKeyPair.publicKey
-                                         error:error];
-    
-    NSLog(@"Cipher Text:\n%@", cipherText);
-    
-    NSString *recoveredText =
-    [RSACryptor decrypt:cipherText
-                    key:RSAKeyPair.privateKey
-                  error:error];
-    
-    NSLog(@"Recovered Text:\n%@", recoveredText);
+#pragma mark - User Observers
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if([object isKindOfClass:[KUser class]]) {
+        if([keyPath isEqualToString:NSStringFromSelector(@selector(status))]) {
+            if([[object valueForKey:keyPath] isEqualToString:kUserRegisterUsernameSuccessStatus]) {
+                [object addObserver:object forKeyPath:NSStringFromSelector(@selector(passwordCrypt)) options:0 context:NULL];
+                [object removeObserver:object forKeyPath:NSStringFromSelector(@selector(publicId))];
+            }else if([[object valueForKey:keyPath] isEqualToString:kUserRegisterUsernameFailureStatus]) {
+                NSLog(@"Username taken");
+            }
+        }else if([keyPath isEqualToString:NSStringFromSelector(@selector(passwordCrypt))]) {
+            [object remoteFinishRegistration];
+            [object removeObserver:object forKeyPath:NSStringFromSelector(@selector(passwordCrypt))];
+        }
+    }
 }
 
 @end

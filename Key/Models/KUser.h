@@ -22,8 +22,8 @@
 
 + (void)addUserWithUsername:(NSString *)username;
 
-- (void)registerUsername:(NSString *)username;
-- (void)localRegistrationWithPassword:(NSString *)password;
+- (void)registerUsername:(NSString *)username password:(NSString *)password;
+- (void)remoteFinishRegistration;
 - (void)sendMessageText:(NSString *)text toUser:(KUser *)user;
 - (KKeyPair *)activeKeyPair;
 
