@@ -22,10 +22,9 @@
 
 + (void)addUserWithUsername:(NSString *)username;
 
-- (void)registerUsername:(NSString *)username password:(NSString *)password;
-- (void)finishRegistrationWithPassword:(NSString *)password;
+- (void)registerUsername:(NSString *)username;
+- (void)localRegistrationWithPassword:(NSString *)password;
 - (void)sendMessageText:(NSString *)text toUser:(KUser *)user;
-- (KKeyPair *)generateRSAKeyPair;
 - (KKeyPair *)activeKeyPair;
 
 @end
@@ -33,3 +32,15 @@
 // This protocol enables typed collections. i.e.:
 // RLMArray<KUser>
 RLM_ARRAY_TYPE(KUser)
+
+//API Endpoints
+#define kUserUsernameRegistrationEndpoint @"http://127.0.0.1:9393/user.json"
+#define kUserFinishRegistrationEndpoint @"http://127.0.0.1:9393/user.json"
+#define kUserGetUsersEndpoint @"http://127.0.0.1:9393/users.json"
+
+//Status Definitions
+#define kUserTryRegisterUsernameStatus @"Attempting Registration of Username"
+#define kUserRegisterUsernameSuccessStatus @"Successfully Registered Username"
+#define kUserRegisterUsernameFailureStatus @"Username Already Taken"
+#define kUserRegisterKeyPairSuccess @"Successfully Registered KeyPair"
+#define kUserRegisterKeyPairFailure @"Failed to Register KeyPair"

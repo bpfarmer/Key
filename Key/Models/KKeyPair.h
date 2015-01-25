@@ -18,6 +18,8 @@
 @property NSString *algorithm;
 
 + (KKeyPair *)createRSAKeyPair;
+- (void)updateAttributes:(NSDictionary *)keyDictionary realm:(RLMRealm *)realm;
+- (void)saveInRealm:(RLMRealm *)realm;
 - (NSString *)encryptText:(NSString *)text;
 - (NSString *)decryptText:(NSString *)textCrypt;
 - (NSData *)encryptData:(NSData *)data;

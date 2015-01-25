@@ -12,7 +12,4 @@
 
 @end
 
-#define kUserUsernameRegistrationEndpoint @"http://127.0.0.1:9393/user.json"
-#define kUserFinishRegistrationEndpoint @"http://127.0.0.1:9393/user.json"
-#define kUserGetUsersEndpoint @"http://127.0.0.1:9393/users.json"
 #define kMessageSendMessagesEndpoint @"http://127.0.0.1:9393/messages.json"

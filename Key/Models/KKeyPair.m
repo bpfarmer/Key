@@ -76,4 +76,18 @@
     return dataCrypt;
 }
 
+- (void)saveInRealm:(RLMRealm *)realm {
+    [realm beginWriteTransaction];
+    [realm addObject:self];
+    [realm commitWriteTransaction];
+}
+
+- (void)updateAttributes:(NSDictionary *)attributeDictionary realm:(RLMRealm *)realm {
+    [realm beginWriteTransaction];
+    for(id key in attributeDictionary) {
+        [self setValue:attributeDictionary[key] forKey:key];
+    }
+    [realm commitWriteTransaction];
+}
+
 @end
