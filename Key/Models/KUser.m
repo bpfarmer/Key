@@ -26,84 +26,73 @@
              @"status"         : @""};
 }
 
-#pragma mark - User Registration
--(void)registerUsername:(NSString *)username password:(NSString *)password {
-    RLMRealm *realm = [RLMRealm defaultRealm];
-    KUser *user = [[KUser alloc] init];
-    [user addToRealm:realm];
-    
-    dispatch_queue_t remote_registration_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+- (void)registerUsername:(NSString *)username password:(NSString *)password {
+    dispatch_queue_t remote_registration_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(remote_registration_queue, ^(void) {
-        [user remoteRegisterUsername:username];
+        //[KUser remoteRegisterUsername:username realmPath:realmPath];
     });
-    
-    dispatch_queue_t local_registration_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+
+    dispatch_queue_t local_registration_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(local_registration_queue, ^(void) {
-        [user localRegistrationWithPassword:password];
+        //[KUser localRegistrationWithUsername:self.username password:password];
     });
 }
 
 #pragma mark - Local User Registration
 
-- (void)localRegistrationWithPassword:(NSString *)password {
-    RLMRealm *realm = [RLMRealm defaultRealm];
-    [self generateRSAKeyPairInRealm:realm];
-    [self generatePasswordCryptFromPassword:password realm:realm];
++ (void)localRegistrationWithUsername:(NSString *)username password:(NSString *)password realmPath:(NSString *)realmPath {
+    //KUser *user = [KUser findByUsername:username realm:realm];
+    //[user generateRSAKeyPairInRealm:realm];
+    //[user generatePasswordCryptFromPassword:password realm:realm];
 }
 
-- (NSDictionary *)generatePasswordCryptFromPassword:(NSString *)password realm:(RLMRealm *)realm {
+- (void)generatePasswordCryptFromPassword:(NSString *)password {
     KCryptor *cryptor = [[KCryptor alloc] init];
     NSDictionary *encryptedPasswordDictionary = [cryptor encryptOneWay: password];
     NSDictionary *userDictionary = @{@"passwordCrypt" : encryptedPasswordDictionary[@"key"],
                                      @"passwordSalt"  : encryptedPasswordDictionary[@"salt"]};
-    [self updateAttributes:userDictionary realm:realm];
-    return encryptedPasswordDictionary;
+    NSLog(@"ENCRYPTED PASSWORD: %@", userDictionary[@"passwordCrypt"]);
 }
 
-- (void)generateRSAKeyPairInRealm:(RLMRealm *)realm {
+- (void)generateRSAKeyPair {
     KKeyPair *keyPair = [KKeyPair createRSAKeyPair];
-    [self updateKeyPairs:keyPair realm:realm];
+    NSLog(@"PUBLIC KEY: %@", keyPair.publicKey);
 }
 
 #pragma mark - Remote User Registration
 
-- (void)remoteRegisterUsername:(NSString *)username {
++ (void)remoteRegisterUsername:(NSString *)username {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"user" : @{@"username" : username}};
     [manager POST:kUserUsernameRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON FROM USERNAME CHECK: %@", responseObject);
-        RLMRealm *realm = [RLMRealm defaultRealm];
+        KUser *user = [[KUser alloc] init];
         if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
             NSDictionary *userDictionary = @{@"status" : kUserRegisterUsernameFailureStatus};
-            [self updateAttributes:userDictionary realm:realm];
         }else {
             NSDictionary *userDictionary = @{@"publicId" : responseObject[@"user"][@"id"],
                                              @"status"   : kUserRegisterUsernameSuccessStatus};
-            [self updateAttributes:userDictionary realm:realm];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
 }
 
-- (void)remoteFinishRegistration {
-    NSDictionary *updatedUserDictionary = @{@"id" : self.publicId,
-                                            @"password" : self.passwordCrypt,
-                                            @"keyPair"  : [self.activeKeyPair toDictionary]};
++ (void)remoteFinishRegistration:(NSString *)username {
+    KUser *user = [[KUser alloc] init];
+    NSDictionary *updatedUserDictionary = @{@"id" : user.publicId,
+                                            @"password" : user.passwordCrypt,
+                                            @"keyPair"  : [user.activeKeyPair toDictionary]};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"user" : updatedUserDictionary};
     [manager POST:kUserFinishRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON FROM USER PASSWORD: %@", responseObject);
-        RLMRealm *realm = [RLMRealm defaultRealm];
+        KUser *asyncUser = [[KUser alloc] init];
         if([responseObject[@"status"] isEqual:@"FAILURE"]) {
             NSDictionary *keyDictionary = @{@"publicId" : responseObject[@"user"][@"keyPair"][@"id"]};
-            [self.activeKeyPair updateAttributes:keyDictionary realm:realm];
-            
             NSDictionary *userDictionary = @{@"status" : kUserRegisterKeyPairSuccess};
-            [self updateAttributes:userDictionary realm:realm];
         } else {
             NSDictionary *userDictionary = @{@"status" : kUserRegisterKeyPairFailure};
-            [self updateAttributes:userDictionary realm:realm];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -112,36 +101,31 @@
 
 #pragma mark - Adding External Users
 
-+ (void)addUserWithUsername:(NSString *)username {
++ (void)addUserWithUsername:(NSString *)username realmPath:(NSString *)realmPath {
     NSDictionary *userDictionary = @{@"users" : @{@"username" : username}};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:kUserGetUsersEndpoint parameters:userDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON FOR ADDITIONAL USER CREATION: %@", responseObject);
-        RLMRealm *realm = [[RLMRealm alloc] init];
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-            [KUser createUserFromDictionary:responseObject realm:realm];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
 }
 
-+ (void)createUserFromDictionary:(NSDictionary *)userDictionary realm:(RLMRealm *)realm {
++ (void)createUserFromDictionary:(NSDictionary *)userDictionary {
     KUser *user = [[KUser alloc] init];
     user.publicId = userDictionary[@"id"];
     user.username = userDictionary[@"username"];
-    [user addToRealm:realm];
-    [user addPublicKey:userDictionary[@"keyPair"] realm:realm];
 }
 
 #pragma mark - Methods For External Users
 
-- (void)addPublicKey:(NSDictionary *)keyDictionary realm:(RLMRealm *)realm {
+- (void)addPublicKey:(NSDictionary *)keyDictionary {
     KKeyPair *keyPair = [[KKeyPair alloc] init];
     keyPair.publicId = keyDictionary[@"id"];
     keyPair.publicKey = keyDictionary[@"publicKey"];
     keyPair.algorithm = keyDictionary[@"algorithm"];
-    [self updateKeyPairs:keyPair realm:realm];
 }
 
 #pragma mark - Sending Messages
@@ -172,24 +156,14 @@
 
 #pragma mark - Realm Setter Methods
 
-- (void)addToRealm:(RLMRealm *)realm {
-    [realm beginWriteTransaction];
-    [realm addObject:self];
-    [realm commitWriteTransaction];
++ (void)removeTemporaryUsers {
+    NSPredicate *usernamePredicate = [NSPredicate predicateWithFormat:@"username = %@", @""];
+    //RLMResults *temporaryUsers = [KUser objectsInRealm:realm withPredicate:usernamePredicate];
 }
 
-- (void)updateAttributes:(NSDictionary *)attributeDictionary realm:(RLMRealm *)realm {
-    [realm beginWriteTransaction];
-    for(id key in attributeDictionary) {
-        [self setValue:attributeDictionary[key] forKey:key];
-    }
-    [realm commitWriteTransaction];
-}
-
-- (void)updateKeyPairs:(KKeyPair *)keyPair realm:(RLMRealm *)realm {
-    [realm beginWriteTransaction];
-    [self.keyPairs addObject:keyPair];
-    [realm commitWriteTransaction];
+- (NSArray *)yapDatabaseRelationshipEdges {
+    NSArray *edges = nil;
+    return edges;
 }
 
 @end

@@ -5,33 +5,30 @@
 //  Created by Brendan Farmer on 1/15/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
-
-#import <Realm/Realm.h>
+#import <Foundation/Foundation.h>
+#import <YapDatabase/YapDatabaseRelationshipNode.h>
+#import "KYapDatabaseObject.h"
 #import "KKeyPair.h"
 #import "KGroup.h"
 
-@interface KUser : RLMObject
+@interface KUser : KYapDatabaseObject <YapDatabaseRelationshipNode>
 
-@property NSString *publicId;
-@property NSString *username;
-@property NSData *passwordSalt;
-@property NSData *passwordCrypt;
-@property NSString *status;
-@property RLMArray<KKeyPair> *keyPairs;
-@property RLMArray<KGroup> *groups;
+@property (nonatomic) NSString *username;
+@property (nonatomic) NSData *passwordSalt;
+@property (nonatomic) NSData *passwordCrypt;
+@property (nonatomic) NSString *status;
+@property (nonatomic) NSArray *keyPairs;
+@property (nonatomic) NSArray *groups;
 
-+ (void)addUserWithUsername:(NSString *)username;
++ (void)addUserWithUsername:(NSString *)username realmPath:(NSString *)realmPath;
++ (void)remoteFinishRegistration:(NSString *)username realmPath:(NSString *)realmPath;
+//+ (KUser *)findByUsername:(NSString *)username realm:(RLMRealm *)realm;
 
-- (void)registerUsername:(NSString *)username password:(NSString *)password;
-- (void)remoteFinishRegistration;
+- (void)registerUsername:(NSString *)username password:(NSString *)password; //realm:(RLMRealm *)realm;
 - (void)sendMessageText:(NSString *)text toUser:(KUser *)user;
 - (KKeyPair *)activeKeyPair;
 
 @end
-
-// This protocol enables typed collections. i.e.:
-// RLMArray<KUser>
-RLM_ARRAY_TYPE(KUser)
 
 //API Endpoints
 #define kUserUsernameRegistrationEndpoint @"http://127.0.0.1:9393/user.json"

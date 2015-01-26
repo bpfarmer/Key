@@ -13,23 +13,6 @@
 
 @implementation KKeyPair
 
-// Specify default values for properties
-
-+ (NSDictionary *)defaultPropertyValues
-{
-    return @{
-      @"publicId" : @"",
-      @"privateKey" : @"",
-    };
-}
-
-// Specify properties to ignore (Realm won't persist these)
-
-//+ (NSArray *)ignoredProperties
-//{
-//    return @[];
-//}
-
 + (KKeyPair *)createRSAKeyPair {
     KError *error = [[KError alloc] init];
     KRSACryptor *RSACryptor = [[KRSACryptor alloc] init];
@@ -76,18 +59,9 @@
     return dataCrypt;
 }
 
-- (void)saveInRealm:(RLMRealm *)realm {
-    [realm beginWriteTransaction];
-    [realm addObject:self];
-    [realm commitWriteTransaction];
-}
-
-- (void)updateAttributes:(NSDictionary *)attributeDictionary realm:(RLMRealm *)realm {
-    [realm beginWriteTransaction];
-    for(id key in attributeDictionary) {
-        [self setValue:attributeDictionary[key] forKey:key];
-    }
-    [realm commitWriteTransaction];
+- (NSArray *)yapDatabaseRelationshipEdges {
+    NSArray *edges = nil;
+    return edges;
 }
 
 @end

@@ -41,5 +41,9 @@
     return @{@"key" : [NSData dataWithBytes:key length:sizeof(key)], @"salt" : salt};
 }
 
-
++(NSData*)generateSecureRandomData:(NSUInteger)length {
+    NSMutableData* d = [NSMutableData dataWithLength:length];
+    SecRandomCopyBytes(kSecRandomDefault, length, [d mutableBytes]);
+    return d;
+}
 @end

@@ -18,14 +18,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [RLMRealm setSchemaVersion:2 withMigrationBlock:^(RLMMigration *migration, NSUInteger oldSchemaVersion) {
-        // We haven’t migrated anything yet, so oldSchemaVersion == 0
-        if (oldSchemaVersion < 2) {
-            // Nothing to do!
-            // Realm will automatically detect new properties and removed properties
-            // And will update the schema on disk automatically
-        }
-    }];
+    [RLMRealm setSchemaVersion:3 forRealmAtPath:[RLMRealm defaultRealmPath] withMigrationBlock:^(RLMMigration *migration, NSUInteger oldSchemaVersion) {}];
     return YES;
 }
 

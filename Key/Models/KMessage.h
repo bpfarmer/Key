@@ -5,27 +5,23 @@
 //  Created by Brendan Farmer on 1/17/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
-
-#import <Realm/Realm.h>
+#import <Foundation/Foundation.h>
+#import <YapDatabase/YapDatabaseRelationshipNode.h>
+#import "KYapDatabaseObject.h"
 
 @class KUser;
 @class KGroup;
 @class KMessageCrypt;
 
-@interface KMessage : RLMObject
+@interface KMessage : KYapDatabaseObject <YapDatabaseRelationshipNode>
 
-@property NSString *publicId;
-@property KUser *author;
-@property KGroup *group;
-@property NSString *body;
-@property NSData *attachments;
-@property NSString *status;
+@property (nonatomic) KUser *author;
+@property (nonatomic) KGroup *group;
+@property (nonatomic) NSString *body;
+@property (nonatomic) NSData *attachments;
+@property (nonatomic) NSString *status;
 
 - (BOOL)sendToServer;
 - (KMessageCrypt *)encryptMessageToUser:(KUser *)user;
 
 @end
-
-// This protocol enables typed collections. i.e.:
-// RLMArray<KMessage>
-RLM_ARRAY_TYPE(KMessage)

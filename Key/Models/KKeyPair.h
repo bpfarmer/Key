@@ -5,29 +5,27 @@
 //  Created by Brendan Farmer on 1/15/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
-
-#import <Realm/Realm.h>
+#import <Foundation/Foundation.h>
+#import <YapDatabase/YapDatabaseRelationshipNode.h>
+#import "KYapDatabaseObject.h"
 
 @class KUser;
 
-@interface KKeyPair : RLMObject
+@interface KKeyPair : KYapDatabaseObject <YapDatabaseRelationshipNode>
 
-@property NSString *publicId;
-@property NSString *privateKey;
-@property NSString *publicKey;
-@property NSString *algorithm;
+@property (nonatomic) NSString *privateKey;
+@property (nonatomic) NSString *publicKey;
+@property (nonatomic) NSString *algorithm;
 
 + (KKeyPair *)createRSAKeyPair;
-- (void)updateAttributes:(NSDictionary *)keyDictionary realm:(RLMRealm *)realm;
-- (void)saveInRealm:(RLMRealm *)realm;
+//- (void)updateAttributes:(NSDictionary *)keyDictionary realm:(RLMRealm *)realm;
+//- (void)saveInRealm:(RLMRealm *)realm;
+
 - (NSString *)encryptText:(NSString *)text;
 - (NSString *)decryptText:(NSString *)textCrypt;
 - (NSData *)encryptData:(NSData *)data;
 - (NSData *)decryptData:(NSData *)dataCrypt;
+
 - (NSDictionary *)toDictionary;
 
 @end
-
-// This protocol enables typed collections. i.e.:
-// RLMArray<KKeyPair>
-RLM_ARRAY_TYPE(KKeyPair)

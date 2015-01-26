@@ -9,7 +9,27 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-Key-Realm.xcscheme</key>
+		<key>Pods-Key-CocoaLumberjack.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-Key-Mantle.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-Key-SQLCipher.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-Key-SSKeychain.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-Key-YapDatabase.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -19,40 +39,40 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-KeyTests-Realm.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-KeyTests.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>21495F2EB1531626D999525B</key>
+		<key>098B6A194C464E9DFD111E0D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AA769E827963923B87A4692A</key>
+		<key>246CAE61EDB8C61AA6A47E98</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AEDC0F965A9FDB85E040FF6D</key>
+		<key>3A86FAF5A464355C04E0B0D7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BC5760F2550E6F02C3934419</key>
+		<key>4C754CF06D89BC2D01E2D4C1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E755A77A9FF92C19D68D3E5F</key>
+		<key>AF14BA65AD0F9952481F216F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C6895A60AA4FD929C42BBE0D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EE697906931C100CB9A1A598</key>
 		<dict>
 			<key>primary</key>
 			<true/>

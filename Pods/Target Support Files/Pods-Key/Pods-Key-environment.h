@@ -48,15 +48,63 @@
 #define COCOAPODS_VERSION_MINOR_AFNetworking_UIKit 5
 #define COCOAPODS_VERSION_PATCH_AFNetworking_UIKit 0
 
-// Realm
-#define COCOAPODS_POD_AVAILABLE_Realm
-#define COCOAPODS_VERSION_MAJOR_Realm 0
-#define COCOAPODS_VERSION_MINOR_Realm 89
-#define COCOAPODS_VERSION_PATCH_Realm 2
+// CocoaLumberjack
+#define COCOAPODS_POD_AVAILABLE_CocoaLumberjack
+#define COCOAPODS_VERSION_MAJOR_CocoaLumberjack 1
+#define COCOAPODS_VERSION_MINOR_CocoaLumberjack 9
+#define COCOAPODS_VERSION_PATCH_CocoaLumberjack 2
 
-// Realm/Headers
-#define COCOAPODS_POD_AVAILABLE_Realm_Headers
-#define COCOAPODS_VERSION_MAJOR_Realm_Headers 0
-#define COCOAPODS_VERSION_MINOR_Realm_Headers 89
-#define COCOAPODS_VERSION_PATCH_Realm_Headers 2
+// CocoaLumberjack/Core
+#define COCOAPODS_POD_AVAILABLE_CocoaLumberjack_Core
+#define COCOAPODS_VERSION_MAJOR_CocoaLumberjack_Core 1
+#define COCOAPODS_VERSION_MINOR_CocoaLumberjack_Core 9
+#define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Core 2
+
+// CocoaLumberjack/Extensions
+#define COCOAPODS_POD_AVAILABLE_CocoaLumberjack_Extensions
+#define COCOAPODS_VERSION_MAJOR_CocoaLumberjack_Extensions 1
+#define COCOAPODS_VERSION_MINOR_CocoaLumberjack_Extensions 9
+#define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Extensions 2
+
+// Mantle
+#define COCOAPODS_POD_AVAILABLE_Mantle
+#define COCOAPODS_VERSION_MAJOR_Mantle 1
+#define COCOAPODS_VERSION_MINOR_Mantle 5
+#define COCOAPODS_VERSION_PATCH_Mantle 4
+
+// Mantle/extobjc
+#define COCOAPODS_POD_AVAILABLE_Mantle_extobjc
+#define COCOAPODS_VERSION_MAJOR_Mantle_extobjc 1
+#define COCOAPODS_VERSION_MINOR_Mantle_extobjc 5
+#define COCOAPODS_VERSION_PATCH_Mantle_extobjc 4
+
+// SQLCipher/common
+#define COCOAPODS_POD_AVAILABLE_SQLCipher_common
+#define COCOAPODS_VERSION_MAJOR_SQLCipher_common 3
+#define COCOAPODS_VERSION_MINOR_SQLCipher_common 1
+#define COCOAPODS_VERSION_PATCH_SQLCipher_common 0
+
+// SQLCipher/fts
+#define COCOAPODS_POD_AVAILABLE_SQLCipher_fts
+#define COCOAPODS_VERSION_MAJOR_SQLCipher_fts 3
+#define COCOAPODS_VERSION_MINOR_SQLCipher_fts 1
+#define COCOAPODS_VERSION_PATCH_SQLCipher_fts 0
+
+// SSKeychain
+#define COCOAPODS_POD_AVAILABLE_SSKeychain
+#define COCOAPODS_VERSION_MAJOR_SSKeychain 1
+#define COCOAPODS_VERSION_MINOR_SSKeychain 2
+#define COCOAPODS_VERSION_PATCH_SSKeychain 2
+
+// YapDatabase/SQLCipher
+#define COCOAPODS_POD_AVAILABLE_YapDatabase_SQLCipher
+#define COCOAPODS_VERSION_MAJOR_YapDatabase_SQLCipher 2
+#define COCOAPODS_VERSION_MINOR_YapDatabase_SQLCipher 5
+#define COCOAPODS_VERSION_PATCH_YapDatabase_SQLCipher 4
+
+// YapDatabase/common
+#define COCOAPODS_POD_AVAILABLE_YapDatabase_common
+#define COCOAPODS_VERSION_MAJOR_YapDatabase_common 2
+#define COCOAPODS_VERSION_MINOR_YapDatabase_common 5
+#define COCOAPODS_VERSION_PATCH_YapDatabase_common 4
 

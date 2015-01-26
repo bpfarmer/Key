@@ -1,0 +1,1 @@
+PODS_KEY_MANTLE_OTHER_LDFLAGS = -framework "Foundation"

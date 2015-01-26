@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		9975D9D1116658E479B1041D /* libPods-Key.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80A2212DA0A1E21445E98DDB /* libPods-Key.a */; };
 		E7BF14D0C491E7C8C7BAFF73 /* libPods-KeyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */; };
+		EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAA81A76C47200589CF3 /* KYapDatabaseObject.m */; };
+		EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAAC1A76C55600589CF3 /* KStorageManager.m */; };
+		EFB1EAB01A76C5E900589CF3 /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAAF1A76C5E900589CF3 /* KStorageKeys.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
 		EFC6BEA91A6857D400B0EB8F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA81A6857D400B0EB8F /* ViewController.m */; };
@@ -50,6 +53,12 @@
 		BED4F366B60241C2DC1CBDD5 /* Pods-Key.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.debug.xcconfig"; sourceTree = "<group>"; };
 		C461760CA51ABA0BE7C393EF /* Pods-Key.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.release.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.release.xcconfig"; sourceTree = "<group>"; };
 		DF6091F2DF6E5A8AC8248FE8 /* Pods-KeyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.release.xcconfig"; sourceTree = "<group>"; };
+		EFB1EAA71A76C47200589CF3 /* KYapDatabaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KYapDatabaseObject.h; path = Models/KYapDatabaseObject.h; sourceTree = "<group>"; };
+		EFB1EAA81A76C47200589CF3 /* KYapDatabaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KYapDatabaseObject.m; path = Models/KYapDatabaseObject.m; sourceTree = "<group>"; };
+		EFB1EAAB1A76C55600589CF3 /* KStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KStorageManager.h; path = Models/Storage/KStorageManager.h; sourceTree = "<group>"; };
+		EFB1EAAC1A76C55600589CF3 /* KStorageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KStorageManager.m; path = Models/Storage/KStorageManager.m; sourceTree = "<group>"; };
+		EFB1EAAE1A76C5E900589CF3 /* KStorageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KStorageKeys.h; path = Models/Storage/KStorageKeys.h; sourceTree = "<group>"; };
+		EFB1EAAF1A76C5E900589CF3 /* KStorageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KStorageKeys.m; path = Models/Storage/KStorageKeys.m; sourceTree = "<group>"; };
 		EFC6BE9D1A6857D400B0EB8F /* Key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Key.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFC6BEA11A6857D400B0EB8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFC6BEA21A6857D400B0EB8F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -132,6 +141,19 @@
 				940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EFB1EAAA1A76C53500589CF3 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				EFB1EAA71A76C47200589CF3 /* KYapDatabaseObject.h */,
+				EFB1EAA81A76C47200589CF3 /* KYapDatabaseObject.m */,
+				EFB1EAAB1A76C55600589CF3 /* KStorageManager.h */,
+				EFB1EAAC1A76C55600589CF3 /* KStorageManager.m */,
+				EFB1EAAE1A76C5E900589CF3 /* KStorageKeys.h */,
+				EFB1EAAF1A76C5E900589CF3 /* KStorageKeys.m */,
+			);
+			name = Storage;
 			sourceTree = "<group>";
 		};
 		EFC6BE941A6857D400B0EB8F = {
@@ -265,6 +287,7 @@
 		EFEBDD321A68673D00973E15 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				EFB1EAAA1A76C53500589CF3 /* Storage */,
 				EFEBDD391A6B2C7800973E15 /* KMessage.h */,
 				EFEBDD3A1A6B2C7800973E15 /* KMessage.m */,
 				EFEBDD331A686A0300973E15 /* KKeyPair.h */,
@@ -457,6 +480,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
+				EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */,
 				EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */,
 				EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */,
 				EFC6BEDB1A68582200B0EB8F /* KRSACryptorKeyPair.m in Sources */,
@@ -468,10 +492,12 @@
 				EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */,
 				EFC6BEDA1A68582200B0EB8F /* KRSACryptor.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
+				EFB1EAB01A76C5E900589CF3 /* KStorageKeys.m in Sources */,
 				EFEBDD411A6B2D5E00973E15 /* KMessageCrypt.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
 				EFC6BED81A68582200B0EB8F /* KCryptError.m in Sources */,
 				EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */,
+				EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */,
 				EFEBDD481A6D879700973E15 /* Util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

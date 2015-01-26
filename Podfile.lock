@@ -20,17 +20,36 @@ PODS:
   - AFNetworking/UIKit (2.5.0):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Realm (0.89.2):
-    - Realm/Headers (= 0.89.2)
-  - Realm/Headers (0.89.2)
+  - CocoaLumberjack (1.9.2):
+    - CocoaLumberjack/Extensions (= 1.9.2)
+  - CocoaLumberjack/Core (1.9.2)
+  - CocoaLumberjack/Extensions (1.9.2):
+    - CocoaLumberjack/Core
+  - Mantle (1.5.4):
+    - Mantle/extobjc (= 1.5.4)
+  - Mantle/extobjc (1.5.4)
+  - SQLCipher/common (3.1.0)
+  - SQLCipher/fts (3.1.0):
+    - SQLCipher/common
+  - SSKeychain (1.2.2)
+  - YapDatabase/common (2.5.4):
+    - CocoaLumberjack (~> 1)
+  - YapDatabase/SQLCipher (2.5.4):
+    - SQLCipher/fts
+    - YapDatabase/common
 
 DEPENDENCIES:
   - AFNetworking
-  - Realm
-  - Realm/Headers
+  - Mantle
+  - SSKeychain
+  - YapDatabase/SQLCipher
 
 SPEC CHECKSUMS:
   AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
-  Realm: 4ba08033bea6a32e49eebcfd41e5fd651168135b
+  CocoaLumberjack: 205769c032b5fef85b92472046bcc8b7e7c8a817
+  Mantle: d5fbaf30fbc58031223af13812c060e15934a1fe
+  SQLCipher: 981110217eb93c2779c34fb59e646a1c1da918d8
+  SSKeychain: cc48bd3ad24fcd9125adb9e0d23dd50b8bbd08b9
+  YapDatabase: c1d6912df1b4a160f7373ee7657d360e29bb00fd
 
 COCOAPODS: 0.35.0
