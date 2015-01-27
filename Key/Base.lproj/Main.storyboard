@@ -200,6 +200,16 @@
                                     </mask>
                                 </variation>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aBr-Hh-Gec">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="bypass">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="Tyd-pY-OD3" kind="showDetail" id="s7F-s8-eXn"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -209,7 +219,13 @@
                             <constraint firstItem="Skq-dk-6nw" firstAttribute="top" secondItem="bhe-A7-aYb" secondAttribute="bottom" constant="30" id="LVP-u4-hxo">
                                 <variation key="widthClass=compact" constant="13"/>
                             </constraint>
+                            <constraint firstItem="aBr-Hh-Gec" firstAttribute="top" secondItem="Oqw-Kv-EoX" secondAttribute="bottom" constant="20" id="Vm5-5O-Yih">
+                                <variation key="heightClass=regular-widthClass=compact" constant="39"/>
+                            </constraint>
                             <constraint firstAttribute="centerX" secondItem="bhe-A7-aYb" secondAttribute="centerX" id="XB5-No-WpP"/>
+                            <constraint firstAttribute="centerX" secondItem="aBr-Hh-Gec" secondAttribute="centerX" id="g5k-LB-3Zx">
+                                <variation key="heightClass=regular-widthClass=compact" constant="-0.5"/>
+                            </constraint>
                             <constraint firstAttribute="centerX" secondItem="Skq-dk-6nw" secondAttribute="centerX" id="oeN-Yd-wJz"/>
                         </constraints>
                         <variation key="default">
@@ -217,14 +233,17 @@
                                 <exclude reference="Skq-dk-6nw"/>
                                 <exclude reference="Oqw-Kv-EoX"/>
                                 <exclude reference="bhe-A7-aYb"/>
+                                <exclude reference="aBr-Hh-Gec"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="XB5-No-WpP"/>
                                 <exclude reference="JRE-c7-zd3"/>
                                 <exclude reference="LVP-u4-hxo"/>
                                 <exclude reference="oeN-Yd-wJz"/>
-                                <exclude reference="XB5-No-WpP"/>
                                 <exclude reference="3TD-Lv-FJC"/>
                                 <exclude reference="5rL-tw-U0v"/>
+                                <exclude reference="Vm5-5O-Yih"/>
+                                <exclude reference="g5k-LB-3Zx"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -232,14 +251,17 @@
                                 <include reference="Skq-dk-6nw"/>
                                 <include reference="Oqw-Kv-EoX"/>
                                 <include reference="bhe-A7-aYb"/>
+                                <include reference="aBr-Hh-Gec"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="XB5-No-WpP"/>
                                 <include reference="JRE-c7-zd3"/>
                                 <include reference="LVP-u4-hxo"/>
                                 <include reference="oeN-Yd-wJz"/>
-                                <include reference="XB5-No-WpP"/>
                                 <include reference="3TD-Lv-FJC"/>
                                 <include reference="5rL-tw-U0v"/>
+                                <include reference="Vm5-5O-Yih"/>
+                                <include reference="g5k-LB-3Zx"/>
                             </mask>
                         </variation>
                     </view>
@@ -265,7 +287,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DhW-06-40E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="319.5" y="-321"/>
+            <point key="canvasLocation" x="1179" y="-1092"/>
         </scene>
         <!--Registration View Controller-->
         <scene sceneID="dlR-ni-TIk">
@@ -503,6 +525,74 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xrv-Ed-dGh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1974" y="-321"/>
+        </scene>
+        <!--New Contact View Controller-->
+        <scene sceneID="rt1-Z8-7QE">
+            <objects>
+                <viewController id="Mm6-1z-EPz" customClass="NewContactViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2le-WS-2FG"/>
+                        <viewControllerLayoutGuide type="bottom" id="g6b-a1-zJV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ZPl-Ct-53m">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eQr-Te-yTl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-354" y="442.5"/>
+        </scene>
+        <!--Contacts View Controller-->
+        <scene sceneID="5Bv-Q3-SMH">
+            <objects>
+                <viewController id="HDm-TH-uUI" customClass="ContactsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="v8y-EJ-xez"/>
+                        <viewControllerLayoutGuide type="bottom" id="jaJ-tK-YbH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Xyc-dw-NUm">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GEH-JS-SJJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="382.5" y="442.5"/>
+        </scene>
+        <!--Inbox View Controller-->
+        <scene sceneID="5cH-Mh-agy">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nR0-yV-GoQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="Tyd-pY-OD3" customClass="InboxViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="aJj-vx-11j"/>
+                        <viewControllerLayoutGuide type="bottom" id="e8q-U4-o31"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="6s9-CT-KBf">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1179" y="442.5"/>
+        </scene>
+        <!--Message Compose View Controller-->
+        <scene sceneID="bzC-Sz-fTk">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3ux-6i-LZN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="JID-II-qk7" customClass="MessageComposeViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Wmg-Zv-Mx5"/>
+                        <viewControllerLayoutGuide type="bottom" id="W7P-mc-Srk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="oua-lT-wfk">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="1983" y="442.5"/>
         </scene>
     </scenes>
 </document>
