@@ -10,6 +10,11 @@
 		527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3E61A78193300B3688E /* WelcomeScreenViewController.m */; };
 		527DD3EA1A78197600B3688E /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3E91A78197600B3688E /* RegistrationViewController.m */; };
 		527DD3ED1A78198A00B3688E /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3EC1A78198A00B3688E /* LoginViewController.m */; };
+		527DD3F01A782E8A00B3688E /* InboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3EF1A782E8A00B3688E /* InboxViewController.m */; };
+		527DD3F31A78303000B3688E /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3F21A78303000B3688E /* ContactsViewController.m */; };
+		527DD3F61A78303A00B3688E /* NewContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3F51A78303A00B3688E /* NewContactViewController.m */; };
+		527DD3F91A78304500B3688E /* ContactDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3F81A78304500B3688E /* ContactDetailViewController.m */; };
+		527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3FB1A78306700B3688E /* MessageComposeViewController.m */; };
 		BC4AD1E3775892932B1ADA08 /* libPods-Key.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80A2212DA0A1E21445E98DDB /* libPods-Key.a */; };
 		E7BF14D0C491E7C8C7BAFF73 /* libPods-KeyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */; };
 		EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAA81A76C47200589CF3 /* KYapDatabaseObject.m */; };
@@ -57,6 +62,16 @@
 		527DD3E91A78197600B3688E /* RegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationViewController.m; sourceTree = "<group>"; };
 		527DD3EB1A78198A00B3688E /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		527DD3EC1A78198A00B3688E /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		527DD3EE1A782E8900B3688E /* InboxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InboxViewController.h; sourceTree = "<group>"; };
+		527DD3EF1A782E8A00B3688E /* InboxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxViewController.m; sourceTree = "<group>"; };
+		527DD3F11A78303000B3688E /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
+		527DD3F21A78303000B3688E /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
+		527DD3F41A78303A00B3688E /* NewContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewContactViewController.h; sourceTree = "<group>"; };
+		527DD3F51A78303A00B3688E /* NewContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewContactViewController.m; sourceTree = "<group>"; };
+		527DD3F71A78304500B3688E /* ContactDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactDetailViewController.h; sourceTree = "<group>"; };
+		527DD3F81A78304500B3688E /* ContactDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactDetailViewController.m; sourceTree = "<group>"; };
+		527DD3FA1A78306700B3688E /* MessageComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageComposeViewController.h; sourceTree = "<group>"; };
+		527DD3FB1A78306700B3688E /* MessageComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageComposeViewController.m; sourceTree = "<group>"; };
 		7FE65DB16A2581426F9789DA /* Pods-KeyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.debug.xcconfig"; sourceTree = "<group>"; };
 		80A2212DA0A1E21445E98DDB /* libPods-Key.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Key.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KeyTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -198,6 +213,16 @@
 				EFC6BEA71A6857D400B0EB8F /* ViewController.h */,
 				EFC6BEA81A6857D400B0EB8F /* ViewController.m */,
 				EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */,
+				527DD3F11A78303000B3688E /* ContactsViewController.h */,
+				527DD3F21A78303000B3688E /* ContactsViewController.m */,
+				527DD3F41A78303A00B3688E /* NewContactViewController.h */,
+				527DD3F51A78303A00B3688E /* NewContactViewController.m */,
+				527DD3F71A78304500B3688E /* ContactDetailViewController.h */,
+				527DD3F81A78304500B3688E /* ContactDetailViewController.m */,
+				527DD3FA1A78306700B3688E /* MessageComposeViewController.h */,
+				527DD3FB1A78306700B3688E /* MessageComposeViewController.m */,
+				527DD3EE1A782E8900B3688E /* InboxViewController.h */,
+				527DD3EF1A782E8A00B3688E /* InboxViewController.m */,
 				527DD3EB1A78198A00B3688E /* LoginViewController.h */,
 				527DD3EC1A78198A00B3688E /* LoginViewController.m */,
 				527DD3E81A78197600B3688E /* RegistrationViewController.h */,
@@ -496,6 +521,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				527DD3F61A78303A00B3688E /* NewContactViewController.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */,
 				EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */,
@@ -503,9 +529,12 @@
 				EFC6BEDB1A68582200B0EB8F /* KRSACryptorKeyPair.m in Sources */,
 				EFEBDD4E1A6EF2E000973E15 /* KSettings.m in Sources */,
 				EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */,
+				527DD3F31A78303000B3688E /* ContactsViewController.m in Sources */,
 				EFC6BED91A68582200B0EB8F /* KCryptor.m in Sources */,
 				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
+				527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */,
 				527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */,
+				527DD3F91A78304500B3688E /* ContactDetailViewController.m in Sources */,
 				EFC6BEA91A6857D400B0EB8F /* ViewController.m in Sources */,
 				EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */,
 				EFC6BEDA1A68582200B0EB8F /* KRSACryptor.m in Sources */,
@@ -519,6 +548,7 @@
 				EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */,
 				EFEBDD481A6D879700973E15 /* Util.m in Sources */,
 				527DD3ED1A78198A00B3688E /* LoginViewController.m in Sources */,
+				527DD3F01A782E8A00B3688E /* InboxViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
