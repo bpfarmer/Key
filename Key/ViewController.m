@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "KUser.h"
+#import "KStorageManager.h"
 
 @interface ViewController ()
 
@@ -19,6 +20,7 @@
     [super viewDidLoad];
     KUser *user = [[KUser alloc] initWithUsername:@"username3"];
     [user registerPassword:@"password"];
+    NSLog(@"NOT BLOCKING");
 }
 
 - (void)didReceiveMemoryWarning {

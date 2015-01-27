@@ -16,8 +16,8 @@
 NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnectionDidUpdateNotification";
 
 static const NSString *const databaseName  = @"Key.sqlite";
-static NSString * keychainService          = @"TSKeyChainService";
-static NSString * keychainDBPassAccount    = @"TSDatabasePass";
+static NSString * keychainService          = @"KKeyChainService";
+static NSString * keychainDBPassAccount    = @"KDatabasePass";
 
 @interface KStorageManager ()
 
@@ -32,7 +32,7 @@ static NSString * keychainDBPassAccount    = @"TSDatabasePass";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] init];
-        [sharedMyManager protectDatabaseFile];
+        //[sharedMyManager protectDatabaseFile];
     });
     return sharedMyManager;
 }
