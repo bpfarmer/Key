@@ -39,40 +39,110 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-KeyTests-AFNetworking.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-KeyTests-CocoaLumberjack.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-KeyTests-Mantle.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-KeyTests-SQLCipher.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-KeyTests-SSKeychain.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-KeyTests-YapDatabase.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-KeyTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>098B6A194C464E9DFD111E0D</key>
+		<key>119D933E4758020F7CF1B992</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>246CAE61EDB8C61AA6A47E98</key>
+		<key>4BF82E8944D8AA481B0CA6A7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3A86FAF5A464355C04E0B0D7</key>
+		<key>66CFE0866FD5CB3D5495686F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4C754CF06D89BC2D01E2D4C1</key>
+		<key>718DA94D033BB92EC5B18D33</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AF14BA65AD0F9952481F216F</key>
+		<key>7CEFABB1E0389E24E7721E01</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C6895A60AA4FD929C42BBE0D</key>
+		<key>85CF0712F7F1605AA059083C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EE697906931C100CB9A1A598</key>
+		<key>97E77C3314ED01A34236856E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A1212EAF03A17720F8A0156C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A4ECA8F6943EB6C77C80B01C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D5B021D117CD4164D2BCB644</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E27564109B8D9EFF4EE27D79</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E69FC5E387A2CE26ACED3EC8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F0D2503A55D75E96671CDBE3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F782B602AE670D123DE64121</key>
 		<dict>
 			<key>primary</key>
 			<true/>

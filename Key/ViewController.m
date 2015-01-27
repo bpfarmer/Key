@@ -17,12 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    KUser *user = [[KUser alloc] init];
-    NSString *username = @"username3";
-    [user registerUsername:username password:@"12345"];
-    //[realm addNotificationBlock:^(NSString *note, RLMRealm * realm) {
-        //[self tryFinishRegistration:username realm:realm];
-    //}];
+    KUser *user = [[KUser alloc] initWithUsername:@"username3"];
 }
 
 - (void)didReceiveMemoryWarning {

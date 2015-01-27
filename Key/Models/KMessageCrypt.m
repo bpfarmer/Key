@@ -12,16 +12,16 @@
 
 @implementation KMessageCrypt
 
-- (NSDictionary *)toDictionary {
-    return @{
-      @"senderId" : self.message.author.publicId,
-      @"recipientId" : self.recipient.publicId,
-      @"groupId" : self.group.publicId,
-      @"keyPairId" : self.keyPair.publicId,
-      @"bodyCrypt" : self.bodyCrypt,
-      @"attachmentsCrypt" : self.attachmentsCrypt
-    };
+- (instancetype)initWithMessage:(KMessage *)message user:(KUser *)user {
+    self = [super initWithUniqueId:nil];
     
+    if (self) {
+        _recipient = user;
+        _keyPair   = [user activeKeyPair];
+        _bodyCrypt = [[self keyPair] encryptText:message.body];
+    }
+    
+    return self;
 }
 
 @end

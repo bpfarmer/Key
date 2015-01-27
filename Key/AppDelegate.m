@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import <Realm/Realm.h>
 
 @interface AppDelegate ()
 
@@ -18,7 +17,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [RLMRealm setSchemaVersion:3 forRealmAtPath:[RLMRealm defaultRealmPath] withMigrationBlock:^(RLMMigration *migration, NSUInteger oldSchemaVersion) {}];
     return YES;
 }
 

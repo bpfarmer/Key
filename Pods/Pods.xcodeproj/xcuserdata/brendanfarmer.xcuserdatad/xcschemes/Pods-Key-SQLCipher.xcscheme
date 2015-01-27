@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4C754CF06D89BC2D01E2D4C1"
+               BlueprintIdentifier = "85CF0712F7F1605AA059083C"
                BuildableName = "libPods-Key-SQLCipher.a"
                BlueprintName = "Pods-Key-SQLCipher"
                ReferencedContainer = "container:Pods.xcodeproj">

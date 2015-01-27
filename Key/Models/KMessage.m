@@ -17,7 +17,7 @@
     KGroup *group = [self group];
     NSMutableArray *messageCrypts = [NSMutableArray array];
     for(KUser *user in group.users) {
-        [messageCrypts addObject:[[self encryptMessageToUser:user] toDictionary]];
+        [messageCrypts addObject:[self encryptMessageToUser:user]];
     }
     NSDictionary *messagesDictionary =
     @{
@@ -28,15 +28,7 @@
 }
 
 - (KMessageCrypt *)encryptMessageToUser:(KUser *)user {
-    KKeyPair *keyPair = [user activeKeyPair];
-    KMessageCrypt *messageCrypt = [[KMessageCrypt alloc] init];
-    /*
-    messageCrypt.message = self;
-    messageCrypt.recipient = user;
-    messageCrypt.keyPair = keyPair;
-    messageCrypt.bodyCrypt = [keyPair encryptText:self.body];
-    messageCrypt.attachmentsCrypt = [keyPair encryptData:self.attachments];
-    */
+    KMessageCrypt *messageCrypt = [[KMessageCrypt alloc] initWithMessage:self user:user];
     return messageCrypt;
 }
 

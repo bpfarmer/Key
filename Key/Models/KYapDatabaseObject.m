@@ -14,20 +14,20 @@
 - (id)init{
     if (self = [super init])
     {
-        _publicId = [[NSUUID UUID] UUIDString];
+        _uniqueId = [[NSUUID UUID] UUIDString];
     }
     return self;
 }
 
-- (instancetype)initWithpublicId:(NSString *)apublicId{
+- (instancetype)initWithUniqueId:(NSString *)aUniqueId{
     if (self = [super init]) {
-        _publicId = apublicId;
+        _uniqueId = aUniqueId;
     }
     return self;
 }
 
 - (void)saveWithTransaction:(YapDatabaseReadWriteTransaction *)transaction{
-    [transaction setObject:self forKey:self.publicId inCollection:[[self class] collection]];
+    [transaction setObject:self forKey:self.uniqueId inCollection:[[self class] collection]];
 }
 
 - (void)save{
@@ -37,14 +37,14 @@
 }
 
 - (void)removeWithTransaction:(YapDatabaseReadWriteTransaction *)transaction{
-    [transaction removeObjectForKey:self.publicId inCollection:[[self class] collection]];
+    [transaction removeObjectForKey:self.uniqueId inCollection:[[self class] collection]];
 }
 
 
 - (void)remove{
     [[KStorageManager sharedManager].dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
         [self removeWithTransaction:transaction];
-        [[transaction ext:@"relationships"] flush];
+        //[[transaction ext:@"relationships"] flush];
     }];
 }
 
@@ -55,15 +55,15 @@
     return NSStringFromClass([self class]);
 }
 
-+ (instancetype) fetchObjectWithpublicId:(NSString *)publicId transaction:(YapDatabaseReadTransaction *)transaction {
-    return [transaction objectForKey:publicId inCollection:[self collection]];
++ (instancetype) fetchObjectWithUniqueId:(NSString *)uniqueId transaction:(YapDatabaseReadTransaction *)transaction {
+    return [transaction objectForKey:uniqueId inCollection:[self collection]];
 }
 
-+ (instancetype) fetchObjectWithpublicId:(NSString *)publicId{
++ (instancetype) fetchObjectWithUniqueId:(NSString *)uniqueId{
     __block id object;
     
     [[KStorageManager sharedManager].dbConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        object = [transaction objectForKey:publicId inCollection:[self collection]];
+        object = [transaction objectForKey:uniqueId inCollection:[self collection]];
     }];
     
     return object;

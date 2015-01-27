@@ -16,12 +16,12 @@
 /**
  *  Initializes a new database object with a unique identifier
  *
- *  @param publicId Key used for the key-value store
+ *  @param uniqueId Key used for the key-value store
  *
  *  @return Initialized object
  */
 
-- (instancetype)initWithpublicId:(NSString*)publicId;
+- (instancetype)initWithUniqueId:(NSString*)uniqueId;
 
 /**
  *  Returns the collection to which the object belongs.
@@ -34,15 +34,15 @@
 /**
  *  Fetches the object with the provided identifier
  *
- *  @param publicId    Unique identifier of the entry in a collection
+ *  @param uniqueId    Unique identifier of the entry in a collection
  *  @param transaction Transaction used for fetching the object
  *
  *  @return Returns and instance of the object or nil if non-existent
  */
 
-+ (instancetype)fetchObjectWithpublicId:(NSString*)publicId transaction:(YapDatabaseReadTransaction*)transaction;
++ (instancetype)fetchObjectWithUniqueId:(NSString*)uniqueId transaction:(YapDatabaseReadTransaction*)transaction;
 
-+ (instancetype) fetchObjectWithpublicId:(NSString *)publicId;
++ (instancetype) fetchObjectWithUniqueId:(NSString *)uniqueId;
 
 /**
  *  Saves the object with a new YapDatabaseConnection
@@ -64,7 +64,7 @@
  */
 
 
-@property (nonatomic) NSString *publicId;
+@property (nonatomic) NSString *uniqueId;
 
 
 - (void)removeWithTransaction:(YapDatabaseReadWriteTransaction*)transaction;

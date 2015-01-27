@@ -38,7 +38,7 @@
     unsigned char key[(size_t)saltLength];
     CCKeyDerivationPBKDF(kCCPBKDF2, textData.bytes, textData.length, salt.bytes, salt.length, kCCPRFHmacAlgSHA256, rounds, key, saltLength);
 
-    return @{@"key" : [NSData dataWithBytes:key length:sizeof(key)], @"salt" : salt};
+    return @{@"encrypted" : [NSData dataWithBytes:key length:sizeof(key)], @"salt" : salt};
 }
 
 +(NSData*)generateSecureRandomData:(NSUInteger)length {

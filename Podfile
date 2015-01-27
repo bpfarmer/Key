@@ -10,4 +10,8 @@ target 'Key', exclusive: true do
 end
 
 target 'KeyTests', exclusive: true do
+    pod 'YapDatabase/SQLCipher'
+    pod 'AFNetworking'
+    pod 'Mantle'
+    pod 'SSKeychain'
 end

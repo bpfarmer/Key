@@ -6,22 +6,19 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 #import <Foundation/Foundation.h>
+#import "KMessage.h"
 
-@class KMessage;
 @class KKeyPair;
 @class KUser;
 @class KGroup;
 
-@interface KMessageCrypt : NSObject <NSCoding>
+@interface KMessageCrypt : KMessage
 
-@property (nonatomic) KMessage *message;
 @property (nonatomic) KUser *recipient;
-@property (nonatomic) KGroup *group;
 @property (nonatomic) KKeyPair *keyPair;
 @property (nonatomic) NSString *bodyCrypt;
 @property (nonatomic) NSData *attachmentsCrypt;
-@property (nonatomic) NSString *status;
 
-- (NSDictionary *)toDictionary;
+- (instancetype)initWithMessage:(KMessage *)message user:(KUser *)user;
 
 @end

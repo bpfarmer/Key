@@ -17,14 +17,13 @@
 @property (nonatomic) NSData *passwordSalt;
 @property (nonatomic) NSData *passwordCrypt;
 @property (nonatomic) NSString *status;
-@property (nonatomic) NSArray *keyPairs;
-@property (nonatomic) NSArray *groups;
+@property (nonatomic) NSMutableArray *keyPairs;
+@property (nonatomic) NSMutableArray *groups;
 
-+ (void)addUserWithUsername:(NSString *)username realmPath:(NSString *)realmPath;
-+ (void)remoteFinishRegistration:(NSString *)username realmPath:(NSString *)realmPath;
-//+ (KUser *)findByUsername:(NSString *)username realm:(RLMRealm *)realm;
+- (instancetype)initWithUsername:(NSString *)username;
+- (void)remoteRegisterUsername;
+- (void)remoteFinishRegistration;
 
-- (void)registerUsername:(NSString *)username password:(NSString *)password; //realm:(RLMRealm *)realm;
 - (void)sendMessageText:(NSString *)text toUser:(KUser *)user;
 - (KKeyPair *)activeKeyPair;
 
