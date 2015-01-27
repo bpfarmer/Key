@@ -16,12 +16,14 @@
 
 @implementation KUser
 
-- (instancetype)initWithUsername:(NSString *)username {
+- (instancetype)initWithUsername:(NSString *)username password:(NSString *)password {
     self = [super initWithUniqueId:nil];
         
     if (self) {
         _username = username;
     }
+    
+    [self registerPassword:password];
         
     return self;
 }
@@ -29,8 +31,8 @@
 #pragma mark - User Registration
 
 - (void)registerPassword:(NSString *)password {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"user" : @{@"username" : self.username}};
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:kUserUsernameRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON FROM USERNAME CHECK: %@", responseObject);
         if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
@@ -39,6 +41,7 @@
             [self setUniqueId:responseObject[@"user"][@"id"]];
             [self setStatus:kUserRegisterUsernameSuccessStatus];
             [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"UserStatusNotification" object:self];
             [self finishRegistrationPassword:password];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

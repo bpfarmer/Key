@@ -15,11 +15,10 @@
 
 @implementation RegistrationViewController
 
-/*
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
     return YES;
-}*/
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,10 +26,16 @@
 }
 
 - (IBAction)createNewUser:(id)sender {
-    KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text];
-    [user registerPassword:self.passwordText.text];
-    
-    NSLog(@"%@ %@", user.username, self.passwordText.text);
+    KUser *user = [[KUser alloc] initWithUsername:@"username3" password:@"password"];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveUserStatusNotification:)
+                                                 name:@"UserStatusNotification"
+                                               object:nil];
+    NSLog(@"NOT BLOCKING");
+}
+
+- (void)receiveUserStatusNotification:(NSNotification *)notification {
+    NSLog(@"FANTASTIC");
 }
 
 - (void)didReceiveMemoryWarning {

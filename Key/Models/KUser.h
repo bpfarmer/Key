@@ -20,7 +20,7 @@
 @property (nonatomic) NSArray *keyPairs;
 @property (nonatomic) NSArray *groups;
 
-- (instancetype)initWithUsername:(NSString *)username;
+- (instancetype)initWithUsername:(NSString *)username password:(NSString *)password;
 - (void)registerPassword:(NSString *)password;
 - (KKeyPair *)activeKeyPair;
 

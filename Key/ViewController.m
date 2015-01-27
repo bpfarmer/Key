@@ -18,9 +18,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    KUser *user = [[KUser alloc] initWithUsername:@"username3"];
-    [user registerPassword:@"password"];
+    KUser *user = [[KUser alloc] initWithUsername:@"username3" password:@"password"];
+    [self addObserver:user forKeyPath:NSStringFromSelector(@selector(status)) options:0 context:NULL];
     NSLog(@"NOT BLOCKING");
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([object isKindOfClass:[KUser class]]) {
+        if ([keyPath isEqualToString:NSStringFromSelector(@selector(status))]) {
+            NSLog(@"FANTASTIC!");
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {
