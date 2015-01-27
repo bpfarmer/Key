@@ -17,8 +17,8 @@
 @property (nonatomic) NSData *passwordSalt;
 @property (nonatomic) NSData *passwordCrypt;
 @property (nonatomic) NSString *status;
-@property (nonatomic) NSMutableArray *keyPairs;
-@property (nonatomic) NSMutableArray *groups;
+@property (nonatomic) NSArray *keyPairs;
+@property (nonatomic) NSArray *groups;
 
 - (instancetype)initWithUsername:(NSString *)username;
 - (void)registerPassword:(NSString *)password;

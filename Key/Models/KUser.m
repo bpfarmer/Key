@@ -12,6 +12,7 @@
 #import "KSettings.h"
 #import "KMessage.h"
 #import "KMessageCrypt.h"
+#import "KStorageManager.h"
 
 @implementation KUser
 
@@ -37,7 +38,7 @@
         }else {
             [self setUniqueId:responseObject[@"user"][@"id"]];
             [self setStatus:kUserRegisterUsernameSuccessStatus];
-            //WRITE
+            [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
             [self finishRegistrationPassword:password];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -54,14 +55,16 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:kUserFinishRegistrationEndpoint parameters: updatedUserDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON FROM USER PASSWORD: %@", responseObject);
-        if([responseObject[@"status"] isEqual:@"FAILURE"]) {
+        if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
             [keyPair setUniqueId:responseObject[@"user"][@"keyPair"][@"id"]];
-            [self.keyPairs addObject:keyPair];
+            self.keyPairs = [NSArray arrayWithObjects:keyPair, nil];
             [self setStatus:kUserRegisterKeyPairSuccess];
+            [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
         } else {
             [self setStatus:kUserRegisterKeyPairFailure];
         }
-        //WRITE
+        KUser *user = [[KStorageManager sharedManager] objectForKey:self.uniqueId inCollection:@"users"];
+        NSLog(@"PERSISTENT USER PUBLIC KEY: %@", [[user.keyPairs objectAtIndex:0] publicKey]);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
