@@ -21,10 +21,7 @@
 @property (nonatomic) NSMutableArray *groups;
 
 - (instancetype)initWithUsername:(NSString *)username;
-- (void)remoteRegisterUsername;
-- (void)remoteFinishRegistration;
-
-- (void)sendMessageText:(NSString *)text toUser:(KUser *)user;
+- (void)registerPassword:(NSString *)password;
 - (KKeyPair *)activeKeyPair;
 
 @end

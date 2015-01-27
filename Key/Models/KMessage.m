@@ -13,34 +13,6 @@
 
 @implementation KMessage
 
-- (BOOL)sendToServer {
-    KGroup *group = [self group];
-    NSMutableArray *messageCrypts = [NSMutableArray array];
-    for(KUser *user in group.users) {
-        [messageCrypts addObject:[self encryptMessageToUser:user]];
-    }
-    NSDictionary *messagesDictionary =
-    @{
-      @"Messages" : messageCrypts
-    };
-    
-    return [self sendToServerMessageCrypts:messagesDictionary];
-}
-
-- (KMessageCrypt *)encryptMessageToUser:(KUser *)user {
-    KMessageCrypt *messageCrypt = [[KMessageCrypt alloc] initWithMessage:self user:user];
-    return messageCrypt;
-}
-
-+ (KMessage *)decryptMessageToUser:(KUser *)user {
-    return [[KMessage alloc] init];
-}
-
-- (BOOL)sendToServerMessageCrypts:(NSDictionary *)messageCrypts {
-    
-    return YES;
-}
-
 - (NSArray *)yapDatabaseRelationshipEdges {
     NSArray *edges = nil;
     return edges;

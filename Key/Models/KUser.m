@@ -25,30 +25,9 @@
     return self;
 }
 
-#pragma mark - Local User Registration
+#pragma mark - User Registration
 
-- (void)localRegistrationWithPassword:(NSString *)password {
-    [self generateRSAKeyPair];
-    [self generatePasswordCryptFromPassword:password];
-    // WRITE
-}
-
-- (void)generatePasswordCryptFromPassword:(NSString *)password {
-    KCryptor *cryptor = [[KCryptor alloc] init];
-    NSDictionary *encryptedPasswordDictionary = [cryptor encryptOneWay: password];
-    [self setPasswordCrypt:encryptedPasswordDictionary[@"encrypted"]];
-    [self setPasswordSalt:encryptedPasswordDictionary[@"salt"]];
-    NSLog(@"PASSWORD ENCRYPTED: %@", [self passwordCrypt]);
-}
-
-- (void)generateRSAKeyPair {
-    [self.keyPairs addObject:[KKeyPair createRSAKeyPair]];
-    NSLog(@"PUBLIC KEY: %@", [[self.keyPairs objectAtIndex:0] publicKey]);
-}
-
-#pragma mark - Remote User Registration
-
-- (void)remoteRegisterUsername {
+- (void)registerPassword:(NSString *)password {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSDictionary *parameters = @{@"user" : @{@"username" : self.username}};
     [manager POST:kUserUsernameRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -58,29 +37,41 @@
         }else {
             [self setUniqueId:responseObject[@"user"][@"id"]];
             [self setStatus:kUserRegisterUsernameSuccessStatus];
+            //WRITE
+            [self finishRegistrationPassword:password];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
 }
 
-- (void)remoteFinishRegistration {
+- (void)finishRegistrationPassword:(NSString *)password {
+    [self localGeneratePassword:password];
+    KKeyPair *keyPair = [KKeyPair createRSAKeyPair];
     NSDictionary *updatedUserDictionary = @{@"user" : @{@"id"       : self.uniqueId,
                                                         @"password" : self.passwordCrypt,
-                                                        @"keyPair"  : [self.activeKeyPair toDictionary]}};
+                                                        @"keyPair"  : [keyPair toDictionary]}};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:kUserFinishRegistrationEndpoint parameters: updatedUserDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON FROM USER PASSWORD: %@", responseObject);
         if([responseObject[@"status"] isEqual:@"FAILURE"]) {
-            [[self.keyPairs lastObject] setUniqueId:responseObject[@"user"][@"keyPair"][@"id"]];
+            [keyPair setUniqueId:responseObject[@"user"][@"keyPair"][@"id"]];
+            [self.keyPairs addObject:keyPair];
             [self setStatus:kUserRegisterKeyPairSuccess];
-            //WRITE
         } else {
             [self setStatus:kUserRegisterKeyPairFailure];
         }
+        //WRITE
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+}
+
+- (void)localGeneratePassword:(NSString *)password {
+    NSDictionary *encryptedPasswordDictionary = [[[KCryptor alloc] init] encryptOneWay: password];
+    [self setPasswordCrypt:encryptedPasswordDictionary[@"encrypted"]];
+    [self setPasswordSalt:encryptedPasswordDictionary[@"salt"]];
+    NSLog(@"PASSWORD ENCRYPTED: %@", [self passwordCrypt]);
 }
 
 #pragma mark - Adding External Users

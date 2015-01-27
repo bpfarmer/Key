@@ -21,7 +21,4 @@
 @property (nonatomic) NSData *attachments;
 @property (nonatomic) NSString *status;
 
-- (BOOL)sendToServer;
-- (KMessageCrypt *)encryptMessageToUser:(KUser *)user;
-
 @end

@@ -18,6 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     KUser *user = [[KUser alloc] initWithUsername:@"username3"];
+    [user registerPassword:@"password"];
 }
 
 - (void)didReceiveMemoryWarning {
