@@ -7,7 +7,7 @@
         <!--Welcome Screen View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="welcomeScreenViewController" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="WelcomeScreenViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -270,7 +270,7 @@
         <!--Registration View Controller-->
         <scene sceneID="dlR-ni-TIk">
             <objects>
-                <viewController id="j8F-1F-UoR" customClass="registrationViewController" sceneMemberID="viewController">
+                <viewController id="j8F-1F-UoR" customClass="RegistrationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="xHa-sC-oP5"/>
                         <viewControllerLayoutGuide type="bottom" id="NQw-c1-n2F"/>
