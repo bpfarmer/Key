@@ -35,7 +35,15 @@
 }
 
 - (void)receiveUserStatusNotification:(NSNotification *)notification {
-    NSLog(@"FANTASTIC");
+    
+    NSString *status = [notification.object performSelector:@selector(status)];
+    if([status isEqualToString:kUserRegisterUsernameSuccessStatus]) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
+        UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"IDENTIFIER_OF_YOUR_VIEWCONTROLLER"];
+        [self presentViewController:vc animated:YES completion:nil];
+    }else if([status isEqualToString:kUserRegisterUsernameFailureStatus]) {
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {
