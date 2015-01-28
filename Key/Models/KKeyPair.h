@@ -17,9 +17,8 @@
 @property (nonatomic) NSString *publicKey;
 @property (nonatomic) NSString *algorithm;
 
-+ (KKeyPair *)createRSAKeyPair;
-//- (void)updateAttributes:(NSDictionary *)keyDictionary realm:(RLMRealm *)realm;
-//- (void)saveInRealm:(RLMRealm *)realm;
+- (instancetype)initRSA;
+- (instancetype)initFromRemote:(NSDictionary *)publicKeyDictionary;
 
 - (NSString *)encryptText:(NSString *)text;
 - (NSString *)decryptText:(NSString *)textCrypt;

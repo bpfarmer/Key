@@ -22,7 +22,6 @@
 		EFB1EAB01A76C5E900589CF3 /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAAF1A76C5E900589CF3 /* KStorageKeys.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
-		EFC6BEA91A6857D400B0EB8F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA81A6857D400B0EB8F /* ViewController.m */; };
 		EFC6BEAC1A6857D400B0EB8F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */; };
 		EFC6BEAE1A6857D500B0EB8F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEAD1A6857D400B0EB8F /* Images.xcassets */; };
 		EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEAF1A6857D500B0EB8F /* LaunchScreen.xib */; };
@@ -89,8 +88,6 @@
 		EFC6BEA21A6857D400B0EB8F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		EFC6BEA41A6857D400B0EB8F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		EFC6BEA71A6857D400B0EB8F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		EFC6BEA81A6857D400B0EB8F /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		EFC6BEAB1A6857D400B0EB8F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EFC6BEAD1A6857D400B0EB8F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		EFC6BEB01A6857D500B0EB8F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -210,8 +207,6 @@
 				EFC6BEC81A68582200B0EB8F /* Library */,
 				EFC6BEA41A6857D400B0EB8F /* AppDelegate.h */,
 				EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */,
-				EFC6BEA71A6857D400B0EB8F /* ViewController.h */,
-				EFC6BEA81A6857D400B0EB8F /* ViewController.m */,
 				EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */,
 				527DD3F11A78303000B3688E /* ContactsViewController.h */,
 				527DD3F21A78303000B3688E /* ContactsViewController.m */,
@@ -535,7 +530,6 @@
 				527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */,
 				527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */,
 				527DD3F91A78304500B3688E /* ContactDetailViewController.m in Sources */,
-				EFC6BEA91A6857D400B0EB8F /* ViewController.m in Sources */,
 				EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */,
 				EFC6BEDA1A68582200B0EB8F /* KRSACryptor.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,

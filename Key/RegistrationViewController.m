@@ -26,11 +26,15 @@
 }
 
 - (IBAction)createNewUser:(id)sender {
-    KUser *user = [[KUser alloc] initWithUsername:@"username3" password:@"password"];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveUserStatusNotification:)
                                                  name:@"UserStatusNotification"
                                                object:nil];
+    dispatch_queue_t registrationQueue= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(registrationQueue, ^{
+        KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text];
+        [user registerWithPassword:self.passwordText.text];
+    });
     NSLog(@"NOT BLOCKING");
 }
 
@@ -38,9 +42,9 @@
     
     NSString *status = [notification.object performSelector:@selector(status)];
     if([status isEqualToString:kUserRegisterUsernameSuccessStatus]) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle: nil];
-        UIViewController * vc = [storyboard instantiateViewControllerWithIdentifier:@"IDENTIFIER_OF_YOUR_VIEWCONTROLLER"];
-        [self presentViewController:vc animated:YES completion:nil];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+        UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxViewController"];
+        [self presentViewController:inboxView animated:YES completion:nil];
     }else if([status isEqualToString:kUserRegisterUsernameFailureStatus]) {
         
     }

@@ -20,8 +20,8 @@
 @property (nonatomic) NSArray *keyPairs;
 @property (nonatomic) NSArray *groups;
 
-- (instancetype)initWithUsername:(NSString *)username password:(NSString *)password;
-- (void)registerPassword:(NSString *)password;
+- (instancetype)initWithUsername:(NSString *)username;
+- (void)registerWithPassword:(NSString *)password;
 - (KKeyPair *)activeKeyPair;
 
 @end
@@ -29,11 +29,13 @@
 //API Endpoints
 #define kUserUsernameRegistrationEndpoint @"http://127.0.0.1:9393/user.json"
 #define kUserFinishRegistrationEndpoint @"http://127.0.0.1:9393/user.json"
-#define kUserGetUsersEndpoint @"http://127.0.0.1:9393/users.json"
+#define kUserGetUserEndpoint @"http://127.0.0.1:9393/user.json"
 
 //Status Definitions
 #define kUserTryRegisterUsernameStatus @"Attempting Registration of Username"
 #define kUserRegisterUsernameSuccessStatus @"Successfully Registered Username"
 #define kUserRegisterUsernameFailureStatus @"Username Already Taken"
-#define kUserRegisterKeyPairSuccess @"Successfully Registered KeyPair"
-#define kUserRegisterKeyPairFailure @"Failed to Register KeyPair"
+#define kUserRegisterKeyPairSuccessStatus @"Successfully Registered KeyPair"
+#define kUserRegisterKeyPairFailureStatus @"Failed to Register KeyPair"
+#define kUserGetUserSuccessStatus @"Successfully Retrieved User"
+#define kUserGetUserFailureStatus @"Failed to Retrieve User"

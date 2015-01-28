@@ -13,18 +13,31 @@
 
 @implementation KKeyPair
 
-+ (KKeyPair *)createRSAKeyPair {
-    KError *error = [[KError alloc] init];
-    KRSACryptor *RSACryptor = [[KRSACryptor alloc] init];
+- (instancetype)initRSA {
+    self = [super initWithUniqueId:nil];
     
-    KRSACryptorKeyPair *RSAKeyPair = [RSACryptor generateKeyPairWithKeyIdentifier:[NSString stringWithFormat:@"kkeypair_%f", [[NSDate date] timeIntervalSince1970]] error:error];
+    if (self) {
+        KError *error = [[KError alloc] init];
+        KRSACryptor *RSACryptor = [[KRSACryptor alloc] init];
+        
+        KRSACryptorKeyPair *RSAKeyPair = [RSACryptor generateKeyPairWithKeyIdentifier:[NSString stringWithFormat:@"kkeypair_%f", [[NSDate date] timeIntervalSince1970]] error:error];
+        _privateKey = RSAKeyPair.privateKey;
+        _publicKey = RSAKeyPair.publicKey;
+        _algorithm = @"RSA";
+    }
     
-    KKeyPair *keyPair = [[KKeyPair alloc] init];
-    keyPair.privateKey = RSAKeyPair.privateKey;
-    keyPair.publicKey = RSAKeyPair.publicKey;
-    keyPair.algorithm = @"RSA";
+    return self;
+}
+
+- (instancetype)initFromRemote:(NSDictionary *)publicKeyDictionary {
+    self = [super initWithUniqueId:publicKeyDictionary[@"id"]];
     
-    return keyPair;
+    if (self) {
+        _publicKey = publicKeyDictionary[@"publicKey"];
+        _algorithm = publicKeyDictionary[@"algorithm"];
+    }
+    
+    return self;
 }
 
 - (NSString *)encryptText:(NSString *)text {
