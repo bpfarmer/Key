@@ -7,6 +7,7 @@
 //
 
 #import "KStorageManager.h"
+#import "KAccountManager.h"
 #import <YapDatabase/YapDatabase.h>
 #import <YapDatabase/YapDatabaseRelationship.h>
 #import <SSKeychain/SSKeychain.h>
@@ -15,7 +16,6 @@
 
 NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnectionDidUpdateNotification";
 
-static const NSString *const databaseName  = @"Key.sqlite";
 static NSString * keychainService          = @"KKeyChainService";
 static NSString * keychainDBPassAccount    = @"KDatabasePass";
 
@@ -110,7 +110,7 @@ static NSString * keychainDBPassAccount    = @"KDatabasePass";
     NSFileManager* fileManager = [NSFileManager defaultManager];
     NSURL *fileURL = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSString *path = [fileURL path];
-    return [path stringByAppendingFormat:@"/%@", databaseName];
+    return [path stringByAppendingFormat:@"/%@", [[KAccountManager sharedManager] uniqueId]];
 }
 
 - (NSString*)databasePassword {

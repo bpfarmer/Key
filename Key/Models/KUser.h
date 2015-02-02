@@ -13,16 +13,22 @@
 
 @interface KUser : KYapDatabaseObject <YapDatabaseRelationshipNode>
 
+@property (nonatomic) NSString *firstName;
+@property (nonatomic) NSString *lastName;
 @property (nonatomic) NSString *username;
 @property (nonatomic) NSData *passwordSalt;
 @property (nonatomic) NSData *passwordCrypt;
 @property (nonatomic) NSString *status;
 @property (nonatomic) NSArray *keyPairs;
 @property (nonatomic) NSArray *groups;
+@property (nonatomic) NSArray *contacts;
 
+- (instancetype)initFromRemoteWithUsername:(NSString *)username;
 - (instancetype)initWithUsername:(NSString *)username;
 - (void)registerWithPassword:(NSString *)password;
+- (void)getRemoteUser;
 - (KKeyPair *)activeKeyPair;
+- (void)addContact:(KUser *)user;
 
 @end
 
@@ -31,11 +37,15 @@
 #define kUserFinishRegistrationEndpoint @"http://127.0.0.1:9393/user.json"
 #define kUserGetUserEndpoint @"http://127.0.0.1:9393/user.json"
 
+//Notification Center
+#define kUserRegistrationStatusNotification @"UserRegistrationStatusNotification"
+#define kUserGetRemoteStatusNotification @"UserGetRemoteStatusNotification"
+
 //Status Definitions
 #define kUserTryRegisterUsernameStatus @"Attempting Registration of Username"
 #define kUserRegisterUsernameSuccessStatus @"Successfully Registered Username"
 #define kUserRegisterUsernameFailureStatus @"Username Already Taken"
 #define kUserRegisterKeyPairSuccessStatus @"Successfully Registered KeyPair"
 #define kUserRegisterKeyPairFailureStatus @"Failed to Register KeyPair"
-#define kUserGetUserSuccessStatus @"Successfully Retrieved User"
-#define kUserGetUserFailureStatus @"Failed to Retrieve User"
+#define kUserGetRemoteUserSuccessStatus @"Successfully Retrieved User"
+#define kUserGetRemoteUserFailureStatus @"Failed to Retrieve User"

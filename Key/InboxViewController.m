@@ -7,6 +7,7 @@
 //
 
 #import "InboxViewController.h"
+#import "KAccountManager.h"
 
 @interface InboxViewController ()
 

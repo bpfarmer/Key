@@ -527,41 +527,75 @@
             </objects>
             <point key="canvasLocation" x="1974" y="-321"/>
         </scene>
-        <!--New Contact View Controller-->
-        <scene sceneID="rt1-Z8-7QE">
+        <!--Add Contact View Controller-->
+        <scene sceneID="aan-b3-58F">
             <objects>
-                <viewController id="Mm6-1z-EPz" customClass="NewContactViewController" sceneMemberID="viewController">
+                <viewController id="dru-WR-b0I" customClass="AddContactViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="2le-WS-2FG"/>
-                        <viewControllerLayoutGuide type="bottom" id="g6b-a1-zJV"/>
+                        <viewControllerLayoutGuide type="top" id="kJR-sl-yRO"/>
+                        <viewControllerLayoutGuide type="bottom" id="WcM-Uc-Fjb"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ZPl-Ct-53m">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <view key="view" contentMode="scaleToFill" id="u45-26-ZE0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Add New Contact" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1co-BB-rig">
+                                <rect key="frame" x="119" y="68" width="137" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RDY-lx-dIx">
+                                <rect key="frame" x="62" y="171" width="250" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TsO-zS-Avq">
+                                <rect key="frame" x="320" y="171" width="30" height="30"/>
+                                <state key="normal" title="Add">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="addContact:" destination="dru-WR-b0I" eventType="touchUpInside" id="kHV-pN-mok"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="usernameText" destination="RDY-lx-dIx" id="e31-DK-yfd"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eQr-Te-yTl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6t7-We-CGR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-354" y="442.5"/>
+            <point key="canvasLocation" x="425" y="-240"/>
         </scene>
-        <!--Contacts View Controller-->
-        <scene sceneID="5Bv-Q3-SMH">
+        <!--Contact Table View Controller-->
+        <scene sceneID="jLi-00-7a2">
             <objects>
-                <viewController id="HDm-TH-uUI" customClass="ContactsViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="v8y-EJ-xez"/>
-                        <viewControllerLayoutGuide type="bottom" id="jaJ-tK-YbH"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Xyc-dw-NUm">
+                <tableViewController id="mh3-iy-YVN" customClass="ContactTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="WuX-Uw-5vF">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="GEH-JS-SJJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="i7h-NH-5n8">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="i7h-NH-5n8" id="Mf0-bO-hgW">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="mh3-iy-YVN" id="7Sp-EK-1n9"/>
+                            <outlet property="delegate" destination="mh3-iy-YVN" id="Lhv-Qh-l6V"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="roh-WR-O6S" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="382.5" y="442.5"/>
+            <point key="canvasLocation" x="425" y="442"/>
         </scene>
         <!--Inbox View Controller-->
         <scene sceneID="5cH-Mh-agy">
@@ -574,6 +608,17 @@
                     <view key="view" contentMode="scaleToFill" id="6s9-CT-KBf">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUz-xl-e1p">
+                                <rect key="frame" x="16" y="550" width="87" height="30"/>
+                                <state key="normal" title="Add Contact">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="dru-WR-b0I" kind="show" id="xaW-BM-Dcb"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </viewController>

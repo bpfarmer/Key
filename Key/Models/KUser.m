@@ -13,8 +13,11 @@
 #import "KMessage.h"
 #import "KMessageCrypt.h"
 #import "KStorageManager.h"
+#import "KAccountManager.h"
 
 @implementation KUser
+
+#pragma mark - Initializers
 
 - (instancetype)initWithUsername:(NSString *)username {
     self = [super initWithUniqueId:nil];
@@ -26,12 +29,17 @@
     return self;
 }
 
+- (instancetype)initFromRemoteWithUsername:(NSString *)username {
+    self = [self initWithUsername:username];
+    [self getRemoteUser];
+    return self;
+}
+
 #pragma mark - User Registration
 
 - (void)registerWithPassword:(NSString *)password {
-    NSDictionary *parameters = @{@"user" : @{@"username" : self.username}};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:kUserUsernameRegistrationEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:kUserUsernameRegistrationEndpoint parameters:@{@"user" : @{@"username" : self.username}} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON FROM USERNAME CHECK: %@", responseObject);
         if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
             [self setStatus:kUserRegisterUsernameFailureStatus];
@@ -39,13 +47,15 @@
             [self setUniqueId:responseObject[@"user"][@"id"]];
             [self setStatus:kUserRegisterUsernameSuccessStatus];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                KAccountManager *account = [KAccountManager sharedManager];
+                [account setUniqueId:[notification.object performSelector:@selector(uniqueId)]];
                 [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
                 [self generatePassword:password];
                 [self finishRegistration];
             });
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"UserStatusNotification" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUserRegistrationStatusNotification object:self];
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
@@ -64,12 +74,10 @@
             [keyPair setUniqueId:responseObject[@"user"][@"keyPair"][@"id"]];
             self.keyPairs = [NSArray arrayWithObject:keyPair];
             [self setStatus:kUserRegisterKeyPairSuccessStatus];
-            [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
         } else {
             [self setStatus:kUserRegisterKeyPairFailureStatus];
         }
-        KUser *user = [[KStorageManager sharedManager] objectForKey:self.uniqueId inCollection:@"users"];
-        NSLog(@"PERSISTENT USER PUBLIC KEY: %@", [[user.keyPairs objectAtIndex:0] publicKey]);
+        [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -79,33 +87,39 @@
     NSDictionary *encryptedPasswordDictionary = [[[KCryptor alloc] init] encryptOneWay: password];
     [self setPasswordCrypt:encryptedPasswordDictionary[@"encrypted"]];
     [self setPasswordSalt:encryptedPasswordDictionary[@"salt"]];
-    NSLog(@"PASSWORD ENCRYPTED: %@", [self passwordCrypt]);
 }
 
 #pragma mark - Adding External Users
-- (void)addFromRemote {
-    NSDictionary *parameters = @{@"user" : @{@"username" : self.username}};
+
+- (void)getRemoteUser {
+    NSLog(@"HERE AT REMOTE USER");
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:kUserGetUserEndpoint parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:kUserGetUserEndpoint parameters:@{@"user" : @{@"username" : self.username}} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"RETRIEVING USER CHECK: %@", responseObject);
         if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
-            [self setStatus:kUserGetUserFailureStatus];
+            [self setStatus:kUserGetRemoteUserFailureStatus];
         }else {
             [self setUniqueId:responseObject[@"user"][@"id"]];
             KKeyPair *keyPair = [[KKeyPair alloc] initFromRemote:responseObject[@"user"][@"keyPair"]];
             self.keyPairs = [NSArray arrayWithObject:keyPair];
-            [self setStatus:kUserGetUserSuccessStatus];
+            [self setStatus:kUserGetRemoteUserSuccessStatus];
+            [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"UserStatusNotification" object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kUserGetRemoteStatusNotification object:self];
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
 }
 
-
-#pragma mark - Methods For External Users
+- (void)addContact:(KUser *)user {
+    NSMutableArray *newContacts = [[NSMutableArray alloc] init];
+    [newContacts arrayByAddingObjectsFromArray:self.contacts];
+    [newContacts addObject:[user uniqueId]];
+    [self setContacts:[NSArray arrayWithArray:newContacts]];
+    [self save];
+}
 
 #pragma mark - Sending Messages
 

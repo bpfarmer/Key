@@ -1,60 +1,53 @@
 //
-//  registrationViewController.m
+//  AddContactViewController.m
 //  Key
 //
-//  Created by Loren on 1/27/15.
+//  Created by Brendan Farmer on 1/29/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "RegistrationViewController.h"
+#import "AddContactViewController.h"
 #import "KUser.h"
 #import "KAccountManager.h"
 
-@interface RegistrationViewController ()
+@interface AddContactViewController ()
 
 @end
 
-@implementation RegistrationViewController
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
-    return YES;
-}
+@implementation AddContactViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
 
-- (IBAction)createNewUser:(id)sender {
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)addContact:(id)sender {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveUserStatusNotification:)
-                                                 name:kUserRegistrationStatusNotification
+                                                 name:kUserGetRemoteStatusNotification
                                                object:nil];
     dispatch_queue_t registrationQueue= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(registrationQueue, ^{
-        KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text];
-        [user registerWithPassword:self.passwordText.text];
+        [[KAccountManager currentUser] addContact:[[KUser alloc] initFromRemoteWithUsername:self.usernameText.text]];
     });
     NSLog(@"NOT BLOCKING");
 }
 
 - (void)receiveUserStatusNotification:(NSNotification *)notification {
-    
     NSString *status = [notification.object performSelector:@selector(status)];
-    if([status isEqualToString:kUserRegisterUsernameSuccessStatus]) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-        UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxViewController"];
-        [self presentViewController:inboxView animated:YES completion:nil];
-    }else if([status isEqualToString:kUserRegisterUsernameFailureStatus]) {
-        
+    if([status isEqualToString:kUserGetRemoteUserSuccessStatus]) {
+        NSLog(@"Successfully Retrieved User");
+    }else if([status isEqualToString:kUserGetRemoteUserFailureStatus]) {
+        NSLog(@"Failed to Retrieve User");
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
 
 /*
 #pragma mark - Navigation
