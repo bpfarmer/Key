@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class KUser;
+
 @interface KAccountManager : NSObject
 
 @property (nonatomic) NSString *uniqueId;

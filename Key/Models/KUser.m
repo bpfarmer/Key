@@ -47,8 +47,7 @@
             [self setUniqueId:responseObject[@"user"][@"id"]];
             [self setStatus:kUserRegisterUsernameSuccessStatus];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                KAccountManager *account = [KAccountManager sharedManager];
-                [account setUniqueId:[notification.object performSelector:@selector(uniqueId)]];
+                [self startAccountManager];
                 [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
                 [self generatePassword:password];
                 [self finishRegistration];
@@ -60,6 +59,11 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+}
+
+- (void)startAccountManager {
+    KAccountManager *account = [KAccountManager sharedManager];
+    [account setUniqueId:self.uniqueId];
 }
 
 - (void)finishRegistration {
