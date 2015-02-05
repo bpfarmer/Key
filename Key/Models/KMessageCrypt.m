@@ -12,13 +12,13 @@
 
 @implementation KMessageCrypt
 
-- (instancetype)initWithMessage:(KMessage *)message user:(KUser *)user {
+- (instancetype)initWithMessage:(KMessage *)message keyPair:(KKeyPair *)keyPair {
     self = [super initWithUniqueId:nil];
     
     if (self) {
-        _recipient = user;
-        _keyPair   = [user activeKeyPair];
-        _bodyCrypt = [[self keyPair] encryptText:message.body];
+        _recipientId = [keyPair userId];
+        _keyPairId   = [keyPair uniqueId];
+        _bodyCrypt = [keyPair encryptText:[message body]];
     }
     
     return self;
