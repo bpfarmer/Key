@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zbK-QD-Eif">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zbK-QD-Eif">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
@@ -200,16 +200,6 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aBr-Hh-Gec">
-                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="bypass">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="Tyd-pY-OD3" kind="showDetail" id="s7F-s8-eXn"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -219,13 +209,7 @@
                             <constraint firstItem="Skq-dk-6nw" firstAttribute="top" secondItem="bhe-A7-aYb" secondAttribute="bottom" constant="30" id="LVP-u4-hxo">
                                 <variation key="widthClass=compact" constant="13"/>
                             </constraint>
-                            <constraint firstItem="aBr-Hh-Gec" firstAttribute="top" secondItem="Oqw-Kv-EoX" secondAttribute="bottom" constant="20" id="Vm5-5O-Yih">
-                                <variation key="heightClass=regular-widthClass=compact" constant="39"/>
-                            </constraint>
                             <constraint firstAttribute="centerX" secondItem="bhe-A7-aYb" secondAttribute="centerX" id="XB5-No-WpP"/>
-                            <constraint firstAttribute="centerX" secondItem="aBr-Hh-Gec" secondAttribute="centerX" id="g5k-LB-3Zx">
-                                <variation key="heightClass=regular-widthClass=compact" constant="-0.5"/>
-                            </constraint>
                             <constraint firstAttribute="centerX" secondItem="Skq-dk-6nw" secondAttribute="centerX" id="oeN-Yd-wJz"/>
                         </constraints>
                         <variation key="default">
@@ -233,14 +217,11 @@
                                 <exclude reference="Skq-dk-6nw"/>
                                 <exclude reference="Oqw-Kv-EoX"/>
                                 <exclude reference="bhe-A7-aYb"/>
-                                <exclude reference="aBr-Hh-Gec"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="XB5-No-WpP"/>
                                 <exclude reference="3TD-Lv-FJC"/>
                                 <exclude reference="5rL-tw-U0v"/>
-                                <exclude reference="Vm5-5O-Yih"/>
-                                <exclude reference="g5k-LB-3Zx"/>
                                 <exclude reference="JRE-c7-zd3"/>
                                 <exclude reference="LVP-u4-hxo"/>
                                 <exclude reference="oeN-Yd-wJz"/>
@@ -251,14 +232,11 @@
                                 <include reference="Skq-dk-6nw"/>
                                 <include reference="Oqw-Kv-EoX"/>
                                 <include reference="bhe-A7-aYb"/>
-                                <include reference="aBr-Hh-Gec"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="XB5-No-WpP"/>
                                 <include reference="3TD-Lv-FJC"/>
                                 <include reference="5rL-tw-U0v"/>
-                                <include reference="Vm5-5O-Yih"/>
-                                <include reference="g5k-LB-3Zx"/>
                                 <include reference="JRE-c7-zd3"/>
                                 <include reference="LVP-u4-hxo"/>
                                 <include reference="oeN-Yd-wJz"/>
@@ -597,34 +575,30 @@
             </objects>
             <point key="canvasLocation" x="425" y="442"/>
         </scene>
-        <!--Inbox View Controller-->
-        <scene sceneID="5cH-Mh-agy">
+        <!--Inbox Table View Controller-->
+        <scene sceneID="Yhh-xW-6s7">
             <objects>
-                <viewController storyboardIdentifier="InboxViewController" id="Tyd-pY-OD3" customClass="InboxViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="aJj-vx-11j"/>
-                        <viewControllerLayoutGuide type="bottom" id="e8q-U4-o31"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="6s9-CT-KBf">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                <tableViewController storyboardIdentifier="InboxTableViewController" id="t9c-ZQ-3B0" customClass="InboxTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1Mj-gT-mii">
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUz-xl-e1p">
-                                <rect key="frame" x="16" y="550" width="87" height="30"/>
-                                <state key="normal" title="Add Contact">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="dru-WR-b0I" kind="show" id="xaW-BM-Dcb"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nR0-yV-GoQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="LGc-lb-Z0c">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LGc-lb-Z0c" id="jux-b2-7Dg">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="t9c-ZQ-3B0" id="tJv-nq-Vcb"/>
+                            <outlet property="delegate" destination="t9c-ZQ-3B0" id="br6-P2-eHo"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VqV-xe-GfU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1179" y="442.5"/>
+            <point key="canvasLocation" x="1179" y="441.75"/>
         </scene>
         <!--Message Compose View Controller-->
         <scene sceneID="bzC-Sz-fTk">

@@ -44,7 +44,7 @@
     NSString *status = [notification.object performSelector:@selector(status)];
     if([status isEqualToString:kUserRegisterUsernameSuccessStatus]) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-        UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxViewController"];
+        UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
         [self presentViewController:inboxView animated:YES completion:nil];
     }else if([status isEqualToString:kUserRegisterUsernameFailureStatus]) {
         
