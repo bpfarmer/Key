@@ -11,7 +11,6 @@
 		527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3E61A78193300B3688E /* WelcomeScreenViewController.m */; };
 		527DD3EA1A78197600B3688E /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3E91A78197600B3688E /* RegistrationViewController.m */; };
 		527DD3ED1A78198A00B3688E /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3EC1A78198A00B3688E /* LoginViewController.m */; };
-		527DD3F01A782E8A00B3688E /* InboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3EF1A782E8A00B3688E /* InboxViewController.m */; };
 		527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3FB1A78306700B3688E /* MessageComposeViewController.m */; };
 		BC4AD1E3775892932B1ADA08 /* libPods-Key.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80A2212DA0A1E21445E98DDB /* libPods-Key.a */; };
 		E7BF14D0C491E7C8C7BAFF73 /* libPods-KeyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */; };
@@ -65,8 +64,6 @@
 		527DD3E91A78197600B3688E /* RegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationViewController.m; sourceTree = "<group>"; };
 		527DD3EB1A78198A00B3688E /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		527DD3EC1A78198A00B3688E /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		527DD3EE1A782E8900B3688E /* InboxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InboxViewController.h; sourceTree = "<group>"; };
-		527DD3EF1A782E8A00B3688E /* InboxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxViewController.m; sourceTree = "<group>"; };
 		527DD3FA1A78306700B3688E /* MessageComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageComposeViewController.h; sourceTree = "<group>"; };
 		527DD3FB1A78306700B3688E /* MessageComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageComposeViewController.m; sourceTree = "<group>"; };
 		7FE65DB16A2581426F9789DA /* Pods-KeyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -179,8 +176,6 @@
 				EF973F971A7AD58C00D92A9E /* AddContactViewController.m */,
 				EF973F931A7AA25000D92A9E /* ContactTableViewController.h */,
 				EF973F941A7AA25000D92A9E /* ContactTableViewController.m */,
-				527DD3EE1A782E8900B3688E /* InboxViewController.h */,
-				527DD3EF1A782E8A00B3688E /* InboxViewController.m */,
 				5205C02D1A83E2630008CFF6 /* InboxTableViewController.h */,
 				5205C02E1A83E2630008CFF6 /* InboxTableViewController.m */,
 				527DD3EB1A78198A00B3688E /* LoginViewController.h */,
@@ -561,7 +556,6 @@
 				EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */,
 				EFEBDD481A6D879700973E15 /* Util.m in Sources */,
 				527DD3ED1A78198A00B3688E /* LoginViewController.m in Sources */,
-				527DD3F01A782E8A00B3688E /* InboxViewController.m in Sources */,
 				EF973F981A7AD58C00D92A9E /* AddContactViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
