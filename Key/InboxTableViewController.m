@@ -10,7 +10,7 @@
 #import "KUser.h"
 #import "KAccountManager.h"
 
-static NSString *TableViewCellIdentifier = @"MyCells";
+static NSString *TableViewCellIdentifier = @"Threads";
 
 @interface InboxTableViewController ()
 
@@ -26,9 +26,7 @@ static NSString *TableViewCellIdentifier = @"MyCells";
     
     [self.tableView registerClass:[UITableViewCell class]
              forCellReuseIdentifier:TableViewCellIdentifier];
-    
-    self.tableView.dataSource = self;
-    
+        
     /* Make sure our table view resizes correctly */
     self.tableView.autoresizingMask =
                 UIViewAutoresizingFlexibleWidth |
@@ -63,6 +61,7 @@ static NSString *TableViewCellIdentifier = @"MyCells";
                 // Return the number of rows in the section.
             case 0:{
                 KUser *user = [KAccountManager currentUser];
+                // Need method for counting currentUser's threads. Number currently returned is a placeholder.
                 return 3;
                 break;
             }
@@ -89,6 +88,27 @@ static NSString *TableViewCellIdentifier = @"MyCells";
     
     return cell;
 }
+
+- (UILabel *) newLabelWithTitle:(NSString *)paramTitle{
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+    label.text = paramTitle;
+    label.backgroundColor = [UIColor clearColor];
+    [label sizeToFit];
+    return label;
+}
+
+- (UIView *) tableView:(UITableView *)tableView
+viewForHeaderInSection:(NSInteger)section{
+    if (section == 0){
+        return [self newLabelWithTitle:@"Section 1 Header"];
+    }
+    return nil; }
+
+- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+    if (section == 0){
+        return [self newLabelWithTitle:@"Section 1 Footer"];
+    }
+    return nil; }
 
 
 /*
