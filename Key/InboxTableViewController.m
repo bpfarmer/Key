@@ -9,6 +9,8 @@
 #import "InboxTableViewController.h"
 #import "KUser.h"
 #import "KAccountManager.h"
+#import "KThread.h"
+#import "KStorageManager.h"
 
 static NSString *TableViewCellIdentifier = @"MyCells";
 
@@ -60,10 +62,8 @@ static NSString *TableViewCellIdentifier = @"MyCells";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([tableView isEqual:self.tableView]){
         switch (section){
-                // Return the number of rows in the section.
             case 0:{
-                KUser *user = [KAccountManager currentUser];
-                return 3;
+                return [[KStorageManager sharedManager] numberOfKeysInCollection:[KThread collection]];
                 break;
             }
 
@@ -78,14 +78,9 @@ static NSString *TableViewCellIdentifier = @"MyCells";
     UITableViewCell *cell = nil;
     
     if ([tableView isEqual:self.tableView]) {
-    
         cell = [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    
-        cell.textLabel.text = [NSString stringWithFormat:
-                           @"Section %ld, Cell %ld",
-                           (long)indexPath.section,
-                           (long)indexPath.row];
-        }
+        cell.textLabel.text = [NSString stringWithFormat:@"Some Thread"]; //[[KThread threadAtIndex:indexPath.row] name]];
+    }
     
     return cell;
 }

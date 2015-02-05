@@ -134,6 +134,15 @@ static NSString * keychainDBPassAccount    = @"KDatabasePass";
     }];
 }
 
+- (NSUInteger)numberOfKeysInCollection:(NSString *)collection {
+    __block NSUInteger count;
+    
+    [self.dbConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        count = [transaction numberOfKeysInCollection:(NSString *)collection];
+    }];
+    return count;
+}
+
 - (void)setObject:(id)object forKey:(NSString*)key inCollection:(NSString*)collection {
     [self.dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
         [transaction setObject:object forKey:key inCollection:collection];
