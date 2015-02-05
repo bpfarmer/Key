@@ -12,9 +12,10 @@
 		527DD3EA1A78197600B3688E /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3E91A78197600B3688E /* RegistrationViewController.m */; };
 		527DD3ED1A78198A00B3688E /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3EC1A78198A00B3688E /* LoginViewController.m */; };
 		527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3FB1A78306700B3688E /* MessageComposeViewController.m */; };
+		52E964A81A841FA500E67736 /* ThreadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E964A71A841FA500E67736 /* ThreadTableViewController.m */; };
+		52E964AE1A84255500E67736 /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E964AD1A84255500E67736 /* ContactsTableViewController.m */; };
 		BC4AD1E3775892932B1ADA08 /* libPods-Key.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80A2212DA0A1E21445E98DDB /* libPods-Key.a */; };
 		E7BF14D0C491E7C8C7BAFF73 /* libPods-KeyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */; };
-		EF973F951A7AA25000D92A9E /* ContactTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973F941A7AA25000D92A9E /* ContactTableViewController.m */; };
 		EF973F981A7AD58C00D92A9E /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973F971A7AD58C00D92A9E /* AddContactViewController.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EF973FA91A7FE82500D92A9E /* KDatabaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA81A7FE82400D92A9E /* KDatabaseView.m */; };
@@ -67,14 +68,16 @@
 		527DD3EC1A78198A00B3688E /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		527DD3FA1A78306700B3688E /* MessageComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageComposeViewController.h; sourceTree = "<group>"; };
 		527DD3FB1A78306700B3688E /* MessageComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageComposeViewController.m; sourceTree = "<group>"; };
+		52E964A61A841FA500E67736 /* ThreadTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadTableViewController.h; sourceTree = "<group>"; };
+		52E964A71A841FA500E67736 /* ThreadTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadTableViewController.m; sourceTree = "<group>"; };
+		52E964AC1A84255500E67736 /* ContactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewController.h; sourceTree = "<group>"; };
+		52E964AD1A84255500E67736 /* ContactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsTableViewController.m; sourceTree = "<group>"; };
 		7FE65DB16A2581426F9789DA /* Pods-KeyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.debug.xcconfig"; sourceTree = "<group>"; };
 		80A2212DA0A1E21445E98DDB /* libPods-Key.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Key.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KeyTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BED4F366B60241C2DC1CBDD5 /* Pods-Key.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.debug.xcconfig"; sourceTree = "<group>"; };
 		C461760CA51ABA0BE7C393EF /* Pods-Key.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.release.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.release.xcconfig"; sourceTree = "<group>"; };
 		DF6091F2DF6E5A8AC8248FE8 /* Pods-KeyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.release.xcconfig"; sourceTree = "<group>"; };
-		EF973F931A7AA25000D92A9E /* ContactTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactTableViewController.h; sourceTree = "<group>"; };
-		EF973F941A7AA25000D92A9E /* ContactTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewController.m; sourceTree = "<group>"; };
 		EF973F961A7AD58C00D92A9E /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
 		EF973F971A7AD58C00D92A9E /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
@@ -177,10 +180,12 @@
 			children = (
 				EF973F961A7AD58C00D92A9E /* AddContactViewController.h */,
 				EF973F971A7AD58C00D92A9E /* AddContactViewController.m */,
-				EF973F931A7AA25000D92A9E /* ContactTableViewController.h */,
-				EF973F941A7AA25000D92A9E /* ContactTableViewController.m */,
 				5205C02D1A83E2630008CFF6 /* InboxTableViewController.h */,
 				5205C02E1A83E2630008CFF6 /* InboxTableViewController.m */,
+				52E964A61A841FA500E67736 /* ThreadTableViewController.h */,
+				52E964A71A841FA500E67736 /* ThreadTableViewController.m */,
+				52E964AC1A84255500E67736 /* ContactsTableViewController.h */,
+				52E964AD1A84255500E67736 /* ContactsTableViewController.m */,
 				527DD3EB1A78198A00B3688E /* LoginViewController.h */,
 				527DD3EC1A78198A00B3688E /* LoginViewController.m */,
 				527DD3FA1A78306700B3688E /* MessageComposeViewController.h */,
@@ -534,7 +539,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF973F951A7AA25000D92A9E /* ContactTableViewController.m in Sources */,
 				EF973FA91A7FE82500D92A9E /* KDatabaseView.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */,
@@ -545,6 +549,7 @@
 				EFEBDD4E1A6EF2E000973E15 /* KSettings.m in Sources */,
 				EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */,
 				EFC6BED91A68582200B0EB8F /* KCryptor.m in Sources */,
+				52E964AE1A84255500E67736 /* ContactsTableViewController.m in Sources */,
 				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
 				527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */,
 				527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */,
@@ -563,6 +568,7 @@
 				EFEBDD481A6D879700973E15 /* Util.m in Sources */,
 				527DD3ED1A78198A00B3688E /* LoginViewController.m in Sources */,
 				EF973F981A7AD58C00D92A9E /* AddContactViewController.m in Sources */,
+				52E964A81A841FA500E67736 /* ThreadTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

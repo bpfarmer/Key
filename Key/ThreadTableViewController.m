@@ -1,24 +1,24 @@
 //
-//  InboxTableViewController.m
+//  ThreadTableViewController.m
 //  Key
 //
 //  Created by Loren on 2/5/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "InboxTableViewController.h"
+#import "ThreadTableViewController.h"
 #import "KUser.h"
 #import "KAccountManager.h"
 #import "KThread.h"
 #import "KStorageManager.h"
 
-static NSString *TableViewCellIdentifier = @"Threads";
+static NSString *ThreadTableViewCellIdentifier = @"Messages";
 
-@interface InboxTableViewController ()
+@interface ThreadTableViewController ()
 
 @end
 
-@implementation InboxTableViewController
+@implementation ThreadTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,12 +27,12 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     
     [self.tableView registerClass:[UITableViewCell class]
-             forCellReuseIdentifier:TableViewCellIdentifier];
-        
+           forCellReuseIdentifier:ThreadTableViewCellIdentifier];
+    
     /* Make sure our table view resizes correctly */
     self.tableView.autoresizingMask =
-                UIViewAutoresizingFlexibleWidth |
-                UIViewAutoresizingFlexibleHeight;
+    UIViewAutoresizingFlexibleWidth |
+    UIViewAutoresizingFlexibleHeight;
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -51,7 +51,7 @@ static NSString *TableViewCellIdentifier = @"Threads";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if ([tableView isEqual:self.tableView]){
-    // Return the number of sections.
+        // Return the number of sections.
         return 1;
     }
     return 0;
@@ -61,49 +61,27 @@ static NSString *TableViewCellIdentifier = @"Threads";
     if ([tableView isEqual:self.tableView]){
         switch (section){
             case 0:{
-                // Returns number of threads associated with current user's account, sets row count accordingly
-                return [[KStorageManager sharedManager] numberOfKeysInCollection:[KThread collection]];
+                // Placeholder count for number of messages in thread to determine number of table rows to display. Needs method for counting number of messages in thread.
+                return 6;
                 break;
             }
-
+                
         }
-    
+        
     }
     return 0;
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = nil;
     
     if ([tableView isEqual:self.tableView]) {
-        cell = [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-        cell.textLabel.text = [NSString stringWithFormat:@"Some Thread"]; //[[KThread threadAtIndex:indexPath.row] name]];
+        cell = [tableView dequeueReusableCellWithIdentifier:ThreadTableViewCellIdentifier forIndexPath:indexPath];
+        cell.textLabel.text = [NSString stringWithFormat:@"Some Message"];
     }
     
     return cell;
 }
-
-- (UILabel *) newLabelWithTitle:(NSString *)paramTitle{
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-    label.text = paramTitle;
-    label.backgroundColor = [UIColor clearColor];
-    [label sizeToFit];
-    return label;
-}
-
-- (UIView *) tableView:(UITableView *)tableView
-viewForHeaderInSection:(NSInteger)section{
-    if (section == 0){
-        return [self newLabelWithTitle:@"Section 1 Header"];
-    }
-    return nil; }
-
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
-    if (section == 0){
-        return [self newLabelWithTitle:@"Section 1 Footer"];
-    }
-    return nil; }
 
 
 /*
