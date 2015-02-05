@@ -20,7 +20,6 @@
 @property (nonatomic) NSData *passwordCrypt;
 @property (nonatomic) NSString *status;
 @property (nonatomic) NSArray *keyPairs;
-@property (nonatomic) BOOL *accountUser;
 
 - (instancetype)initFromRemoteWithUsername:(NSString *)username;
 - (instancetype)initWithUsername:(NSString *)username;
