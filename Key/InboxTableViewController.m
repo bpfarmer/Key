@@ -9,6 +9,8 @@
 #import "InboxTableViewController.h"
 #import "KUser.h"
 #import "KAccountManager.h"
+#import "KThread.h"
+#import "KStorageManager.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
 
@@ -58,7 +60,6 @@ static NSString *TableViewCellIdentifier = @"Threads";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([tableView isEqual:self.tableView]){
         switch (section){
-                // Return the number of rows in the section.
             case 0:{
                 KUser *user = [KAccountManager currentUser];
                 // Need method for counting currentUser's threads. Number currently returned is a placeholder.
@@ -77,14 +78,9 @@ static NSString *TableViewCellIdentifier = @"Threads";
     UITableViewCell *cell = nil;
     
     if ([tableView isEqual:self.tableView]) {
-    
         cell = [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    
-        cell.textLabel.text = [NSString stringWithFormat:
-                           @"Section %ld, Cell %ld",
-                           (long)indexPath.section,
-                           (long)indexPath.row];
-        }
+        cell.textLabel.text = [NSString stringWithFormat:@"Some Thread"]; //[[KThread threadAtIndex:indexPath.row] name]];
+    }
     
     return cell;
 }

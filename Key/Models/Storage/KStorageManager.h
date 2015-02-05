@@ -19,6 +19,7 @@ extern NSString *const KUIDatabaseConnectionDidUpdateNotification;
 - (YapDatabase*)database;
 - (YapDatabaseConnection*)newDatabaseConnection;
 
+- (NSUInteger)numberOfKeysInCollection:(NSString *)collection;
 - (void)setObject:(id)object forKey:(NSString*)key inCollection:(NSString*)collection;
 - (void)removeObjectForKey:(NSString*)string inCollection:(NSString *)collection;
 - (BOOL)boolForKey:(NSString*)key inCollection:(NSString*)collection;
