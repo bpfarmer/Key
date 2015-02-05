@@ -7,6 +7,10 @@
 //
 
 #import "InboxTableViewController.h"
+#import "KUser.h"
+#import "KAccountManager.h"
+
+static NSString *TableViewCellIdentifier = @"MyCells";
 
 @interface InboxTableViewController ()
 
@@ -17,11 +21,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.tableView =
+    [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    
+    [self.tableView registerClass:[UITableViewCell class]
+             forCellReuseIdentifier:TableViewCellIdentifier];
+    
+    self.tableView.dataSource = self;
+    
+    /* Make sure our table view resizes correctly */
+    self.tableView.autoresizingMask =
+                UIViewAutoresizingFlexibleWidth |
+                UIViewAutoresizingFlexibleHeight;
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -32,26 +50,46 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
+    if ([tableView isEqual:self.tableView]){
     // Return the number of sections.
+        return 1;
+    }
     return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
+    if ([tableView isEqual:self.tableView]){
+        switch (section){
+                // Return the number of rows in the section.
+            case 0:{
+                KUser *user = [KAccountManager currentUser];
+                return 3;
+                break;
+            }
+
+        }
+    
+    }
     return 0;
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    UITableViewCell *cell = nil;
     
-    // Configure the cell...
+    if ([tableView isEqual:self.tableView]) {
+    
+        cell = [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
+    
+        cell.textLabel.text = [NSString stringWithFormat:
+                           @"Section %ld, Cell %ld",
+                           (long)indexPath.section,
+                           (long)indexPath.row];
+        }
     
     return cell;
 }
-*/
+
 
 /*
 // Override to support conditional editing of the table view.
