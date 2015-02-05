@@ -10,12 +10,30 @@
 #import "KMessageCrypt.h"
 #import "KUser.h"
 #import "KKeyPair.h"
+#import "KThread.h"
+#import "KStorageManager.h"
 
 @implementation KMessage
 
 - (NSArray *)yapDatabaseRelationshipEdges {
     NSArray *edges = nil;
     return edges;
+}
+
+- (instancetype)initFrom:(NSString *)userId threadId:(NSString *)threadId body:(NSString *)body {
+    self = [super initWithUniqueId:nil];
+    
+    if (self) {
+        _authorId = userId;
+        _threadId = threadId;
+        _body     = body;
+    }
+    return self;
+}
+
+- (void)sendMessages {
+    KThread *thread = [[KStorageManager sharedManager] objectForKey:[self threadId] inCollection:[KThread collection]];
+    
 }
 
 @end

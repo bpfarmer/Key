@@ -12,13 +12,16 @@
 @class KUser;
 @class KGroup;
 @class KMessageCrypt;
+@class KThread;
 
 @interface KMessage : KYapDatabaseObject <YapDatabaseRelationshipNode>
 
-@property (nonatomic) KUser *author;
-@property (nonatomic) KGroup *group;
+@property (nonatomic) NSString *authorId;
+@property (nonatomic) NSString *threadId;
 @property (nonatomic) NSString *body;
 @property (nonatomic) NSData *attachments;
 @property (nonatomic) NSString *status;
+
+- (instancetype)initFrom:(NSString *)userId threadId:(NSString *)threadId body:(NSString *)body;
 
 @end

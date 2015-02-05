@@ -25,6 +25,8 @@
 - (instancetype)initWithUsername:(NSString *)username;
 - (void)registerAccountWithPassword:(NSString *)password;
 - (KKeyPair *)activeKeyPair;
+- (NSString *)fullName;
+- (void)generateRandomThread;
 
 @end
 

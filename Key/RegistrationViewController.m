@@ -47,7 +47,7 @@
         UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
         [self presentViewController:inboxView animated:YES completion:nil];
     }else if([status isEqualToString:kUserRegisterUsernameFailureStatus]) {
-        
+        NSLog(@"YOU SUCK!");
     }
 }
 

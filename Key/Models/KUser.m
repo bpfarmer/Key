@@ -14,6 +14,7 @@
 #import "KMessageCrypt.h"
 #import "KStorageManager.h"
 #import "KAccountManager.h"
+#import "KThread.h"
 
 @implementation KUser
 
@@ -125,11 +126,25 @@
     return [self.keyPairs objectAtIndex:0];
 }
 
+- (NSString *)fullName {
+    return [self username];
+}
+
 #pragma mark - YapDatabase Methods
 
 - (NSArray *)yapDatabaseRelationshipEdges {
     NSArray *edges = nil;
     return edges;
+}
+
+#pragma mark - Throwaway Methods for Testing
+
+- (void)generateRandomThread {
+    KUser *otherUser = [[KUser alloc] initWithUniqueId:@"KUserUniqueId1"];
+    [otherUser setUsername:@"Some Stupid User"];
+    NSArray *users = @[self, otherUser];
+    KThread *firstThread = [[KThread alloc] initWithUsers:users];
+    KMessage *message = [[KMessage alloc] initFrom:self threadId:[firstThread uniqueId] body:@"SOME DUMB MESSAGE"];
 }
 
 @end

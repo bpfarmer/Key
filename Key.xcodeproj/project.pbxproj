@@ -35,6 +35,7 @@
 		EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BED61A68582200B0EB8F /* KError.m */; };
 		EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */; };
 		EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */; };
+		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
 		EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD341A686A0300973E15 /* KKeyPair.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
 		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
@@ -112,6 +113,8 @@
 		EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		EFC6BEE01A68588100B0EB8F /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
 		EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		EFCD01D61A83E651005065B2 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThread.h; path = Models/KThread.h; sourceTree = "<group>"; };
+		EFCD01D71A83E651005065B2 /* KThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KThread.m; path = Models/KThread.m; sourceTree = "<group>"; };
 		EFEBDD331A686A0300973E15 /* KKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKeyPair.h; path = Models/KKeyPair.h; sourceTree = "<group>"; };
 		EFEBDD341A686A0300973E15 /* KKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKeyPair.m; path = Models/KKeyPair.m; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
@@ -335,6 +338,8 @@
 		EFEBDD321A68673D00973E15 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				EF973FA31A7E8F5200D92A9E /* KAccountManager.h */,
+				EF973FA41A7E8F5200D92A9E /* KAccountManager.m */,
 				EFEBDD421A6B5C1400973E15 /* KGroup.h */,
 				EFEBDD431A6B5C1400973E15 /* KGroup.m */,
 				EFEBDD331A686A0300973E15 /* KKeyPair.h */,
@@ -343,11 +348,11 @@
 				EFEBDD3A1A6B2C7800973E15 /* KMessage.m */,
 				EFEBDD3F1A6B2D5E00973E15 /* KMessageCrypt.h */,
 				EFEBDD401A6B2D5E00973E15 /* KMessageCrypt.m */,
+				EFCD01D61A83E651005065B2 /* KThread.h */,
+				EFCD01D71A83E651005065B2 /* KThread.m */,
 				EFEBDD361A68CE9600973E15 /* KUser.h */,
 				EFEBDD371A68CE9600973E15 /* KUser.m */,
 				EFB1EAAA1A76C53500589CF3 /* Storage */,
-				EF973FA31A7E8F5200D92A9E /* KAccountManager.h */,
-				EF973FA41A7E8F5200D92A9E /* KAccountManager.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -534,6 +539,7 @@
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */,
 				EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */,
+				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
 				EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */,
 				EFC6BEDB1A68582200B0EB8F /* KRSACryptorKeyPair.m in Sources */,
 				EFEBDD4E1A6EF2E000973E15 /* KSettings.m in Sources */,
