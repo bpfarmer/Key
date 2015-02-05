@@ -35,37 +35,14 @@
     return self;
 }
 
-- (NSArray *)users {
-    id (^mapBlock)(id obj) = (id) ^(id obj){
-        [[KStorageManager sharedManager] objectForKey: inCollection:<#(NSString *)#>
-    };
-    return nil;
-}
-
 - (void)setNameFromUsers {
-    NSMutableArray *fullNames = [self mapUsers:^(id user){
-        return [user fullName];
-    }];
+    NSArray *fullNames = [KUser fullNamesForUserIds:[self userIds]];
     [self setName:[fullNames componentsJoinedByString:@", "]];
 }
 
 - (void)setUniqueIdFromUsers {
-    NSMutableArray *uniqueIds = [self mapUsers: ^(id user){
-        return [user uniqueId];
-    }];
-    [uniqueIds sortedArrayUsingSelector:@selector(caseSensitive)];
-    [self setUniqueId:[uniqueIds componentsJoinedByString:@"_"]];
-}
-
-- (NSMutableArray *)mapUsers: (id (^)(id obj))block
-{
-    NSMutableArray *new = [NSMutableArray array];
-    for(id obj in [self users])
-    {
-        id newObj = block(obj);
-        [new addObject: newObj ? newObj : [NSNull null]];
-    }
-    return new;
+    [[self userIds] sortedArrayUsingSelector:@selector(caseSensitive)];
+    [self setUniqueId:[[self userIds] componentsJoinedByString:@"_"]];
 }
 
 @end

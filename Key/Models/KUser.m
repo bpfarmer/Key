@@ -77,6 +77,7 @@
         NSLog(@"JSON FROM USER PASSWORD: %@", responseObject);
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
             [keyPair setUniqueId:responseObject[@"user"][@"keyPair"][@"id"]];
+            [keyPair setUserId:[self uniqueId]];
             self.keyPairs = [NSArray arrayWithObject:keyPair];
             [self setStatus:kUserRegisterKeyPairSuccessStatus];
         } else {
@@ -93,6 +94,31 @@
     [self setPasswordCrypt:encryptedPasswordDictionary[@"encrypted"]];
     [self setPasswordSalt:encryptedPasswordDictionary[@"salt"]];
 }
+
+#pragma mark - Batch Query Methods
+
++ (NSArray *)keyPairsForUserIds:(NSArray *)userIds {
+    __block NSMutableArray *keyPairs = nil;
+    
+    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        [transaction enumerateObjectsForKeys:userIds inCollection:[self collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, BOOL *stop) {
+            [keyPairs addObject:[object activeKeyPair]];
+        }];
+    }];
+    return keyPairs;
+}
+
++ (NSArray *)fullNamesForUserIds:(NSArray *)userIds {
+    __block NSMutableArray *fullNames = nil;
+    
+    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        [transaction enumerateObjectsForKeys:userIds inCollection:[self collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, BOOL *stop) {
+            [fullNames addObject:[object fullName]];
+        }];
+    }];
+    return fullNames;
+}
+
 
 #pragma mark - Adding External Users
 

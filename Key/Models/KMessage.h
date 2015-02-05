@@ -22,6 +22,13 @@
 @property (nonatomic) NSData *attachments;
 @property (nonatomic) NSString *status;
 
-- (instancetype)initFrom:(NSString *)userId threadId:(NSString *)threadId body:(NSString *)body;
+- (instancetype)initFrom:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body;
 
 @end
+
+//API Endpoints
+#define kMessageSendEndpoint @"http://127.0.0.1:9393/messages.json"
+
+//Notification Center
+#define kMessageStatusNotification @"MessageSentStatusNotification"
+

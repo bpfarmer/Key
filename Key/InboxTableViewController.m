@@ -50,17 +50,34 @@ static NSString *TableViewCellIdentifier = @"MyCells";
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if ([tableView isEqual:self.tableView]){
     // Return the number of sections.
-    return 1;
+        return 1;
+    }
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if ([tableView isEqual:self.tableView]){
+        switch (section){
+                // Return the number of rows in the section.
+            case 0:{
+                KUser *user = [KAccountManager currentUser];
+                return 3;
+                break;
+            }
+
+        }
+    
+    }
     return 0;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:nil forIndexPath:indexPath];
+    UITableViewCell *cell = nil;
+    
+    if ([tableView isEqual:self.tableView]) {
     
         cell = [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
     

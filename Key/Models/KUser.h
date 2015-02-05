@@ -21,6 +21,9 @@
 @property (nonatomic) NSString *status;
 @property (nonatomic) NSArray *keyPairs;
 
++ (NSArray *)keyPairsForUserIds:(NSArray *)userIds;
++ (NSArray *)fullNamesForUserIds:(NSArray *)userIds;
+
 - (instancetype)initFromRemoteWithUsername:(NSString *)username;
 - (instancetype)initWithUsername:(NSString *)username;
 - (void)registerAccountWithPassword:(NSString *)password;

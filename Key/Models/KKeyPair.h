@@ -16,6 +16,7 @@
 @property (nonatomic) NSString *privateKey;
 @property (nonatomic) NSString *publicKey;
 @property (nonatomic) NSString *algorithm;
+@property (nonatomic) NSString *userId;
 
 - (instancetype)initRSA;
 - (instancetype)initFromRemote:(NSDictionary *)publicKeyDictionary;
