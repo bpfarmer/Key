@@ -37,7 +37,7 @@
 
 #pragma mark - User Registration
 
-- (void)registerWithPassword:(NSString *)password {
+- (void)registerAccountWithPassword:(NSString *)password {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:kUserUsernameRegistrationEndpoint parameters:@{@"user" : @{@"username" : self.username}} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON FROM USERNAME CHECK: %@", responseObject);
@@ -115,14 +115,6 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-}
-
-- (void)addContact:(KUser *)user {
-    NSMutableArray *newContacts = [[NSMutableArray alloc] init];
-    [newContacts arrayByAddingObjectsFromArray:self.contacts];
-    [newContacts addObject:[user uniqueId]];
-    [self setContacts:[NSArray arrayWithArray:newContacts]];
-    [self save];
 }
 
 #pragma mark - Sending Messages

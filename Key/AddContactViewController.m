@@ -33,7 +33,7 @@
                                                object:nil];
     dispatch_queue_t registrationQueue= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(registrationQueue, ^{
-        [[KAccountManager currentUser] addContact:[[KUser alloc] initFromRemoteWithUsername:self.usernameText.text]];
+        [[KUser alloc] initFromRemoteWithUsername:self.usernameText.text];
     });
     NSLog(@"NOT BLOCKING");
 }

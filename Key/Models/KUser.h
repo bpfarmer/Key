@@ -20,15 +20,12 @@
 @property (nonatomic) NSData *passwordCrypt;
 @property (nonatomic) NSString *status;
 @property (nonatomic) NSArray *keyPairs;
-@property (nonatomic) NSArray *groups;
-@property (nonatomic) NSArray *contacts;
+@property (nonatomic) BOOL *accountUser;
 
 - (instancetype)initFromRemoteWithUsername:(NSString *)username;
 - (instancetype)initWithUsername:(NSString *)username;
-- (void)registerWithPassword:(NSString *)password;
-- (void)getRemoteUser;
+- (void)registerAccountWithPassword:(NSString *)password;
 - (KKeyPair *)activeKeyPair;
-- (void)addContact:(KUser *)user;
 
 @end
 
