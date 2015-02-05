@@ -7,6 +7,10 @@
 //
 
 #import "InboxTableViewController.h"
+#import "KUser.h"
+#import "KAccountManager.h"
+
+static NSString *TableViewCellIdentifier = @"MyCells";
 
 @interface InboxTableViewController ()
 
@@ -17,11 +21,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.tableView =
+    [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    
+    [self.tableView registerClass:[UITableViewCell class]
+             forCellReuseIdentifier:TableViewCellIdentifier];
+    
+    self.tableView.dataSource = self;
+    
+    /* Make sure our table view resizes correctly */
+    self.tableView.autoresizingMask =
+                UIViewAutoresizingFlexibleWidth |
+                UIViewAutoresizingFlexibleHeight;
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,7 +62,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:nil forIndexPath:indexPath];
     
-    // Configure the cell...
+        cell = [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
+    
+        cell.textLabel.text = [NSString stringWithFormat:
+                           @"Section %ld, Cell %ld",
+                           (long)indexPath.section,
+                           (long)indexPath.row];
+        }
     
     return cell;
 }
