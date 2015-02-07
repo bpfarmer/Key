@@ -15,6 +15,8 @@
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSArray *userIds;
 @property (nonatomic) NSString *latestMessage;
+@property (nonatomic) NSDate *lastMessageAt;
+@property (nonatomic) NSDate *archivedAt;
 
 - (instancetype)initWithUsers:(NSArray *)userIds;
 - (instancetype)initFromRemote:(NSDictionary *)threadDictionary;

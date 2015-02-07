@@ -18,7 +18,6 @@
 		E7BF14D0C491E7C8C7BAFF73 /* libPods-KeyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */; };
 		EF973F981A7AD58C00D92A9E /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973F971A7AD58C00D92A9E /* AddContactViewController.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
-		EF973FA91A7FE82500D92A9E /* KDatabaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA81A7FE82400D92A9E /* KDatabaseView.m */; };
 		EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAA81A76C47200589CF3 /* KYapDatabaseObject.m */; };
 		EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAAC1A76C55600589CF3 /* KStorageManager.m */; };
 		EFB1EAB01A76C5E900589CF3 /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAAF1A76C5E900589CF3 /* KStorageKeys.m */; };
@@ -37,10 +36,12 @@
 		EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */; };
 		EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */; };
 		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
+		EFCD01DB1A84202D005065B2 /* KYapDatabaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01DA1A84202D005065B2 /* KYapDatabaseView.m */; };
+		EFCD01DE1A8421F2005065B2 /* KOutgoingMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01DD1A8421F2005065B2 /* KOutgoingMessage.m */; };
+		EFCD01E11A842202005065B2 /* KIncomingMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01E01A842202005065B2 /* KIncomingMessage.m */; };
 		EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD341A686A0300973E15 /* KKeyPair.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
 		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
-		EFEBDD411A6B2D5E00973E15 /* KMessageCrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD401A6B2D5E00973E15 /* KMessageCrypt.m */; };
 		EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD431A6B5C1400973E15 /* KGroup.m */; };
 		EFEBDD481A6D879700973E15 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD471A6D879700973E15 /* Util.m */; };
 		EFEBDD4E1A6EF2E000973E15 /* KSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD4D1A6EF2E000973E15 /* KSettings.m */; };
@@ -82,8 +83,6 @@
 		EF973F971A7AD58C00D92A9E /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
-		EF973FA71A7FE82400D92A9E /* KDatabaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KDatabaseView.h; path = Models/Storage/KDatabaseView.h; sourceTree = "<group>"; };
-		EF973FA81A7FE82400D92A9E /* KDatabaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KDatabaseView.m; path = Models/Storage/KDatabaseView.m; sourceTree = "<group>"; };
 		EFB1EAA71A76C47200589CF3 /* KYapDatabaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KYapDatabaseObject.h; path = Models/KYapDatabaseObject.h; sourceTree = "<group>"; };
 		EFB1EAA81A76C47200589CF3 /* KYapDatabaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KYapDatabaseObject.m; path = Models/KYapDatabaseObject.m; sourceTree = "<group>"; };
 		EFB1EAAB1A76C55600589CF3 /* KStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KStorageManager.h; path = Models/Storage/KStorageManager.h; sourceTree = "<group>"; };
@@ -118,14 +117,18 @@
 		EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		EFCD01D61A83E651005065B2 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThread.h; path = Models/KThread.h; sourceTree = "<group>"; };
 		EFCD01D71A83E651005065B2 /* KThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KThread.m; path = Models/KThread.m; sourceTree = "<group>"; };
+		EFCD01D91A84202C005065B2 /* KYapDatabaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYapDatabaseView.h; sourceTree = "<group>"; };
+		EFCD01DA1A84202D005065B2 /* KYapDatabaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYapDatabaseView.m; sourceTree = "<group>"; };
+		EFCD01DC1A8421F2005065B2 /* KOutgoingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KOutgoingMessage.h; path = Models/KOutgoingMessage.h; sourceTree = "<group>"; };
+		EFCD01DD1A8421F2005065B2 /* KOutgoingMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KOutgoingMessage.m; path = Models/KOutgoingMessage.m; sourceTree = "<group>"; };
+		EFCD01DF1A842202005065B2 /* KIncomingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KIncomingMessage.h; path = Models/KIncomingMessage.h; sourceTree = "<group>"; };
+		EFCD01E01A842202005065B2 /* KIncomingMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KIncomingMessage.m; path = Models/KIncomingMessage.m; sourceTree = "<group>"; };
 		EFEBDD331A686A0300973E15 /* KKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKeyPair.h; path = Models/KKeyPair.h; sourceTree = "<group>"; };
 		EFEBDD341A686A0300973E15 /* KKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKeyPair.m; path = Models/KKeyPair.m; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
 		EFEBDD371A68CE9600973E15 /* KUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KUser.m; path = Models/KUser.m; sourceTree = "<group>"; };
 		EFEBDD391A6B2C7800973E15 /* KMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMessage.h; path = Models/KMessage.h; sourceTree = "<group>"; };
 		EFEBDD3A1A6B2C7800973E15 /* KMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KMessage.m; path = Models/KMessage.m; sourceTree = "<group>"; };
-		EFEBDD3F1A6B2D5E00973E15 /* KMessageCrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMessageCrypt.h; path = Models/KMessageCrypt.h; sourceTree = "<group>"; };
-		EFEBDD401A6B2D5E00973E15 /* KMessageCrypt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KMessageCrypt.m; path = Models/KMessageCrypt.m; sourceTree = "<group>"; };
 		EFEBDD421A6B5C1400973E15 /* KGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KGroup.h; path = Models/KGroup.h; sourceTree = "<group>"; };
 		EFEBDD431A6B5C1400973E15 /* KGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KGroup.m; path = Models/KGroup.m; sourceTree = "<group>"; };
 		EFEBDD461A6D879700973E15 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Util.h; path = Util/Util.h; sourceTree = "<group>"; };
@@ -207,8 +210,8 @@
 				EFB1EAAC1A76C55600589CF3 /* KStorageManager.m */,
 				EFB1EAAE1A76C5E900589CF3 /* KStorageKeys.h */,
 				EFB1EAAF1A76C5E900589CF3 /* KStorageKeys.m */,
-				EF973FA71A7FE82400D92A9E /* KDatabaseView.h */,
-				EF973FA81A7FE82400D92A9E /* KDatabaseView.m */,
+				EFCD01D91A84202C005065B2 /* KYapDatabaseView.h */,
+				EFCD01DA1A84202D005065B2 /* KYapDatabaseView.m */,
 			);
 			name = Storage;
 			sourceTree = "<group>";
@@ -347,12 +350,14 @@
 				EF973FA41A7E8F5200D92A9E /* KAccountManager.m */,
 				EFEBDD421A6B5C1400973E15 /* KGroup.h */,
 				EFEBDD431A6B5C1400973E15 /* KGroup.m */,
+				EFCD01DF1A842202005065B2 /* KIncomingMessage.h */,
+				EFCD01E01A842202005065B2 /* KIncomingMessage.m */,
 				EFEBDD331A686A0300973E15 /* KKeyPair.h */,
 				EFEBDD341A686A0300973E15 /* KKeyPair.m */,
 				EFEBDD391A6B2C7800973E15 /* KMessage.h */,
 				EFEBDD3A1A6B2C7800973E15 /* KMessage.m */,
-				EFEBDD3F1A6B2D5E00973E15 /* KMessageCrypt.h */,
-				EFEBDD401A6B2D5E00973E15 /* KMessageCrypt.m */,
+				EFCD01DC1A8421F2005065B2 /* KOutgoingMessage.h */,
+				EFCD01DD1A8421F2005065B2 /* KOutgoingMessage.m */,
 				EFCD01D61A83E651005065B2 /* KThread.h */,
 				EFCD01D71A83E651005065B2 /* KThread.m */,
 				EFEBDD361A68CE9600973E15 /* KUser.h */,
@@ -542,6 +547,7 @@
 				EF973FA91A7FE82500D92A9E /* KDatabaseView.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */,
+				EFCD01DE1A8421F2005065B2 /* KOutgoingMessage.m in Sources */,
 				EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */,
 				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
 				EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */,
@@ -558,8 +564,8 @@
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
 				EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */,
 				EFB1EAB01A76C5E900589CF3 /* KStorageKeys.m in Sources */,
-				EFEBDD411A6B2D5E00973E15 /* KMessageCrypt.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
+				EFCD01DB1A84202D005065B2 /* KYapDatabaseView.m in Sources */,
 				EFC6BED81A68582200B0EB8F /* KCryptError.m in Sources */,
 				EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */,
 				527DD3EA1A78197600B3688E /* RegistrationViewController.m in Sources */,

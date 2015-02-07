@@ -1,16 +1,16 @@
 //
-//  KMessageCrypt.m
+//  KOutgoingMessage.m
 //  Key
 //
-//  Created by Brendan Farmer on 1/17/15.
+//  Created by Brendan Farmer on 2/5/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "KMessageCrypt.h"
+#import "KOutgoingMessage.h"
 #import "KMessage.h"
 #import "KUser.h"
 
-@implementation KMessageCrypt
+@implementation KOutgoingMessage
 
 - (instancetype)initWithMessage:(KMessage *)message keyPair:(KKeyPair *)keyPair {
     self = [super initWithUniqueId:nil];
