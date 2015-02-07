@@ -7,13 +7,13 @@
 //
 #import "KMessage.h"
 #import "KGroup.h"
-#import "KMessageCrypt.h"
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
 #import "KUser.h"
 #import "KKeyPair.h"
 #import "KThread.h"
 #import "KStorageManager.h"
 #import "KUser.h"
+#import "KOutgoingMessage.h"
 
 @implementation KMessage
 
@@ -37,16 +37,16 @@
     KThread *thread = [[KStorageManager sharedManager] objectForKey:[self threadId] inCollection:[KThread collection]];
     NSArray *keyPairs = [KUser fullNamesForUserIds:[thread userIds]];
     
-    NSMutableArray *messageCrypts = nil;
+    NSMutableArray *outgoingMessages = nil;
     for (KKeyPair *keyPair in keyPairs) {
-        [messageCrypts addObject: [self encryptForKeyPair:keyPair]];
+        [outgoingMessages addObject: [self encryptForKeyPair:keyPair]];
     }
     
-    [self sendMessageCrypts:messageCrypts];
+    [self sendMessageCrypts:outgoingMessages];
 }
 
-- (KMessageCrypt *)encryptForKeyPair:(KKeyPair *)keyPair {
-    return [[KMessageCrypt alloc] initWithMessage:self keyPair:keyPair];
+- (KOutgoingMessage *)encryptForKeyPair:(KKeyPair *)keyPair {
+    return [[KOutgoingMessage alloc] initWithMessage:self keyPair:keyPair];
 }
 
 - (void)sendMessageCrypts:(NSArray *)messageCrypts {

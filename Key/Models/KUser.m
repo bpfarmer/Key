@@ -11,7 +11,6 @@
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
 #import "KSettings.h"
 #import "KMessage.h"
-#import "KMessageCrypt.h"
 #import "KStorageManager.h"
 #import "KAccountManager.h"
 #import "KThread.h"
