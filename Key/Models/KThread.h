@@ -10,11 +10,13 @@
 #import <YapDatabase/YapDatabaseRelationshipNode.h>
 #import "KYapDatabaseObject.h"
 
+@class KMessage;
+
 @interface KThread : KYapDatabaseObject
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSArray *userIds;
-@property (nonatomic) NSString *latestMessage;
+@property (nonatomic) KMessage *latestMessage;
 @property (nonatomic) NSDate *lastMessageAt;
 @property (nonatomic) NSDate *archivedAt;
 

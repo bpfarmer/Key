@@ -13,11 +13,12 @@
 #import <SSKeychain/SSKeychain.h>
 #import "KCryptor.h"
 #import "NSData+Base64.h"
+#import "KYapDatabaseView.h"
 
 NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnectionDidUpdateNotification";
 
-static NSString * keychainService          = @"KKeyChainService";
-static NSString * keychainDBPassAccount    = @"KDatabasePass";
+static NSString *keychainService          = @"KKeyChainService";
+static NSString *keychainDBPassAccount    = @"KDatabasePass";
 
 @interface KStorageManager ()
 
@@ -55,15 +56,13 @@ static NSString * keychainDBPassAccount    = @"KDatabasePass";
                                 metadataSanitizer:NULL
                                           options:options];
     _dbConnection = self.newDatabaseConnection;
+    
+    [self setupDatabase];
     return self;
 }
 
 - (void)setupDatabase {
-    //[TSDatabaseView registerThreadDatabaseView];
-    //[TSDatabaseView registerBuddyConversationDatabaseView];
-    //[TSDatabaseView registerUnreadDatabaseView];
-    
-    //[self.database registerExtension:[[YapDatabaseRelationship alloc] init] withName:@"TSRelationships"];
+    [KYapDatabaseView registerThreadDatabaseView];
 }
 
 /**

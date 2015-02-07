@@ -7,7 +7,6 @@
 //
 
 #import "KYapDatabaseView.h"
-#import <YapDatabase/YapDatabaseView.h>
 #import "KThread.h"
 #import "KStorageManager.h"
 #import "KUser.h"

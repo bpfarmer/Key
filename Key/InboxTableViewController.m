@@ -11,8 +11,12 @@
 #import "KAccountManager.h"
 #import "KThread.h"
 #import "KStorageManager.h"
+#import "KYapDatabaseView.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
+
+YapDatabaseViewMappings *mappings;
+YapDatabaseConnection *databaseConnection;
 
 @interface InboxTableViewController ()
 
@@ -40,6 +44,36 @@ static NSString *TableViewCellIdentifier = @"Threads";
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    [self setupDatabaseView];
+    
+}
+
+- (void) setupDatabaseView {
+    databaseConnection = [[KStorageManager sharedManager] dbConnection];
+    [databaseConnection beginLongLivedReadTransaction];
+    
+    mappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[] view:@"KThreadDatabaseViewExtensionName"];
+    
+    // We can do all kinds of cool stuff with the mappings object.
+    // For example, we could say we only want to display the top 20 in each genre.
+    // This will be covered later.
+    //
+    // Now initialize the mappings object.
+    // It will fetch and cache the counts per group/section.
+    
+    [databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
+        // One-time initialization
+        [mappings updateWithTransaction:transaction];
+    }];
+    
+    // And register for notifications when the database changes.
+    // Our method will be invoked on the main-thread,
+    // and will allow us to move our stable data-source from our existing state to an updated state.
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(yapDatabaseModified:)
+                                                 name:YapDatabaseModifiedNotification
+                                               object:databaseConnection.database];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -51,37 +85,30 @@ static NSString *TableViewCellIdentifier = @"Threads";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if ([tableView isEqual:self.tableView]){
-    // Return the number of sections.
-        return 1;
+        return [mappings numberOfSections];
     }
     return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([tableView isEqual:self.tableView]){
-        switch (section){
-            case 0:{
-                // Returns number of threads associated with current user's account, sets row count accordingly
-                return [[KStorageManager sharedManager] numberOfKeysInCollection:[KThread collection]];
-                break;
-            }
-
-        }
-    
+        return [mappings numberOfItemsInSection:section];
     }
     return 0;
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = nil;
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {    
+    __block KMessage *message = nil;
+    [databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        message = [[transaction extension:@"KInboxGroup"] objectAtIndexPath:indexPath withMappings:mappings];
+    }];
     
-    if ([tableView isEqual:self.tableView]) {
-        cell = [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-        cell.textLabel.text = [NSString stringWithFormat:@"Some Thread"]; //[[KThread threadAtIndex:indexPath.row] name]];
-    }
-    
-    return cell;
+    return [self cellForMessage:message];
+}
+
+- (UITableViewCell *)cellForMessage:(KMessage *)message {
+    return nil;
 }
 
 - (UILabel *) newLabelWithTitle:(NSString *)paramTitle{
