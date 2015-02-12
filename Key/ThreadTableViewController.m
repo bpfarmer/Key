@@ -65,9 +65,7 @@ static NSString *ThreadTableViewCellIdentifier = @"Messages";
                 return 6;
                 break;
             }
-                
         }
-        
     }
     return 0;
 }

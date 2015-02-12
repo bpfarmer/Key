@@ -31,20 +31,37 @@ YapDatabaseConnection *databaseConnection;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
-        
-    /* Make sure our table view resizes correctly */
+
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
 
     [self setupDatabaseView];
+    
+    [self addHeaderAndFooter];
+}
+
+- (void)addHeaderAndFooter {
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 300, 50)];
+    UILabel *headerLabelView = [[UILabel alloc] initWithFrame:CGRectMake(25, 25, 200, 20)];
+    headerLabelView.text = @"Messages";
+    [headerView addSubview:headerLabelView];
+    self.tableView.tableHeaderView = headerView;
+    
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 100, 300, 50)];
+    UIButton *newMessageButton = [[UIButton alloc] initWithFrame:CGRectMake(25, 25, 200, 20)];
+    [newMessageButton addTarget:self action:@selector(newThread) forControlEvents:UIControlEventTouchUpInside];
+    [newMessageButton setTitle:@"New Message" forState:UIControlStateNormal];
+    [newMessageButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [footerView addSubview:newMessageButton];
+    self.tableView.tableFooterView = footerView;
+}
+
+- (void) newThread {
+    [self performSegueWithIdentifier:@"ShowThreadDetail" sender:self];
 }
 
 - (void) setupDatabaseView {
@@ -99,7 +116,6 @@ YapDatabaseConnection *databaseConnection;
     cell.textLabel.text = [thread uniqueId];
     return cell;
 }
-
 
 /*
 // Override to support conditional editing of the table view.
