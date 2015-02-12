@@ -14,6 +14,7 @@
 #import "KCryptor.h"
 #import "NSData+Base64.h"
 #import "KYapDatabaseView.h"
+#import "KYapDatabaseSecondaryIndex.h"
 
 NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnectionDidUpdateNotification";
 
@@ -70,6 +71,7 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
 
 - (void)setupDatabase {
     [KYapDatabaseView registerThreadDatabaseView];
+    [KYapDatabaseSecondaryIndex registerUsernameIndex];
 }
 
 /**
@@ -116,7 +118,6 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
     NSFileManager* fileManager = [NSFileManager defaultManager];
     NSURL *fileURL = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSString *path = [fileURL path];
-    NSLog(@"ACCOUNT MANAGER ID FOR DB: %@", [[KAccountManager sharedManager] uniqueId]);
     return [path stringByAppendingFormat:@"/%@", [[KAccountManager sharedManager] uniqueId]];
 }
 

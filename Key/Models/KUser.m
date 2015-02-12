@@ -14,6 +14,7 @@
 #import "KStorageManager.h"
 #import "KAccountManager.h"
 #import "KThread.h"
+#import "KYapDatabaseSecondaryIndex.h"
 
 @implementation KUser
 
@@ -31,7 +32,18 @@
 
 - (instancetype)initFromRemoteWithUsername:(NSString *)username {
     self = [self initWithUsername:username];
-    [self getRemoteUser];
+    
+    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:[NSString stringWithFormat:@"WHERE username = %@", username]];
+        [[transaction ext:KUsernameSQLiteIndex] enumerateKeysMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, BOOL *stop) {
+            self.uniqueId = key;
+        }];
+    }];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self getRemoteUser];
+    });
+    
     return self;
 }
 
@@ -46,9 +58,10 @@
         }else {
             [self setUniqueId:responseObject[@"user"][@"id"]];
             [self setStatus:kUserRegisterUsernameSuccessStatus];
+            //Randomly registering username index here
             [[KAccountManager sharedManager] setUniqueId:[self uniqueId]];
-            NSLog(@"HERE HERE");
             [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:[[self class] collection]];
+            [KYapDatabaseSecondaryIndex registerUsernameIndex];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [self generatePassword:password];
                 [self finishRegistration];
@@ -168,7 +181,6 @@
     NSArray *users = [NSArray arrayWithObjects:[self uniqueId], [otherUser uniqueId], nil];
     KThread *firstThread = [[KThread alloc] initWithUsers:users];
     KMessage *message = [[KMessage alloc] initFrom:[self uniqueId] threadId:[firstThread uniqueId] body:@"SOME DUMB MESSAGE"];
-    NSLog(@"%@", [firstThread uniqueId]);
     [[KStorageManager sharedManager] setObject:firstThread forKey:[firstThread uniqueId] inCollection:[[firstThread class] collection]];
     [[KStorageManager sharedManager] setObject:message forKey:[message uniqueId] inCollection:[[message class] collection]];
 }

@@ -11,10 +11,21 @@
 #import "KAccountManager.h"
 #import "KThread.h"
 #import "KStorageManager.h"
+#import "KMessage.h"
+#import "KYapDatabaseView.h"
 
-static NSString *ThreadTableViewCellIdentifier = @"Messages";
+static NSString *TableViewCellIdentifier = @"Messages";
 
 @interface ThreadTableViewController ()
+
+@property (nonatomic, retain) KThread *thread;
+@property (nonatomic, strong) YapDatabaseConnection   *editDatabaseConnection;
+@property (nonatomic, strong) YapDatabaseConnection   *readDatabaseConnection;
+@property (nonatomic, strong) YapDatabaseViewMappings *messageMappings;
+@property (nonatomic, strong) UITextField *recipientTextField;
+@property (nonatomic, strong) UITextField *messageTextField;
+@property (nonatomic) BOOL fetchingUsernames;
+@property (nonatomic, strong) NSArray *recipients;
 
 @end
 
@@ -24,60 +35,96 @@ static NSString *ThreadTableViewCellIdentifier = @"Messages";
     [super viewDidLoad];
     
     self.tableView =
-    [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     
-    [self.tableView registerClass:[UITableViewCell class]
-           forCellReuseIdentifier:ThreadTableViewCellIdentifier];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
     /* Make sure our table view resizes correctly */
-    self.tableView.autoresizingMask =
-    UIViewAutoresizingFlexibleWidth |
-    UIViewAutoresizingFlexibleHeight;
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    [self setupDatabaseView];
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self addHeaderAndFooter];
+}
+
+- (void)addHeaderAndFooter {
+    NSLog(@"THREAD VALUE: %@", self.thread);
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 300, 80)];
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 100, 300, 80)];
     
+    if (!self.thread) {
+        self.recipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 25, 200, 30)];
+        [self.recipientTextField setBorderStyle:UITextBorderStyleRoundedRect];
+        [headerView addSubview:self.recipientTextField];
+    }else {
+        UILabel *headerLabelView = [[UILabel alloc] initWithFrame:CGRectMake(25, 25, 200, 20)];
+        headerLabelView.text = @"Thread";
+        [headerView addSubview:headerLabelView];
+    }
+    self.messageTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 25, 200, 30)];
+    [self.messageTextField setBorderStyle:UITextBorderStyleRoundedRect];
+    [footerView addSubview:self.messageTextField];
+    UIButton *submitButton = [[UIButton alloc] initWithFrame:CGRectMake(240, 25, 70, 30)];
+    [submitButton addTarget:self action:@selector(createThread) forControlEvents:UIControlEventTouchUpInside];
+    [submitButton setTitle:@"Send" forState:UIControlStateNormal];
+    [submitButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [footerView addSubview:submitButton];
+    [headerView setBackgroundColor:[UIColor whiteColor]];
+    [footerView setBackgroundColor:[UIColor whiteColor]];
+    self.tableView.tableHeaderView = headerView;
+    self.tableView.tableFooterView = footerView;
+}
+
+- (void) createThread {
+    
+}
+
+- (void) setupDatabaseView {
+    [KYapDatabaseView registerThreadDatabaseView];
+    self.readDatabaseConnection = [KStorageManager longLivedReadConnection];
+    self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[@"KInboxGroup"] view:@"KMessageDatabaseViewExtension"];
+    
+    [self.readDatabaseConnection beginLongLivedReadTransaction];
+    [self.readDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
+        [self.messageMappings updateWithTransaction:transaction];
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(yapDatabaseModified:)
+                                                 name:YapDatabaseModifiedNotification
+                                               object:self.readDatabaseConnection.database];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+- (void)yapDatabaseModified:(NSNotification *)notification {
+    
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if ([tableView isEqual:self.tableView]){
-        // Return the number of sections.
-        return 1;
-    }
-    return 0;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)sender
+{
+    return [self.messageMappings numberOfSections];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([tableView isEqual:self.tableView]){
-        switch (section){
-            case 0:{
-                // Placeholder count for number of messages in thread to determine number of table rows to display. Needs method for counting number of messages in thread.
-                return 6;
-                break;
-            }
-        }
-    }
-    return 0;
+- (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section
+{
+    return [self.messageMappings numberOfItemsInSection:section];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = nil;
+- (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    __block KMessage *message = nil;
+    [self.readDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        message = [[transaction extension:@"KMessageDatabaseViewExtension"] objectAtIndexPath:indexPath withMappings:self.messageMappings];
+    }];
     
-    if ([tableView isEqual:self.tableView]) {
-        cell = [tableView dequeueReusableCellWithIdentifier:ThreadTableViewCellIdentifier forIndexPath:indexPath];
-        cell.textLabel.text = [NSString stringWithFormat:@"Some Message"];
-    }
-    
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
+    NSLog(@"SUPPOSED TO SAY: %@", [message uniqueId]);
+    cell.textLabel.text = [message uniqueId];
     return cell;
 }
 

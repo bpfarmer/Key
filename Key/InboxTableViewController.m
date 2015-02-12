@@ -45,19 +45,24 @@ YapDatabaseConnection *databaseConnection;
 }
 
 - (void)addHeaderAndFooter {
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 300, 50)];
-    UILabel *headerLabelView = [[UILabel alloc] initWithFrame:CGRectMake(25, 25, 200, 20)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, [UIScreen mainScreen].bounds.size.width, 60)];
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 100, [UIScreen mainScreen].bounds.size.width, 50)];
+    UILabel *headerLabelView = [[UILabel alloc] initWithFrame:CGRectMake(15, 25, [UIScreen mainScreen].bounds.size.width, 20)];
     headerLabelView.text = @"Messages";
+    [headerLabelView sizeToFit];
+    headerLabelView.textAlignment = NSTextAlignmentCenter;
     [headerView addSubview:headerLabelView];
-    self.tableView.tableHeaderView = headerView;
-    
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 100, 300, 50)];
-    UIButton *newMessageButton = [[UIButton alloc] initWithFrame:CGRectMake(25, 25, 200, 20)];
+    UIButton *newMessageButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 15, 150, 20)];
     [newMessageButton addTarget:self action:@selector(newThread) forControlEvents:UIControlEventTouchUpInside];
     [newMessageButton setTitle:@"New Message" forState:UIControlStateNormal];
     [newMessageButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [footerView addSubview:newMessageButton];
+    
+    [headerView setBackgroundColor:[UIColor whiteColor]];
+    [footerView setBackgroundColor:[UIColor whiteColor]];
+    self.tableView.tableHeaderView = headerView;
     self.tableView.tableFooterView = footerView;
+
 }
 
 - (void) newThread {
@@ -74,8 +79,6 @@ YapDatabaseConnection *databaseConnection;
         // One-time initialization
         [self.threadMappings updateWithTransaction:transaction];
     }];
-    
-    NSLog(@"SHOULD BE ROWS: %lu", [self.threadMappings numberOfItemsInAllGroups]);
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(yapDatabaseModified:)
@@ -112,7 +115,6 @@ YapDatabaseConnection *databaseConnection;
     }];
     
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    NSLog(@"SUPPOSED TO SAY: %@", [thread uniqueId]);
     cell.textLabel.text = [thread uniqueId];
     return cell;
 }

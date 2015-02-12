@@ -38,7 +38,7 @@
 		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
 		EFCD01DB1A84202D005065B2 /* KYapDatabaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01DA1A84202D005065B2 /* KYapDatabaseView.m */; };
 		EFCD01DE1A8421F2005065B2 /* KOutgoingMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01DD1A8421F2005065B2 /* KOutgoingMessage.m */; };
-		EFCD01E11A842202005065B2 /* KIncomingMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01E01A842202005065B2 /* KIncomingMessage.m */; };
+		EFE45C701A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE45C6F1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m */; };
 		EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD341A686A0300973E15 /* KKeyPair.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
 		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
@@ -123,6 +123,8 @@
 		EFCD01DD1A8421F2005065B2 /* KOutgoingMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KOutgoingMessage.m; path = Models/KOutgoingMessage.m; sourceTree = "<group>"; };
 		EFCD01DF1A842202005065B2 /* KIncomingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KIncomingMessage.h; path = Models/KIncomingMessage.h; sourceTree = "<group>"; };
 		EFCD01E01A842202005065B2 /* KIncomingMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KIncomingMessage.m; path = Models/KIncomingMessage.m; sourceTree = "<group>"; };
+		EFE45C6E1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KYapDatabaseSecondaryIndex.h; path = Models/Storage/KYapDatabaseSecondaryIndex.h; sourceTree = "<group>"; };
+		EFE45C6F1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KYapDatabaseSecondaryIndex.m; path = Models/Storage/KYapDatabaseSecondaryIndex.m; sourceTree = "<group>"; };
 		EFEBDD331A686A0300973E15 /* KKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKeyPair.h; path = Models/KKeyPair.h; sourceTree = "<group>"; };
 		EFEBDD341A686A0300973E15 /* KKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKeyPair.m; path = Models/KKeyPair.m; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
@@ -212,6 +214,8 @@
 				EFB1EAAF1A76C5E900589CF3 /* KStorageKeys.m */,
 				EFCD01D91A84202C005065B2 /* KYapDatabaseView.h */,
 				EFCD01DA1A84202D005065B2 /* KYapDatabaseView.m */,
+				EFE45C6E1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.h */,
+				EFE45C6F1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m */,
 			);
 			name = Storage;
 			sourceTree = "<group>";
@@ -544,7 +548,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF973FA91A7FE82500D92A9E /* KDatabaseView.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */,
 				EFCD01DE1A8421F2005065B2 /* KOutgoingMessage.m in Sources */,
@@ -557,6 +560,7 @@
 				EFC6BED91A68582200B0EB8F /* KCryptor.m in Sources */,
 				52E964AE1A84255500E67736 /* ContactsTableViewController.m in Sources */,
 				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
+				EFE45C701A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m in Sources */,
 				527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */,
 				527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */,
 				EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */,
