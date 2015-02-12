@@ -168,6 +168,7 @@
     NSArray *users = [NSArray arrayWithObjects:[self uniqueId], [otherUser uniqueId], nil];
     KThread *firstThread = [[KThread alloc] initWithUsers:users];
     KMessage *message = [[KMessage alloc] initFrom:[self uniqueId] threadId:[firstThread uniqueId] body:@"SOME DUMB MESSAGE"];
+    NSLog(@"%@", [firstThread uniqueId]);
     [[KStorageManager sharedManager] setObject:firstThread forKey:[firstThread uniqueId] inCollection:[[firstThread class] collection]];
     [[KStorageManager sharedManager] setObject:message forKey:[message uniqueId] inCollection:[[message class] collection]];
 }
