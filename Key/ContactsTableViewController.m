@@ -61,7 +61,7 @@ static NSString *ContactsTableViewCellIdentifier = @"Contacts";
         switch (section){
             case 0:{
                 // Returns number of contacts associated with current user's account, sets row count accordingly
-                return [[KStorageManager sharedManager] numberOfKeysInCollection:[KUser collection]] -1;
+                //return [[KStorageManager sharedManager] numberOfKeysInCollection:[KUser collection]] -1;
                 break;
             }
                 

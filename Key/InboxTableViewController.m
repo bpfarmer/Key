@@ -20,6 +20,10 @@ YapDatabaseConnection *databaseConnection;
 
 @interface InboxTableViewController ()
 
+@property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
+@property (nonatomic, strong) YapDatabaseViewMappings *threadMappings;
+
+
 @end
 
 @implementation InboxTableViewController
@@ -44,15 +48,19 @@ YapDatabaseConnection *databaseConnection;
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
+    NSLog(@"%lu", (unsigned long)[[KStorageManager sharedManager] numberOfKeysInCollection:[KThread collection]]);
+    NSLog(@"INBOX TABLE VIEW DB PATH: %@", [[KStorageManager sharedManager] dbPath]);
+    NSLog(@"INBOX TABLE VIEW ACCOUNT MANAGER: %@", [[KAccountManager sharedManager] uniqueId]);
     [self setupDatabaseView];
     
 }
 
 - (void) setupDatabaseView {
-    databaseConnection = [[KStorageManager sharedManager] dbConnection];
+    [KYapDatabaseView registerThreadDatabaseView];
+    _databaseConnection = [KStorageManager longLivedReadConnection];
     [databaseConnection beginLongLivedReadTransaction];
     
-    mappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[] view:@"KThreadDatabaseViewExtensionName"];
+    _threadMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[] view:@"KThreadDatabaseViewExtension"];
     
     // We can do all kinds of cool stuff with the mappings object.
     // For example, we could say we only want to display the top 20 in each genre.
@@ -81,6 +89,10 @@ YapDatabaseConnection *databaseConnection;
     // Dispose of any resources that can be recreated.
 }
 
+- (void)yapDatabaseModified:(NSNotification *)notification {
+    
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -98,7 +110,7 @@ YapDatabaseConnection *databaseConnection;
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     __block KMessage *message = nil;
     [databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         message = [[transaction extension:@"KInboxGroup"] objectAtIndexPath:indexPath withMappings:mappings];

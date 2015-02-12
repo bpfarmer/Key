@@ -43,6 +43,7 @@
     
     NSString *status = [notification.object performSelector:@selector(status)];
     if([status isEqualToString:kUserRegisterUsernameSuccessStatus]) {
+        [notification.object generateRandomThread];
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
         UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
         [self presentViewController:inboxView animated:YES completion:nil];

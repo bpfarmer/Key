@@ -12,7 +12,7 @@
 
 @class KMessage;
 
-@interface KThread : KYapDatabaseObject
+@interface KThread : KYapDatabaseObject <YapDatabaseRelationshipNode>
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSArray *userIds;

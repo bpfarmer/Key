@@ -17,5 +17,6 @@
 
 + (instancetype)sharedManager;
 + (KUser *)currentUser;
+- (instancetype)initWithUniqueId:(NSString *)uniqueId;
 
 @end

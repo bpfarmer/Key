@@ -12,14 +12,9 @@
 @interface KYapDatabaseView : NSObject
 
 extern NSString *KInboxGroup;
-extern NSString *KArchiveGroup;
-extern NSString *KUnreadIncomingMessagesGroup;
 
 extern NSString *KThreadDatabaseViewExtensionName;
-extern NSString *KMessageDatabaseViewExtensionName;
-extern NSString *KUnreadDatabaseViewExtensionName;
 
 + (BOOL)registerThreadDatabaseView;
-+ (BOOL)registerUnreadDatabaseView;
 
 @end

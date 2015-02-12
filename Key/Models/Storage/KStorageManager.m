@@ -38,6 +38,15 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
     return sharedMyManager;
 }
 
++ (YapDatabaseConnection *)longLivedReadConnection {
+    static YapDatabaseConnection *longLivedReadConnection = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        longLivedReadConnection = [[self sharedManager] newDatabaseConnection];
+    });
+    return longLivedReadConnection;
+}
+
 - (instancetype)init {
     self = [super init];
     
@@ -56,8 +65,6 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
                                 metadataSanitizer:NULL
                                           options:options];
     _dbConnection = self.newDatabaseConnection;
-    
-    [self setupDatabase];
     return self;
 }
 
@@ -109,6 +116,7 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
     NSFileManager* fileManager = [NSFileManager defaultManager];
     NSURL *fileURL = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSString *path = [fileURL path];
+    NSLog(@"ACCOUNT MANAGER ID FOR DB: %@", [[KAccountManager sharedManager] uniqueId]);
     return [path stringByAppendingFormat:@"/%@", [[KAccountManager sharedManager] uniqueId]];
 }
 

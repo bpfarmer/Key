@@ -46,9 +46,10 @@
         }else {
             [self setUniqueId:responseObject[@"user"][@"id"]];
             [self setStatus:kUserRegisterUsernameSuccessStatus];
+            [[KAccountManager sharedManager] setUniqueId:[self uniqueId]];
+            NSLog(@"HERE HERE");
+            [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:[[self class] collection]];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [self startAccountManager];
-                [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
                 [self generatePassword:password];
                 [self finishRegistration];
             });
@@ -59,11 +60,6 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-}
-
-- (void)startAccountManager {
-    KAccountManager *account = [KAccountManager sharedManager];
-    [account setUniqueId:self.uniqueId];
 }
 
 - (void)finishRegistration {
@@ -82,7 +78,7 @@
         } else {
             [self setStatus:kUserRegisterKeyPairFailureStatus];
         }
-        [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
+        [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:[[self class] collection]];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -97,21 +93,22 @@
 #pragma mark - Batch Query Methods
 
 + (NSArray *)keyPairsForUserIds:(NSArray *)userIds {
-    __block NSMutableArray *keyPairs = nil;
+    NSMutableArray *keyPairs = [[NSMutableArray alloc] init];
     
     [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         [transaction enumerateObjectsForKeys:userIds inCollection:[self collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, BOOL *stop) {
             [keyPairs addObject:[object activeKeyPair]];
         }];
     }];
+    
     return keyPairs;
 }
 
 + (NSArray *)fullNamesForUserIds:(NSArray *)userIds {
-    __block NSMutableArray *fullNames = nil;
+    NSMutableArray *fullNames = [[NSMutableArray alloc] init];
     
     [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        [transaction enumerateObjectsForKeys:userIds inCollection:[self collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, BOOL *stop) {
+        [transaction enumerateRowsForKeys:userIds inCollection:[self collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, id metadata, BOOL *stop) {
             [fullNames addObject:[object fullName]];
         }];
     }];
@@ -133,7 +130,7 @@
             KKeyPair *keyPair = [[KKeyPair alloc] initFromRemote:responseObject[@"user"][@"keyPair"]];
             self.keyPairs = [NSArray arrayWithObject:keyPair];
             [self setStatus:kUserGetRemoteUserSuccessStatus];
-            [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:@"users"];
+            [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:[[self class] collection]];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kUserGetRemoteStatusNotification object:self];
@@ -167,9 +164,12 @@
 - (void)generateRandomThread {
     KUser *otherUser = [[KUser alloc] initWithUniqueId:@"KUserUniqueId1"];
     [otherUser setUsername:@"Some Stupid User"];
-    NSArray *users = @[self, otherUser];
+    [[KStorageManager sharedManager] setObject:otherUser forKey:[otherUser uniqueId] inCollection:[KUser collection]];
+    NSArray *users = [NSArray arrayWithObjects:[self uniqueId], [otherUser uniqueId], nil];
     KThread *firstThread = [[KThread alloc] initWithUsers:users];
-    KMessage *message = [[KMessage alloc] initFrom:self threadId:[firstThread uniqueId] body:@"SOME DUMB MESSAGE"];
+    KMessage *message = [[KMessage alloc] initFrom:[self uniqueId] threadId:[firstThread uniqueId] body:@"SOME DUMB MESSAGE"];
+    [[KStorageManager sharedManager] setObject:firstThread forKey:[firstThread uniqueId] inCollection:[[firstThread class] collection]];
+    [[KStorageManager sharedManager] setObject:message forKey:[message uniqueId] inCollection:[[message class] collection]];
 }
 
 @end

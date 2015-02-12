@@ -13,7 +13,7 @@
 @implementation KAccountManager
 
 + (instancetype)sharedManager {
-    static KAccountManager *sharedMyManager = nil;
+    static KAccountManager *sharedMyManager;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] init];
@@ -23,6 +23,11 @@
 
 + (KUser *)currentUser {
     return [[KStorageManager sharedManager] objectForKey:[[self sharedManager] uniqueId] inCollection:[KUser collection]];
+}
+
+- (instancetype) initWithUniqueId:(NSString *)uniqueId {
+    _uniqueId = uniqueId;
+    return self;
 }
 
 @end

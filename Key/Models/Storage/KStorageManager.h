@@ -16,17 +16,20 @@ extern NSString *const KUIDatabaseConnectionDidUpdateNotification;
 + (instancetype)sharedManager;
 - (void)setupDatabase;
 
-- (YapDatabase*)database;
-- (YapDatabaseConnection*)newDatabaseConnection;
++ (YapDatabaseConnection *)longLivedReadConnection;
+
+- (YapDatabase *)database;
+- (YapDatabaseConnection *)newDatabaseConnection;
+- (NSString *)dbPath;
 
 - (NSUInteger)numberOfKeysInCollection:(NSString *)collection;
 - (void)setObject:(id)object forKey:(NSString*)key inCollection:(NSString*)collection;
 - (void)removeObjectForKey:(NSString*)string inCollection:(NSString *)collection;
 - (BOOL)boolForKey:(NSString*)key inCollection:(NSString*)collection;
 - (id)objectForKey:(NSString*)key inCollection:(NSString *)collection;
-- (NSDictionary*)dictionaryForKey:(NSString*)key inCollection:(NSString *)collection;
-- (NSString*)stringForKey:(NSString*)key inCollection:(NSString*)collection;
-- (NSData*)dataForKey:(NSString*)key inCollection:(NSString*)collection;
+- (NSDictionary *)dictionaryForKey:(NSString*)key inCollection:(NSString *)collection;
+- (NSString *)stringForKey:(NSString*)key inCollection:(NSString*)collection;
+- (NSData *)dataForKey:(NSString*)key inCollection:(NSString*)collection;
 
 - (void)purgeCollection:(NSString*)collection;
 

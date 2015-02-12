@@ -27,8 +27,10 @@
     self = [super initWithUniqueId:nil];
     
     if (self) {
-        _userIds = userIds;
-        [self setUniqueIdFromUsers];
+        _userIds = [userIds sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return obj1 > obj2;
+        }];
+        [self setUniqueId:[userIds componentsJoinedByString:@"_"]];
         [self setNameFromUsers];
     }
     
@@ -38,11 +40,6 @@
 - (void)setNameFromUsers {
     NSArray *fullNames = [KUser fullNamesForUserIds:[self userIds]];
     [self setName:[fullNames componentsJoinedByString:@", "]];
-}
-
-- (void)setUniqueIdFromUsers {
-    [[self userIds] sortedArrayUsingSelector:@selector(caseSensitive)];
-    [self setUniqueId:[[self userIds] componentsJoinedByString:@"_"]];
 }
 
 @end
