@@ -30,8 +30,14 @@
         _userIds = [userIds sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             return obj1 > obj2;
         }];
-        [self setUniqueId:[userIds componentsJoinedByString:@"_"]];
-        [self setNameFromUsers];
+        NSString *uniqueId = [userIds componentsJoinedByString:@"_"];
+        KThread *thread = [[KStorageManager sharedManager] objectForKey:uniqueId inCollection:[KThread collection]];
+        if (!thread) {
+            [self setUniqueId:uniqueId];
+            //[self setNameFromUsers];
+        }else {
+            self = thread;
+        }
     }
     
     return self;

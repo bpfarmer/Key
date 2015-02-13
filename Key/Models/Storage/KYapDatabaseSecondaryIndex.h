@@ -12,7 +12,7 @@
 
 @interface KYapDatabaseSecondaryIndex : NSObject
 
-+ (YapDatabaseSecondaryIndex*)registerUsernameIndex;
++ (BOOL)registerUsernameIndex;
 
 @end
 

@@ -49,7 +49,7 @@ NSString *KMessageDatabaseViewExtensionName = @"KMessageDatabaseViewExtensionNam
     
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {
         if ([object isKindOfClass:[KMessage class]]){
-            return ((KMessage *)object).threadId;
+            return ((KMessage *) object).threadId;
         }
         return nil;
     }];

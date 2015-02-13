@@ -26,6 +26,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 @property (nonatomic, strong) UITextField *messageTextField;
 @property (nonatomic) BOOL fetchingUsernames;
 @property (nonatomic, strong) NSArray *recipients;
+@property (nonatomic, strong) KUser *currentUser;
 
 @end
 
@@ -34,15 +35,17 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tableView =
-    [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    self.currentUser = [KAccountManager currentUser];
+    
+    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
-    
-    /* Make sure our table view resizes correctly */
+
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    [self setupDatabaseView];
+    if (self.thread) {
+        [self setupDatabaseView];
+    }
     
     [self addHeaderAndFooter];
 }
@@ -65,7 +68,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
     [self.messageTextField setBorderStyle:UITextBorderStyleRoundedRect];
     [footerView addSubview:self.messageTextField];
     UIButton *submitButton = [[UIButton alloc] initWithFrame:CGRectMake(240, 25, 70, 30)];
-    [submitButton addTarget:self action:@selector(createThread) forControlEvents:UIControlEventTouchUpInside];
+    [submitButton addTarget:self action:@selector(createMessage) forControlEvents:UIControlEventTouchUpInside];
     [submitButton setTitle:@"Send" forState:UIControlStateNormal];
     [submitButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [footerView addSubview:submitButton];
@@ -75,14 +78,27 @@ static NSString *TableViewCellIdentifier = @"Messages";
     self.tableView.tableFooterView = footerView;
 }
 
-- (void) createThread {
+- (void) createMessage {
+    if (!self.thread) {
+        NSArray *usernames = [self.recipientTextField.text componentsSeparatedByString:@", "];
+        NSMutableArray *recipients = [NSMutableArray arrayWithObjects:self.currentUser.uniqueId, nil];
+        for (NSString *username in usernames) {
+            [recipients addObject:[[KUser alloc] initFromRemoteWithUsername:username]];
+        };
+        [[KStorageManager sharedManager] setObject:self.thread forKey:[self.thread uniqueId] inCollection:[[self.thread class] collection]];
+        self.thread = [[KThread alloc] initWithUsers:recipients];
+    }
     
+    KMessage *message = [[KMessage alloc] initFrom:self.currentUser.uniqueId threadId:[self.thread uniqueId] body:self.messageTextField.text];
+    
+    [self setupDatabaseView];
+    [[KStorageManager sharedManager] setObject:message forKey:[message uniqueId] inCollection:[[message class] collection]];
 }
 
 - (void) setupDatabaseView {
     [KYapDatabaseView registerThreadDatabaseView];
     self.readDatabaseConnection = [KStorageManager longLivedReadConnection];
-    self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[@"KInboxGroup"] view:@"KMessageDatabaseViewExtension"];
+    self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[self.thread.uniqueId] view:@"KMessageDatabaseViewExtension"];
     
     [self.readDatabaseConnection beginLongLivedReadTransaction];
     [self.readDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
@@ -100,7 +116,87 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (void)yapDatabaseModified:(NSNotification *)notification {
+    NSLog(@"Supposed to have updated...");
     
+    NSArray *notifications = [self.readDatabaseConnection beginLongLivedReadTransaction];
+    
+    // Process the notification(s),
+    // and get the change-set(s) as applies to my view and mappings configuration.
+    
+    NSArray *sectionChanges = nil;
+    NSArray *rowChanges = nil;
+    
+    [[self.readDatabaseConnection ext:@"KMessageDatabaseViewExtensionName"] getSectionChanges:&sectionChanges
+                                                  rowChanges:&rowChanges
+                                            forNotifications:notifications
+                                                withMappings:self.messageMappings];
+    
+    
+    if ([sectionChanges count] == 0 & [rowChanges count] == 0)
+    {
+        // Nothing has changed that affects our tableView
+        NSLog(@"THIS IS BAD");
+        return;
+    }
+    
+    // Familiar with NSFetchedResultsController?
+    // Then this should look pretty familiar
+    
+    [self.tableView beginUpdates];
+    
+    for (YapDatabaseViewSectionChange *sectionChange in sectionChanges)
+    {
+        switch (sectionChange.type)
+        {
+            case YapDatabaseViewChangeDelete :
+            {
+                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionChange.index]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            }
+            case YapDatabaseViewChangeInsert :
+            {
+                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionChange.index]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            }
+        }
+    }
+    
+    for (YapDatabaseViewRowChange *rowChange in rowChanges)
+    {
+        switch (rowChange.type)
+        {
+            case YapDatabaseViewChangeDelete :
+            {
+                [self.tableView deleteRowsAtIndexPaths:@[ rowChange.indexPath ]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            }
+            case YapDatabaseViewChangeInsert :
+            {
+                [self.tableView insertRowsAtIndexPaths:@[ rowChange.newIndexPath ]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            }
+            case YapDatabaseViewChangeMove :
+            {
+                [self.tableView deleteRowsAtIndexPaths:@[ rowChange.indexPath ]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView insertRowsAtIndexPaths:@[ rowChange.newIndexPath ]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            }
+            case YapDatabaseViewChangeUpdate :
+            {
+                [self.tableView reloadRowsAtIndexPaths:@[ rowChange.indexPath ]
+                                      withRowAnimation:UITableViewRowAnimationNone];
+                break;
+            }
+        }
+    }
+    
+    [self.tableView endUpdates];
 }
 
 #pragma mark - Table view data source

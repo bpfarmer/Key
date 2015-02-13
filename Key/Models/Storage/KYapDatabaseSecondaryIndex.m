@@ -30,7 +30,7 @@
     
     YapDatabaseSecondaryIndex *secondaryIndex = [[YapDatabaseSecondaryIndex alloc] initWithSetup:setup handler:handler];
     
-    return [[[KStorageManager sharedManager].database registerExtension:secondaryIndex withName:@"KUsernameSQLiteIndex"];
+    return [[KStorageManager sharedManager].database registerExtension:secondaryIndex withName:@"KUsernameSQLiteIndex"];
 }
 
 @end
