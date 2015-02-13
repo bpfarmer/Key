@@ -36,7 +36,6 @@
         KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text];
         [user registerAccountWithPassword:self.passwordText.text];
     });
-    NSLog(@"NOT BLOCKING");
 }
 
 - (void)receiveUserStatusNotification:(NSNotification *)notification {

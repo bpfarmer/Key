@@ -70,12 +70,12 @@ NSString *KMessageDatabaseViewExtensionName = @"KMessageDatabaseViewExtensionNam
 
 + (YapDatabaseViewSorting *) messageSorting {
     return [YapDatabaseViewSorting withObjectBlock:^NSComparisonResult(NSString *group, NSString *collection1, NSString *key1, id object1, NSString *collection2, NSString *key2, id object2) {
-        if ([object1 isKindOfClass:[KMessage class]] && [object2 isKindOfClass:[KMessage class]]) {
+        /*if ([object1 isKindOfClass:[KMessage class]] && [object2 isKindOfClass:[KMessage class]]) {
             KMessage *message1 = (KMessage *) object1;
             KMessage *message2 = (KMessage *) object2;
             
             return [message1.createdAt compare:message2.createdAt];
-        }
+        }*/
         return NSOrderedSame;
     }];
 }

@@ -52,7 +52,6 @@
 - (void)registerAccountWithPassword:(NSString *)password {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:kUserUsernameRegistrationEndpoint parameters:@{@"user" : @{@"username" : self.username}} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON FROM USERNAME CHECK: %@", responseObject);
         if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
             [self setStatus:kUserRegisterUsernameFailureStatus];
         }else {
@@ -82,7 +81,6 @@
                                                         @"keyPair"  : [keyPair toDictionary]}};
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:kUserFinishRegistrationEndpoint parameters: updatedUserDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON FROM USER PASSWORD: %@", responseObject);
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
             [keyPair setUniqueId:responseObject[@"user"][@"keyPair"][@"id"]];
             [keyPair setUserId:[self uniqueId]];
@@ -132,10 +130,8 @@
 #pragma mark - Adding External Users
 
 - (void)getRemoteUser {
-    NSLog(@"HERE AT REMOTE USER");
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:kUserGetUserEndpoint parameters:@{@"user" : @{@"username" : self.username}} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"RETRIEVING USER CHECK: %@", responseObject);
         if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
             [self setStatus:kUserGetRemoteUserFailureStatus];
         }else {

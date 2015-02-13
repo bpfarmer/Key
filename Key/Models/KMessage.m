@@ -12,8 +12,10 @@
 #import "KKeyPair.h"
 #import "KThread.h"
 #import "KStorageManager.h"
+#import "KAccountManager.h"
 #import "KUser.h"
 #import "KOutgoingMessage.h"
+#import "Util.h"
 
 @implementation KMessage
 
@@ -23,13 +25,14 @@
 }
 
 - (instancetype)initFrom:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body {
-    self = [super initWithUniqueId:nil];
+    self = [super initWithUniqueId:[[self class] placeholderUniqueId]];
     
     if (self) {
         _authorId = authorId;
         _threadId = threadId;
         _body     = body;
     }
+    NSLog(@"%@", self);
     return self;
 }
 
@@ -59,6 +62,12 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
+}
+
++ (NSString *)placeholderUniqueId {
+    NSTimeInterval today = [[NSDate date] timeIntervalSince1970];
+    NSString *uniqueId = [NSString stringWithFormat:@"%@_%f_%@", [[KAccountManager currentUser] uniqueId], today, [Util insecureRandomString:10]];
+    return uniqueId;
 }
 
 @end

@@ -51,7 +51,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (void)addHeaderAndFooter {
-    NSLog(@"THREAD VALUE: %@", self.thread);
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 300, 80)];
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 100, 300, 80)];
     
@@ -81,24 +80,28 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (void) createMessage {
     if (!self.thread) {
         NSArray *usernames = [self.recipientTextField.text componentsSeparatedByString:@", "];
-        NSMutableArray *recipients = [NSMutableArray arrayWithObjects:self.currentUser.uniqueId, nil];
+        NSMutableArray *recipientIds = [NSMutableArray arrayWithObjects:self.currentUser.uniqueId, nil];
         for (NSString *username in usernames) {
-            [recipients addObject:[[KUser alloc] initFromRemoteWithUsername:username]];
+            [recipientIds addObject:username];
         };
         [[KStorageManager sharedManager] setObject:self.thread forKey:[self.thread uniqueId] inCollection:[[self.thread class] collection]];
-        self.thread = [[KThread alloc] initWithUsers:recipients];
+        self.thread = [[KThread alloc] initWithUsers:recipientIds];
+        [self setupDatabaseView];
     }
-    
+    NSLog(@"THREAD ID: %@", [self.thread uniqueId]);
     KMessage *message = [[KMessage alloc] initFrom:self.currentUser.uniqueId threadId:[self.thread uniqueId] body:self.messageTextField.text];
-    
-    [self setupDatabaseView];
     [[KStorageManager sharedManager] setObject:message forKey:[message uniqueId] inCollection:[[message class] collection]];
+    NSLog(@"MESSAGE THREAD ID: %@", [[[KStorageManager sharedManager] objectForKey:[message uniqueId] inCollection:[[message class] collection]] threadId]);
+    NSLog(@"WILL EVENTUALLY SAY: %@", message.body);
+    NSLog(@"ONLY GOT ONE KEY %@", [message uniqueId]);
+    NSLog(@"COLLECTION: %@", [[message class] collection]);
+    NSLog(@"SHOULD BE MESSAGES: %lu", (unsigned long)[self.messageMappings numberOfItemsInGroup:self.thread.uniqueId]);
 }
 
 - (void) setupDatabaseView {
-    [KYapDatabaseView registerThreadDatabaseView];
+    [KYapDatabaseView registerMessageDatabaseView];
     self.readDatabaseConnection = [KStorageManager longLivedReadConnection];
-    self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[self.thread.uniqueId] view:@"KMessageDatabaseViewExtension"];
+    self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[self.thread.uniqueId] view:@"KMessageDatabaseViewExtensionName"];
     
     [self.readDatabaseConnection beginLongLivedReadTransaction];
     [self.readDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
@@ -117,7 +120,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)yapDatabaseModified:(NSNotification *)notification {
     NSLog(@"Supposed to have updated...");
-    
     NSArray *notifications = [self.readDatabaseConnection beginLongLivedReadTransaction];
     
     // Process the notification(s),
@@ -141,7 +143,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
     
     // Familiar with NSFetchedResultsController?
     // Then this should look pretty familiar
-    
     [self.tableView beginUpdates];
     
     for (YapDatabaseViewSectionChange *sectionChange in sectionChanges)
@@ -203,7 +204,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)sender
 {
-    return [self.messageMappings numberOfSections];
+    return 1;//[self.messageMappings numberOfSections];
 }
 
 - (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section
@@ -213,14 +214,14 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    __block KMessage *message = nil;
+    __block KMessage *message;
     [self.readDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        message = [[transaction extension:@"KMessageDatabaseViewExtension"] objectAtIndexPath:indexPath withMappings:self.messageMappings];
+        message = (KMessage *)[[transaction extension:@"KMessageDatabaseViewExtensionName"] objectAtIndexPath:indexPath withMappings:self.messageMappings];
     }];
     
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    NSLog(@"SUPPOSED TO SAY: %@", [message uniqueId]);
-    cell.textLabel.text = [message uniqueId];
+    NSLog(@"SUPPOSED TO SAY: %@", message.body);
+    cell.textLabel.text = message.body;
     return cell;
 }
 

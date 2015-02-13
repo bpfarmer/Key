@@ -11,5 +11,6 @@
 @interface Util : NSObject
 
 + (NSData *)generateRandomString:(NSInteger)length;
++ (NSString *)insecureRandomString:(NSInteger)length;
 
 @end

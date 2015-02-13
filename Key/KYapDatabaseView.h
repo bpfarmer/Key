@@ -16,5 +16,6 @@ extern NSString *KInboxGroup;
 extern NSString *KThreadDatabaseViewExtensionName;
 
 + (BOOL)registerThreadDatabaseView;
++ (BOOL)registerMessageDatabaseView;
 
 @end
