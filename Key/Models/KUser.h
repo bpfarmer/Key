@@ -16,6 +16,7 @@
 @property (nonatomic) NSString *firstName;
 @property (nonatomic) NSString *lastName;
 @property (nonatomic) NSString *username;
+@property (nonatomic) NSString *plainPassword;
 @property (nonatomic) NSData *passwordSalt;
 @property (nonatomic) NSData *passwordCrypt;
 @property (nonatomic) NSString *status;
@@ -24,19 +25,14 @@
 + (NSArray *)keyPairsForUserIds:(NSArray *)userIds;
 + (NSArray *)fullNamesForUserIds:(NSArray *)userIds;
 
-- (instancetype)initFromRemoteWithUsername:(NSString *)username;
+- (instancetype)initWithRemoteUsername:(NSString *)username;
 - (instancetype)initWithUsername:(NSString *)username;
-- (void)registerAccountWithPassword:(NSString *)password;
+- (instancetype)initWithUsername:(NSString *)username password:(NSString *)password;
 - (KKeyPair *)activeKeyPair;
 - (NSString *)fullName;
 - (void)generateRandomThread;
 
 @end
-
-//API Endpoints
-#define kUserUsernameRegistrationEndpoint @"http://127.0.0.1:9393/user.json"
-#define kUserFinishRegistrationEndpoint @"http://127.0.0.1:9393/user.json"
-#define kUserGetUserEndpoint @"http://127.0.0.1:9393/user.json"
 
 //Notification Center
 #define kUserRegistrationStatusNotification @"UserRegistrationStatusNotification"

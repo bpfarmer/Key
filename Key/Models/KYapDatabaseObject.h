@@ -40,7 +40,7 @@
  *  @return Returns and instance of the object or nil if non-existent
  */
 
-+ (instancetype)fetchObjectWithUniqueId:(NSString*)uniqueId transaction:(YapDatabaseReadTransaction*)transaction;
++ (instancetype) fetchObjectWithUniqueId:(NSString*)uniqueId transaction:(YapDatabaseReadTransaction*)transaction;
 
 + (instancetype) fetchObjectWithUniqueId:(NSString *)uniqueId;
 
@@ -58,6 +58,8 @@
 
 - (void)saveWithTransaction:(YapDatabaseReadWriteTransaction*)transaction;
 
+- (void)remoteCreate;
+- (void)remoteUpdate;
 
 /**
  *  The unique identifier of the stored object
@@ -65,9 +67,18 @@
 
 
 @property (nonatomic) NSString *uniqueId;
+@property (nonatomic) NSString *remoteStatus;
 
 
 - (void)removeWithTransaction:(YapDatabaseReadWriteTransaction*)transaction;
 - (void)remove;
 
 @end
+
+#define KRemoteCreateSuccessStatus @"KRemoteCreateSuccess"
+#define KRemoteCreateFailureStatus @"KRemoteCreateFailure"
+#define KRemoteCreateNotification  @"KRemoteCreateNotification"
+
+#define KRemoteUpdateSuccessStatus @"KRemoteUpdateSuccess"
+#define KRemoteUpdateFailureStatus @"KRemoteUpdateFailure"
+#define KRemoteUpdateNotification  @"KRemoteUpdateNotification"

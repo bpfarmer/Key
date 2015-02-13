@@ -53,6 +53,11 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (void)addHeaderAndFooter {
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, 300, 80)];
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - 100, 300, 80)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(225, 20, 100, 30)];
+    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backToInbox) forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:backButton];
     
     if (!self.thread) {
         self.recipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, 25, 200, 30)];
@@ -88,14 +93,15 @@ static NSString *TableViewCellIdentifier = @"Messages";
         self.thread = [[KThread alloc] initWithUsers:recipientIds];
         [self setupDatabaseView];
     }
-    NSLog(@"THREAD ID: %@", [self.thread uniqueId]);
     KMessage *message = [[KMessage alloc] initFrom:self.currentUser.uniqueId threadId:[self.thread uniqueId] body:self.messageTextField.text];
     [[KStorageManager sharedManager] setObject:message forKey:[message uniqueId] inCollection:[[message class] collection]];
-    NSLog(@"MESSAGE THREAD ID: %@", [[[KStorageManager sharedManager] objectForKey:[message uniqueId] inCollection:[[message class] collection]] threadId]);
-    NSLog(@"WILL EVENTUALLY SAY: %@", message.body);
-    NSLog(@"ONLY GOT ONE KEY %@", [message uniqueId]);
-    NSLog(@"COLLECTION: %@", [[message class] collection]);
-    NSLog(@"SHOULD BE MESSAGES: %lu", (unsigned long)[self.messageMappings numberOfItemsInGroup:self.thread.uniqueId]);
+}
+
+- (void) backToInbox {
+    self.thread = nil;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
+    [self presentViewController:inboxView animated:YES completion:nil];
 }
 
 - (void) setupDatabaseView {
@@ -119,30 +125,21 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (void)yapDatabaseModified:(NSNotification *)notification {
-    NSLog(@"Supposed to have updated...");
     NSArray *notifications = [self.readDatabaseConnection beginLongLivedReadTransaction];
-    
-    // Process the notification(s),
-    // and get the change-set(s) as applies to my view and mappings configuration.
     
     NSArray *sectionChanges = nil;
     NSArray *rowChanges = nil;
     
     [[self.readDatabaseConnection ext:@"KMessageDatabaseViewExtensionName"] getSectionChanges:&sectionChanges
-                                                  rowChanges:&rowChanges
-                                            forNotifications:notifications
-                                                withMappings:self.messageMappings];
-    
+                                                                                   rowChanges:&rowChanges
+                                                                             forNotifications:notifications
+                                                                                 withMappings:self.messageMappings];
     
     if ([sectionChanges count] == 0 & [rowChanges count] == 0)
     {
-        // Nothing has changed that affects our tableView
-        NSLog(@"THIS IS BAD");
         return;
     }
     
-    // Familiar with NSFetchedResultsController?
-    // Then this should look pretty familiar
     [self.tableView beginUpdates];
     
     for (YapDatabaseViewSectionChange *sectionChange in sectionChanges)
@@ -204,7 +201,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)sender
 {
-    return 1;//[self.messageMappings numberOfSections];
+    return [self.messageMappings numberOfSections];
 }
 
 - (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section
@@ -220,7 +217,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
     }];
     
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    NSLog(@"SUPPOSED TO SAY: %@", message.body);
     cell.textLabel.text = message.body;
     return cell;
 }

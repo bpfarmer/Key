@@ -33,8 +33,7 @@
                                                object:nil];
     dispatch_queue_t registrationQueue= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(registrationQueue, ^{
-        KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text];
-        [user registerAccountWithPassword:self.passwordText.text];
+        KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text password:self.passwordText.text];
     });
 }
 

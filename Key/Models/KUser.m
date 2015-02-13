@@ -8,7 +8,6 @@
 
 #import "KUser.h"
 #import "KCryptor.h"
-#import <AFNetworking/AFHTTPRequestOperationManager.h>
 #import "KSettings.h"
 #import "KMessage.h"
 #import "KStorageManager.h"
@@ -30,75 +29,90 @@
     return self;
 }
 
-- (instancetype)initFromRemoteWithUsername:(NSString *)username {
+- (instancetype)initWithUsername:(NSString *)username password:(NSString *)password {
     self = [self initWithUsername:username];
     
-    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:[NSString stringWithFormat:@"WHERE username = %@", username]];
-        [[transaction ext:KUsernameSQLiteIndex] enumerateKeysMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, BOOL *stop) {
-            self.uniqueId = key;
-        }];
-    }];
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self getRemoteUser];
-    });
-    
+    if (self) {
+        _plainPassword = password;
+        [[self class ] registerCreateNotificationObserver];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self remoteCreate];
+        });
+    }
     return self;
+}
+
+- (instancetype)initWithRemoteUsername:(NSString *)username {
+    self = [[self class] fetchWithUsername:username];
+    
+    if (!self) {
+        self = [self initWithUsername:username];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            //[self getRemoteUser];
+        });
+    }
+    return self;
+}
+
++ (void)finishUserRegistration:(NSNotification *)notification {
+    if([notification.object isKindOfClass:[self class]]) {
+        KUser *user = (KUser *)[notification object];
+        if([user.remoteStatus isEqualToString:KRemoteCreateSuccessStatus]) {
+            [self removeCreateNotificationObserver];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:kUserRegisterUsernameSuccessStatus object:user];
+            });
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [user generatePassword];
+                [user generateKeyPair];
+                [user remoteUpdate];
+            });
+        }
+    }
 }
 
 #pragma mark - User Registration
 
-- (void)registerAccountWithPassword:(NSString *)password {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:kUserUsernameRegistrationEndpoint parameters:@{@"user" : @{@"username" : self.username}} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
-            [self setStatus:kUserRegisterUsernameFailureStatus];
-        }else {
-            [self setUniqueId:responseObject[@"user"][@"id"]];
-            [self setStatus:kUserRegisterUsernameSuccessStatus];
-            //Randomly registering username index here
-            [[KAccountManager sharedManager] setUniqueId:[self uniqueId]];
-            [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:[[self class] collection]];
-            [KYapDatabaseSecondaryIndex registerUsernameIndex];
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [self generatePassword:password];
-                [self finishRegistration];
-            });
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUserRegistrationStatusNotification object:self];
-        });
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-}
-
-- (void)finishRegistration {
+- (void)generateKeyPair {
     KKeyPair *keyPair = [[KKeyPair alloc] initRSA];
-    NSDictionary *updatedUserDictionary = @{@"user" : @{@"id"       : self.uniqueId,
-                                                        @"password" : self.passwordCrypt,
-                                                        @"keyPair"  : [keyPair toDictionary]}};
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:kUserFinishRegistrationEndpoint parameters: updatedUserDictionary success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-            [keyPair setUniqueId:responseObject[@"user"][@"keyPair"][@"id"]];
-            [keyPair setUserId:[self uniqueId]];
-            self.keyPairs = [NSArray arrayWithObject:keyPair];
-            [self setStatus:kUserRegisterKeyPairSuccessStatus];
-        } else {
-            [self setStatus:kUserRegisterKeyPairFailureStatus];
-        }
-        [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:[[self class] collection]];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
+    NSMutableArray *userKeyPairs = [[NSMutableArray alloc] initWithArray:self.keyPairs];
+    [userKeyPairs addObject:keyPair];
+    self.keyPairs = userKeyPairs;
 }
 
-- (void)generatePassword:(NSString *)password {
-    NSDictionary *encryptedPasswordDictionary = [[[KCryptor alloc] init] encryptOneWay: password];
+- (void)generatePassword {
+    NSDictionary *encryptedPasswordDictionary = [[[KCryptor alloc] init] encryptOneWay: self.plainPassword];
+    self.plainPassword = nil;
     [self setPasswordCrypt:encryptedPasswordDictionary[@"encrypted"]];
     [self setPasswordSalt:encryptedPasswordDictionary[@"salt"]];
+}
+
++ (NSString *)remoteEndpoint {
+    return @"http://127.0.0.1:9393/user.json";
+}
+
++ (NSString *)remoteClassAlias {
+    return @"User";
+}
+
++ (NSString *)remoteCreateNotification {
+    return @"KUserRemoteCreateNotification";
+}
+
++ (NSString *)remoteUpdateNotification {
+    return @"KUserRemoteCreateNotification";
+}
+
+# pragma mark - Notification Methods
++ (void)registerCreateNotificationObserver {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(finishUserRegistration:)
+                                                 name:[self remoteCreateNotification]
+                                               object:nil];
+}
+
++ (void)removeCreateNotificationObserver {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:[self remoteCreateNotification] object:nil];
 }
 
 #pragma mark - Batch Query Methods
@@ -126,30 +140,18 @@
     return fullNames;
 }
 
-
-#pragma mark - Adding External Users
-
-- (void)getRemoteUser {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:kUserGetUserEndpoint parameters:@{@"user" : @{@"username" : self.username}} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
-            [self setStatus:kUserGetRemoteUserFailureStatus];
-        }else {
-            [self setUniqueId:responseObject[@"user"][@"id"]];
-            KKeyPair *keyPair = [[KKeyPair alloc] initFromRemote:responseObject[@"user"][@"keyPair"]];
-            self.keyPairs = [NSArray arrayWithObject:keyPair];
-            [self setStatus:kUserGetRemoteUserSuccessStatus];
-            [[KStorageManager sharedManager] setObject:self forKey:self.uniqueId inCollection:[[self class] collection]];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kUserGetRemoteStatusNotification object:self];
-        });
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+#pragma mark - Query Methods
++ (KUser *)fetchWithUsername:(NSString *)username {
+    __block KUser *user = [[KUser alloc] init];
+    
+    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:[NSString stringWithFormat:@"WHERE username = %@", username]];
+        [[transaction ext:KUsernameSQLiteIndex] enumerateKeysMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, BOOL *stop) {
+            user = (KUser *)[[KStorageManager sharedManager] objectForKey:key inCollection:[self collection]];
+        }];
     }];
+    return user;
 }
-
-#pragma mark - Sending Messages
 
 #pragma mark - User Custom Attributes
 

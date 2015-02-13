@@ -76,7 +76,6 @@ YapDatabaseConnection *databaseConnection;
     
     [self.databaseConnection beginLongLivedReadTransaction];
     [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
-        // One-time initialization
         [self.threadMappings updateWithTransaction:transaction];
     }];
     
@@ -88,11 +87,79 @@ YapDatabaseConnection *databaseConnection;
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)yapDatabaseModified:(NSNotification *)notification {
+    NSArray *notifications = [self.databaseConnection beginLongLivedReadTransaction];
     
+    NSArray *sectionChanges = nil;
+    NSArray *rowChanges = nil;
+    
+    [[self.databaseConnection ext:@"KThreadDatabaseViewExtensionName"] getSectionChanges:&sectionChanges
+                                                                               rowChanges:&rowChanges
+                                                                         forNotifications:notifications
+                                                                             withMappings:self.threadMappings];
+    
+    if ([sectionChanges count] == 0 & [rowChanges count] == 0)
+    {
+        return;
+    }
+    
+    [self.tableView beginUpdates];
+    
+    for (YapDatabaseViewSectionChange *sectionChange in sectionChanges)
+    {
+        switch (sectionChange.type)
+        {
+            case YapDatabaseViewChangeDelete :
+            {
+                [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:sectionChange.index]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            }
+            case YapDatabaseViewChangeInsert :
+            {
+                [self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionChange.index]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            }
+        }
+    }
+    
+    for (YapDatabaseViewRowChange *rowChange in rowChanges)
+    {
+        switch (rowChange.type)
+        {
+            case YapDatabaseViewChangeDelete :
+            {
+                [self.tableView deleteRowsAtIndexPaths:@[ rowChange.indexPath ]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            }
+            case YapDatabaseViewChangeInsert :
+            {
+                [self.tableView insertRowsAtIndexPaths:@[ rowChange.newIndexPath ]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            }
+            case YapDatabaseViewChangeMove :
+            {
+                [self.tableView deleteRowsAtIndexPaths:@[ rowChange.indexPath ]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView insertRowsAtIndexPaths:@[ rowChange.newIndexPath ]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+                break;
+            }
+            case YapDatabaseViewChangeUpdate :
+            {
+                [self.tableView reloadRowsAtIndexPaths:@[ rowChange.indexPath ]
+                                      withRowAnimation:UITableViewRowAnimationNone];
+                break;
+            }
+        }
+    }
+    
+    [self.tableView endUpdates];
 }
 
 #pragma mark - Table view data source
