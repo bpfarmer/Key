@@ -27,24 +27,11 @@
 }
 
 - (IBAction)addContact:(id)sender {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(receiveUserStatusNotification:)
-                                                 name:kUserGetRemoteStatusNotification
-                                               object:nil];
-    dispatch_queue_t registrationQueue= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(registrationQueue, ^{
-        [[KUser alloc] initFromRemoteWithUsername:self.usernameText.text];
-    });
-    NSLog(@"NOT BLOCKING");
+
 }
 
 - (void)receiveUserStatusNotification:(NSNotification *)notification {
-    NSString *status = [notification.object performSelector:@selector(status)];
-    if([status isEqualToString:kUserGetRemoteUserSuccessStatus]) {
-        NSLog(@"Successfully Retrieved User");
-    }else if([status isEqualToString:kUserGetRemoteUserFailureStatus]) {
-        NSLog(@"Failed to Retrieve User");
-    }
+
 }
 
 

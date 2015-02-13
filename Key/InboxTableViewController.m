@@ -70,7 +70,6 @@ YapDatabaseConnection *databaseConnection;
 }
 
 - (void) setupDatabaseView {
-    [KYapDatabaseView registerThreadDatabaseView];
     _databaseConnection = [KStorageManager longLivedReadConnection];
     _threadMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[@"KInboxGroup"] view:@"KThreadDatabaseViewExtension"];
     

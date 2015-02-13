@@ -54,15 +54,24 @@
     return self;
 }
 
+- (void)startAccountManager {
+    if(self.uniqueId) {
+        [[KAccountManager sharedManager] setUniqueId:self.uniqueId];
+        [self save];
+    }
+}
+
 + (void)finishUserRegistration:(NSNotification *)notification {
     if([notification.object isKindOfClass:[self class]]) {
         KUser *user = (KUser *)[notification object];
         if([user.remoteStatus isEqualToString:KRemoteCreateSuccessStatus]) {
             [self removeCreateNotificationObserver];
+            [user startAccountManager];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:kUserRegisterUsernameSuccessStatus object:user];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KUserRegisterUsernameStatusNotification object:user];
             });
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[KStorageManager sharedManager] setupDatabase];
                 [user generatePassword];
                 [user generateKeyPair];
                 [user remoteUpdate];
@@ -87,11 +96,26 @@
     [self setPasswordSalt:encryptedPasswordDictionary[@"salt"]];
 }
 
+- (void)saveFromRemoteUpdateResponse:(NSDictionary *)responseObject {
+    NSUInteger index = 0;
+    NSMutableArray *updatedKeyPairs = [[NSMutableArray alloc] init];
+    for(KKeyPair *keyPair in self.keyPairs) {
+        if(!keyPair.uniqueId) {
+            [keyPair setUniqueId:responseObject[@"user"][@"keyPairs"][index][@"id"]];
+            [keyPair setUserId:[self uniqueId]];
+        }
+        [updatedKeyPairs addObject:keyPair];
+        index++;
+    }
+    self.keyPairs = updatedKeyPairs;
+    [self save];
+}
+
 + (NSString *)remoteEndpoint {
     return @"http://127.0.0.1:9393/user.json";
 }
 
-+ (NSString *)remoteClassAlias {
++ (NSString *)remoteAlias {
     return @"User";
 }
 

@@ -105,7 +105,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (void) setupDatabaseView {
-    [KYapDatabaseView registerMessageDatabaseView];
     self.readDatabaseConnection = [KStorageManager longLivedReadConnection];
     self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[self.thread.uniqueId] view:@"KMessageDatabaseViewExtensionName"];
     

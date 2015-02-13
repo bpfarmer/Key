@@ -71,6 +71,7 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
 
 - (void)setupDatabase {
     [KYapDatabaseView registerThreadDatabaseView];
+    [KYapDatabaseView registerMessageDatabaseView];
     [KYapDatabaseSecondaryIndex registerUsernameIndex];
 }
 

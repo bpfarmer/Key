@@ -53,9 +53,9 @@
 
 - (void) remoteCreate {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteClassAlias] : self} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : self} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
-            [self setUniqueId:responseObject[[[self class] remoteClassAlias]][@"id"]];
+            [self setUniqueId:responseObject[[[self class] remoteAlias]][@"id"]];
             [self setRemoteStatus:KRemoteCreateSuccessStatus];
         }else {
             [self setRemoteStatus:KRemoteCreateFailureStatus];
@@ -73,9 +73,10 @@
 
 - (void) remoteUpdate {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteClassAlias] : self} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : self} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
             [self setRemoteStatus:KRemoteUpdateSuccessStatus];
+            [self saveFromRemoteUpdateResponse:responseObject[[[self class] remoteAlias]]];
         } else {
             [self setRemoteStatus:KRemoteUpdateFailureStatus];
         }
@@ -90,11 +91,15 @@
     }];
 }
 
+- (void)saveFromRemoteUpdateResponse:(NSDictionary *)responseObject {
+    [self save];
+}
+
 + (NSString *)remoteEndpoint {
     return nil;
 }
 
-+ (NSString *)remoteClassAlias {
++ (NSString *)remoteAlias {
     return nil;
 }
 

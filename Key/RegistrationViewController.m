@@ -29,24 +29,21 @@
 - (IBAction)createNewUser:(id)sender {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveUserStatusNotification:)
-                                                 name:kUserRegistrationStatusNotification
+                                                 name:KUserRegisterUsernameStatusNotification
                                                object:nil];
-    dispatch_queue_t registrationQueue= dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(registrationQueue, ^{
-        KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text password:self.passwordText.text];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[KUser alloc] initWithUsername:self.usernameText.text password:self.passwordText.text];
     });
 }
 
 - (void)receiveUserStatusNotification:(NSNotification *)notification {
-    
-    NSString *status = [notification.object performSelector:@selector(status)];
-    if([status isEqualToString:kUserRegisterUsernameSuccessStatus]) {
+    KUser *user = (KUser *)notification.object;
+    if([user.remoteStatus isEqualToString:KRemoteCreateSuccessStatus]) {
         [notification.object generateRandomThread];
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
         UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
         [self presentViewController:inboxView animated:YES completion:nil];
-    }else if([status isEqualToString:kUserRegisterUsernameFailureStatus]) {
-        NSLog(@"YOU SUCK!");
+    }else if([user.remoteStatus isEqualToString:KRemoteCreateFailureStatus]) {
     }
 }
 
