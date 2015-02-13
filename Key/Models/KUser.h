@@ -8,8 +8,8 @@
 #import <Foundation/Foundation.h>
 #import <YapDatabase/YapDatabaseRelationshipNode.h>
 #import "KYapDatabaseObject.h"
-#import "KKeyPair.h"
-#import "KGroup.h"
+
+@class KKeyPair;
 
 @interface KUser : KYapDatabaseObject <YapDatabaseRelationshipNode>
 
@@ -20,7 +20,7 @@
 @property (nonatomic) NSData *passwordSalt;
 @property (nonatomic) NSData *passwordCrypt;
 @property (nonatomic) NSString *localStatus;
-@property (nonatomic) NSArray *keyPairs;
+@property (nonatomic) KKeyPair *activeKeyPair;
 
 + (NSArray *)keyPairsForUserIds:(NSArray *)userIds;
 + (NSArray *)fullNamesForUserIds:(NSArray *)userIds;

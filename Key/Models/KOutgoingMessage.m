@@ -9,6 +9,7 @@
 #import "KOutgoingMessage.h"
 #import "KMessage.h"
 #import "KUser.h"
+#import "KKeyPair.h"
 
 @implementation KOutgoingMessage
 

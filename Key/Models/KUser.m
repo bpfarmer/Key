@@ -14,6 +14,7 @@
 #import "KAccountManager.h"
 #import "KThread.h"
 #import "KYapDatabaseSecondaryIndex.h"
+#import "KKeyPair.h"
 
 @implementation KUser
 
@@ -31,11 +32,12 @@
 
 - (instancetype)initWithUsername:(NSString *)username password:(NSString *)password {
     self = [self initWithUsername:username];
-    
+    NSLog(@"Correctly inside the initusernamepassword method");
     if (self) {
         _plainPassword = password;
         [[self class ] registerCreateNotificationObserver];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSLog(@"Calling remoteCreate method");
             [self remoteCreate];
         });
     }
@@ -56,6 +58,8 @@
 
 - (void)startAccountManager {
     if(self.uniqueId) {
+        if(self.plainPassword)
+            self.plainPassword = nil;
         [[KAccountManager sharedManager] setUniqueId:self.uniqueId];
         [self save];
     }
@@ -66,57 +70,50 @@
         KUser *user = (KUser *)[notification object];
         if([user.remoteStatus isEqualToString:KRemoteCreateSuccessStatus]) {
             [self removeCreateNotificationObserver];
+            NSString *plainPassword = user.plainPassword;
             [user startAccountManager];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:KUserRegisterUsernameStatusNotification object:user];
-            });
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [[KStorageManager sharedManager] setupDatabase];
-                [user generatePassword];
+                [user generatePassword:plainPassword];
                 [user generateKeyPair];
                 [user remoteUpdate];
             });
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:KUserRegisterUsernameStatusNotification object:user];
+        });
     }
 }
 
 #pragma mark - User Registration
 
 - (void)generateKeyPair {
-    KKeyPair *keyPair = [[KKeyPair alloc] initRSA];
-    NSMutableArray *userKeyPairs = [[NSMutableArray alloc] initWithArray:self.keyPairs];
-    [userKeyPairs addObject:keyPair];
-    self.keyPairs = userKeyPairs;
+    self.activeKeyPair = [[KKeyPair alloc] initRSA];
+    NSLog(@"Newly-generated KeyPair: %@", self.activeKeyPair);
 }
 
-- (void)generatePassword {
-    NSDictionary *encryptedPasswordDictionary = [[[KCryptor alloc] init] encryptOneWay: self.plainPassword];
+- (void)generatePassword:(NSString *)plainPassword {
+    NSDictionary *encryptedPasswordDictionary = [[[KCryptor alloc] init] encryptOneWay: plainPassword];
     self.plainPassword = nil;
     [self setPasswordCrypt:encryptedPasswordDictionary[@"encrypted"]];
     [self setPasswordSalt:encryptedPasswordDictionary[@"salt"]];
 }
 
 - (void)saveFromRemoteUpdateResponse:(NSDictionary *)responseObject {
-    NSUInteger index = 0;
-    NSMutableArray *updatedKeyPairs = [[NSMutableArray alloc] init];
-    for(KKeyPair *keyPair in self.keyPairs) {
-        if(!keyPair.uniqueId) {
-            [keyPair setUniqueId:responseObject[@"user"][@"keyPairs"][index][@"id"]];
-            [keyPair setUserId:[self uniqueId]];
-        }
-        [updatedKeyPairs addObject:keyPair];
-        index++;
+    if(!self.activeKeyPair.uniqueId) {
+        [self.activeKeyPair setUniqueId:responseObject[@"user"][@"keyPair"][@"uniqueId"]];
+        [self.activeKeyPair setUserId:[self uniqueId]];
+        [self.activeKeyPair save];
     }
-    self.keyPairs = updatedKeyPairs;
     [self save];
 }
 
 + (NSString *)remoteEndpoint {
-    return @"http://127.0.0.1:9393/user.json";
+    return KUserRemoteEndpoint;
 }
 
 + (NSString *)remoteAlias {
-    return @"User";
+    return @"user";
 }
 
 + (NSString *)remoteCreateNotification {
@@ -179,12 +176,18 @@
 
 #pragma mark - User Custom Attributes
 
-- (KKeyPair *)activeKeyPair {
-    return [self.keyPairs objectAtIndex:0];
-}
-
 - (NSString *)fullName {
     return [self username];
+}
+
+//NEED TO IMPLEMENT A BETTER NSCODING PROTOCOL FOR THIS
+- (NSDictionary *)toDictionary {
+    NSMutableDictionary *userDictionary = [[NSMutableDictionary alloc] init];
+    if(self.uniqueId) [userDictionary addEntriesFromDictionary:@{@"uniqueId" : self.uniqueId}];
+    if(self.username) [userDictionary addEntriesFromDictionary:@{@"username" : self.username}];
+    if(self.passwordCrypt) [userDictionary addEntriesFromDictionary:@{@"passwordCrypt" : self.passwordCrypt}];
+    if([self activeKeyPair]) [userDictionary addEntriesFromDictionary:@{@"keyPair" : [[self activeKeyPair] toDictionary]}];
+    return userDictionary;
 }
 
 #pragma mark - YapDatabase Methods
@@ -208,3 +211,5 @@
 }
 
 @end
+
+#define KUserRemoteEndpoint @"http://127.0.0.1:9393/user.json"

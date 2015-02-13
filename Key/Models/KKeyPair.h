@@ -21,6 +21,8 @@
 - (instancetype)initRSA;
 - (instancetype)initFromRemote:(NSDictionary *)publicKeyDictionary;
 
+- (NSDictionary *)toDictionary;
+
 - (NSString *)encryptText:(NSString *)text;
 - (NSString *)decryptText:(NSString *)textCrypt;
 - (NSData *)encryptData:(NSData *)data;

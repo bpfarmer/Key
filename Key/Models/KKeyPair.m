@@ -58,10 +58,11 @@
 }
 
 - (NSDictionary *)toDictionary {
-    return @{
-      @"publicKey" : self.publicKey,
-      @"algorithm" : self.algorithm
-    };
+    NSMutableDictionary *keyPairDictionary = [[NSMutableDictionary alloc] init];
+    if(self.uniqueId) [keyPairDictionary addEntriesFromDictionary:@{@"uniqueId" : self.uniqueId}];
+    if(self.algorithm) [keyPairDictionary addEntriesFromDictionary:@{@"algorithm" : self.algorithm}];
+    if(self.publicKey) [keyPairDictionary addEntriesFromDictionary:@{@"publicKey" : self.publicKey}];
+    return keyPairDictionary;
 }
 
 - (NSData *)encryptData:(NSData *)data {
