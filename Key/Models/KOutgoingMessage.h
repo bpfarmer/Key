@@ -22,6 +22,7 @@
 @property (nonatomic) NSString *bodyCrypt;
 @property (nonatomic) NSData *attachmentsCrypt;
 
-- (instancetype)initWithMessage:(KMessage *)message keyPair:(KKeyPair *)keyPair;
+- (instancetype)initWithMessage:(KMessage *)message user:(KUser *)user;
+- (NSDictionary *)toDictionary;
 
 @end

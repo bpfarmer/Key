@@ -83,7 +83,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
         [self setupThread];
     }
     KMessage *message = [[KMessage alloc] initFrom:self.currentUser.uniqueId threadId:self.thread.uniqueId body:self.messageTextField.text];
-    [message save];
+    [message createAndSend];
 }
 
 - (void)setupThread {
@@ -94,7 +94,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
         [recipientIds addObject:username];
     };
     self.thread = [[KThread alloc] initWithUsers:recipientIds];
-    [self.thread save];
+    [self.thread createAndSend];
     [self setupDatabaseView];
 }
 

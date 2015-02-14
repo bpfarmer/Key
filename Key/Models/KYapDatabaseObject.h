@@ -77,8 +77,15 @@
 
 #define KRemoteCreateSuccessStatus @"KRemoteCreateSuccess"
 #define KRemoteCreateFailureStatus @"KRemoteCreateFailure"
+#define KRemoteCreateNetworkFailureStatus @"KRemoteCreateNetworkFailure"
 #define KRemoteCreateNotification  @"KRemoteCreateNotification"
 
 #define KRemoteUpdateSuccessStatus @"KRemoteUpdateSuccess"
 #define KRemoteUpdateFailureStatus @"KRemoteUpdateFailure"
+#define KRemoteUpdateNetworkFailureStatus @"KRemoteUpdateNetworkFailure"
 #define KRemoteUpdateNotification  @"KRemoteUpdateNotification"
+
+#define KRemoteDistributeSuccessStatus @"KRemoteDistributeSuccess"
+#define KRemoteDistributeFailureStatus @"KRemoteDistributeFailure"
+#define KRemoteDistributeNetworkFailureStatus @"KRemoteDistributeNetworkFailure"
+#define KRemoteDistributeNotification  @"KRemoteDistributeNotification"

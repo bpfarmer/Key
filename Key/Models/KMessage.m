@@ -17,6 +17,11 @@
 #import "KOutgoingMessage.h"
 #import "Util.h"
 
+#define KMessageUnsentStatus @"KMessageUnsent"
+#define KMessageSentSuccessStatus @"KMessageSentSuccess"
+#define KMessageSentFailureStatus @"KMessageSentFailure"
+#define KMessageSentNetworkFailureStatus @"KMessageSentNetworkFailure"
+
 @implementation KMessage
 
 - (NSArray *)yapDatabaseRelationshipEdges {
@@ -35,31 +40,35 @@
     return self;
 }
 
-- (void)sendMessages {
+- (void)createAndSend {
+    self.sendStatus = KMessageUnsentStatus;
+    [self save];
+    [self initOutgoingMessages];
+}
+
+- (void)initOutgoingMessages {
+    __block NSMutableArray *outgoingMessages = [[NSMutableArray alloc] init];
     KThread *thread = [[KStorageManager sharedManager] objectForKey:[self threadId] inCollection:[KThread collection]];
-    NSArray *keyPairs = [KUser fullNamesForUserIds:[thread userIds]];
+    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        [transaction enumerateObjectsForKeys:thread.userIds inCollection:[KUser collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, BOOL *stop) {
+            KUser *user = (KUser *)object;
+            [outgoingMessages addObject:[[[KOutgoingMessage alloc] initWithMessage:self user:user] toDictionary]];
+        }];
+    }];
     
-    NSMutableArray *outgoingMessages = nil;
-    for (KKeyPair *keyPair in keyPairs) {
-        [outgoingMessages addObject: [self encryptForKeyPair:keyPair]];
-    }
-    
-    [self sendMessageCrypts:outgoingMessages];
+    [self sendOutgoingMessages:outgoingMessages];
 }
 
-- (KOutgoingMessage *)encryptForKeyPair:(KKeyPair *)keyPair {
-    return [[KOutgoingMessage alloc] initWithMessage:self keyPair:keyPair];
-}
-
-- (void)sendMessageCrypts:(NSArray *)messageCrypts {
+- (void)sendOutgoingMessages:(NSArray *)outgoingMessages {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:kMessageSendEndpoint parameters:@{@"messages" : messageCrypts} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"JSON FROM SEND MESSAGE CHECK: %@", responseObject);
-        if([responseObject[@"status"]  isEqual:@"FAILURE"]) {
+    [manager POST:kMessageSendEndpoint parameters:@{@"messages" : outgoingMessages} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
+            [self setSendStatus:KMessageSentSuccessStatus];
         }else {
+            [self setSendStatus:KMessageSentFailureStatus];
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+        [self setSendStatus:KMessageSentNetworkFailureStatus];
     }];
 }
 

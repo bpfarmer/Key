@@ -51,7 +51,7 @@
 
 #pragma mark Remote Server Methods
 
-- (void) remoteCreate {
+- (void)remoteCreate {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : [self toDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
@@ -64,14 +64,14 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteCreateNotification] object:self];
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self setRemoteStatus:KRemoteCreateFailureStatus];
+        [self setRemoteStatus:KRemoteCreateNetworkFailureStatus];
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteCreateNotification] object:self];
         });
     }];
 }
 
-- (void) remoteUpdate {
+- (void)remoteUpdate {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : [self toDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
@@ -84,11 +84,32 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteUpdateNotification] object:self];
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self setRemoteStatus:KRemoteUpdateFailureStatus];
+        [self setRemoteStatus:KRemoteUpdateNetworkFailureStatus];
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteUpdateNotification] object:self];
         });
     }];
+}
+
+- (void)remoteDistribute {
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : [self toDistributeDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
+            [self setRemoteStatus:KRemoteDistributeSuccessStatus];
+            [self saveFromRemoteUpdateResponse:responseObject[[[self class] remoteAlias]]];
+        } else {
+            [self setRemoteStatus:KRemoteDistributeFailureStatus];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteDistributeNotification] object:self];
+        });
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [self setRemoteStatus:KRemoteDistributeNetworkFailureStatus];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteDistributeNotification] object:self];
+        });
+    }];
+
 }
 
 - (void)saveFromRemoteUpdateResponse:(NSDictionary *)responseObject {
@@ -96,6 +117,10 @@
 }
 
 - (NSDictionary *)toDictionary {
+    return nil;
+}
+
+- (NSDictionary *)toDistributeDictionary {
     return nil;
 }
 
@@ -112,6 +137,10 @@
 }
 
 + (NSString *)remoteUpdateNotification {
+    return nil;
+}
+
++ (NSString *)remoteDistributeNotification {
     return nil;
 }
 

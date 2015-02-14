@@ -23,4 +23,6 @@
 - (instancetype)initWithUsers:(NSArray *)userIds;
 - (instancetype)initFromRemote:(NSDictionary *)threadDictionary;
 
+- (void)createAndSend;
+
 @end
