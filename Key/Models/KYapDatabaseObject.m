@@ -53,10 +53,7 @@
 
 - (void) remoteCreate {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSLog(@"Making a request to %@", [[self class] remoteEndpoint]);
-    NSLog(@"This is what we're going to send: %@", @{[[self class] remoteAlias] : [self toDictionary]});
     [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : [self toDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"The response object is: %@", responseObject);
         if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
             [self setUniqueId:responseObject[[[self class] remoteAlias]][@"uniqueId"]];
             [self setRemoteStatus:KRemoteCreateSuccessStatus];
@@ -76,10 +73,8 @@
 
 - (void) remoteUpdate {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSLog(@"About to update the server with: %@", [self toDictionary]);
     [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : [self toDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-            NSLog(@"Response Object we're getting: %@", responseObject);
             [self setRemoteStatus:KRemoteUpdateSuccessStatus];
             [self saveFromRemoteUpdateResponse:responseObject[[[self class] remoteAlias]]];
         } else {
@@ -119,8 +114,6 @@
 + (NSString *)remoteUpdateNotification {
     return nil;
 }
-
-
 
 #pragma mark Class Methods
 

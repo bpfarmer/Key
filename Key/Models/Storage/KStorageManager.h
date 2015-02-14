@@ -16,8 +16,6 @@ extern NSString *const KUIDatabaseConnectionDidUpdateNotification;
 + (instancetype)sharedManager;
 - (void)setupDatabase;
 
-+ (YapDatabaseConnection *)longLivedReadConnection;
-
 - (YapDatabase *)database;
 - (YapDatabaseConnection *)newDatabaseConnection;
 - (NSString *)dbPath;

@@ -44,7 +44,7 @@
         UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
         [self presentViewController:inboxView animated:YES completion:nil];
     }else if([user.remoteStatus isEqualToString:KRemoteCreateFailureStatus]) {
-        NSLog(@"Correctly failed to create user");
+        NSLog(@"Failed to create user");
     }
 }
 

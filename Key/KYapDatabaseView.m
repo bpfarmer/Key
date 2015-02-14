@@ -16,7 +16,7 @@
 NSString *KInboxGroup                       = @"KInboxGroup";
 NSString *KThreadGroup                      = @"KThreadGroup";
 NSString *KThreadDatabaseViewExtensionName  = @"KThreadDatabaseViewExtension";
-NSString *KMessageDatabaseViewExtensionName = @"KMessageDatabaseViewExtensionName";
+NSString *KMessageDatabaseViewExtensionName = @"KMessageDatabaseViewExtension";
 
 @implementation KYapDatabaseView
 

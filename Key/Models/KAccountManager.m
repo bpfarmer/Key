@@ -27,6 +27,7 @@
 
 - (instancetype) initWithUniqueId:(NSString *)uniqueId {
     _uniqueId = uniqueId;
+    [[KStorageManager sharedManager] setupDatabase];
     return self;
 }
 

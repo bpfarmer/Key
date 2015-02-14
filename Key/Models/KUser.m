@@ -16,6 +16,9 @@
 #import "KYapDatabaseSecondaryIndex.h"
 #import "KKeyPair.h"
 
+
+#define KUserRemoteEndpoint @"http://127.0.0.1:9393/user.json"
+
 @implementation KUser
 
 #pragma mark - Initializers
@@ -32,12 +35,10 @@
 
 - (instancetype)initWithUsername:(NSString *)username password:(NSString *)password {
     self = [self initWithUsername:username];
-    NSLog(@"Correctly inside the initusernamepassword method");
     if (self) {
         _plainPassword = password;
         [[self class ] registerCreateNotificationObserver];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSLog(@"Calling remoteCreate method");
             [self remoteCreate];
         });
     }
@@ -60,11 +61,12 @@
     if(self.uniqueId) {
         if(self.plainPassword)
             self.plainPassword = nil;
-        [[KAccountManager sharedManager] setUniqueId:self.uniqueId];
+        [[KAccountManager sharedManager] initWithUniqueId:self.uniqueId];
         [self save];
     }
 }
 
+#pragma mark - User Registration
 + (void)finishUserRegistration:(NSNotification *)notification {
     if([notification.object isKindOfClass:[self class]]) {
         KUser *user = (KUser *)[notification object];
@@ -85,11 +87,8 @@
     }
 }
 
-#pragma mark - User Registration
-
 - (void)generateKeyPair {
     self.activeKeyPair = [[KKeyPair alloc] initRSA];
-    NSLog(@"Newly-generated KeyPair: %@", self.activeKeyPair);
 }
 
 - (void)generatePassword:(NSString *)plainPassword {
@@ -180,7 +179,6 @@
     return [self username];
 }
 
-//NEED TO IMPLEMENT A BETTER NSCODING PROTOCOL FOR THIS
 - (NSDictionary *)toDictionary {
     NSMutableDictionary *userDictionary = [[NSMutableDictionary alloc] init];
     if(self.uniqueId) [userDictionary addEntriesFromDictionary:@{@"uniqueId" : self.uniqueId}];
@@ -211,5 +209,3 @@
 }
 
 @end
-
-#define KUserRemoteEndpoint @"http://127.0.0.1:9393/user.json"

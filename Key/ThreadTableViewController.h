@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class KThread;
+
 @interface ThreadTableViewController : UITableViewController
 
-
+@property (nonatomic, retain) KThread *thread;
 
 @end

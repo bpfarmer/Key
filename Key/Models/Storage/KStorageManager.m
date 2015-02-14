@@ -39,15 +39,6 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
     return sharedMyManager;
 }
 
-+ (YapDatabaseConnection *)longLivedReadConnection {
-    static YapDatabaseConnection *longLivedReadConnection = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        longLivedReadConnection = [[self sharedManager] newDatabaseConnection];
-    });
-    return longLivedReadConnection;
-}
-
 - (instancetype)init {
     self = [super init];
     
@@ -131,7 +122,7 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
         [SSKeychain setPassword:dbPassword forService:keychainService account:keychainDBPassAccount];
         //DDLogError(@"Set new password from keychain ...");
     }
-    
+    NSLog(@"Password: %@", dbPassword);
     return dbPassword;
 }
 

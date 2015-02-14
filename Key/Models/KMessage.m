@@ -32,7 +32,6 @@
         _threadId = threadId;
         _body     = body;
     }
-    NSLog(@"%@", self);
     return self;
 }
 

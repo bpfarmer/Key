@@ -18,13 +18,11 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 @interface ThreadTableViewController ()
 
-@property (nonatomic, retain) KThread *thread;
-@property (nonatomic, strong) YapDatabaseConnection   *editDatabaseConnection;
-@property (nonatomic, strong) YapDatabaseConnection   *readDatabaseConnection;
+@property (nonatomic, strong) YapDatabaseConnection *editDatabaseConnection;
+@property (nonatomic, strong) YapDatabaseConnection *readDatabaseConnection;
 @property (nonatomic, strong) YapDatabaseViewMappings *messageMappings;
 @property (nonatomic, strong) UITextField *recipientTextField;
 @property (nonatomic, strong) UITextField *messageTextField;
-@property (nonatomic) BOOL fetchingUsernames;
 @property (nonatomic, strong) NSArray *recipients;
 @property (nonatomic, strong) KUser *currentUser;
 
@@ -34,8 +32,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.currentUser = [KAccountManager currentUser];
     
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     
@@ -84,34 +80,34 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void) createMessage {
     if (!self.thread) {
-        NSArray *usernames = [self.recipientTextField.text componentsSeparatedByString:@", "];
-        NSMutableArray *recipientIds = [NSMutableArray arrayWithObjects:self.currentUser.uniqueId, nil];
-        for (NSString *username in usernames) {
-            [recipientIds addObject:username];
-        };
-        [[KStorageManager sharedManager] setObject:self.thread forKey:[self.thread uniqueId] inCollection:[[self.thread class] collection]];
-        self.thread = [[KThread alloc] initWithUsers:recipientIds];
-        [self setupDatabaseView];
+        [self setupThread];
     }
-    KMessage *message = [[KMessage alloc] initFrom:self.currentUser.uniqueId threadId:[self.thread uniqueId] body:self.messageTextField.text];
-    [[KStorageManager sharedManager] setObject:message forKey:[message uniqueId] inCollection:[[message class] collection]];
+    KMessage *message = [[KMessage alloc] initFrom:self.currentUser.uniqueId threadId:self.thread.uniqueId body:self.messageTextField.text];
+    [message save];
 }
 
-- (void) backToInbox {
-    self.thread = nil;
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
-    [self presentViewController:inboxView animated:YES completion:nil];
+- (void)setupThread {
+    self.currentUser = [KAccountManager currentUser];
+    NSArray *usernames = [self.recipientTextField.text componentsSeparatedByString:@", "];
+    NSMutableArray *recipientIds = [NSMutableArray arrayWithObjects:self.currentUser.uniqueId, nil];
+    for (NSString *username in usernames) {
+        [recipientIds addObject:username];
+    };
+    self.thread = [[KThread alloc] initWithUsers:recipientIds];
+    [self.thread save];
+    [self setupDatabaseView];
 }
 
 - (void) setupDatabaseView {
-    self.readDatabaseConnection = [KStorageManager longLivedReadConnection];
-    self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[self.thread.uniqueId] view:@"KMessageDatabaseViewExtensionName"];
-    
+    self.readDatabaseConnection = [[KStorageManager sharedManager] newDatabaseConnection];
     [self.readDatabaseConnection beginLongLivedReadTransaction];
+    self.messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[self.thread.uniqueId] view:@"KMessageDatabaseViewExtension"];
+
     [self.readDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
         [self.messageMappings updateWithTransaction:transaction];
     }];
+    
+    NSLog(@"Message mappings correct here? %lu", [self.messageMappings numberOfItemsInAllGroups]);
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(yapDatabaseModified:)
@@ -129,11 +125,11 @@ static NSString *TableViewCellIdentifier = @"Messages";
     NSArray *sectionChanges = nil;
     NSArray *rowChanges = nil;
     
-    [[self.readDatabaseConnection ext:@"KMessageDatabaseViewExtensionName"] getSectionChanges:&sectionChanges
-                                                                                   rowChanges:&rowChanges
-                                                                             forNotifications:notifications
-                                                                                 withMappings:self.messageMappings];
-    
+    [[self.readDatabaseConnection ext:@"KMessageDatabaseViewExtension"] getSectionChanges:&sectionChanges
+                                                                               rowChanges:&rowChanges
+                                                                         forNotifications:notifications
+                                                                             withMappings:self.messageMappings];
+
     if ([sectionChanges count] == 0 & [rowChanges count] == 0)
     {
         return;
@@ -212,7 +208,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 {
     __block KMessage *message;
     [self.readDatabaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        message = (KMessage *)[[transaction extension:@"KMessageDatabaseViewExtensionName"] objectAtIndexPath:indexPath withMappings:self.messageMappings];
+        message = (KMessage *)[[transaction extension:@"KMessageDatabaseViewExtension"] objectAtIndexPath:indexPath withMappings:self.messageMappings];
     }];
     
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
@@ -220,6 +216,12 @@ static NSString *TableViewCellIdentifier = @"Messages";
     return cell;
 }
 
+- (void) backToInbox {
+    self.thread = nil;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
+    [self presentViewController:inboxView animated:YES completion:nil];
+}
 
 /*
 // Override to support conditional editing of the table view.
