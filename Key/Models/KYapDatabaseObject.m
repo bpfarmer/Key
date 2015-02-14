@@ -91,36 +91,11 @@
     }];
 }
 
-- (void)remoteDistribute {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : [self toDistributeDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-            [self setRemoteStatus:KRemoteDistributeSuccessStatus];
-            [self saveFromRemoteUpdateResponse:responseObject[[[self class] remoteAlias]]];
-        } else {
-            [self setRemoteStatus:KRemoteDistributeFailureStatus];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteDistributeNotification] object:self];
-        });
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self setRemoteStatus:KRemoteDistributeNetworkFailureStatus];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteDistributeNotification] object:self];
-        });
-    }];
-
-}
-
 - (void)saveFromRemoteUpdateResponse:(NSDictionary *)responseObject {
     [self save];
 }
 
 - (NSDictionary *)toDictionary {
-    return nil;
-}
-
-- (NSDictionary *)toDistributeDictionary {
     return nil;
 }
 
@@ -137,10 +112,6 @@
 }
 
 + (NSString *)remoteUpdateNotification {
-    return nil;
-}
-
-+ (NSString *)remoteDistributeNotification {
     return nil;
 }
 

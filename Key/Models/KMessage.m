@@ -43,10 +43,14 @@
 - (void)createAndSend {
     self.sendStatus = KMessageUnsentStatus;
     [self save];
-    [self initOutgoingMessages];
+    [self remoteCreate];
 }
 
-- (void)initOutgoingMessages {
+- (NSDictionary *)toDictionary {
+    return @{@"outgoingMessages" : [self outgoingMessagesArray]};
+}
+
+- (NSArray *)outgoingMessagesArray {
     __block NSMutableArray *outgoingMessages = [[NSMutableArray alloc] init];
     KThread *thread = [[KStorageManager sharedManager] objectForKey:[self threadId] inCollection:[KThread collection]];
     [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
@@ -55,21 +59,7 @@
             [outgoingMessages addObject:[[[KOutgoingMessage alloc] initWithMessage:self user:user] toDictionary]];
         }];
     }];
-    
-    [self sendOutgoingMessages:outgoingMessages];
-}
-
-- (void)sendOutgoingMessages:(NSArray *)outgoingMessages {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:kMessageSendEndpoint parameters:@{@"messages" : outgoingMessages} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
-            [self setSendStatus:KMessageSentSuccessStatus];
-        }else {
-            [self setSendStatus:KMessageSentFailureStatus];
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self setSendStatus:KMessageSentNetworkFailureStatus];
-    }];
+    return outgoingMessages;
 }
 
 + (NSString *)placeholderUniqueId {
