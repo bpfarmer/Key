@@ -107,8 +107,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
         [self.messageMappings updateWithTransaction:transaction];
     }];
     
-    NSLog(@"Message mappings correct here? %lu", [self.messageMappings numberOfItemsInAllGroups]);
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(yapDatabaseModified:)
                                                  name:YapDatabaseModifiedNotification
@@ -196,7 +194,8 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)sender
 {
-    return [self.messageMappings numberOfSections];
+    if ([self.messageMappings numberOfItemsInAllGroups] == 0) return 1;
+    else return [self.messageMappings numberOfSections];
 }
 
 - (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section
