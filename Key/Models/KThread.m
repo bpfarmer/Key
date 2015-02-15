@@ -11,6 +11,11 @@
 #import "KUser.h"
 #import "KStorageManager.h"
 
+#define KThreadRemoteEndpoint @"http://127.0.0.1:9393/user.json"
+#define KThreadRemoteAlias @"thread"
+#define KThreadRemoteCreateNotification @"KThreadRemoteCreateNotification"
+#define KThreadRemoteUpdateNotification @"KThreadRemoteUpdateNotification"
+
 @implementation KThread
 
 - (NSArray *)yapDatabaseRelationshipEdges {
@@ -25,7 +30,6 @@
 
 - (instancetype)initWithUsers:(NSArray *)userIds {
     self = [super initWithUniqueId:nil];
-    
     if (self) {
         _userIds = [userIds sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
             return obj1 > obj2;
@@ -34,18 +38,35 @@
         KThread *thread = [[KStorageManager sharedManager] objectForKey:uniqueId inCollection:[KThread collection]];
         if (!thread) {
             [self setUniqueId:uniqueId];
-            //[self setNameFromUsers];
         }else {
             self = thread;
         }
+        [self remoteCreate];
+        [self save];
     }
-    
     return self;
+}
+
+- (NSDictionary *)toDictionary {
+    return @{@"uniqueId" : self.uniqueId,
+             @"userIds"  : self.userIds};
 }
 
 - (void)setNameFromUsers {
     NSArray *fullNames = [KUser fullNamesForUserIds:[self userIds]];
     [self setName:[fullNames componentsJoinedByString:@", "]];
+}
+
++ (NSString *)remoteEndpoint {
+    return KThreadRemoteEndpoint;
+}
+
++ (NSString *)remoteAlias {
+    return KThreadRemoteAlias;
+}
+
++ (NSString *)remoteCreateNotification {
+    return KThreadRemoteCreateNotification;
 }
 
 @end

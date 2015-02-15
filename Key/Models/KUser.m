@@ -18,6 +18,9 @@
 
 
 #define KUserRemoteEndpoint @"http://127.0.0.1:9393/user.json"
+#define KUserRemoteAlias @"user"
+#define KUserRemoteCreateNotification @"KUserRemoteCreateNotification"
+#define KUserRemoteUpdateNotification @"KUserRemoteUpdateNotification"
 
 @implementation KUser
 
@@ -112,15 +115,15 @@
 }
 
 + (NSString *)remoteAlias {
-    return @"user";
+    return KUserRemoteAlias;
 }
 
 + (NSString *)remoteCreateNotification {
-    return @"KUserRemoteCreateNotification";
+    return KUserRemoteCreateNotification;
 }
 
 + (NSString *)remoteUpdateNotification {
-    return @"KUserRemoteCreateNotification";
+    return KUserRemoteUpdateNotification;
 }
 
 # pragma mark - Notification Methods

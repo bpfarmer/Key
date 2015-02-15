@@ -17,10 +17,14 @@
 #import "KOutgoingMessage.h"
 #import "Util.h"
 
+//API Endpoints
+#define KMessageRemoteEndpoint @"http://127.0.0.1:9393/message.json"
+#define KMessageRemoteAlias @"message"
 #define KMessageUnsentStatus @"KMessageUnsent"
 #define KMessageSentSuccessStatus @"KMessageSentSuccess"
 #define KMessageSentFailureStatus @"KMessageSentFailure"
 #define KMessageSentNetworkFailureStatus @"KMessageSentNetworkFailure"
+#define KMessageRemoteCreateNotification @"KMessageRemoteCreateNotification"
 
 @implementation KMessage
 
@@ -30,7 +34,7 @@
 }
 
 - (instancetype)initFrom:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body {
-    self = [super initWithUniqueId:[[self class] placeholderUniqueId]];
+    self = [super initWithUniqueId:nil];
     
     if (self) {
         _authorId = authorId;
@@ -62,10 +66,16 @@
     return outgoingMessages;
 }
 
-+ (NSString *)placeholderUniqueId {
-    NSTimeInterval today = [[NSDate date] timeIntervalSince1970];
-    NSString *uniqueId = [NSString stringWithFormat:@"%@_%f_%@", [[KAccountManager currentUser] uniqueId], today, [Util insecureRandomString:10]];
-    return uniqueId;
++ (NSString *)remoteEndpoint {
+    return KMessageRemoteEndpoint;
+}
+
++ (NSString *)remoteAlias {
+    return KMessageRemoteAlias;
+}
+
++ (NSString *)remoteCreateNotification {
+    return KMessageRemoteCreateNotification;
 }
 
 @end

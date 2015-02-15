@@ -188,7 +188,7 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
 }
 
 - (NSData*)dataForKey:(NSString*)key inCollection:(NSString*)collection {
-    NSData *data   = [self objectForKey:key inCollection:collection];
+    NSData *data = [self objectForKey:key inCollection:collection];
     return data;
 }
 

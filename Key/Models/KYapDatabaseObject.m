@@ -32,9 +32,11 @@
 }
 
 - (void)save{
-    [[KStorageManager sharedManager].dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-        [self saveWithTransaction:transaction];
-    }];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[KStorageManager sharedManager].newDatabaseConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+            [self saveWithTransaction:transaction];
+        }];
+    });
 }
 
 - (void)removeWithTransaction:(YapDatabaseReadWriteTransaction *)transaction{
