@@ -16,6 +16,7 @@
 
 @interface KOutgoingMessage : KYapDatabaseObject
 
+@property (nonatomic) NSString *authorId;
 @property (nonatomic) NSString *recipientId;
 @property (nonatomic) NSString *keyPairId;
 @property (nonatomic) NSString *threadId;

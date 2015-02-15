@@ -13,16 +13,25 @@
 
 @implementation KOutgoingMessage
 
-- (instancetype)initWithMessage:(KMessage *)message keyPair:(KKeyPair *)keyPair {
+- (instancetype)initWithMessage:(KMessage *)message user:(KUser *)user {
     self = [super initWithUniqueId:nil];
     
     if (self) {
-        _recipientId = [keyPair userId];
-        _keyPairId   = [keyPair uniqueId];
-        _bodyCrypt = [keyPair encryptText:[message body]];
+        _recipientId = user.uniqueId;
+        _authorId    = message.authorId;
+        _keyPairId   = [user.activeKeyPair uniqueId];
+        _bodyCrypt   = [user.activeKeyPair encryptText:[message body]];
+        _threadId    = message.threadId;
     }
-    
     return self;
+}
+
+- (NSDictionary *)toDictionary {
+    return @{@"authorId" : self.authorId,
+             @"recipientId" : self.recipientId,
+             @"keyPairId" : self.keyPairId,
+             @"bodyCrypt" : self.bodyCrypt,
+             @"threadId"  : self.threadId};
 }
 
 @end
