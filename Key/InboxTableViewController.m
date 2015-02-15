@@ -43,8 +43,6 @@ YapDatabaseConnection *databaseConnection;
     [self setupDatabaseView];
     
     [self addHeaderAndFooter];
-    
-    NSLog(@"DB Path: %@", [[KStorageManager sharedManager] dbPath]);
 }
 
 - (void)addHeaderAndFooter {

@@ -32,11 +32,9 @@
 }
 
 - (void)save{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[KStorageManager sharedManager].newDatabaseConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
-            [self saveWithTransaction:transaction];
-        }];
-    });
+    [[KStorageManager sharedManager].dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+        [self saveWithTransaction:transaction];
+    }];
 }
 
 - (void)removeWithTransaction:(YapDatabaseReadWriteTransaction *)transaction{
@@ -56,6 +54,7 @@
 - (void)remoteCreate {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : [self toDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"%@", responseObject);
         if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
             [self setUniqueId:responseObject[[[self class] remoteAlias]][@"uniqueId"]];
             [self setRemoteStatus:KRemoteCreateSuccessStatus];

@@ -33,25 +33,28 @@
     return edges;
 }
 
-- (instancetype)initFrom:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body {
-    self = [super initWithUniqueId:nil];
+- (instancetype)initFromAuthorId:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body {
+    self = [super initWithUniqueId:[self placeholderUniqueId]];
     
     if (self) {
         _authorId = authorId;
         _threadId = threadId;
         _body     = body;
+        _sendStatus = KMessageUnsentStatus;
     }
     return self;
 }
 
-- (void)createAndSend {
-    self.sendStatus = KMessageUnsentStatus;
-    [self save];
-    [self remoteCreate];
+- (void)sendToRecipients {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self remoteCreate];
+    });
 }
 
 - (NSDictionary *)toDictionary {
-    return @{@"outgoingMessages" : [self outgoingMessagesArray]};
+    return @{@"outgoingMessages" : [self outgoingMessagesArray],
+                     @"authorId" : self.authorId,
+                     @"threadId" : self.threadId};
 }
 
 - (NSArray *)outgoingMessagesArray {
@@ -76,6 +79,12 @@
 
 + (NSString *)remoteCreateNotification {
     return KMessageRemoteCreateNotification;
+}
+
+- (NSString *)placeholderUniqueId {
+    NSTimeInterval today = [[NSDate date] timeIntervalSince1970];
+    NSString *uniqueId = [NSString stringWithFormat:@"%@_%f_%@", [[KAccountManager currentUser] uniqueId], today, [Util insecureRandomString:10]];
+    return uniqueId;
 }
 
 @end

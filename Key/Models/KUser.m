@@ -103,7 +103,7 @@
 
 - (void)saveFromRemoteUpdateResponse:(NSDictionary *)responseObject {
     if(!self.activeKeyPair.uniqueId) {
-        [self.activeKeyPair setUniqueId:responseObject[@"user"][@"keyPair"][@"uniqueId"]];
+        [self.activeKeyPair setUniqueId:responseObject[@"keyPair"][@"uniqueId"]];
         [self.activeKeyPair setUserId:[self uniqueId]];
         [self.activeKeyPair save];
     }
@@ -200,15 +200,5 @@
 
 #pragma mark - Throwaway Methods for Testing
 
-- (void)generateRandomThread {
-    KUser *otherUser = [[KUser alloc] initWithUniqueId:@"KUserUniqueId1"];
-    [otherUser setUsername:@"Some Stupid User"];
-    [[KStorageManager sharedManager] setObject:otherUser forKey:[otherUser uniqueId] inCollection:[KUser collection]];
-    NSArray *users = [NSArray arrayWithObjects:[self uniqueId], [otherUser uniqueId], nil];
-    KThread *firstThread = [[KThread alloc] initWithUsers:users];
-    KMessage *message = [[KMessage alloc] initFrom:[self uniqueId] threadId:[firstThread uniqueId] body:@"SOME DUMB MESSAGE"];
-    [[KStorageManager sharedManager] setObject:firstThread forKey:[firstThread uniqueId] inCollection:[[firstThread class] collection]];
-    [[KStorageManager sharedManager] setObject:message forKey:[message uniqueId] inCollection:[[message class] collection]];
-}
 
 @end

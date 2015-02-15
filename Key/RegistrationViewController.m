@@ -39,7 +39,6 @@
 - (void)receiveUserStatusNotification:(NSNotification *)notification {
     KUser *user = (KUser *)notification.object;
     if([user.remoteStatus isEqualToString:KRemoteCreateSuccessStatus]) {
-        [notification.object generateRandomThread];
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
         UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
         [self presentViewController:inboxView animated:YES completion:nil];

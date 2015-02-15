@@ -24,6 +24,7 @@
 @property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *createdAt;
 
-- (instancetype) initFrom:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body;
+- (instancetype)initFromAuthorId:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body;
+- (void)sendToRecipients;
 
 @end

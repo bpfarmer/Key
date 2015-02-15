@@ -32,7 +32,6 @@
 - (instancetype)initWithUsername:(NSString *)username password:(NSString *)password;
 - (KKeyPair *)activeKeyPair;
 - (NSString *)fullName;
-- (void)generateRandomThread;
 
 @end
 

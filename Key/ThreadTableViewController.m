@@ -39,6 +39,8 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
+    self.currentUser = [KAccountManager currentUser];
+    
     if (self.thread) {
         [self setupDatabaseView];
     }
@@ -82,19 +84,18 @@ static NSString *TableViewCellIdentifier = @"Messages";
     if (!self.thread) {
         [self setupThread];
     }
-    KMessage *message = [[KMessage alloc] initFrom:self.currentUser.uniqueId threadId:self.thread.uniqueId body:self.messageTextField.text];
-    [message createAndSend];
+    KMessage *message = [[KMessage alloc] initFromAuthorId:self.currentUser.uniqueId threadId:self.thread.uniqueId body:self.messageTextField.text];
+    [message save];
+    [message sendToRecipients];
 }
 
 - (void)setupThread {
-    self.currentUser = [KAccountManager currentUser];
     NSArray *usernames = [self.recipientTextField.text componentsSeparatedByString:@", "];
     NSMutableArray *recipientIds = [NSMutableArray arrayWithObjects:self.currentUser.uniqueId, nil];
     for (NSString *username in usernames) {
         [recipientIds addObject:username];
     };
     self.thread = [[KThread alloc] initWithUsers:recipientIds];
-    [self.thread createAndSend];
     [self setupDatabaseView];
 }
 

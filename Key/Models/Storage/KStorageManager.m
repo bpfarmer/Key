@@ -122,7 +122,6 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
         [SSKeychain setPassword:dbPassword forService:keychainService account:keychainDBPassAccount];
         //DDLogError(@"Set new password from keychain ...");
     }
-    NSLog(@"Password: %@", dbPassword);
     return dbPassword;
 }
 

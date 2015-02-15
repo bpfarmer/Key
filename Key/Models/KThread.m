@@ -41,8 +41,6 @@
         }else {
             self = thread;
         }
-        [self remoteCreate];
-        [self save];
     }
     return self;
 }

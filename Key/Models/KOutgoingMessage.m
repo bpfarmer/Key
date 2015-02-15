@@ -21,17 +21,17 @@
         _authorId    = message.authorId;
         _keyPairId   = [user.activeKeyPair uniqueId];
         _bodyCrypt   = [user.activeKeyPair encryptText:[message body]];
-        _threadId    = message.threadId;
     }
     return self;
 }
 
 - (NSDictionary *)toDictionary {
-    return @{@"authorId" : self.authorId,
-             @"recipientId" : self.recipientId,
-             @"keyPairId" : self.keyPairId,
-             @"bodyCrypt" : self.bodyCrypt,
-             @"threadId"  : self.threadId};
+    NSMutableDictionary *outgoingMessageDictionary = [[NSMutableDictionary alloc] init];
+    if(self.authorId) [outgoingMessageDictionary addEntriesFromDictionary:@{@"authorId" : self.authorId}];
+    if(self.recipientId) [outgoingMessageDictionary addEntriesFromDictionary:@{@"recipientId" : self.recipientId}];
+    if(self.keyPairId) [outgoingMessageDictionary addEntriesFromDictionary:@{@"keyPairId" : self.keyPairId}];
+    if(self.bodyCrypt) [outgoingMessageDictionary addEntriesFromDictionary:@{@"bodyCrypt" : self.bodyCrypt}];
+    return outgoingMessageDictionary;
 }
 
 @end
