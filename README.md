@@ -1,4 +1,4 @@
-##Key: share freely##
+##key: share freely##
 
 ####Running Locally####
 
