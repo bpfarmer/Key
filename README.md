@@ -1,6 +1,4 @@
-##Key##
-===
-###Share Freely###
+##Key: Share Freely##
 
 ####Running Locally####
 
