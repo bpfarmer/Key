@@ -1,6 +1,0 @@
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/CocoaLumberjack" "${PODS_ROOT}/Headers/Public/Mantle" "${PODS_ROOT}/Headers/Public/SQLCipher" "${PODS_ROOT}/Headers/Public/SSKeychain" "${PODS_ROOT}/Headers/Public/YapDatabase"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/CocoaLumberjack" -isystem "${PODS_ROOT}/Headers/Public/Mantle" -isystem "${PODS_ROOT}/Headers/Public/SQLCipher" -isystem "${PODS_ROOT}/Headers/Public/SSKeychain" -isystem "${PODS_ROOT}/Headers/Public/YapDatabase" $(inherited) -DSQLITE_HAS_CODEC -DSQLITE_TEMP_STORE=2 -DSQLITE_THREADSAFE -DSQLCIPHER_CRYPTO_CC $(inherited) -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_FTS3_PARENTHESIS $(inherited) -DSQLITE_HAS_CODEC
-OTHER_LDFLAGS = -ObjC -weak_library /usr/lib/libc++.dylib -l"Pods-Key-AFNetworking" -l"Pods-Key-CocoaLumberjack" -l"Pods-Key-Mantle" -l"Pods-Key-SQLCipher" -l"Pods-Key-SSKeychain" -l"Pods-Key-YapDatabase" -framework "CoreGraphics" -framework "Foundation" -framework "MobileCoreServices" -framework "Security" -framework "SystemConfiguration"
-OTHER_LIBTOOLFLAGS = $(OTHER_LDFLAGS)
-PODS_ROOT = ${SRCROOT}/Pods
