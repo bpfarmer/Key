@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KYapDatabaseObject.h"
 
 @class ECKeyPair;
 
-@interface IdentityKey : NSObject
+@interface IdentityKey : KYapDatabaseObject
 
 @property (nonatomic, readonly) NSString *userId;
-@property (nonatomic, readonly) NSString *uniqueId;
 @property (nonatomic, readonly) NSData *publicKey;
 @property (nonatomic, readonly) ECKeyPair *keyPair;
 

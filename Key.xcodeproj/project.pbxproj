@@ -8,20 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		49324C749A49C0F4FB711A5D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
-		5205C02F1A83E2630008CFF6 /* InboxTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5205C02E1A83E2630008CFF6 /* InboxTableViewController.m */; };
-		527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3E61A78193300B3688E /* WelcomeScreenViewController.m */; };
-		527DD3EA1A78197600B3688E /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3E91A78197600B3688E /* RegistrationViewController.m */; };
-		527DD3ED1A78198A00B3688E /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3EC1A78198A00B3688E /* LoginViewController.m */; };
-		527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3FB1A78306700B3688E /* MessageComposeViewController.m */; };
-		52E964A81A841FA500E67736 /* ThreadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E964A71A841FA500E67736 /* ThreadTableViewController.m */; };
-		52E964AE1A84255500E67736 /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E964AD1A84255500E67736 /* ContactsTableViewController.m */; };
 		710028D1F762C6FE738F0D7A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
-		EF5542A31AADC92F00129F3C /* NSData+keyVersionByte.m in Sources */ = {isa = PBXBuildFile; fileRef = EF5542921AADC92F00129F3C /* NSData+keyVersionByte.m */; };
-		EF973F981A7AD58C00D92A9E /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973F971A7AD58C00D92A9E /* AddContactViewController.m */; };
+		EF524ADA1AAE238600F3B9AF /* KDatabaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD11AAE238600F3B9AF /* KDatabaseView.m */; };
+		EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD31AAE238600F3B9AF /* KStorageKeys.m */; };
+		EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD51AAE238600F3B9AF /* KStorageManager.m */; };
+		EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD71AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m */; };
+		EF524ADE1AAE238600F3B9AF /* KYapDatabaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD91AAE238600F3B9AF /* KYapDatabaseView.m */; };
+		EF524AE51AAE239800F3B9AF /* NSData+keyVersionByte.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AE21AAE239800F3B9AF /* NSData+keyVersionByte.m */; };
+		EF524AE61AAE239800F3B9AF /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AE41AAE239800F3B9AF /* Util.m */; };
+		EF524AE91AAE247800F3B9AF /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AE81AAE247800F3B9AF /* NSData+Base64.m */; };
+		EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AEB1AAE24B400F3B9AF /* NSString+Base64.m */; };
+		EF524AEF1AAE255200F3B9AF /* KYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AEE1AAE255200F3B9AF /* KYapDatabaseObject.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
-		EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAA81A76C47200589CF3 /* KYapDatabaseObject.m */; };
-		EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAAC1A76C55600589CF3 /* KStorageManager.m */; };
-		EFB1EAB01A76C5E900589CF3 /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAAF1A76C5E900589CF3 /* KStorageKeys.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
 		EFC6BEAC1A6857D400B0EB8F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */; };
@@ -29,15 +27,10 @@
 		EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEAF1A6857D500B0EB8F /* LaunchScreen.xib */; };
 		EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */; };
 		EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEC61A6857E000B0EB8F /* Podfile */; };
-		EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */; };
-		EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */; };
 		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
-		EFCD01DB1A84202D005065B2 /* KYapDatabaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01DA1A84202D005065B2 /* KYapDatabaseView.m */; };
-		EFE45C701A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE45C6F1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
 		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
 		EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD431A6B5C1400973E15 /* KGroup.m */; };
-		EFEBDD481A6D879700973E15 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD471A6D879700973E15 /* Util.m */; };
 		EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A611AAE19C3006C10D2 /* AES_CBC.m */; };
 		EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A631AAE19C3006C10D2 /* HMAC.m */; };
 		EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A651AAE19C3006C10D2 /* KeyDerivation.m */; };
@@ -54,6 +47,14 @@
 		EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A7D1AAE19C3006C10D2 /* PreKeyExchangeReceipt.m */; };
 		EFF70A941AAE19C3006C10D2 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A801AAE19C3006C10D2 /* Session.m */; };
 		EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A821AAE19C3006C10D2 /* SessionState.m */; };
+		EFF70AC11AAE1CBC006C10D2 /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70AB21AAE1CBC006C10D2 /* AddContactViewController.m */; };
+		EFF70AC21AAE1CBC006C10D2 /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70AB41AAE1CBC006C10D2 /* ContactsTableViewController.m */; };
+		EFF70AC31AAE1CBC006C10D2 /* InboxTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70AB61AAE1CBC006C10D2 /* InboxTableViewController.m */; };
+		EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */; };
+		EFF70AC51AAE1CBC006C10D2 /* MessageComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70ABA1AAE1CBC006C10D2 /* MessageComposeViewController.m */; };
+		EFF70AC61AAE1CBC006C10D2 /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */; };
+		EFF70AC71AAE1CBC006C10D2 /* ThreadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70ABE1AAE1CBC006C10D2 /* ThreadTableViewController.m */; };
+		EFF70AC81AAE1CBC006C10D2 /* WelcomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70AC01AAE1CBC006C10D2 /* WelcomeScreenViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,39 +69,35 @@
 
 /* Begin PBXFileReference section */
 		2539EDD7F5AA0C4DFB3367D0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		5205C02D1A83E2630008CFF6 /* InboxTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InboxTableViewController.h; sourceTree = "<group>"; };
-		5205C02E1A83E2630008CFF6 /* InboxTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxTableViewController.m; sourceTree = "<group>"; };
-		527DD3E51A78193300B3688E /* WelcomeScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenViewController.h; sourceTree = "<group>"; };
-		527DD3E61A78193300B3688E /* WelcomeScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenViewController.m; sourceTree = "<group>"; };
-		527DD3E81A78197600B3688E /* RegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationViewController.h; sourceTree = "<group>"; };
-		527DD3E91A78197600B3688E /* RegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationViewController.m; sourceTree = "<group>"; };
-		527DD3EB1A78198A00B3688E /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
-		527DD3EC1A78198A00B3688E /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		527DD3FA1A78306700B3688E /* MessageComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageComposeViewController.h; sourceTree = "<group>"; };
-		527DD3FB1A78306700B3688E /* MessageComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageComposeViewController.m; sourceTree = "<group>"; };
-		52E964A61A841FA500E67736 /* ThreadTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadTableViewController.h; sourceTree = "<group>"; };
-		52E964A71A841FA500E67736 /* ThreadTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadTableViewController.m; sourceTree = "<group>"; };
-		52E964AC1A84255500E67736 /* ContactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewController.h; sourceTree = "<group>"; };
-		52E964AD1A84255500E67736 /* ContactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsTableViewController.m; sourceTree = "<group>"; };
 		65563319915893A686117F67 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FE65DB16A2581426F9789DA /* Pods-KeyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BED4F366B60241C2DC1CBDD5 /* Pods-Key.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.debug.xcconfig"; sourceTree = "<group>"; };
 		C461760CA51ABA0BE7C393EF /* Pods-Key.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.release.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.release.xcconfig"; sourceTree = "<group>"; };
 		DB575E32381FD8118E62EE58 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		DF6091F2DF6E5A8AC8248FE8 /* Pods-KeyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.release.xcconfig"; sourceTree = "<group>"; };
-		EF5542911AADC92F00129F3C /* NSData+keyVersionByte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+keyVersionByte.h"; path = "Classes/Util/NSData+keyVersionByte.h"; sourceTree = "<group>"; };
-		EF5542921AADC92F00129F3C /* NSData+keyVersionByte.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+keyVersionByte.m"; path = "Classes/Util/NSData+keyVersionByte.m"; sourceTree = "<group>"; };
-		EF7F40101AADD19000E5E31D /* FreeKeyExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKeyExceptions.h; sourceTree = "<group>"; };
-		EF973F961A7AD58C00D92A9E /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
-		EF973F971A7AD58C00D92A9E /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
+		EF524AD01AAE238600F3B9AF /* KDatabaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KDatabaseView.h; sourceTree = "<group>"; };
+		EF524AD11AAE238600F3B9AF /* KDatabaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KDatabaseView.m; sourceTree = "<group>"; };
+		EF524AD21AAE238600F3B9AF /* KStorageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageKeys.h; sourceTree = "<group>"; };
+		EF524AD31AAE238600F3B9AF /* KStorageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageKeys.m; sourceTree = "<group>"; };
+		EF524AD41AAE238600F3B9AF /* KStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageManager.h; sourceTree = "<group>"; };
+		EF524AD51AAE238600F3B9AF /* KStorageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageManager.m; sourceTree = "<group>"; };
+		EF524AD61AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYapDatabaseSecondaryIndex.h; sourceTree = "<group>"; };
+		EF524AD71AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYapDatabaseSecondaryIndex.m; sourceTree = "<group>"; };
+		EF524AD81AAE238600F3B9AF /* KYapDatabaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYapDatabaseView.h; sourceTree = "<group>"; };
+		EF524AD91AAE238600F3B9AF /* KYapDatabaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYapDatabaseView.m; sourceTree = "<group>"; };
+		EF524AE01AAE239800F3B9AF /* FreeKeyExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKeyExceptions.h; sourceTree = "<group>"; };
+		EF524AE11AAE239800F3B9AF /* NSData+keyVersionByte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+keyVersionByte.h"; sourceTree = "<group>"; };
+		EF524AE21AAE239800F3B9AF /* NSData+keyVersionByte.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+keyVersionByte.m"; sourceTree = "<group>"; };
+		EF524AE31AAE239800F3B9AF /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		EF524AE41AAE239800F3B9AF /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
+		EF524AE71AAE247800F3B9AF /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		EF524AE81AAE247800F3B9AF /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		EF524AEA1AAE24B400F3B9AF /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		EF524AEB1AAE24B400F3B9AF /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		EF524AED1AAE255200F3B9AF /* KYapDatabaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYapDatabaseObject.h; sourceTree = "<group>"; };
+		EF524AEE1AAE255200F3B9AF /* KYapDatabaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYapDatabaseObject.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
-		EFB1EAA71A76C47200589CF3 /* KYapDatabaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KYapDatabaseObject.h; path = Models/KYapDatabaseObject.h; sourceTree = "<group>"; };
-		EFB1EAA81A76C47200589CF3 /* KYapDatabaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KYapDatabaseObject.m; path = Models/KYapDatabaseObject.m; sourceTree = "<group>"; };
-		EFB1EAAB1A76C55600589CF3 /* KStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KStorageManager.h; path = Models/Storage/KStorageManager.h; sourceTree = "<group>"; };
-		EFB1EAAC1A76C55600589CF3 /* KStorageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KStorageManager.m; path = Models/Storage/KStorageManager.m; sourceTree = "<group>"; };
-		EFB1EAAE1A76C5E900589CF3 /* KStorageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KStorageKeys.h; path = Models/Storage/KStorageKeys.h; sourceTree = "<group>"; };
-		EFB1EAAF1A76C5E900589CF3 /* KStorageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KStorageKeys.m; path = Models/Storage/KStorageKeys.m; sourceTree = "<group>"; };
 		EFC6BE9D1A6857D400B0EB8F /* Key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Key.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFC6BEA11A6857D400B0EB8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFC6BEA21A6857D400B0EB8F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -113,24 +110,14 @@
 		EFC6BEBB1A6857D500B0EB8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyTests.m; sourceTree = "<group>"; };
 		EFC6BEC61A6857E000B0EB8F /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		EFC6BEDE1A68588100B0EB8F /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "External/Base64/NSData+Base64.h"; sourceTree = "<group>"; };
-		EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "External/Base64/NSData+Base64.m"; sourceTree = "<group>"; };
-		EFC6BEE01A68588100B0EB8F /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Base64.h"; path = "External/Base64/NSString+Base64.h"; sourceTree = "<group>"; };
-		EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Base64.m"; path = "External/Base64/NSString+Base64.m"; sourceTree = "<group>"; };
 		EFCD01D61A83E651005065B2 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThread.h; path = Models/KThread.h; sourceTree = "<group>"; };
 		EFCD01D71A83E651005065B2 /* KThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KThread.m; path = Models/KThread.m; sourceTree = "<group>"; };
-		EFCD01D91A84202C005065B2 /* KYapDatabaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYapDatabaseView.h; sourceTree = "<group>"; };
-		EFCD01DA1A84202D005065B2 /* KYapDatabaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYapDatabaseView.m; sourceTree = "<group>"; };
-		EFE45C6E1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KYapDatabaseSecondaryIndex.h; path = Models/Storage/KYapDatabaseSecondaryIndex.h; sourceTree = "<group>"; };
-		EFE45C6F1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KYapDatabaseSecondaryIndex.m; path = Models/Storage/KYapDatabaseSecondaryIndex.m; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
 		EFEBDD371A68CE9600973E15 /* KUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KUser.m; path = Models/KUser.m; sourceTree = "<group>"; };
 		EFEBDD391A6B2C7800973E15 /* KMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMessage.h; path = Models/KMessage.h; sourceTree = "<group>"; };
 		EFEBDD3A1A6B2C7800973E15 /* KMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KMessage.m; path = Models/KMessage.m; sourceTree = "<group>"; };
 		EFEBDD421A6B5C1400973E15 /* KGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KGroup.h; path = Models/KGroup.h; sourceTree = "<group>"; };
 		EFEBDD431A6B5C1400973E15 /* KGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KGroup.m; path = Models/KGroup.m; sourceTree = "<group>"; };
-		EFEBDD461A6D879700973E15 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Util.h; path = Util/Util.h; sourceTree = "<group>"; };
-		EFEBDD471A6D879700973E15 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Util.m; path = Util/Util.m; sourceTree = "<group>"; };
 		EFF70A601AAE19C3006C10D2 /* AES_CBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES_CBC.h; sourceTree = "<group>"; };
 		EFF70A611AAE19C3006C10D2 /* AES_CBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AES_CBC.m; sourceTree = "<group>"; };
 		EFF70A621AAE19C3006C10D2 /* HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC.h; sourceTree = "<group>"; };
@@ -163,6 +150,22 @@
 		EFF70A801AAE19C3006C10D2 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		EFF70A811AAE19C3006C10D2 /* SessionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionState.h; sourceTree = "<group>"; };
 		EFF70A821AAE19C3006C10D2 /* SessionState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionState.m; sourceTree = "<group>"; };
+		EFF70AB11AAE1CBC006C10D2 /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
+		EFF70AB21AAE1CBC006C10D2 /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
+		EFF70AB31AAE1CBC006C10D2 /* ContactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewController.h; sourceTree = "<group>"; };
+		EFF70AB41AAE1CBC006C10D2 /* ContactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsTableViewController.m; sourceTree = "<group>"; };
+		EFF70AB51AAE1CBC006C10D2 /* InboxTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InboxTableViewController.h; sourceTree = "<group>"; };
+		EFF70AB61AAE1CBC006C10D2 /* InboxTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxTableViewController.m; sourceTree = "<group>"; };
+		EFF70AB71AAE1CBC006C10D2 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		EFF70AB91AAE1CBC006C10D2 /* MessageComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageComposeViewController.h; sourceTree = "<group>"; };
+		EFF70ABA1AAE1CBC006C10D2 /* MessageComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageComposeViewController.m; sourceTree = "<group>"; };
+		EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationViewController.h; sourceTree = "<group>"; };
+		EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationViewController.m; sourceTree = "<group>"; };
+		EFF70ABD1AAE1CBC006C10D2 /* ThreadTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadTableViewController.h; sourceTree = "<group>"; };
+		EFF70ABE1AAE1CBC006C10D2 /* ThreadTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadTableViewController.m; sourceTree = "<group>"; };
+		EFF70ABF1AAE1CBC006C10D2 /* WelcomeScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenViewController.h; sourceTree = "<group>"; };
+		EFF70AC01AAE1CBC006C10D2 /* WelcomeScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,44 +209,39 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EF973FA61A7EA0DF00D92A9E /* Controllers */ = {
+		EF524ACF1AAE238600F3B9AF /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				EF973F961A7AD58C00D92A9E /* AddContactViewController.h */,
-				EF973F971A7AD58C00D92A9E /* AddContactViewController.m */,
-				5205C02D1A83E2630008CFF6 /* InboxTableViewController.h */,
-				5205C02E1A83E2630008CFF6 /* InboxTableViewController.m */,
-				52E964A61A841FA500E67736 /* ThreadTableViewController.h */,
-				52E964A71A841FA500E67736 /* ThreadTableViewController.m */,
-				52E964AC1A84255500E67736 /* ContactsTableViewController.h */,
-				52E964AD1A84255500E67736 /* ContactsTableViewController.m */,
-				527DD3EB1A78198A00B3688E /* LoginViewController.h */,
-				527DD3EC1A78198A00B3688E /* LoginViewController.m */,
-				527DD3FA1A78306700B3688E /* MessageComposeViewController.h */,
-				527DD3FB1A78306700B3688E /* MessageComposeViewController.m */,
-				527DD3E81A78197600B3688E /* RegistrationViewController.h */,
-				527DD3E91A78197600B3688E /* RegistrationViewController.m */,
-				527DD3E51A78193300B3688E /* WelcomeScreenViewController.h */,
-				527DD3E61A78193300B3688E /* WelcomeScreenViewController.m */,
+				EF524AED1AAE255200F3B9AF /* KYapDatabaseObject.h */,
+				EF524AEE1AAE255200F3B9AF /* KYapDatabaseObject.m */,
+				EF524AD01AAE238600F3B9AF /* KDatabaseView.h */,
+				EF524AD11AAE238600F3B9AF /* KDatabaseView.m */,
+				EF524AD21AAE238600F3B9AF /* KStorageKeys.h */,
+				EF524AD31AAE238600F3B9AF /* KStorageKeys.m */,
+				EF524AD41AAE238600F3B9AF /* KStorageManager.h */,
+				EF524AD51AAE238600F3B9AF /* KStorageManager.m */,
+				EF524AD61AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.h */,
+				EF524AD71AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m */,
+				EF524AD81AAE238600F3B9AF /* KYapDatabaseView.h */,
+				EF524AD91AAE238600F3B9AF /* KYapDatabaseView.m */,
 			);
-			name = Controllers;
+			path = Storage;
 			sourceTree = "<group>";
 		};
-		EFB1EAAA1A76C53500589CF3 /* Storage */ = {
+		EF524ADF1AAE239800F3B9AF /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				EFB1EAA71A76C47200589CF3 /* KYapDatabaseObject.h */,
-				EFB1EAA81A76C47200589CF3 /* KYapDatabaseObject.m */,
-				EFB1EAAB1A76C55600589CF3 /* KStorageManager.h */,
-				EFB1EAAC1A76C55600589CF3 /* KStorageManager.m */,
-				EFB1EAAE1A76C5E900589CF3 /* KStorageKeys.h */,
-				EFB1EAAF1A76C5E900589CF3 /* KStorageKeys.m */,
-				EFCD01D91A84202C005065B2 /* KYapDatabaseView.h */,
-				EFCD01DA1A84202D005065B2 /* KYapDatabaseView.m */,
-				EFE45C6E1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.h */,
-				EFE45C6F1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m */,
+				EF524AE01AAE239800F3B9AF /* FreeKeyExceptions.h */,
+				EF524AE11AAE239800F3B9AF /* NSData+keyVersionByte.h */,
+				EF524AE21AAE239800F3B9AF /* NSData+keyVersionByte.m */,
+				EF524AE31AAE239800F3B9AF /* Util.h */,
+				EF524AE41AAE239800F3B9AF /* Util.m */,
+				EF524AE71AAE247800F3B9AF /* NSData+Base64.h */,
+				EF524AE81AAE247800F3B9AF /* NSData+Base64.m */,
+				EF524AEA1AAE24B400F3B9AF /* NSString+Base64.h */,
+				EF524AEB1AAE24B400F3B9AF /* NSString+Base64.m */,
 			);
-			name = Storage;
+			path = Util;
 			sourceTree = "<group>";
 		};
 		EFC6BE941A6857D400B0EB8F = {
@@ -270,17 +268,17 @@
 		EFC6BE9F1A6857D400B0EB8F /* Key */ = {
 			isa = PBXGroup;
 			children = (
-				EFF70A5E1AAE19C3006C10D2 /* FreeKey */,
-				EFEBDD451A6D878200973E15 /* Util */,
-				EFB1EAAA1A76C53500589CF3 /* Storage */,
-				EFEBDD321A68673D00973E15 /* Models */,
-				EF973FA61A7EA0DF00D92A9E /* Controllers */,
 				EFC6BEA41A6857D400B0EB8F /* AppDelegate.h */,
 				EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */,
+				EFF70AB01AAE1CBC006C10D2 /* Controllers */,
+				EFF70A5E1AAE19C3006C10D2 /* FreeKey */,
 				EFC6BEAD1A6857D400B0EB8F /* Images.xcassets */,
 				EFC6BEAF1A6857D500B0EB8F /* LaunchScreen.xib */,
 				EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */,
+				EFEBDD321A68673D00973E15 /* Models */,
+				EF524ACF1AAE238600F3B9AF /* Storage */,
 				EFC6BEA01A6857D400B0EB8F /* Supporting Files */,
+				EF524ADF1AAE239800F3B9AF /* Util */,
 			);
 			path = Key;
 			sourceTree = "<group>";
@@ -326,23 +324,6 @@
 				EFEBDD371A68CE9600973E15 /* KUser.m */,
 			);
 			name = Models;
-			sourceTree = "<group>";
-		};
-		EFEBDD451A6D878200973E15 /* Util */ = {
-			isa = PBXGroup;
-			children = (
-				EF7F40101AADD19000E5E31D /* FreeKeyExceptions.h */,
-				EFC6BEDE1A68588100B0EB8F /* NSData+Base64.h */,
-				EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */,
-				EFC6BEE01A68588100B0EB8F /* NSString+Base64.h */,
-				EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */,
-				EF5542911AADC92F00129F3C /* NSData+keyVersionByte.h */,
-				EF5542921AADC92F00129F3C /* NSData+keyVersionByte.m */,
-				EFEBDD461A6D879700973E15 /* Util.h */,
-				EFEBDD471A6D879700973E15 /* Util.m */,
-			);
-			name = Util;
-			path = Library;
 			sourceTree = "<group>";
 		};
 		EFF70A5E1AAE19C3006C10D2 /* FreeKey */ = {
@@ -414,6 +395,29 @@
 				EFF70A821AAE19C3006C10D2 /* SessionState.m */,
 			);
 			path = Sessions;
+			sourceTree = "<group>";
+		};
+		EFF70AB01AAE1CBC006C10D2 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				EFF70AB11AAE1CBC006C10D2 /* AddContactViewController.h */,
+				EFF70AB21AAE1CBC006C10D2 /* AddContactViewController.m */,
+				EFF70AB31AAE1CBC006C10D2 /* ContactsTableViewController.h */,
+				EFF70AB41AAE1CBC006C10D2 /* ContactsTableViewController.m */,
+				EFF70AB51AAE1CBC006C10D2 /* InboxTableViewController.h */,
+				EFF70AB61AAE1CBC006C10D2 /* InboxTableViewController.m */,
+				EFF70AB71AAE1CBC006C10D2 /* LoginViewController.h */,
+				EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */,
+				EFF70AB91AAE1CBC006C10D2 /* MessageComposeViewController.h */,
+				EFF70ABA1AAE1CBC006C10D2 /* MessageComposeViewController.m */,
+				EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */,
+				EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */,
+				EFF70ABD1AAE1CBC006C10D2 /* ThreadTableViewController.h */,
+				EFF70ABE1AAE1CBC006C10D2 /* ThreadTableViewController.m */,
+				EFF70ABF1AAE1CBC006C10D2 /* WelcomeScreenViewController.h */,
+				EFF70AC01AAE1CBC006C10D2 /* WelcomeScreenViewController.m */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -587,42 +591,43 @@
 				EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */,
 				EFF70A891AAE19C3006C10D2 /* ChainKey.m in Sources */,
 				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
+				EFF70AC51AAE1CBC006C10D2 /* MessageComposeViewController.m in Sources */,
+				EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */,
+				EF524AE51AAE239800F3B9AF /* NSData+keyVersionByte.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
-				EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */,
+				EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */,
+				EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */,
 				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
+				EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */,
 				EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */,
-				52E964AE1A84255500E67736 /* ContactsTableViewController.m in Sources */,
+				EF524AE91AAE247800F3B9AF /* NSData+Base64.m in Sources */,
 				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
+				EFF70AC61AAE1CBC006C10D2 /* RegistrationViewController.m in Sources */,
 				EFF70A8B1AAE19C3006C10D2 /* MasterKey.m in Sources */,
+				EFF70AC11AAE1CBC006C10D2 /* AddContactViewController.m in Sources */,
 				EFF70A8A1AAE19C3006C10D2 /* IdentityKey.m in Sources */,
 				EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */,
-				EFE45C701A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m in Sources */,
-				527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */,
-				EF5542A31AADC92F00129F3C /* NSData+keyVersionByte.m in Sources */,
+				EF524AE61AAE239800F3B9AF /* Util.m in Sources */,
+				EFF70AC21AAE1CBC006C10D2 /* ContactsTableViewController.m in Sources */,
 				EFF70A921AAE19C3006C10D2 /* PreKeyExchange.m in Sources */,
-				527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */,
-				EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */,
+				EFF70AC71AAE1CBC006C10D2 /* ThreadTableViewController.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
 				EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
 				EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */,
 				EFF70A901AAE19C3006C10D2 /* SessionKeyBundle.m in Sources */,
+				EF524ADA1AAE238600F3B9AF /* KDatabaseView.m in Sources */,
 				EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */,
+				EF524ADE1AAE238600F3B9AF /* KYapDatabaseView.m in Sources */,
 				EFF70A8D1AAE19C3006C10D2 /* PreKey.m in Sources */,
-				EFB1EAB01A76C5E900589CF3 /* KStorageKeys.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
-				EFCD01DB1A84202D005065B2 /* KYapDatabaseView.m in Sources */,
 				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,
 				EFF70A8E1AAE19C3006C10D2 /* RootChain.m in Sources */,
-				EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */,
+				EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */,
 				EFF70A941AAE19C3006C10D2 /* Session.m in Sources */,
-				527DD3EA1A78197600B3688E /* RegistrationViewController.m in Sources */,
+				EFF70AC81AAE1CBC006C10D2 /* WelcomeScreenViewController.m in Sources */,
+				EF524AEF1AAE255200F3B9AF /* KYapDatabaseObject.m in Sources */,
 				EFF70A8C1AAE19C3006C10D2 /* MessageKey.m in Sources */,
-				5205C02F1A83E2630008CFF6 /* InboxTableViewController.m in Sources */,
-				EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */,
-				EFEBDD481A6D879700973E15 /* Util.m in Sources */,
-				527DD3ED1A78198A00B3688E /* LoginViewController.m in Sources */,
-				EF973F981A7AD58C00D92A9E /* AddContactViewController.m in Sources */,
-				52E964A81A841FA500E67736 /* ThreadTableViewController.m in Sources */,
+				EFF70AC31AAE1CBC006C10D2 /* InboxTableViewController.m in Sources */,
 				EFF70A8F1AAE19C3006C10D2 /* RootKey.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
