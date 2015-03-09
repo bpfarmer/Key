@@ -19,6 +19,7 @@
 		EF524AE91AAE247800F3B9AF /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AE81AAE247800F3B9AF /* NSData+Base64.m */; };
 		EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AEB1AAE24B400F3B9AF /* NSString+Base64.m */; };
 		EF524AEF1AAE255200F3B9AF /* KYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AEE1AAE255200F3B9AF /* KYapDatabaseObject.m */; };
+		EF524AF51AAE2BAC00F3B9AF /* FreeKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AF41AAE2BAC00F3B9AF /* FreeKey.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
@@ -96,6 +97,8 @@
 		EF524AEB1AAE24B400F3B9AF /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		EF524AED1AAE255200F3B9AF /* KYapDatabaseObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYapDatabaseObject.h; sourceTree = "<group>"; };
 		EF524AEE1AAE255200F3B9AF /* KYapDatabaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYapDatabaseObject.m; sourceTree = "<group>"; };
+		EF524AF31AAE2BAC00F3B9AF /* FreeKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKey.h; sourceTree = "<group>"; };
+		EF524AF41AAE2BAC00F3B9AF /* FreeKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKey.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
 		EFC6BE9D1A6857D400B0EB8F /* Key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Key.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -333,6 +336,8 @@
 				EFF70A661AAE19C3006C10D2 /* Keys */,
 				EFF70A771AAE19C3006C10D2 /* Messages */,
 				EFF70A7E1AAE19C3006C10D2 /* Sessions */,
+				EF524AF31AAE2BAC00F3B9AF /* FreeKey.h */,
+				EF524AF41AAE2BAC00F3B9AF /* FreeKey.m */,
 			);
 			path = FreeKey;
 			sourceTree = "<group>";
@@ -621,6 +626,7 @@
 				EFF70A8D1AAE19C3006C10D2 /* PreKey.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
 				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,
+				EF524AF51AAE2BAC00F3B9AF /* FreeKey.m in Sources */,
 				EFF70A8E1AAE19C3006C10D2 /* RootChain.m in Sources */,
 				EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */,
 				EFF70A941AAE19C3006C10D2 /* Session.m in Sources */,

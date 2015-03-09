@@ -41,7 +41,6 @@
     }else {
         _isAlice = NO;
     }
-
 }
 
 - (instancetype)oppositeBundle {
