@@ -11,7 +11,6 @@
 #import <YapDatabase/YapDatabase.h>
 #import <YapDatabase/YapDatabaseRelationship.h>
 #import <SSKeychain/SSKeychain.h>
-#import "KCryptor.h"
 #import "NSData+Base64.h"
 #import "KYapDatabaseView.h"
 #import "KYapDatabaseSecondaryIndex.h"
@@ -118,7 +117,7 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
     NSString *dbPassword = [SSKeychain passwordForService:keychainService account:keychainDBPassAccount];
     
     if (!dbPassword) {
-        dbPassword = [[KCryptor generateSecureRandomData:30] base64EncodedString];
+        dbPassword = @"TODO: SET DB PASSWORD";
         [SSKeychain setPassword:dbPassword forService:keychainService account:keychainDBPassAccount];
         //DDLogError(@"Set new password from keychain ...");
     }

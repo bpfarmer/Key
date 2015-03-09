@@ -7,15 +7,11 @@
 //
 
 #import "KUser.h"
-#import "KCryptor.h"
-#import "KSettings.h"
 #import "KMessage.h"
 #import "KStorageManager.h"
 #import "KAccountManager.h"
 #import "KThread.h"
 #import "KYapDatabaseSecondaryIndex.h"
-#import "KKeyPair.h"
-
 
 #define KUserRemoteEndpoint @"http://127.0.0.1:9393/user.json"
 #define KUserRemoteAlias @"user"
@@ -80,7 +76,6 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [[KStorageManager sharedManager] setupDatabase];
                 [user generatePassword:plainPassword];
-                [user generateKeyPair];
                 [user remoteUpdate];
             });
         }
@@ -90,24 +85,11 @@
     }
 }
 
-- (void)generateKeyPair {
-    self.activeKeyPair = [[KKeyPair alloc] initRSA];
-}
-
 - (void)generatePassword:(NSString *)plainPassword {
-    NSDictionary *encryptedPasswordDictionary = [[[KCryptor alloc] init] encryptOneWay: plainPassword];
+    /*NSDictionary *encryptedPasswordDictionary = [[[KCryptor alloc] init] encryptOneWay: plainPassword];
     self.plainPassword = nil;
     [self setPasswordCrypt:encryptedPasswordDictionary[@"encrypted"]];
-    [self setPasswordSalt:encryptedPasswordDictionary[@"salt"]];
-}
-
-- (void)saveFromRemoteUpdateResponse:(NSDictionary *)responseObject {
-    if(!self.activeKeyPair.uniqueId) {
-        [self.activeKeyPair setUniqueId:responseObject[@"keyPair"][@"uniqueId"]];
-        [self.activeKeyPair setUserId:[self uniqueId]];
-        [self.activeKeyPair save];
-    }
-    [self save];
+    [self setPasswordSalt:encryptedPasswordDictionary[@"salt"]];*/
 }
 
 + (NSString *)remoteEndpoint {
@@ -187,7 +169,6 @@
     if(self.uniqueId) [userDictionary addEntriesFromDictionary:@{@"uniqueId" : self.uniqueId}];
     if(self.username) [userDictionary addEntriesFromDictionary:@{@"username" : self.username}];
     if(self.passwordCrypt) [userDictionary addEntriesFromDictionary:@{@"passwordCrypt" : self.passwordCrypt}];
-    if([self activeKeyPair]) [userDictionary addEntriesFromDictionary:@{@"keyPair" : [[self activeKeyPair] toDictionary]}];
     return userDictionary;
 }
 

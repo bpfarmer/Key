@@ -11,7 +11,6 @@
 #import "KStorageManager.h"
 #import "KUser.h"
 #import "KMessage.h"
-#import "KOutgoingMessage.h"
 
 NSString *KInboxGroup                       = @"KInboxGroup";
 NSString *KThreadGroup                      = @"KThreadGroup";

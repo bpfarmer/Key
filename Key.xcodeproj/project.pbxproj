@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		49324C749A49C0F4FB711A5D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
 		5205C02F1A83E2630008CFF6 /* InboxTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5205C02E1A83E2630008CFF6 /* InboxTableViewController.m */; };
 		527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3E61A78193300B3688E /* WelcomeScreenViewController.m */; };
 		527DD3EA1A78197600B3688E /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3E91A78197600B3688E /* RegistrationViewController.m */; };
@@ -14,8 +15,8 @@
 		527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 527DD3FB1A78306700B3688E /* MessageComposeViewController.m */; };
 		52E964A81A841FA500E67736 /* ThreadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E964A71A841FA500E67736 /* ThreadTableViewController.m */; };
 		52E964AE1A84255500E67736 /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52E964AD1A84255500E67736 /* ContactsTableViewController.m */; };
-		BC4AD1E3775892932B1ADA08 /* libPods-Key.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80A2212DA0A1E21445E98DDB /* libPods-Key.a */; };
-		E7BF14D0C491E7C8C7BAFF73 /* libPods-KeyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */; };
+		710028D1F762C6FE738F0D7A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
+		EF5542A31AADC92F00129F3C /* NSData+keyVersionByte.m in Sources */ = {isa = PBXBuildFile; fileRef = EF5542921AADC92F00129F3C /* NSData+keyVersionByte.m */; };
 		EF973F981A7AD58C00D92A9E /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973F971A7AD58C00D92A9E /* AddContactViewController.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB1EAA81A76C47200589CF3 /* KYapDatabaseObject.m */; };
@@ -28,23 +29,32 @@
 		EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEAF1A6857D500B0EB8F /* LaunchScreen.xib */; };
 		EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */; };
 		EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEC61A6857E000B0EB8F /* Podfile */; };
-		EFC6BED81A68582200B0EB8F /* KCryptError.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BECB1A68582200B0EB8F /* KCryptError.m */; };
-		EFC6BED91A68582200B0EB8F /* KCryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BECD1A68582200B0EB8F /* KCryptor.m */; };
-		EFC6BEDA1A68582200B0EB8F /* KRSACryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BED01A68582200B0EB8F /* KRSACryptor.m */; };
-		EFC6BEDB1A68582200B0EB8F /* KRSACryptorKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BED21A68582200B0EB8F /* KRSACryptorKeyPair.m */; };
-		EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BED61A68582200B0EB8F /* KError.m */; };
 		EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */; };
 		EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */; };
 		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
 		EFCD01DB1A84202D005065B2 /* KYapDatabaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01DA1A84202D005065B2 /* KYapDatabaseView.m */; };
-		EFCD01DE1A8421F2005065B2 /* KOutgoingMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01DD1A8421F2005065B2 /* KOutgoingMessage.m */; };
 		EFE45C701A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE45C6F1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m */; };
-		EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD341A686A0300973E15 /* KKeyPair.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
 		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
 		EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD431A6B5C1400973E15 /* KGroup.m */; };
 		EFEBDD481A6D879700973E15 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD471A6D879700973E15 /* Util.m */; };
-		EFEBDD4E1A6EF2E000973E15 /* KSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD4D1A6EF2E000973E15 /* KSettings.m */; };
+		EFF70A4D1AAE1208006C10D2 /* AES_CBC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A281AAE1208006C10D2 /* AES_CBC.m */; };
+		EFF70A4E1AAE1208006C10D2 /* HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A2A1AAE1208006C10D2 /* HMAC.m */; };
+		EFF70A4F1AAE1208006C10D2 /* KeyDerivation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A2C1AAE1208006C10D2 /* KeyDerivation.m */; };
+		EFF70A501AAE1208006C10D2 /* ChainKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A2F1AAE1208006C10D2 /* ChainKey.m */; };
+		EFF70A511AAE1208006C10D2 /* IdentityKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A311AAE1208006C10D2 /* IdentityKey.m */; };
+		EFF70A521AAE1208006C10D2 /* MasterKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A331AAE1208006C10D2 /* MasterKey.m */; };
+		EFF70A531AAE1208006C10D2 /* MessageKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A351AAE1208006C10D2 /* MessageKey.m */; };
+		EFF70A541AAE1208006C10D2 /* PreKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A371AAE1208006C10D2 /* PreKey.m */; };
+		EFF70A551AAE1208006C10D2 /* RootChain.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A391AAE1208006C10D2 /* RootChain.m */; };
+		EFF70A561AAE1208006C10D2 /* RootKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A3B1AAE1208006C10D2 /* RootKey.m */; };
+		EFF70A571AAE1208006C10D2 /* SessionKeyBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A3D1AAE1208006C10D2 /* SessionKeyBundle.m */; };
+		EFF70A581AAE1208006C10D2 /* EncryptedMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A401AAE1208006C10D2 /* EncryptedMessage.m */; };
+		EFF70A591AAE1208006C10D2 /* PreKeyExchange.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A421AAE1208006C10D2 /* PreKeyExchange.m */; };
+		EFF70A5A1AAE1208006C10D2 /* PreKeyExchangeReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A441AAE1208006C10D2 /* PreKeyExchangeReceipt.m */; };
+		EFF70A5B1AAE1208006C10D2 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A471AAE1208006C10D2 /* Session.m */; };
+		EFF70A5C1AAE1208006C10D2 /* SessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A491AAE1208006C10D2 /* SessionState.m */; };
+		EFF70A5D1AAE1208006C10D2 /* NSData+keyVersionByte.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A4C1AAE1208006C10D2 /* NSData+keyVersionByte.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +68,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00048FEFDC3F0CE6344F113A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2539EDD7F5AA0C4DFB3367D0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		5205C02D1A83E2630008CFF6 /* InboxTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InboxTableViewController.h; sourceTree = "<group>"; };
 		5205C02E1A83E2630008CFF6 /* InboxTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxTableViewController.m; sourceTree = "<group>"; };
 		527DD3E51A78193300B3688E /* WelcomeScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenViewController.h; sourceTree = "<group>"; };
@@ -73,12 +83,15 @@
 		52E964A71A841FA500E67736 /* ThreadTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadTableViewController.m; sourceTree = "<group>"; };
 		52E964AC1A84255500E67736 /* ContactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewController.h; sourceTree = "<group>"; };
 		52E964AD1A84255500E67736 /* ContactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsTableViewController.m; sourceTree = "<group>"; };
+		65563319915893A686117F67 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FE65DB16A2581426F9789DA /* Pods-KeyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.debug.xcconfig"; sourceTree = "<group>"; };
-		80A2212DA0A1E21445E98DDB /* libPods-Key.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Key.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KeyTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BED4F366B60241C2DC1CBDD5 /* Pods-Key.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.debug.xcconfig"; sourceTree = "<group>"; };
 		C461760CA51ABA0BE7C393EF /* Pods-Key.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.release.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.release.xcconfig"; sourceTree = "<group>"; };
+		DB575E32381FD8118E62EE58 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		DF6091F2DF6E5A8AC8248FE8 /* Pods-KeyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.release.xcconfig"; sourceTree = "<group>"; };
+		EF5542911AADC92F00129F3C /* NSData+keyVersionByte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+keyVersionByte.h"; path = "Classes/Util/NSData+keyVersionByte.h"; sourceTree = "<group>"; };
+		EF5542921AADC92F00129F3C /* NSData+keyVersionByte.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+keyVersionByte.m"; path = "Classes/Util/NSData+keyVersionByte.m"; sourceTree = "<group>"; };
+		EF7F40101AADD19000E5E31D /* FreeKeyExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKeyExceptions.h; sourceTree = "<group>"; };
 		EF973F961A7AD58C00D92A9E /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
 		EF973F971A7AD58C00D92A9E /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
@@ -101,32 +114,16 @@
 		EFC6BEBB1A6857D500B0EB8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyTests.m; sourceTree = "<group>"; };
 		EFC6BEC61A6857E000B0EB8F /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		EFC6BECA1A68582200B0EB8F /* KCryptError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCryptError.h; sourceTree = "<group>"; };
-		EFC6BECB1A68582200B0EB8F /* KCryptError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCryptError.m; sourceTree = "<group>"; };
-		EFC6BECC1A68582200B0EB8F /* KCryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCryptor.h; sourceTree = "<group>"; };
-		EFC6BECD1A68582200B0EB8F /* KCryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCryptor.m; sourceTree = "<group>"; };
-		EFC6BECF1A68582200B0EB8F /* KRSACryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KRSACryptor.h; sourceTree = "<group>"; };
-		EFC6BED01A68582200B0EB8F /* KRSACryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KRSACryptor.m; sourceTree = "<group>"; };
-		EFC6BED11A68582200B0EB8F /* KRSACryptorKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KRSACryptorKeyPair.h; sourceTree = "<group>"; };
-		EFC6BED21A68582200B0EB8F /* KRSACryptorKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KRSACryptorKeyPair.m; sourceTree = "<group>"; };
-		EFC6BED51A68582200B0EB8F /* KError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KError.h; sourceTree = "<group>"; };
-		EFC6BED61A68582200B0EB8F /* KError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KError.m; sourceTree = "<group>"; };
-		EFC6BEDE1A68588100B0EB8F /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
-		EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
-		EFC6BEE01A68588100B0EB8F /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
-		EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		EFC6BEDE1A68588100B0EB8F /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+Base64.h"; path = "External/Base64/NSData+Base64.h"; sourceTree = "<group>"; };
+		EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "External/Base64/NSData+Base64.m"; sourceTree = "<group>"; };
+		EFC6BEE01A68588100B0EB8F /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Base64.h"; path = "External/Base64/NSString+Base64.h"; sourceTree = "<group>"; };
+		EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Base64.m"; path = "External/Base64/NSString+Base64.m"; sourceTree = "<group>"; };
 		EFCD01D61A83E651005065B2 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThread.h; path = Models/KThread.h; sourceTree = "<group>"; };
 		EFCD01D71A83E651005065B2 /* KThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KThread.m; path = Models/KThread.m; sourceTree = "<group>"; };
 		EFCD01D91A84202C005065B2 /* KYapDatabaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYapDatabaseView.h; sourceTree = "<group>"; };
 		EFCD01DA1A84202D005065B2 /* KYapDatabaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYapDatabaseView.m; sourceTree = "<group>"; };
-		EFCD01DC1A8421F2005065B2 /* KOutgoingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KOutgoingMessage.h; path = Models/KOutgoingMessage.h; sourceTree = "<group>"; };
-		EFCD01DD1A8421F2005065B2 /* KOutgoingMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KOutgoingMessage.m; path = Models/KOutgoingMessage.m; sourceTree = "<group>"; };
-		EFCD01DF1A842202005065B2 /* KIncomingMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KIncomingMessage.h; path = Models/KIncomingMessage.h; sourceTree = "<group>"; };
-		EFCD01E01A842202005065B2 /* KIncomingMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KIncomingMessage.m; path = Models/KIncomingMessage.m; sourceTree = "<group>"; };
 		EFE45C6E1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KYapDatabaseSecondaryIndex.h; path = Models/Storage/KYapDatabaseSecondaryIndex.h; sourceTree = "<group>"; };
 		EFE45C6F1A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KYapDatabaseSecondaryIndex.m; path = Models/Storage/KYapDatabaseSecondaryIndex.m; sourceTree = "<group>"; };
-		EFEBDD331A686A0300973E15 /* KKeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKeyPair.h; path = Models/KKeyPair.h; sourceTree = "<group>"; };
-		EFEBDD341A686A0300973E15 /* KKeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKeyPair.m; path = Models/KKeyPair.m; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
 		EFEBDD371A68CE9600973E15 /* KUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KUser.m; path = Models/KUser.m; sourceTree = "<group>"; };
 		EFEBDD391A6B2C7800973E15 /* KMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMessage.h; path = Models/KMessage.h; sourceTree = "<group>"; };
@@ -135,8 +132,40 @@
 		EFEBDD431A6B5C1400973E15 /* KGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KGroup.m; path = Models/KGroup.m; sourceTree = "<group>"; };
 		EFEBDD461A6D879700973E15 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Util.h; path = Util/Util.h; sourceTree = "<group>"; };
 		EFEBDD471A6D879700973E15 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Util.m; path = Util/Util.m; sourceTree = "<group>"; };
-		EFEBDD4C1A6EF2E000973E15 /* KSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSettings.h; sourceTree = "<group>"; };
-		EFEBDD4D1A6EF2E000973E15 /* KSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KSettings.m; sourceTree = "<group>"; };
+		EFF70A271AAE1208006C10D2 /* AES_CBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES_CBC.h; sourceTree = "<group>"; };
+		EFF70A281AAE1208006C10D2 /* AES_CBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AES_CBC.m; sourceTree = "<group>"; };
+		EFF70A291AAE1208006C10D2 /* HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC.h; sourceTree = "<group>"; };
+		EFF70A2A1AAE1208006C10D2 /* HMAC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMAC.m; sourceTree = "<group>"; };
+		EFF70A2B1AAE1208006C10D2 /* KeyDerivation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyDerivation.h; sourceTree = "<group>"; };
+		EFF70A2C1AAE1208006C10D2 /* KeyDerivation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyDerivation.m; sourceTree = "<group>"; };
+		EFF70A2E1AAE1208006C10D2 /* ChainKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChainKey.h; sourceTree = "<group>"; };
+		EFF70A2F1AAE1208006C10D2 /* ChainKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChainKey.m; sourceTree = "<group>"; };
+		EFF70A301AAE1208006C10D2 /* IdentityKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityKey.h; sourceTree = "<group>"; };
+		EFF70A311AAE1208006C10D2 /* IdentityKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityKey.m; sourceTree = "<group>"; };
+		EFF70A321AAE1208006C10D2 /* MasterKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterKey.h; sourceTree = "<group>"; };
+		EFF70A331AAE1208006C10D2 /* MasterKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterKey.m; sourceTree = "<group>"; };
+		EFF70A341AAE1208006C10D2 /* MessageKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageKey.h; sourceTree = "<group>"; };
+		EFF70A351AAE1208006C10D2 /* MessageKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageKey.m; sourceTree = "<group>"; };
+		EFF70A361AAE1208006C10D2 /* PreKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreKey.h; sourceTree = "<group>"; };
+		EFF70A371AAE1208006C10D2 /* PreKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKey.m; sourceTree = "<group>"; };
+		EFF70A381AAE1208006C10D2 /* RootChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootChain.h; sourceTree = "<group>"; };
+		EFF70A391AAE1208006C10D2 /* RootChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootChain.m; sourceTree = "<group>"; };
+		EFF70A3A1AAE1208006C10D2 /* RootKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootKey.h; sourceTree = "<group>"; };
+		EFF70A3B1AAE1208006C10D2 /* RootKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootKey.m; sourceTree = "<group>"; };
+		EFF70A3C1AAE1208006C10D2 /* SessionKeyBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionKeyBundle.h; sourceTree = "<group>"; };
+		EFF70A3D1AAE1208006C10D2 /* SessionKeyBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionKeyBundle.m; sourceTree = "<group>"; };
+		EFF70A3F1AAE1208006C10D2 /* EncryptedMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptedMessage.h; sourceTree = "<group>"; };
+		EFF70A401AAE1208006C10D2 /* EncryptedMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptedMessage.m; sourceTree = "<group>"; };
+		EFF70A411AAE1208006C10D2 /* PreKeyExchange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreKeyExchange.h; sourceTree = "<group>"; };
+		EFF70A421AAE1208006C10D2 /* PreKeyExchange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKeyExchange.m; sourceTree = "<group>"; };
+		EFF70A431AAE1208006C10D2 /* PreKeyExchangeReceipt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreKeyExchangeReceipt.h; sourceTree = "<group>"; };
+		EFF70A441AAE1208006C10D2 /* PreKeyExchangeReceipt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKeyExchangeReceipt.m; sourceTree = "<group>"; };
+		EFF70A461AAE1208006C10D2 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
+		EFF70A471AAE1208006C10D2 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		EFF70A481AAE1208006C10D2 /* SessionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionState.h; sourceTree = "<group>"; };
+		EFF70A491AAE1208006C10D2 /* SessionState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionState.m; sourceTree = "<group>"; };
+		EFF70A4B1AAE1208006C10D2 /* NSData+keyVersionByte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+keyVersionByte.h"; sourceTree = "<group>"; };
+		EFF70A4C1AAE1208006C10D2 /* NSData+keyVersionByte.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+keyVersionByte.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,7 +173,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC4AD1E3775892932B1ADA08 /* libPods-Key.a in Frameworks */,
+				710028D1F762C6FE738F0D7A /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,7 +181,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7BF14D0C491E7C8C7BAFF73 /* libPods-KeyTests.a in Frameworks */,
+				49324C749A49C0F4FB711A5D /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,6 +195,8 @@
 				C461760CA51ABA0BE7C393EF /* Pods-Key.release.xcconfig */,
 				7FE65DB16A2581426F9789DA /* Pods-KeyTests.debug.xcconfig */,
 				DF6091F2DF6E5A8AC8248FE8 /* Pods-KeyTests.release.xcconfig */,
+				DB575E32381FD8118E62EE58 /* Pods.debug.xcconfig */,
+				2539EDD7F5AA0C4DFB3367D0 /* Pods.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -173,9 +204,7 @@
 		BBB3964C9D4C96B33973E253 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				80A2212DA0A1E21445E98DDB /* libPods-Key.a */,
-				940E64252F98B7F66C34A3B8 /* libPods-KeyTests.a */,
-				00048FEFDC3F0CE6344F113A /* libPods.a */,
+				65563319915893A686117F67 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -244,14 +273,16 @@
 		EFC6BE9F1A6857D400B0EB8F /* Key */ = {
 			isa = PBXGroup;
 			children = (
+				EFEBDD451A6D878200973E15 /* Util */,
+				EFB1EAAA1A76C53500589CF3 /* Storage */,
+				EFEBDD321A68673D00973E15 /* Models */,
+				EFF70A251AAE1208006C10D2 /* FreeKey */,
 				EF973FA61A7EA0DF00D92A9E /* Controllers */,
 				EFC6BEA41A6857D400B0EB8F /* AppDelegate.h */,
 				EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */,
 				EFC6BEAD1A6857D400B0EB8F /* Images.xcassets */,
 				EFC6BEAF1A6857D500B0EB8F /* LaunchScreen.xib */,
-				EFC6BEC81A68582200B0EB8F /* Library */,
 				EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */,
-				EFEBDD321A68673D00973E15 /* Models */,
 				EFC6BEA01A6857D400B0EB8F /* Supporting Files */,
 			);
 			path = Key;
@@ -283,70 +314,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		EFC6BEC81A68582200B0EB8F /* Library */ = {
-			isa = PBXGroup;
-			children = (
-				EFEBDD451A6D878200973E15 /* Util */,
-				EFC6BEC91A68582200B0EB8F /* Crypto */,
-				EFC6BED31A68582200B0EB8F /* Error */,
-				EFC6BED71A68582200B0EB8F /* External */,
-				EFEBDD4C1A6EF2E000973E15 /* KSettings.h */,
-				EFEBDD4D1A6EF2E000973E15 /* KSettings.m */,
-			);
-			path = Library;
-			sourceTree = "<group>";
-		};
-		EFC6BEC91A68582200B0EB8F /* Crypto */ = {
-			isa = PBXGroup;
-			children = (
-				EFC6BECA1A68582200B0EB8F /* KCryptError.h */,
-				EFC6BECB1A68582200B0EB8F /* KCryptError.m */,
-				EFC6BECC1A68582200B0EB8F /* KCryptor.h */,
-				EFC6BECD1A68582200B0EB8F /* KCryptor.m */,
-				EFC6BECE1A68582200B0EB8F /* RSA */,
-			);
-			path = Crypto;
-			sourceTree = "<group>";
-		};
-		EFC6BECE1A68582200B0EB8F /* RSA */ = {
-			isa = PBXGroup;
-			children = (
-				EFC6BECF1A68582200B0EB8F /* KRSACryptor.h */,
-				EFC6BED01A68582200B0EB8F /* KRSACryptor.m */,
-				EFC6BED11A68582200B0EB8F /* KRSACryptorKeyPair.h */,
-				EFC6BED21A68582200B0EB8F /* KRSACryptorKeyPair.m */,
-			);
-			path = RSA;
-			sourceTree = "<group>";
-		};
-		EFC6BED31A68582200B0EB8F /* Error */ = {
-			isa = PBXGroup;
-			children = (
-				EFC6BED51A68582200B0EB8F /* KError.h */,
-				EFC6BED61A68582200B0EB8F /* KError.m */,
-			);
-			path = Error;
-			sourceTree = "<group>";
-		};
-		EFC6BED71A68582200B0EB8F /* External */ = {
-			isa = PBXGroup;
-			children = (
-				EFC6BEDD1A68588100B0EB8F /* Base64 */,
-			);
-			path = External;
-			sourceTree = "<group>";
-		};
-		EFC6BEDD1A68588100B0EB8F /* Base64 */ = {
-			isa = PBXGroup;
-			children = (
-				EFC6BEDE1A68588100B0EB8F /* NSData+Base64.h */,
-				EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */,
-				EFC6BEE01A68588100B0EB8F /* NSString+Base64.h */,
-				EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */,
-			);
-			path = Base64;
-			sourceTree = "<group>";
-		};
 		EFEBDD321A68673D00973E15 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -354,19 +321,12 @@
 				EF973FA41A7E8F5200D92A9E /* KAccountManager.m */,
 				EFEBDD421A6B5C1400973E15 /* KGroup.h */,
 				EFEBDD431A6B5C1400973E15 /* KGroup.m */,
-				EFCD01DF1A842202005065B2 /* KIncomingMessage.h */,
-				EFCD01E01A842202005065B2 /* KIncomingMessage.m */,
-				EFEBDD331A686A0300973E15 /* KKeyPair.h */,
-				EFEBDD341A686A0300973E15 /* KKeyPair.m */,
 				EFEBDD391A6B2C7800973E15 /* KMessage.h */,
 				EFEBDD3A1A6B2C7800973E15 /* KMessage.m */,
-				EFCD01DC1A8421F2005065B2 /* KOutgoingMessage.h */,
-				EFCD01DD1A8421F2005065B2 /* KOutgoingMessage.m */,
 				EFCD01D61A83E651005065B2 /* KThread.h */,
 				EFCD01D71A83E651005065B2 /* KThread.m */,
 				EFEBDD361A68CE9600973E15 /* KUser.h */,
 				EFEBDD371A68CE9600973E15 /* KUser.m */,
-				EFB1EAAA1A76C53500589CF3 /* Storage */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -374,10 +334,99 @@
 		EFEBDD451A6D878200973E15 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				EF7F40101AADD19000E5E31D /* FreeKeyExceptions.h */,
+				EFC6BEDE1A68588100B0EB8F /* NSData+Base64.h */,
+				EFC6BEDF1A68588100B0EB8F /* NSData+Base64.m */,
+				EFC6BEE01A68588100B0EB8F /* NSString+Base64.h */,
+				EFC6BEE11A68588100B0EB8F /* NSString+Base64.m */,
+				EF5542911AADC92F00129F3C /* NSData+keyVersionByte.h */,
+				EF5542921AADC92F00129F3C /* NSData+keyVersionByte.m */,
 				EFEBDD461A6D879700973E15 /* Util.h */,
 				EFEBDD471A6D879700973E15 /* Util.m */,
 			);
 			name = Util;
+			path = Library;
+			sourceTree = "<group>";
+		};
+		EFF70A251AAE1208006C10D2 /* FreeKey */ = {
+			isa = PBXGroup;
+			children = (
+				EFF70A261AAE1208006C10D2 /* Crypto */,
+				EFF70A2D1AAE1208006C10D2 /* Keys */,
+				EFF70A3E1AAE1208006C10D2 /* Messages */,
+				EFF70A451AAE1208006C10D2 /* Sessions */,
+				EFF70A4A1AAE1208006C10D2 /* Util */,
+			);
+			path = FreeKey;
+			sourceTree = "<group>";
+		};
+		EFF70A261AAE1208006C10D2 /* Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				EFF70A271AAE1208006C10D2 /* AES_CBC.h */,
+				EFF70A281AAE1208006C10D2 /* AES_CBC.m */,
+				EFF70A291AAE1208006C10D2 /* HMAC.h */,
+				EFF70A2A1AAE1208006C10D2 /* HMAC.m */,
+				EFF70A2B1AAE1208006C10D2 /* KeyDerivation.h */,
+				EFF70A2C1AAE1208006C10D2 /* KeyDerivation.m */,
+			);
+			path = Crypto;
+			sourceTree = "<group>";
+		};
+		EFF70A2D1AAE1208006C10D2 /* Keys */ = {
+			isa = PBXGroup;
+			children = (
+				EFF70A2E1AAE1208006C10D2 /* ChainKey.h */,
+				EFF70A2F1AAE1208006C10D2 /* ChainKey.m */,
+				EFF70A301AAE1208006C10D2 /* IdentityKey.h */,
+				EFF70A311AAE1208006C10D2 /* IdentityKey.m */,
+				EFF70A321AAE1208006C10D2 /* MasterKey.h */,
+				EFF70A331AAE1208006C10D2 /* MasterKey.m */,
+				EFF70A341AAE1208006C10D2 /* MessageKey.h */,
+				EFF70A351AAE1208006C10D2 /* MessageKey.m */,
+				EFF70A361AAE1208006C10D2 /* PreKey.h */,
+				EFF70A371AAE1208006C10D2 /* PreKey.m */,
+				EFF70A381AAE1208006C10D2 /* RootChain.h */,
+				EFF70A391AAE1208006C10D2 /* RootChain.m */,
+				EFF70A3A1AAE1208006C10D2 /* RootKey.h */,
+				EFF70A3B1AAE1208006C10D2 /* RootKey.m */,
+				EFF70A3C1AAE1208006C10D2 /* SessionKeyBundle.h */,
+				EFF70A3D1AAE1208006C10D2 /* SessionKeyBundle.m */,
+			);
+			path = Keys;
+			sourceTree = "<group>";
+		};
+		EFF70A3E1AAE1208006C10D2 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				EFF70A3F1AAE1208006C10D2 /* EncryptedMessage.h */,
+				EFF70A401AAE1208006C10D2 /* EncryptedMessage.m */,
+				EFF70A411AAE1208006C10D2 /* PreKeyExchange.h */,
+				EFF70A421AAE1208006C10D2 /* PreKeyExchange.m */,
+				EFF70A431AAE1208006C10D2 /* PreKeyExchangeReceipt.h */,
+				EFF70A441AAE1208006C10D2 /* PreKeyExchangeReceipt.m */,
+			);
+			path = Messages;
+			sourceTree = "<group>";
+		};
+		EFF70A451AAE1208006C10D2 /* Sessions */ = {
+			isa = PBXGroup;
+			children = (
+				EFF70A461AAE1208006C10D2 /* Session.h */,
+				EFF70A471AAE1208006C10D2 /* Session.m */,
+				EFF70A481AAE1208006C10D2 /* SessionState.h */,
+				EFF70A491AAE1208006C10D2 /* SessionState.m */,
+			);
+			path = Sessions;
+			sourceTree = "<group>";
+		};
+		EFF70A4A1AAE1208006C10D2 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				EFF70A4B1AAE1208006C10D2 /* NSData+keyVersionByte.h */,
+				EFF70A4C1AAE1208006C10D2 /* NSData+keyVersionByte.m */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -493,7 +542,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BE73D807D467778EBD80446C /* Copy Pods Resources */ = {
@@ -508,7 +557,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Key/Pods-Key-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E8358865053C47C29C4025DC /* Check Pods Manifest.lock */ = {
@@ -550,32 +599,42 @@
 			files = (
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */,
-				EFCD01DE1A8421F2005065B2 /* KOutgoingMessage.m in Sources */,
-				EFC6BEDC1A68582200B0EB8F /* KError.m in Sources */,
+				EFF70A551AAE1208006C10D2 /* RootChain.m in Sources */,
+				EFF70A541AAE1208006C10D2 /* PreKey.m in Sources */,
 				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
-				EFEBDD351A686A0300973E15 /* KKeyPair.m in Sources */,
-				EFC6BEDB1A68582200B0EB8F /* KRSACryptorKeyPair.m in Sources */,
-				EFEBDD4E1A6EF2E000973E15 /* KSettings.m in Sources */,
 				EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */,
-				EFC6BED91A68582200B0EB8F /* KCryptor.m in Sources */,
 				52E964AE1A84255500E67736 /* ContactsTableViewController.m in Sources */,
+				EFF70A4D1AAE1208006C10D2 /* AES_CBC.m in Sources */,
+				EFF70A5D1AAE1208006C10D2 /* NSData+keyVersionByte.m in Sources */,
+				EFF70A511AAE1208006C10D2 /* IdentityKey.m in Sources */,
 				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
+				EFF70A561AAE1208006C10D2 /* RootKey.m in Sources */,
+				EFF70A571AAE1208006C10D2 /* SessionKeyBundle.m in Sources */,
+				EFF70A4F1AAE1208006C10D2 /* KeyDerivation.m in Sources */,
 				EFE45C701A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m in Sources */,
 				527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */,
+				EFF70A5B1AAE1208006C10D2 /* Session.m in Sources */,
+				EF5542A31AADC92F00129F3C /* NSData+keyVersionByte.m in Sources */,
+				EFF70A5C1AAE1208006C10D2 /* SessionState.m in Sources */,
 				527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */,
 				EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */,
-				EFC6BEDA1A68582200B0EB8F /* KRSACryptor.m in Sources */,
+				EFF70A581AAE1208006C10D2 /* EncryptedMessage.m in Sources */,
+				EFF70A5A1AAE1208006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
 				EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */,
 				EFB1EAB01A76C5E900589CF3 /* KStorageKeys.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
+				EFF70A591AAE1208006C10D2 /* PreKeyExchange.m in Sources */,
 				EFCD01DB1A84202D005065B2 /* KYapDatabaseView.m in Sources */,
-				EFC6BED81A68582200B0EB8F /* KCryptError.m in Sources */,
+				EFF70A501AAE1208006C10D2 /* ChainKey.m in Sources */,
+				EFF70A531AAE1208006C10D2 /* MessageKey.m in Sources */,
 				EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */,
 				527DD3EA1A78197600B3688E /* RegistrationViewController.m in Sources */,
 				5205C02F1A83E2630008CFF6 /* InboxTableViewController.m in Sources */,
+				EFF70A521AAE1208006C10D2 /* MasterKey.m in Sources */,
 				EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */,
 				EFEBDD481A6D879700973E15 /* Util.m in Sources */,
+				EFF70A4E1AAE1208006C10D2 /* HMAC.m in Sources */,
 				527DD3ED1A78198A00B3688E /* LoginViewController.m in Sources */,
 				EF973F981A7AD58C00D92A9E /* AddContactViewController.m in Sources */,
 				52E964A81A841FA500E67736 /* ThreadTableViewController.m in Sources */,
@@ -654,7 +713,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -689,7 +748,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -698,7 +757,7 @@
 		};
 		EFC6BEC11A6857D500B0EB8F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BED4F366B60241C2DC1CBDD5 /* Pods-Key.debug.xcconfig */;
+			baseConfigurationReference = DB575E32381FD8118E62EE58 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"HEADER_SEARCH_PATHS[arch=*]" = "";
@@ -711,7 +770,7 @@
 		};
 		EFC6BEC21A6857D500B0EB8F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C461760CA51ABA0BE7C393EF /* Pods-Key.release.xcconfig */;
+			baseConfigurationReference = 2539EDD7F5AA0C4DFB3367D0 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"HEADER_SEARCH_PATHS[arch=*]" = "";
@@ -725,7 +784,7 @@
 		};
 		EFC6BEC41A6857D500B0EB8F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7FE65DB16A2581426F9789DA /* Pods-KeyTests.debug.xcconfig */;
+			baseConfigurationReference = DB575E32381FD8118E62EE58 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -745,7 +804,7 @@
 		};
 		EFC6BEC51A6857D500B0EB8F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DF6091F2DF6E5A8AC8248FE8 /* Pods-KeyTests.release.xcconfig */;
+			baseConfigurationReference = 2539EDD7F5AA0C4DFB3367D0 /* Pods.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (

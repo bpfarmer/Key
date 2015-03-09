@@ -9,12 +9,10 @@
 #import "KGroup.h"
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
 #import "KUser.h"
-#import "KKeyPair.h"
 #import "KThread.h"
 #import "KStorageManager.h"
 #import "KAccountManager.h"
 #import "KUser.h"
-#import "KOutgoingMessage.h"
 #import "Util.h"
 
 //API Endpoints
@@ -58,15 +56,18 @@
 }
 
 - (NSArray *)outgoingMessagesArray {
+    /*
     __block NSMutableArray *outgoingMessages = [[NSMutableArray alloc] init];
     KThread *thread = [[KStorageManager sharedManager] objectForKey:[self threadId] inCollection:[KThread collection]];
     [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         [transaction enumerateObjectsForKeys:thread.userIds inCollection:[KUser collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, BOOL *stop) {
             KUser *user = (KUser *)object;
-            [outgoingMessages addObject:[[[KOutgoingMessage alloc] initWithMessage:self user:user] toDictionary]];
+            //[outgoingMessages addObject:[[[KOutgoingMessage alloc] initWithMessage:self user:user] toDictionary]];
         }];
     }];
     return outgoingMessages;
+     */
+    return nil;
 }
 
 + (NSString *)remoteEndpoint {
