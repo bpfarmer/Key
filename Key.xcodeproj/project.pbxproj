@@ -38,23 +38,22 @@
 		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
 		EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD431A6B5C1400973E15 /* KGroup.m */; };
 		EFEBDD481A6D879700973E15 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD471A6D879700973E15 /* Util.m */; };
-		EFF70A4D1AAE1208006C10D2 /* AES_CBC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A281AAE1208006C10D2 /* AES_CBC.m */; };
-		EFF70A4E1AAE1208006C10D2 /* HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A2A1AAE1208006C10D2 /* HMAC.m */; };
-		EFF70A4F1AAE1208006C10D2 /* KeyDerivation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A2C1AAE1208006C10D2 /* KeyDerivation.m */; };
-		EFF70A501AAE1208006C10D2 /* ChainKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A2F1AAE1208006C10D2 /* ChainKey.m */; };
-		EFF70A511AAE1208006C10D2 /* IdentityKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A311AAE1208006C10D2 /* IdentityKey.m */; };
-		EFF70A521AAE1208006C10D2 /* MasterKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A331AAE1208006C10D2 /* MasterKey.m */; };
-		EFF70A531AAE1208006C10D2 /* MessageKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A351AAE1208006C10D2 /* MessageKey.m */; };
-		EFF70A541AAE1208006C10D2 /* PreKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A371AAE1208006C10D2 /* PreKey.m */; };
-		EFF70A551AAE1208006C10D2 /* RootChain.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A391AAE1208006C10D2 /* RootChain.m */; };
-		EFF70A561AAE1208006C10D2 /* RootKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A3B1AAE1208006C10D2 /* RootKey.m */; };
-		EFF70A571AAE1208006C10D2 /* SessionKeyBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A3D1AAE1208006C10D2 /* SessionKeyBundle.m */; };
-		EFF70A581AAE1208006C10D2 /* EncryptedMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A401AAE1208006C10D2 /* EncryptedMessage.m */; };
-		EFF70A591AAE1208006C10D2 /* PreKeyExchange.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A421AAE1208006C10D2 /* PreKeyExchange.m */; };
-		EFF70A5A1AAE1208006C10D2 /* PreKeyExchangeReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A441AAE1208006C10D2 /* PreKeyExchangeReceipt.m */; };
-		EFF70A5B1AAE1208006C10D2 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A471AAE1208006C10D2 /* Session.m */; };
-		EFF70A5C1AAE1208006C10D2 /* SessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A491AAE1208006C10D2 /* SessionState.m */; };
-		EFF70A5D1AAE1208006C10D2 /* NSData+keyVersionByte.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A4C1AAE1208006C10D2 /* NSData+keyVersionByte.m */; };
+		EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A611AAE19C3006C10D2 /* AES_CBC.m */; };
+		EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A631AAE19C3006C10D2 /* HMAC.m */; };
+		EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A651AAE19C3006C10D2 /* KeyDerivation.m */; };
+		EFF70A891AAE19C3006C10D2 /* ChainKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A681AAE19C3006C10D2 /* ChainKey.m */; };
+		EFF70A8A1AAE19C3006C10D2 /* IdentityKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A6A1AAE19C3006C10D2 /* IdentityKey.m */; };
+		EFF70A8B1AAE19C3006C10D2 /* MasterKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A6C1AAE19C3006C10D2 /* MasterKey.m */; };
+		EFF70A8C1AAE19C3006C10D2 /* MessageKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A6E1AAE19C3006C10D2 /* MessageKey.m */; };
+		EFF70A8D1AAE19C3006C10D2 /* PreKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A701AAE19C3006C10D2 /* PreKey.m */; };
+		EFF70A8E1AAE19C3006C10D2 /* RootChain.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A721AAE19C3006C10D2 /* RootChain.m */; };
+		EFF70A8F1AAE19C3006C10D2 /* RootKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A741AAE19C3006C10D2 /* RootKey.m */; };
+		EFF70A901AAE19C3006C10D2 /* SessionKeyBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A761AAE19C3006C10D2 /* SessionKeyBundle.m */; };
+		EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A791AAE19C3006C10D2 /* EncryptedMessage.m */; };
+		EFF70A921AAE19C3006C10D2 /* PreKeyExchange.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A7B1AAE19C3006C10D2 /* PreKeyExchange.m */; };
+		EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A7D1AAE19C3006C10D2 /* PreKeyExchangeReceipt.m */; };
+		EFF70A941AAE19C3006C10D2 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A801AAE19C3006C10D2 /* Session.m */; };
+		EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A821AAE19C3006C10D2 /* SessionState.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,40 +131,38 @@
 		EFEBDD431A6B5C1400973E15 /* KGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KGroup.m; path = Models/KGroup.m; sourceTree = "<group>"; };
 		EFEBDD461A6D879700973E15 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Util.h; path = Util/Util.h; sourceTree = "<group>"; };
 		EFEBDD471A6D879700973E15 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Util.m; path = Util/Util.m; sourceTree = "<group>"; };
-		EFF70A271AAE1208006C10D2 /* AES_CBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES_CBC.h; sourceTree = "<group>"; };
-		EFF70A281AAE1208006C10D2 /* AES_CBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AES_CBC.m; sourceTree = "<group>"; };
-		EFF70A291AAE1208006C10D2 /* HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC.h; sourceTree = "<group>"; };
-		EFF70A2A1AAE1208006C10D2 /* HMAC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMAC.m; sourceTree = "<group>"; };
-		EFF70A2B1AAE1208006C10D2 /* KeyDerivation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyDerivation.h; sourceTree = "<group>"; };
-		EFF70A2C1AAE1208006C10D2 /* KeyDerivation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyDerivation.m; sourceTree = "<group>"; };
-		EFF70A2E1AAE1208006C10D2 /* ChainKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChainKey.h; sourceTree = "<group>"; };
-		EFF70A2F1AAE1208006C10D2 /* ChainKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChainKey.m; sourceTree = "<group>"; };
-		EFF70A301AAE1208006C10D2 /* IdentityKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityKey.h; sourceTree = "<group>"; };
-		EFF70A311AAE1208006C10D2 /* IdentityKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityKey.m; sourceTree = "<group>"; };
-		EFF70A321AAE1208006C10D2 /* MasterKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterKey.h; sourceTree = "<group>"; };
-		EFF70A331AAE1208006C10D2 /* MasterKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterKey.m; sourceTree = "<group>"; };
-		EFF70A341AAE1208006C10D2 /* MessageKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageKey.h; sourceTree = "<group>"; };
-		EFF70A351AAE1208006C10D2 /* MessageKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageKey.m; sourceTree = "<group>"; };
-		EFF70A361AAE1208006C10D2 /* PreKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreKey.h; sourceTree = "<group>"; };
-		EFF70A371AAE1208006C10D2 /* PreKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKey.m; sourceTree = "<group>"; };
-		EFF70A381AAE1208006C10D2 /* RootChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootChain.h; sourceTree = "<group>"; };
-		EFF70A391AAE1208006C10D2 /* RootChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootChain.m; sourceTree = "<group>"; };
-		EFF70A3A1AAE1208006C10D2 /* RootKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootKey.h; sourceTree = "<group>"; };
-		EFF70A3B1AAE1208006C10D2 /* RootKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootKey.m; sourceTree = "<group>"; };
-		EFF70A3C1AAE1208006C10D2 /* SessionKeyBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionKeyBundle.h; sourceTree = "<group>"; };
-		EFF70A3D1AAE1208006C10D2 /* SessionKeyBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionKeyBundle.m; sourceTree = "<group>"; };
-		EFF70A3F1AAE1208006C10D2 /* EncryptedMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptedMessage.h; sourceTree = "<group>"; };
-		EFF70A401AAE1208006C10D2 /* EncryptedMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptedMessage.m; sourceTree = "<group>"; };
-		EFF70A411AAE1208006C10D2 /* PreKeyExchange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreKeyExchange.h; sourceTree = "<group>"; };
-		EFF70A421AAE1208006C10D2 /* PreKeyExchange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKeyExchange.m; sourceTree = "<group>"; };
-		EFF70A431AAE1208006C10D2 /* PreKeyExchangeReceipt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreKeyExchangeReceipt.h; sourceTree = "<group>"; };
-		EFF70A441AAE1208006C10D2 /* PreKeyExchangeReceipt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKeyExchangeReceipt.m; sourceTree = "<group>"; };
-		EFF70A461AAE1208006C10D2 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
-		EFF70A471AAE1208006C10D2 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
-		EFF70A481AAE1208006C10D2 /* SessionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionState.h; sourceTree = "<group>"; };
-		EFF70A491AAE1208006C10D2 /* SessionState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionState.m; sourceTree = "<group>"; };
-		EFF70A4B1AAE1208006C10D2 /* NSData+keyVersionByte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+keyVersionByte.h"; sourceTree = "<group>"; };
-		EFF70A4C1AAE1208006C10D2 /* NSData+keyVersionByte.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+keyVersionByte.m"; sourceTree = "<group>"; };
+		EFF70A601AAE19C3006C10D2 /* AES_CBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES_CBC.h; sourceTree = "<group>"; };
+		EFF70A611AAE19C3006C10D2 /* AES_CBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AES_CBC.m; sourceTree = "<group>"; };
+		EFF70A621AAE19C3006C10D2 /* HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC.h; sourceTree = "<group>"; };
+		EFF70A631AAE19C3006C10D2 /* HMAC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMAC.m; sourceTree = "<group>"; };
+		EFF70A641AAE19C3006C10D2 /* KeyDerivation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyDerivation.h; sourceTree = "<group>"; };
+		EFF70A651AAE19C3006C10D2 /* KeyDerivation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyDerivation.m; sourceTree = "<group>"; };
+		EFF70A671AAE19C3006C10D2 /* ChainKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChainKey.h; sourceTree = "<group>"; };
+		EFF70A681AAE19C3006C10D2 /* ChainKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChainKey.m; sourceTree = "<group>"; };
+		EFF70A691AAE19C3006C10D2 /* IdentityKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentityKey.h; sourceTree = "<group>"; };
+		EFF70A6A1AAE19C3006C10D2 /* IdentityKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityKey.m; sourceTree = "<group>"; };
+		EFF70A6B1AAE19C3006C10D2 /* MasterKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterKey.h; sourceTree = "<group>"; };
+		EFF70A6C1AAE19C3006C10D2 /* MasterKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterKey.m; sourceTree = "<group>"; };
+		EFF70A6D1AAE19C3006C10D2 /* MessageKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageKey.h; sourceTree = "<group>"; };
+		EFF70A6E1AAE19C3006C10D2 /* MessageKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageKey.m; sourceTree = "<group>"; };
+		EFF70A6F1AAE19C3006C10D2 /* PreKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreKey.h; sourceTree = "<group>"; };
+		EFF70A701AAE19C3006C10D2 /* PreKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKey.m; sourceTree = "<group>"; };
+		EFF70A711AAE19C3006C10D2 /* RootChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootChain.h; sourceTree = "<group>"; };
+		EFF70A721AAE19C3006C10D2 /* RootChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootChain.m; sourceTree = "<group>"; };
+		EFF70A731AAE19C3006C10D2 /* RootKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootKey.h; sourceTree = "<group>"; };
+		EFF70A741AAE19C3006C10D2 /* RootKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootKey.m; sourceTree = "<group>"; };
+		EFF70A751AAE19C3006C10D2 /* SessionKeyBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionKeyBundle.h; sourceTree = "<group>"; };
+		EFF70A761AAE19C3006C10D2 /* SessionKeyBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionKeyBundle.m; sourceTree = "<group>"; };
+		EFF70A781AAE19C3006C10D2 /* EncryptedMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptedMessage.h; sourceTree = "<group>"; };
+		EFF70A791AAE19C3006C10D2 /* EncryptedMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptedMessage.m; sourceTree = "<group>"; };
+		EFF70A7A1AAE19C3006C10D2 /* PreKeyExchange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreKeyExchange.h; sourceTree = "<group>"; };
+		EFF70A7B1AAE19C3006C10D2 /* PreKeyExchange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKeyExchange.m; sourceTree = "<group>"; };
+		EFF70A7C1AAE19C3006C10D2 /* PreKeyExchangeReceipt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreKeyExchangeReceipt.h; sourceTree = "<group>"; };
+		EFF70A7D1AAE19C3006C10D2 /* PreKeyExchangeReceipt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKeyExchangeReceipt.m; sourceTree = "<group>"; };
+		EFF70A7F1AAE19C3006C10D2 /* Session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Session.h; sourceTree = "<group>"; };
+		EFF70A801AAE19C3006C10D2 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
+		EFF70A811AAE19C3006C10D2 /* SessionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionState.h; sourceTree = "<group>"; };
+		EFF70A821AAE19C3006C10D2 /* SessionState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionState.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -273,10 +270,10 @@
 		EFC6BE9F1A6857D400B0EB8F /* Key */ = {
 			isa = PBXGroup;
 			children = (
+				EFF70A5E1AAE19C3006C10D2 /* FreeKey */,
 				EFEBDD451A6D878200973E15 /* Util */,
 				EFB1EAAA1A76C53500589CF3 /* Storage */,
 				EFEBDD321A68673D00973E15 /* Models */,
-				EFF70A251AAE1208006C10D2 /* FreeKey */,
 				EF973FA61A7EA0DF00D92A9E /* Controllers */,
 				EFC6BEA41A6857D400B0EB8F /* AppDelegate.h */,
 				EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */,
@@ -348,85 +345,75 @@
 			path = Library;
 			sourceTree = "<group>";
 		};
-		EFF70A251AAE1208006C10D2 /* FreeKey */ = {
+		EFF70A5E1AAE19C3006C10D2 /* FreeKey */ = {
 			isa = PBXGroup;
 			children = (
-				EFF70A261AAE1208006C10D2 /* Crypto */,
-				EFF70A2D1AAE1208006C10D2 /* Keys */,
-				EFF70A3E1AAE1208006C10D2 /* Messages */,
-				EFF70A451AAE1208006C10D2 /* Sessions */,
-				EFF70A4A1AAE1208006C10D2 /* Util */,
+				EFF70A5F1AAE19C3006C10D2 /* Crypto */,
+				EFF70A661AAE19C3006C10D2 /* Keys */,
+				EFF70A771AAE19C3006C10D2 /* Messages */,
+				EFF70A7E1AAE19C3006C10D2 /* Sessions */,
 			);
 			path = FreeKey;
 			sourceTree = "<group>";
 		};
-		EFF70A261AAE1208006C10D2 /* Crypto */ = {
+		EFF70A5F1AAE19C3006C10D2 /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
-				EFF70A271AAE1208006C10D2 /* AES_CBC.h */,
-				EFF70A281AAE1208006C10D2 /* AES_CBC.m */,
-				EFF70A291AAE1208006C10D2 /* HMAC.h */,
-				EFF70A2A1AAE1208006C10D2 /* HMAC.m */,
-				EFF70A2B1AAE1208006C10D2 /* KeyDerivation.h */,
-				EFF70A2C1AAE1208006C10D2 /* KeyDerivation.m */,
+				EFF70A601AAE19C3006C10D2 /* AES_CBC.h */,
+				EFF70A611AAE19C3006C10D2 /* AES_CBC.m */,
+				EFF70A621AAE19C3006C10D2 /* HMAC.h */,
+				EFF70A631AAE19C3006C10D2 /* HMAC.m */,
+				EFF70A641AAE19C3006C10D2 /* KeyDerivation.h */,
+				EFF70A651AAE19C3006C10D2 /* KeyDerivation.m */,
 			);
 			path = Crypto;
 			sourceTree = "<group>";
 		};
-		EFF70A2D1AAE1208006C10D2 /* Keys */ = {
+		EFF70A661AAE19C3006C10D2 /* Keys */ = {
 			isa = PBXGroup;
 			children = (
-				EFF70A2E1AAE1208006C10D2 /* ChainKey.h */,
-				EFF70A2F1AAE1208006C10D2 /* ChainKey.m */,
-				EFF70A301AAE1208006C10D2 /* IdentityKey.h */,
-				EFF70A311AAE1208006C10D2 /* IdentityKey.m */,
-				EFF70A321AAE1208006C10D2 /* MasterKey.h */,
-				EFF70A331AAE1208006C10D2 /* MasterKey.m */,
-				EFF70A341AAE1208006C10D2 /* MessageKey.h */,
-				EFF70A351AAE1208006C10D2 /* MessageKey.m */,
-				EFF70A361AAE1208006C10D2 /* PreKey.h */,
-				EFF70A371AAE1208006C10D2 /* PreKey.m */,
-				EFF70A381AAE1208006C10D2 /* RootChain.h */,
-				EFF70A391AAE1208006C10D2 /* RootChain.m */,
-				EFF70A3A1AAE1208006C10D2 /* RootKey.h */,
-				EFF70A3B1AAE1208006C10D2 /* RootKey.m */,
-				EFF70A3C1AAE1208006C10D2 /* SessionKeyBundle.h */,
-				EFF70A3D1AAE1208006C10D2 /* SessionKeyBundle.m */,
+				EFF70A671AAE19C3006C10D2 /* ChainKey.h */,
+				EFF70A681AAE19C3006C10D2 /* ChainKey.m */,
+				EFF70A691AAE19C3006C10D2 /* IdentityKey.h */,
+				EFF70A6A1AAE19C3006C10D2 /* IdentityKey.m */,
+				EFF70A6B1AAE19C3006C10D2 /* MasterKey.h */,
+				EFF70A6C1AAE19C3006C10D2 /* MasterKey.m */,
+				EFF70A6D1AAE19C3006C10D2 /* MessageKey.h */,
+				EFF70A6E1AAE19C3006C10D2 /* MessageKey.m */,
+				EFF70A6F1AAE19C3006C10D2 /* PreKey.h */,
+				EFF70A701AAE19C3006C10D2 /* PreKey.m */,
+				EFF70A711AAE19C3006C10D2 /* RootChain.h */,
+				EFF70A721AAE19C3006C10D2 /* RootChain.m */,
+				EFF70A731AAE19C3006C10D2 /* RootKey.h */,
+				EFF70A741AAE19C3006C10D2 /* RootKey.m */,
+				EFF70A751AAE19C3006C10D2 /* SessionKeyBundle.h */,
+				EFF70A761AAE19C3006C10D2 /* SessionKeyBundle.m */,
 			);
 			path = Keys;
 			sourceTree = "<group>";
 		};
-		EFF70A3E1AAE1208006C10D2 /* Messages */ = {
+		EFF70A771AAE19C3006C10D2 /* Messages */ = {
 			isa = PBXGroup;
 			children = (
-				EFF70A3F1AAE1208006C10D2 /* EncryptedMessage.h */,
-				EFF70A401AAE1208006C10D2 /* EncryptedMessage.m */,
-				EFF70A411AAE1208006C10D2 /* PreKeyExchange.h */,
-				EFF70A421AAE1208006C10D2 /* PreKeyExchange.m */,
-				EFF70A431AAE1208006C10D2 /* PreKeyExchangeReceipt.h */,
-				EFF70A441AAE1208006C10D2 /* PreKeyExchangeReceipt.m */,
+				EFF70A781AAE19C3006C10D2 /* EncryptedMessage.h */,
+				EFF70A791AAE19C3006C10D2 /* EncryptedMessage.m */,
+				EFF70A7A1AAE19C3006C10D2 /* PreKeyExchange.h */,
+				EFF70A7B1AAE19C3006C10D2 /* PreKeyExchange.m */,
+				EFF70A7C1AAE19C3006C10D2 /* PreKeyExchangeReceipt.h */,
+				EFF70A7D1AAE19C3006C10D2 /* PreKeyExchangeReceipt.m */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
 		};
-		EFF70A451AAE1208006C10D2 /* Sessions */ = {
+		EFF70A7E1AAE19C3006C10D2 /* Sessions */ = {
 			isa = PBXGroup;
 			children = (
-				EFF70A461AAE1208006C10D2 /* Session.h */,
-				EFF70A471AAE1208006C10D2 /* Session.m */,
-				EFF70A481AAE1208006C10D2 /* SessionState.h */,
-				EFF70A491AAE1208006C10D2 /* SessionState.m */,
+				EFF70A7F1AAE19C3006C10D2 /* Session.h */,
+				EFF70A801AAE19C3006C10D2 /* Session.m */,
+				EFF70A811AAE19C3006C10D2 /* SessionState.h */,
+				EFF70A821AAE19C3006C10D2 /* SessionState.m */,
 			);
 			path = Sessions;
-			sourceTree = "<group>";
-		};
-		EFF70A4A1AAE1208006C10D2 /* Util */ = {
-			isa = PBXGroup;
-			children = (
-				EFF70A4B1AAE1208006C10D2 /* NSData+keyVersionByte.h */,
-				EFF70A4C1AAE1208006C10D2 /* NSData+keyVersionByte.m */,
-			);
-			path = Util;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -597,47 +584,46 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */,
+				EFF70A891AAE19C3006C10D2 /* ChainKey.m in Sources */,
+				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EFB1EAAD1A76C55600589CF3 /* KStorageManager.m in Sources */,
-				EFF70A551AAE1208006C10D2 /* RootChain.m in Sources */,
-				EFF70A541AAE1208006C10D2 /* PreKey.m in Sources */,
 				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
 				EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */,
 				52E964AE1A84255500E67736 /* ContactsTableViewController.m in Sources */,
-				EFF70A4D1AAE1208006C10D2 /* AES_CBC.m in Sources */,
-				EFF70A5D1AAE1208006C10D2 /* NSData+keyVersionByte.m in Sources */,
-				EFF70A511AAE1208006C10D2 /* IdentityKey.m in Sources */,
 				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
-				EFF70A561AAE1208006C10D2 /* RootKey.m in Sources */,
-				EFF70A571AAE1208006C10D2 /* SessionKeyBundle.m in Sources */,
-				EFF70A4F1AAE1208006C10D2 /* KeyDerivation.m in Sources */,
+				EFF70A8B1AAE19C3006C10D2 /* MasterKey.m in Sources */,
+				EFF70A8A1AAE19C3006C10D2 /* IdentityKey.m in Sources */,
+				EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */,
 				EFE45C701A8D5CE400D6548E /* KYapDatabaseSecondaryIndex.m in Sources */,
 				527DD3FC1A78306700B3688E /* MessageComposeViewController.m in Sources */,
-				EFF70A5B1AAE1208006C10D2 /* Session.m in Sources */,
 				EF5542A31AADC92F00129F3C /* NSData+keyVersionByte.m in Sources */,
-				EFF70A5C1AAE1208006C10D2 /* SessionState.m in Sources */,
+				EFF70A921AAE19C3006C10D2 /* PreKeyExchange.m in Sources */,
 				527DD3E71A78193300B3688E /* WelcomeScreenViewController.m in Sources */,
 				EFC6BEE31A68588100B0EB8F /* NSString+Base64.m in Sources */,
-				EFF70A581AAE1208006C10D2 /* EncryptedMessage.m in Sources */,
-				EFF70A5A1AAE1208006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
+				EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
 				EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */,
+				EFF70A901AAE19C3006C10D2 /* SessionKeyBundle.m in Sources */,
+				EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */,
+				EFF70A8D1AAE19C3006C10D2 /* PreKey.m in Sources */,
 				EFB1EAB01A76C5E900589CF3 /* KStorageKeys.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
-				EFF70A591AAE1208006C10D2 /* PreKeyExchange.m in Sources */,
 				EFCD01DB1A84202D005065B2 /* KYapDatabaseView.m in Sources */,
-				EFF70A501AAE1208006C10D2 /* ChainKey.m in Sources */,
-				EFF70A531AAE1208006C10D2 /* MessageKey.m in Sources */,
+				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,
+				EFF70A8E1AAE19C3006C10D2 /* RootChain.m in Sources */,
 				EFC6BEE21A68588100B0EB8F /* NSData+Base64.m in Sources */,
+				EFF70A941AAE19C3006C10D2 /* Session.m in Sources */,
 				527DD3EA1A78197600B3688E /* RegistrationViewController.m in Sources */,
+				EFF70A8C1AAE19C3006C10D2 /* MessageKey.m in Sources */,
 				5205C02F1A83E2630008CFF6 /* InboxTableViewController.m in Sources */,
-				EFF70A521AAE1208006C10D2 /* MasterKey.m in Sources */,
 				EFB1EAA91A76C47200589CF3 /* KYapDatabaseObject.m in Sources */,
 				EFEBDD481A6D879700973E15 /* Util.m in Sources */,
-				EFF70A4E1AAE1208006C10D2 /* HMAC.m in Sources */,
 				527DD3ED1A78198A00B3688E /* LoginViewController.m in Sources */,
 				EF973F981A7AD58C00D92A9E /* AddContactViewController.m in Sources */,
 				52E964A81A841FA500E67736 /* ThreadTableViewController.m in Sources */,
+				EFF70A8F1AAE19C3006C10D2 /* RootKey.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
