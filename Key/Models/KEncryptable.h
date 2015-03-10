@@ -1,13 +1,13 @@
 //
-//  KDatabaseView.h
+//  KEncryptable.h
 //  Key
 //
-//  Created by Brendan Farmer on 2/2/15.
+//  Created by Brendan Farmer on 3/9/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface KDatabaseView : NSObject
+@protocol KEncryptable <NSObject>
 
 @end

@@ -23,5 +23,6 @@
 - (instancetype)initWithRootKey:(RootKey*)rootKey chainKey:(ChainKey*)chainKey ratchetKeyPair:(ECKeyPair *)ratchetKeyPair;
 - (instancetype)iterateChainKey;
 - (instancetype)iterateRootKeyWithTheirEphemeral:(NSData *)theirEphemeral ourEphemeral:(ECKeyPair *)ourEphemeral;
+- (BOOL)updateRatchetKey:(NSData *)senderRatchetKey;
 
 @end

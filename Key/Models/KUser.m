@@ -179,7 +179,4 @@
     return edges;
 }
 
-#pragma mark - Throwaway Methods for Testing
-
-
 @end

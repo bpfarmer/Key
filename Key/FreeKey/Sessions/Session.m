@@ -133,6 +133,7 @@
                                              withIV:sessionState.messageKey.iv];
     
     // TODO: delete old message keys
+    // TODO: check HMAC
     
     return decryptedText;
 }
@@ -153,6 +154,9 @@
     
     if(encryptedMessage.previousIndex != self.senderRootChain.chainKey.index) {
         // TODO: Handle missing messages
+    }
+    if([self.receiverRootChain updateRatchetKey:encryptedMessage.senderRatchetKey]) {
+        self.senderRootChain = [self.receiverRootChain iterateRootKeyWithTheirEphemeral:self.receiverRootChain.ratchetKey ourEphemeral:[Curve25519 generateKeyPair]];
     }
     return targetSession;
 }

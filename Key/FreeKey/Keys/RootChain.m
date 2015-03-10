@@ -44,5 +44,13 @@
     return nextRootChain;
 }
 
+- (BOOL)updateRatchetKey:(NSData *)senderRatchetKey {
+    if(![self.ratchetKey isEqual:senderRatchetKey]) {
+        self.ratchetKey = senderRatchetKey;
+        return YES;
+    }
+    return NO;
+}
+
 
 @end

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		49324C749A49C0F4FB711A5D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
 		710028D1F762C6FE738F0D7A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
-		EF524ADA1AAE238600F3B9AF /* KDatabaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD11AAE238600F3B9AF /* KDatabaseView.m */; };
 		EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD31AAE238600F3B9AF /* KStorageKeys.m */; };
 		EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD51AAE238600F3B9AF /* KStorageManager.m */; };
 		EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD71AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m */; };
@@ -20,6 +19,11 @@
 		EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AEB1AAE24B400F3B9AF /* NSString+Base64.m */; };
 		EF524AEF1AAE255200F3B9AF /* KYapDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AEE1AAE255200F3B9AF /* KYapDatabaseObject.m */; };
 		EF524AF51AAE2BAC00F3B9AF /* FreeKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AF41AAE2BAC00F3B9AF /* FreeKey.m */; };
+		EF524B031AAF330A00F3B9AF /* CryptoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AFE1AAF330A00F3B9AF /* CryptoTests.m */; };
+		EF524B041AAF330A00F3B9AF /* EncryptedMessageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AFF1AAF330A00F3B9AF /* EncryptedMessageTests.m */; };
+		EF524B051AAF330A00F3B9AF /* FreeKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B001AAF330A00F3B9AF /* FreeKeyTests.m */; };
+		EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B011AAF330A00F3B9AF /* PreKeyTests.m */; };
+		EF524B071AAF330A00F3B9AF /* SessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B021AAF330A00F3B9AF /* SessionTests.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
@@ -76,8 +80,6 @@
 		C461760CA51ABA0BE7C393EF /* Pods-Key.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.release.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.release.xcconfig"; sourceTree = "<group>"; };
 		DB575E32381FD8118E62EE58 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		DF6091F2DF6E5A8AC8248FE8 /* Pods-KeyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.release.xcconfig"; sourceTree = "<group>"; };
-		EF524AD01AAE238600F3B9AF /* KDatabaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KDatabaseView.h; sourceTree = "<group>"; };
-		EF524AD11AAE238600F3B9AF /* KDatabaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KDatabaseView.m; sourceTree = "<group>"; };
 		EF524AD21AAE238600F3B9AF /* KStorageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageKeys.h; sourceTree = "<group>"; };
 		EF524AD31AAE238600F3B9AF /* KStorageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageKeys.m; sourceTree = "<group>"; };
 		EF524AD41AAE238600F3B9AF /* KStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageManager.h; sourceTree = "<group>"; };
@@ -99,6 +101,12 @@
 		EF524AEE1AAE255200F3B9AF /* KYapDatabaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYapDatabaseObject.m; sourceTree = "<group>"; };
 		EF524AF31AAE2BAC00F3B9AF /* FreeKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKey.h; sourceTree = "<group>"; };
 		EF524AF41AAE2BAC00F3B9AF /* FreeKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKey.m; sourceTree = "<group>"; };
+		EF524AFA1AAEA36300F3B9AF /* KEncryptable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KEncryptable.h; path = Models/KEncryptable.h; sourceTree = "<group>"; };
+		EF524AFE1AAF330A00F3B9AF /* CryptoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CryptoTests.m; sourceTree = "<group>"; };
+		EF524AFF1AAF330A00F3B9AF /* EncryptedMessageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptedMessageTests.m; sourceTree = "<group>"; };
+		EF524B001AAF330A00F3B9AF /* FreeKeyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeyTests.m; sourceTree = "<group>"; };
+		EF524B011AAF330A00F3B9AF /* PreKeyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKeyTests.m; sourceTree = "<group>"; };
+		EF524B021AAF330A00F3B9AF /* SessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTests.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
 		EFC6BE9D1A6857D400B0EB8F /* Key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Key.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -217,8 +225,6 @@
 			children = (
 				EF524AED1AAE255200F3B9AF /* KYapDatabaseObject.h */,
 				EF524AEE1AAE255200F3B9AF /* KYapDatabaseObject.m */,
-				EF524AD01AAE238600F3B9AF /* KDatabaseView.h */,
-				EF524AD11AAE238600F3B9AF /* KDatabaseView.m */,
 				EF524AD21AAE238600F3B9AF /* KStorageKeys.h */,
 				EF524AD31AAE238600F3B9AF /* KStorageKeys.m */,
 				EF524AD41AAE238600F3B9AF /* KStorageManager.h */,
@@ -247,6 +253,13 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		EF524AFD1AAF182800F3B9AF /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
 		EFC6BE941A6857D400B0EB8F = {
 			isa = PBXGroup;
 			children = (
@@ -273,12 +286,13 @@
 			children = (
 				EFC6BEA41A6857D400B0EB8F /* AppDelegate.h */,
 				EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */,
+				EFC6BEAD1A6857D400B0EB8F /* Images.xcassets */,
 				EFF70AB01AAE1CBC006C10D2 /* Controllers */,
 				EFF70A5E1AAE19C3006C10D2 /* FreeKey */,
-				EFC6BEAD1A6857D400B0EB8F /* Images.xcassets */,
 				EFC6BEAF1A6857D500B0EB8F /* LaunchScreen.xib */,
 				EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */,
 				EFEBDD321A68673D00973E15 /* Models */,
+				EF524AFD1AAF182800F3B9AF /* Network */,
 				EF524ACF1AAE238600F3B9AF /* Storage */,
 				EFC6BEA01A6857D400B0EB8F /* Supporting Files */,
 				EF524ADF1AAE239800F3B9AF /* Util */,
@@ -298,6 +312,11 @@
 		EFC6BEB91A6857D500B0EB8F /* KeyTests */ = {
 			isa = PBXGroup;
 			children = (
+				EF524AFE1AAF330A00F3B9AF /* CryptoTests.m */,
+				EF524AFF1AAF330A00F3B9AF /* EncryptedMessageTests.m */,
+				EF524B001AAF330A00F3B9AF /* FreeKeyTests.m */,
+				EF524B011AAF330A00F3B9AF /* PreKeyTests.m */,
+				EF524B021AAF330A00F3B9AF /* SessionTests.m */,
 				EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */,
 				EFC6BEBA1A6857D500B0EB8F /* Supporting Files */,
 			);
@@ -325,6 +344,7 @@
 				EFCD01D71A83E651005065B2 /* KThread.m */,
 				EFEBDD361A68CE9600973E15 /* KUser.h */,
 				EFEBDD371A68CE9600973E15 /* KUser.m */,
+				EF524AFA1AAEA36300F3B9AF /* KEncryptable.h */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -620,7 +640,6 @@
 				EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
 				EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */,
 				EFF70A901AAE19C3006C10D2 /* SessionKeyBundle.m in Sources */,
-				EF524ADA1AAE238600F3B9AF /* KDatabaseView.m in Sources */,
 				EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */,
 				EF524ADE1AAE238600F3B9AF /* KYapDatabaseView.m in Sources */,
 				EFF70A8D1AAE19C3006C10D2 /* PreKey.m in Sources */,
@@ -642,7 +661,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF524B031AAF330A00F3B9AF /* CryptoTests.m in Sources */,
+				EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */,
 				EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */,
+				EF524B041AAF330A00F3B9AF /* EncryptedMessageTests.m in Sources */,
+				EF524B071AAF330A00F3B9AF /* SessionTests.m in Sources */,
+				EF524B051AAF330A00F3B9AF /* FreeKeyTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
