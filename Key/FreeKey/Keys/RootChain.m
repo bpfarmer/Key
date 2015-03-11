@@ -15,13 +15,11 @@
 
 @implementation RootChain
 
-- (instancetype)initWithRootKey:(RootKey *)rootKey chainKey:(ChainKey *)chainKey ratchetKeyPair:(ECKeyPair *)ratchetKeyPair {
+- (instancetype)initWithRootKey:(RootKey *)rootKey chainKey:(ChainKey *)chainKey {
     self = [super init];
     if(self) {
         _rootKey  = rootKey;
         _chainKey = chainKey;
-        _ratchetKeyPair = ratchetKeyPair;
-        _ratchetKey = ratchetKeyPair.publicKey;
     }
     return self;
 }
@@ -31,26 +29,14 @@
     
     KeyDerivation *keyMaterial = [[KeyDerivation alloc] fromSharedSecret:sharedSecret rootKey:self.rootKey.keyData];
     
-    RootChain *nextRootChain =
-    [[RootChain alloc] initWithRootKey:[[RootKey alloc] initWithData:keyMaterial.cipherKey]
-                              chainKey:[[ChainKey alloc] initWithData:keyMaterial.macKey index:0]
-                        ratchetKeyPair:[Curve25519 generateKeyPair]];
-    
+    RootChain *nextRootChain = [[RootChain alloc] initWithRootKey:[[RootKey alloc] initWithData:keyMaterial.cipherKey]
+                                                         chainKey:[[ChainKey alloc] initWithData:keyMaterial.macKey index:0]];
     return nextRootChain;
 }
 
 - (instancetype)iterateChainKey {
-    RootChain *nextRootChain = [[RootChain alloc] initWithRootKey:self.rootKey chainKey:[self.chainKey nextChainKey] ratchetKeyPair:self.ratchetKeyPair];
+    RootChain *nextRootChain = [[RootChain alloc] initWithRootKey:self.rootKey chainKey:[self.chainKey nextChainKey]];
     return nextRootChain;
 }
-
-- (BOOL)updateRatchetKey:(NSData *)senderRatchetKey {
-    if(![self.ratchetKey isEqual:senderRatchetKey]) {
-        self.ratchetKey = senderRatchetKey;
-        return YES;
-    }
-    return NO;
-}
-
 
 @end

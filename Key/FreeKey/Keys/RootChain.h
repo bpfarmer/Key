@@ -17,12 +17,13 @@
 
 @property (nonatomic, strong) RootKey  *rootKey;
 @property (nonatomic, strong) ChainKey *chainKey;
-@property (nonatomic, strong) NSData   *ratchetKey;
 @property (nonatomic, strong) ECKeyPair *ratchetKeyPair;
+@property (nonatomic, strong) NSData *ratchetKey;
 
-- (instancetype)initWithRootKey:(RootKey*)rootKey chainKey:(ChainKey*)chainKey ratchetKeyPair:(ECKeyPair *)ratchetKeyPair;
+- (instancetype)initWithRootKey:(RootKey*)rootKey chainKey:(ChainKey*)chainKey;
 - (instancetype)iterateChainKey;
 - (instancetype)iterateRootKeyWithTheirEphemeral:(NSData *)theirEphemeral ourEphemeral:(ECKeyPair *)ourEphemeral;
-- (BOOL)updateRatchetKey:(NSData *)senderRatchetKey;
+
+- (void)setRatchetKeyPair:(ECKeyPair *)ratchetKeyPair;
 
 @end

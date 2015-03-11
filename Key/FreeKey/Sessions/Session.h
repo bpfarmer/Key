@@ -15,6 +15,7 @@
 @class IdentityKey;
 @class PreKeyExchange;
 @class PreKeyExchangeReceipt;
+@class ECKeyPair;
 
 @interface Session : KYapDatabaseObject
 

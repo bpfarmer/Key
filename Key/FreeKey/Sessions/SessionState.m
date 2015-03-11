@@ -7,17 +7,17 @@
 //
 
 #import "SessionState.h"
-
-@class MessageKey;
+#import "ChainKey.h"
 
 @implementation SessionState
 
-- (instancetype)initWithMessageKey:(MessageKey *)messageKey index:(int)index {
+- (instancetype)initWithMessageKey:(MessageKey *)messageKey senderRatchetKey:(NSData *)senderRatchetKey index:(int)index {
     self = [super init];
     
     if(self) {
-        _messageKey = messageKey;
-        _index      = index;
+        _messageKey       = messageKey;
+        _senderRatchetKey = senderRatchetKey;
+        _index            = index;
     }
     
     return self;

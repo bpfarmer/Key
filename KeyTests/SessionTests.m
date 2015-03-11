@@ -91,6 +91,18 @@
     
     NSData *decryptedMessageData = [bobSession decryptMessage:encryptedMessage];
     XCTAssertTrue([decryptedMessageData isEqual:sendingMessageData]);
+    
+    NSString *replyMessage = @"I got your message!";
+    NSData *replyMessageData = [replyMessage dataUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"MESSAGE INDEX: %d", bobSession.senderRootChain.chainKey.index);
+    NSLog(@"MESSAGE KEYS: %@", bobSession.senderRootChain.chainKey.messageKey.cipherKey);
+    EncryptedMessage *replyEncryptedMessage = [bobSession encryptMessage:replyMessageData];
+    XCTAssertTrue(replyEncryptedMessage.cipherText);
+    NSLog(@"ALICE MESSAGE INDEX: %d", aliceSession.receiverRootChain.chainKey.index);
+    NSLog(@"ALICE MESSGE KEY: %@", aliceSession.receiverRootChain.chainKey.messageKey.cipherKey);
+    NSData *decryptedReplyMessageData = [aliceSession decryptMessage:replyEncryptedMessage];
+    XCTAssertTrue([decryptedReplyMessageData isEqual:replyMessageData]);
+    
 }
 
 @end
