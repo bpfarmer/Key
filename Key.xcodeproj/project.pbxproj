@@ -24,6 +24,7 @@
 		EF524B051AAF330A00F3B9AF /* FreeKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B001AAF330A00F3B9AF /* FreeKeyTests.m */; };
 		EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B011AAF330A00F3B9AF /* PreKeyTests.m */; };
 		EF524B071AAF330A00F3B9AF /* SessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B021AAF330A00F3B9AF /* SessionTests.m */; };
+		EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B091AB0DE4300F3B9AF /* HttpManager.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
@@ -107,6 +108,9 @@
 		EF524B001AAF330A00F3B9AF /* FreeKeyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeyTests.m; sourceTree = "<group>"; };
 		EF524B011AAF330A00F3B9AF /* PreKeyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreKeyTests.m; sourceTree = "<group>"; };
 		EF524B021AAF330A00F3B9AF /* SessionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionTests.m; sourceTree = "<group>"; };
+		EF524B081AB0DE4300F3B9AF /* HttpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HttpManager.h; path = Network/HttpManager.h; sourceTree = "<group>"; };
+		EF524B091AB0DE4300F3B9AF /* HttpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HttpManager.m; path = Network/HttpManager.m; sourceTree = "<group>"; };
+		EF524B0D1AB0DF0D00F3B9AF /* KSendable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSendable.h; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
 		EFC6BE9D1A6857D400B0EB8F /* Key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Key.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -256,8 +260,19 @@
 		EF524AFD1AAF182800F3B9AF /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				EF524B081AB0DE4300F3B9AF /* HttpManager.h */,
+				EF524B091AB0DE4300F3B9AF /* HttpManager.m */,
 			);
 			name = Network;
+			sourceTree = "<group>";
+		};
+		EF524B0B1AB0DE9000F3B9AF /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				EF524AFA1AAEA36300F3B9AF /* KEncryptable.h */,
+				EF524B0D1AB0DF0D00F3B9AF /* KSendable.h */,
+			);
+			name = Protocols;
 			sourceTree = "<group>";
 		};
 		EFC6BE941A6857D400B0EB8F = {
@@ -334,6 +349,7 @@
 		EFEBDD321A68673D00973E15 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				EF524B0B1AB0DE9000F3B9AF /* Protocols */,
 				EF973FA31A7E8F5200D92A9E /* KAccountManager.h */,
 				EF973FA41A7E8F5200D92A9E /* KAccountManager.m */,
 				EFEBDD421A6B5C1400973E15 /* KGroup.h */,
@@ -344,7 +360,6 @@
 				EFCD01D71A83E651005065B2 /* KThread.m */,
 				EFEBDD361A68CE9600973E15 /* KUser.h */,
 				EFEBDD371A68CE9600973E15 /* KUser.m */,
-				EF524AFA1AAEA36300F3B9AF /* KEncryptable.h */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -616,6 +631,7 @@
 				EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */,
 				EFF70A891AAE19C3006C10D2 /* ChainKey.m in Sources */,
 				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
+				EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */,
 				EFF70AC51AAE1CBC006C10D2 /* MessageComposeViewController.m in Sources */,
 				EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */,
 				EF524AE51AAE239800F3B9AF /* NSData+keyVersionByte.m in Sources */,

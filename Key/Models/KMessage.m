@@ -15,15 +15,7 @@
 #import "KUser.h"
 #import "Util.h"
 
-//API Endpoints
-#define KMessageRemoteEndpoint @"http://127.0.0.1:9393/message.json"
-#define KMessageRemoteAlias @"message"
-#define KMessageUnsentStatus @"KMessageUnsent"
-#define KMessageSentSuccessStatus @"KMessageSentSuccess"
-#define KMessageSentFailureStatus @"KMessageSentFailure"
-#define KMessageSentNetworkFailureStatus @"KMessageSentNetworkFailure"
-#define KMessageRemoteCreateNotification @"KMessageRemoteCreateNotification"
-
+#define kStatusUnsent @"UNSENT"
 @implementation KMessage
 
 - (NSArray *)yapDatabaseRelationshipEdges {
@@ -38,48 +30,14 @@
         _authorId = authorId;
         _threadId = threadId;
         _body     = body;
-        _sendStatus = KMessageUnsentStatus;
+        _sendStatus = kStatusUnsent;
     }
     return self;
 }
 
 - (void)sendToRecipients {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self remoteCreate];
     });
-}
-
-- (NSDictionary *)toDictionary {
-    return @{@"outgoingMessages" : [self outgoingMessagesArray],
-                     @"authorId" : self.authorId,
-                     @"threadId" : self.threadId};
-}
-
-- (NSArray *)outgoingMessagesArray {
-    /*
-    __block NSMutableArray *outgoingMessages = [[NSMutableArray alloc] init];
-    KThread *thread = [[KStorageManager sharedManager] objectForKey:[self threadId] inCollection:[KThread collection]];
-    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        [transaction enumerateObjectsForKeys:thread.userIds inCollection:[KUser collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, BOOL *stop) {
-            KUser *user = (KUser *)object;
-            //[outgoingMessages addObject:[[[KOutgoingMessage alloc] initWithMessage:self user:user] toDictionary]];
-        }];
-    }];
-    return outgoingMessages;
-     */
-    return nil;
-}
-
-+ (NSString *)remoteEndpoint {
-    return KMessageRemoteEndpoint;
-}
-
-+ (NSString *)remoteAlias {
-    return KMessageRemoteAlias;
-}
-
-+ (NSString *)remoteCreateNotification {
-    return KMessageRemoteCreateNotification;
 }
 
 - (NSString *)placeholderUniqueId {

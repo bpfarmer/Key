@@ -58,29 +58,15 @@
 
 - (void)saveWithTransaction:(YapDatabaseReadWriteTransaction*)transaction;
 
-- (void)remoteCreate;
-- (void)remoteUpdate;
-
 /**
  *  The unique identifier of the stored object
  */
 
 
 @property (nonatomic) NSString *uniqueId;
-@property (nonatomic) NSString *remoteStatus;
 
 
 - (void)removeWithTransaction:(YapDatabaseReadWriteTransaction*)transaction;
 - (void)remove;
 
 @end
-
-#define KRemoteCreateSuccessStatus @"KRemoteCreateSuccess"
-#define KRemoteCreateFailureStatus @"KRemoteCreateFailure"
-#define KRemoteCreateNetworkFailureStatus @"KRemoteCreateNetworkFailure"
-#define KRemoteCreateNotification  @"KRemoteCreateNotification"
-
-#define KRemoteUpdateSuccessStatus @"KRemoteUpdateSuccess"
-#define KRemoteUpdateFailureStatus @"KRemoteUpdateFailure"
-#define KRemoteUpdateNetworkFailureStatus @"KRemoteUpdateNetworkFailure"
-#define KRemoteUpdateNotification  @"KRemoteUpdateNotification"

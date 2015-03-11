@@ -9,6 +9,7 @@
 #import "RegistrationViewController.h"
 #import "KUser.h"
 #import "KAccountManager.h"
+#import "HttpManager.h"
 
 @interface RegistrationViewController ()
 
@@ -32,17 +33,18 @@
                                                  name:KUserRegisterUsernameStatusNotification
                                                object:nil];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[KUser alloc] initWithUsername:self.usernameText.text password:self.passwordText.text];
+        KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text password:self.passwordText.text];
+        [[KAccountManager alloc] initWithUniqueId:user.uniqueId];
     });
 }
 
 - (void)receiveUserStatusNotification:(NSNotification *)notification {
     KUser *user = (KUser *)notification.object;
-    if([user.remoteStatus isEqualToString:KRemoteCreateSuccessStatus]) {
+    if([user.remoteStatus isEqualToString:kRemotePutSuccessStatus]) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
         UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
         [self presentViewController:inboxView animated:YES completion:nil];
-    }else if([user.remoteStatus isEqualToString:KRemoteCreateFailureStatus]) {
+    }else if([user.remoteStatus isEqualToString:kRemotePutFailureStatus]) {
         NSLog(@"Failed to create user");
     }
 }

@@ -8,7 +8,6 @@
 
 #import "KYapDatabaseObject.h"
 #import "KStorageManager.h"
-#import <AFNetworking/AFHTTPRequestOperationManager.h>
 
 @implementation KYapDatabaseObject
 
@@ -47,73 +46,6 @@
         [self removeWithTransaction:transaction];
         //[[transaction ext:@"relationships"] flush];
     }];
-}
-
-#pragma mark Remote Server Methods
-
-- (void)remoteCreate {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : [self toDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"%@", responseObject);
-        if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
-            [self setUniqueId:responseObject[[[self class] remoteAlias]][@"uniqueId"]];
-            [self setRemoteStatus:KRemoteCreateSuccessStatus];
-        }else {
-            [self setRemoteStatus:KRemoteCreateFailureStatus];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteCreateNotification] object:self];
-        });
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self setRemoteStatus:KRemoteCreateNetworkFailureStatus];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteCreateNotification] object:self];
-        });
-    }];
-}
-
-- (void)remoteUpdate {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[[self class] remoteEndpoint] parameters:@{[[self class] remoteAlias] : [self toDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-            [self setRemoteStatus:KRemoteUpdateSuccessStatus];
-            [self saveFromRemoteUpdateResponse:responseObject[[[self class] remoteAlias]]];
-        } else {
-            [self setRemoteStatus:KRemoteUpdateFailureStatus];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteUpdateNotification] object:self];
-        });
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [self setRemoteStatus:KRemoteUpdateNetworkFailureStatus];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteUpdateNotification] object:self];
-        });
-    }];
-}
-
-- (void)saveFromRemoteUpdateResponse:(NSDictionary *)responseObject {
-    [self save];
-}
-
-- (NSDictionary *)toDictionary {
-    return nil;
-}
-
-+ (NSString *)remoteEndpoint {
-    return nil;
-}
-
-+ (NSString *)remoteAlias {
-    return nil;
-}
-
-+ (NSString *)remoteCreateNotification {
-    return nil;
-}
-
-+ (NSString *)remoteUpdateNotification {
-    return nil;
 }
 
 #pragma mark Class Methods

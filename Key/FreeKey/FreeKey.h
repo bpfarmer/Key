@@ -20,6 +20,6 @@
 + (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage fromUser:(NSString *)userId;
 + (void)respondToPreKeyExchange:(PreKeyExchange *)preKeyExchange;
 + (void)respondToPreKeyRecript:(PreKeyReceipt *)preKeyReceipt;
-+ (void)setupKeysForUser:(KUser *)user;
++ (void)setupPreKeysForUser:(KUser *)user;
 
 @end

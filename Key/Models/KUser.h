@@ -8,10 +8,11 @@
 #import <Foundation/Foundation.h>
 #import <YapDatabase/YapDatabaseRelationshipNode.h>
 #import "KYapDatabaseObject.h"
+#import "KSendable.h"
 
-@class KKeyPair;
+@class IdentityKey;
 
-@interface KUser : KYapDatabaseObject <YapDatabaseRelationshipNode>
+@interface KUser : KYapDatabaseObject <YapDatabaseRelationshipNode, KSendable>
 
 @property (nonatomic) NSString *firstName;
 @property (nonatomic) NSString *lastName;
@@ -20,18 +21,13 @@
 @property (nonatomic) NSData *passwordSalt;
 @property (nonatomic) NSData *passwordCrypt;
 @property (nonatomic) NSString *localStatus;
-@property (nonatomic) KKeyPair *activeKeyPair;
+@property (nonatomic) IdentityKey *identityKey;
 
-+ (NSArray *)keyPairsForUserIds:(NSArray *)userIds;
-+ (NSArray *)fullNamesForUserIds:(NSArray *)userIds;
+// KSendable Protocol
+@property (nonatomic) NSString *remoteStatus;
 
-+ (NSString *)remoteCreateNotification;
-
-- (instancetype)initWithRemoteUsername:(NSString *)username;
 - (instancetype)initWithUsername:(NSString *)username;
 - (instancetype)initWithUsername:(NSString *)username password:(NSString *)password;
-- (KKeyPair *)activeKeyPair;
-- (NSString *)fullName;
 
 @end
 

@@ -12,23 +12,21 @@
 #import "KAccountManager.h"
 #import "KThread.h"
 #import "KYapDatabaseSecondaryIndex.h"
+#import "FreeKey.h"
 
-#define KUserRemoteEndpoint @"http://127.0.0.1:9393/user.json"
-#define KUserRemoteAlias @"user"
-#define KUserRemoteCreateNotification @"KUserRemoteCreateNotification"
-#define KUserRemoteUpdateNotification @"KUserRemoteUpdateNotification"
+#define KRemoteEndpoint @"http://127.0.0.1:9393/user.json"
+#define KRemoteAlias @"user"
+#define KRemoteCreateNotification @"KUserRemoteCreateNotification"
+#define KRemoteUpdateNotification @"KUserRemoteUpdateNotification"
 
 @implementation KUser
 
 #pragma mark - Initializers
-
 - (instancetype)initWithUsername:(NSString *)username {
     self = [super initWithUniqueId:nil];
-    
     if (self) {
         _username = username;
     }
-
     return self;
 }
 
@@ -36,49 +34,20 @@
     self = [self initWithUsername:username];
     if (self) {
         _plainPassword = password;
-        [[self class ] registerCreateNotificationObserver];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self remoteCreate];
-        });
     }
     return self;
-}
-
-- (instancetype)initWithRemoteUsername:(NSString *)username {
-    self = [[self class] fetchWithUsername:username];
-    
-    if (!self) {
-        self = [self initWithUsername:username];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            //[self getRemoteUser];
-        });
-    }
-    return self;
-}
-
-- (void)startAccountManager {
-    if(self.uniqueId) {
-        if(self.plainPassword)
-            self.plainPassword = nil;
-        [[KAccountManager sharedManager] initWithUniqueId:self.uniqueId];
-        [self save];
-    }
 }
 
 #pragma mark - User Registration
 + (void)finishUserRegistration:(NSNotification *)notification {
-    if([notification.object isKindOfClass:[self class]]) {
+    if([notification.object isKindOfClass:[KUser class]]) {
         KUser *user = (KUser *)[notification object];
-        if([user.remoteStatus isEqualToString:KRemoteCreateSuccessStatus]) {
-            [self removeCreateNotificationObserver];
-            NSString *plainPassword = user.plainPassword;
-            [user startAccountManager];
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [[KStorageManager sharedManager] setupDatabase];
-                [user generatePassword:plainPassword];
-                [user remoteUpdate];
-            });
-        }
+        [self removeCreateNotificationObserver];
+        NSString *plainPassword = user.plainPassword;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[KStorageManager sharedManager] setupDatabase];
+            [user generatePassword:plainPassword];
+        });
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:KUserRegisterUsernameStatusNotification object:user];
         });
@@ -86,53 +55,22 @@
 }
 
 - (void)generatePassword:(NSString *)plainPassword {
-    /*NSDictionary *encryptedPasswordDictionary = [[[KCryptor alloc] init] encryptOneWay: plainPassword];
-    self.plainPassword = nil;
-    [self setPasswordCrypt:encryptedPasswordDictionary[@"encrypted"]];
-    [self setPasswordSalt:encryptedPasswordDictionary[@"salt"]];*/
-}
-
-+ (NSString *)remoteEndpoint {
-    return KUserRemoteEndpoint;
-}
-
-+ (NSString *)remoteAlias {
-    return KUserRemoteAlias;
-}
-
-+ (NSString *)remoteCreateNotification {
-    return KUserRemoteCreateNotification;
-}
-
-+ (NSString *)remoteUpdateNotification {
-    return KUserRemoteUpdateNotification;
+    // TODO: use strong 1-way hashing for password encryption
 }
 
 # pragma mark - Notification Methods
 + (void)registerCreateNotificationObserver {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(finishUserRegistration:)
-                                                 name:[self remoteCreateNotification]
+                                                 name:nil
                                                object:nil];
 }
 
 + (void)removeCreateNotificationObserver {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:[self remoteCreateNotification] object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:nil object:nil];
 }
 
 #pragma mark - Batch Query Methods
-
-+ (NSArray *)keyPairsForUserIds:(NSArray *)userIds {
-    NSMutableArray *keyPairs = [[NSMutableArray alloc] init];
-    
-    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        [transaction enumerateObjectsForKeys:userIds inCollection:[self collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, BOOL *stop) {
-            [keyPairs addObject:[object activeKeyPair]];
-        }];
-    }];
-    
-    return keyPairs;
-}
 
 + (NSArray *)fullNamesForUserIds:(NSArray *)userIds {
     NSMutableArray *fullNames = [[NSMutableArray alloc] init];
