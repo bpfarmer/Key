@@ -28,11 +28,11 @@
 @property (nonatomic, retain) RootChain *senderRootChain;
 @property (nonatomic, retain) RootChain *receiverRootChain;
 @property (nonatomic) int previousIndex;
-@property (nonatomic, retain) NSMutableDictionary *previousSessionStates;
+@property (nonatomic, retain) NSDictionary *previousSessionStates;
 
 - (instancetype)initWithReceiverId:(NSString *)receiverId identityKey:(IdentityKey *)identityKey;
 - (void)addOurPreKey:(PreKey *)ourPreKey preKeyExchange:(PreKeyExchange *)preKeyExchange;
-- (void)addPreKey:(PreKey *)preKey;
+- (PreKeyExchange *)addPreKey:(PreKey *)preKey;
 
 - (PreKeyExchange *)preKeyExchange;
 - (EncryptedMessage *)encryptMessage:(NSData *)message;

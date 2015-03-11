@@ -18,6 +18,7 @@
 #import "IdentityKey.h"
 #import "MessageKey.h"
 #import "AES_CBC.h"
+#import "PreKeyExchange.h"
 
 @interface SessionTests : XCTestCase
 
@@ -39,14 +40,41 @@
  *  Testing session initialization with a basic PrekeyWhisperMessage
  */
 
-- (void)testRetrievingPreKey {
-    // NOTE: don't worry about serialization, storage or networking, we'll test that elsewhere
+- (void)testSimpleExchange {
+    NSArray *aliceBobSessions = [self aliceBobSessions];
+    Session *aliceSession = aliceBobSessions[0];
+    Session *bobSession   = aliceBobSessions[1];
+
+    NSString *sendingMessage = @"Free Key!";
+    NSData *sendingMessageData = [sendingMessage dataUsingEncoding:NSUTF8StringEncoding];
+    EncryptedMessage *encryptedMessage = [aliceSession encryptMessage:sendingMessageData];
+    NSData *decryptedMessageData = [bobSession decryptMessage:encryptedMessage];
+    XCTAssertTrue([decryptedMessageData isEqual:sendingMessageData]);
+    
+    NSString *replyMessage = @"I got your message!";
+    NSData *replyMessageData = [replyMessage dataUsingEncoding:NSUTF8StringEncoding];
+    EncryptedMessage *replyEncryptedMessage = [bobSession encryptMessage:replyMessageData];
+    XCTAssertTrue(replyEncryptedMessage.cipherText);
+    NSData *decryptedReplyMessageData = [aliceSession decryptMessage:replyEncryptedMessage];
+    XCTAssertTrue([decryptedReplyMessageData isEqual:replyMessageData]);
+    
+    NSString *doubleReplyMessage = @"I got *your* message!";
+    NSData *doubleReplyMessageData = [doubleReplyMessage dataUsingEncoding:NSUTF8StringEncoding];
+    EncryptedMessage *doubleReplyEncryptedMessage = [bobSession encryptMessage:doubleReplyMessageData];
+    XCTAssertTrue(doubleReplyEncryptedMessage.cipherText);
+    NSData *doubleDecryptedReplyMessageData = [aliceSession decryptMessage:doubleReplyEncryptedMessage];
+    XCTAssertTrue([doubleDecryptedReplyMessageData isEqual:doubleReplyMessageData]);
+    
+    
+}
+
+- (NSArray *)aliceBobSessions {
     NSString *BOB_RECIPIENT_ID   = @"+3828923892";
     NSString *ALICE_RECIPIENT_ID = @"alice@gmail.com";
     
     IdentityKey *aliceIdentityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:ALICE_RECIPIENT_ID];
     IdentityKey *bobIdentityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:BOB_RECIPIENT_ID];
-
+    
     Session *aliceSession = [[Session alloc] initWithReceiverId:BOB_RECIPIENT_ID identityKey:aliceIdentityKey];
     
     ECKeyPair *bobPreKeyPair            = [Curve25519 generateKeyPair];
@@ -64,45 +92,11 @@
                                            identityKey:bobIdentityKey.publicKey
                                            baseKeyPair:bobSignedPreKeyPair];
     
-    [aliceSession addPreKey:bobPreKey];
-    
-    RootChain *senderRootChain = aliceSession.senderRootChain;
-    XCTAssertTrue(senderRootChain.rootKey);
-    XCTAssertTrue(senderRootChain.chainKey);
-    XCTAssertTrue(senderRootChain.chainKey.messageKey);
-    
-    NSString *sendingMessage = @"Free Key!";
-    NSData *sendingMessageData = [sendingMessage dataUsingEncoding:NSUTF8StringEncoding];
-    MessageKey *sendingMessageKey = senderRootChain.chainKey.messageKey;
-    EncryptedMessage *encryptedMessage = [aliceSession encryptMessage:sendingMessageData];
-    XCTAssertTrue(encryptedMessage.cipherText);
+    PreKeyExchange *preKeyExchange = [aliceSession addPreKey:bobPreKey];
     
     Session *bobSession = [[Session alloc] initWithReceiverId:ALICE_RECIPIENT_ID identityKey:bobIdentityKey];
-    [bobSession addOurPreKey:bobPreKey preKeyExchange:[aliceSession preKeyExchange]];
-    
-    RootChain *receiverRootChain = bobSession.receiverRootChain;
-    MessageKey *receivingMessageKey = receiverRootChain.chainKey.messageKey;
-    XCTAssertTrue(receiverRootChain.rootKey);
-    XCTAssertTrue(receiverRootChain.chainKey);
-    XCTAssertTrue(receiverRootChain.chainKey.messageKey);
-    XCTAssertTrue([senderRootChain.rootKey.keyData isEqual:receiverRootChain.rootKey.keyData]);
-    XCTAssertTrue([sendingMessageKey.cipherKey isEqual:receivingMessageKey.cipherKey]);
-    XCTAssertTrue([sendingMessageKey.iv isEqual:receivingMessageKey.iv]);
-    
-    NSData *decryptedMessageData = [bobSession decryptMessage:encryptedMessage];
-    XCTAssertTrue([decryptedMessageData isEqual:sendingMessageData]);
-    
-    NSString *replyMessage = @"I got your message!";
-    NSData *replyMessageData = [replyMessage dataUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"MESSAGE INDEX: %d", bobSession.senderRootChain.chainKey.index);
-    NSLog(@"MESSAGE KEYS: %@", bobSession.senderRootChain.chainKey.messageKey.cipherKey);
-    EncryptedMessage *replyEncryptedMessage = [bobSession encryptMessage:replyMessageData];
-    XCTAssertTrue(replyEncryptedMessage.cipherText);
-    NSLog(@"ALICE MESSAGE INDEX: %d", aliceSession.receiverRootChain.chainKey.index);
-    NSLog(@"ALICE MESSGE KEY: %@", aliceSession.receiverRootChain.chainKey.messageKey.cipherKey);
-    NSData *decryptedReplyMessageData = [aliceSession decryptMessage:replyEncryptedMessage];
-    XCTAssertTrue([decryptedReplyMessageData isEqual:replyMessageData]);
-    
+    [bobSession addOurPreKey:bobPreKey preKeyExchange:preKeyExchange];
+    return [[NSArray alloc] initWithObjects:aliceSession, bobSession, nil];
 }
 
 @end

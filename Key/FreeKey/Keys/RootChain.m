@@ -31,11 +31,15 @@
     
     RootChain *nextRootChain = [[RootChain alloc] initWithRootKey:[[RootKey alloc] initWithData:keyMaterial.cipherKey]
                                                          chainKey:[[ChainKey alloc] initWithData:keyMaterial.macKey index:0]];
+    [nextRootChain setRatchetKey:theirEphemeral];
+    [nextRootChain setRatchetKeyPair:ourEphemeral];
     return nextRootChain;
 }
 
 - (instancetype)iterateChainKey {
     RootChain *nextRootChain = [[RootChain alloc] initWithRootKey:self.rootKey chainKey:[self.chainKey nextChainKey]];
+    [nextRootChain setRatchetKeyPair:self.ratchetKeyPair];
+    [nextRootChain setRatchetKey:self.ratchetKey];
     return nextRootChain;
 }
 
