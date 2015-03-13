@@ -104,14 +104,14 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
     return [[NSFileManager defaultManager] fileExistsAtPath:[self dbPath]];
 }
 
-- (NSString*)dbPath {
+- (NSString *)dbPath {
     NSFileManager* fileManager = [NSFileManager defaultManager];
     NSURL *fileURL = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSString *path = [fileURL path];
     return [path stringByAppendingFormat:@"/%@", [[[KAccountManager sharedManager] user] username]];
 }
 
-- (NSString*)databasePassword {
+- (NSString *)databasePassword {
     NSString *dbPassword = [SSKeychain passwordForService:keychainService account:keychainDBPassAccount];
     
     if (!dbPassword) {

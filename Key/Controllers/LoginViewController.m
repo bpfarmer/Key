@@ -29,9 +29,9 @@
 
 - (IBAction)login:(id)sender {
     KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text];
-    [user encryptPassword:self.passwordText.text];
-    KUser *retrievedUser = [KUser fetchObjectWithUsername:user.username];
-    if(retrievedUser && [retrievedUser.passwordCrypt isEqual:user.passwordCrypt]) {
+    // TODO: refactor to use
+    if([user authenticatePassword:self.passwordText.text]) {
+        KUser *retrievedUser = [KUser fetchObjectWithUsername:user.username];
         [[KAccountManager sharedManager] setUser:retrievedUser];
         [self showInbox];
     }else {

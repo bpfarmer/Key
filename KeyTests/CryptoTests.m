@@ -50,7 +50,7 @@
                                                withKey:key
                                                 withIV:iv];
     
-    XCTAssertTrue([messageData isEqual:decryptedMessage]);
+    XCTAssert([messageData isEqual:decryptedMessage]);
 }
 
 @end

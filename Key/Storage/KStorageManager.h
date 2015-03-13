@@ -17,11 +17,14 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
 @interface KStorageManager : NSObject
 
 + (instancetype)sharedManager;
+
 - (void)setupDatabase;
 
 - (YapDatabase *)database;
 - (YapDatabaseConnection *)newDatabaseConnection;
 - (NSString *)dbPath;
+// TODO: Remove this:
+- (NSString *)databasePassword;
 
 - (NSUInteger)numberOfKeysInCollection:(NSString *)collection;
 - (void)setObject:(id)object forKey:(NSString*)key inCollection:(NSString*)collection;

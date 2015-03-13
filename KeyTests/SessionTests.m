@@ -49,21 +49,21 @@
     NSData *sendingMessageData = [sendingMessage dataUsingEncoding:NSUTF8StringEncoding];
     EncryptedMessage *encryptedMessage = [aliceSession encryptMessage:sendingMessageData];
     NSData *decryptedMessageData = [bobSession decryptMessage:encryptedMessage];
-    XCTAssertTrue([decryptedMessageData isEqual:sendingMessageData]);
+    XCTAssert([decryptedMessageData isEqual:sendingMessageData]);
     
     NSString *replyMessage = @"I got your message!";
     NSData *replyMessageData = [replyMessage dataUsingEncoding:NSUTF8StringEncoding];
     EncryptedMessage *replyEncryptedMessage = [bobSession encryptMessage:replyMessageData];
-    XCTAssertTrue(replyEncryptedMessage.cipherText);
+    XCTAssert(replyEncryptedMessage.cipherText);
     NSData *decryptedReplyMessageData = [aliceSession decryptMessage:replyEncryptedMessage];
-    XCTAssertTrue([decryptedReplyMessageData isEqual:replyMessageData]);
+    XCTAssert([decryptedReplyMessageData isEqual:replyMessageData]);
     
     NSString *doubleReplyMessage = @"I got *your* message!";
     NSData *doubleReplyMessageData = [doubleReplyMessage dataUsingEncoding:NSUTF8StringEncoding];
     EncryptedMessage *doubleReplyEncryptedMessage = [bobSession encryptMessage:doubleReplyMessageData];
-    XCTAssertTrue(doubleReplyEncryptedMessage.cipherText);
+    XCTAssert(doubleReplyEncryptedMessage.cipherText);
     NSData *doubleDecryptedReplyMessageData = [aliceSession decryptMessage:doubleReplyEncryptedMessage];
-    XCTAssertTrue([doubleDecryptedReplyMessageData isEqual:doubleReplyMessageData]);
+    XCTAssert([doubleDecryptedReplyMessageData isEqual:doubleReplyMessageData]);
     
     
 }

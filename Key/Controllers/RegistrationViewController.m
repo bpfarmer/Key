@@ -37,7 +37,6 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // TODO: sanity check on username and password
         KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text];
-        [user encryptPassword:self.passwordText.text];
         [user registerUsername];
         [[KAccountManager sharedManager] setUser:user];
         // TODO: remove 'waiting' spinner animation
@@ -48,9 +47,11 @@
     KUser *user = (KUser *) notification.object;
     if([user.remoteStatus isEqualToString:kRemotePutSuccessStatus]) {
         [[NSNotificationCenter defaultCenter] removeObserver:self name:kRemotePutNotification object:nil];
+        [user setPasswordCryptInKeychain:self.passwordText.text];
         [[KAccountManager sharedManager] setUser:user];
         [[KStorageManager sharedManager] setupDatabase];
         [user save];
+        NSLog(@"DB PATH: %@", [[KStorageManager sharedManager] dbPath]);
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [user finishUserRegistration];
         });

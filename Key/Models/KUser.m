@@ -71,12 +71,12 @@
 
 #pragma mark - Query Methods
 + (KUser *)fetchObjectWithUsername:(NSString *)username {
-    __block KUser *user = [[KUser alloc] init];
-    
+    __block KUser *user;
     [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:[NSString stringWithFormat:@"WHERE username = %@", username]];
-        [[transaction ext:KUsernameSQLiteIndex] enumerateKeysMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, BOOL *stop) {
-            user = (KUser *)[[KStorageManager sharedManager] objectForKey:key inCollection:[self collection]];
+        YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:@"WHERE username = ?", username];
+        [[transaction ext:KUsernameSQLiteIndex] enumerateKeysAndObjectsMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, id object, BOOL *stop) {
+            user = (KUser *)object;
+            NSLog(@"KEY: %@", key);
         }];
     }];
     return user;
@@ -104,14 +104,32 @@
 }
 
 #pragma mark - Convenience Methods
-- (void)encryptPassword:(NSString *)password {
+- (NSData *)encryptPassword:(NSString *)password {
     NSData *passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
     if(!self.passwordSalt) {
         [self setSalt];
     }
     unsigned char key[32];
     CCKeyDerivationPBKDF(kCCPBKDF2, passwordData.bytes, passwordData.length, self.passwordSalt.bytes, self.passwordSalt.length, kCCPRFHmacAlgSHA256, 10000, key, 32);
-    _passwordCrypt = [NSData dataWithBytes:key length:sizeof(key)];
+    return [NSData dataWithBytes:key length:sizeof(key)];
+}
+
+- (void)setPasswordCryptInKeychain:(NSString *)password {
+    _passwordCrypt = [self encryptPassword:password];
+    NSString *keychainPasswordKey = [NSString stringWithFormat:@"password_%@", self.username];
+    NSString *passwordString = [self.passwordCrypt base64EncodedString];
+    [SSKeychain setPassword:passwordString forService:keychainService account:keychainPasswordKey];
+}
+
+- (NSString *)getPasswordCryptFromKeychain {
+    NSString *keychainPasswordKey = [NSString stringWithFormat:@"password_%@", self.username];
+    return [SSKeychain passwordForService:keychainService account:keychainPasswordKey];
+}
+
+- (BOOL)authenticatePassword:(NSString *)password {
+    // TODO: eventually support remote authentication
+    NSData *passwordCrypt = [self encryptPassword:password];
+    return [[passwordCrypt base64EncodedString] isEqual:[self getPasswordCryptFromKeychain]];
 }
 
 - (void)setSalt {

@@ -179,8 +179,6 @@
 - (void)ratchetReceiverRootChain:(NSData *)theirEphemeral {
     if(![self.receiverRootChain.ratchetKey isEqual:theirEphemeral]) {
         ECKeyPair *ourEphemeral = self.senderRootChain.ratchetKeyPair;
-        NSLog(@"ALICE EPHEMERAL: %@", ourEphemeral.publicKey);
-        NSLog(@"BOB EPHEMERAL: %@", theirEphemeral);
         self.receiverRootChain = [[RootChain alloc] iterateRootKeyWithTheirEphemeral:theirEphemeral
                                                                         ourEphemeral:ourEphemeral];
     }
@@ -189,8 +187,6 @@
 - (void)ratchetSenderRootChain:(NSData *)theirEphemeral {
     if(![self.senderRootChain.ratchetKey isEqual:theirEphemeral]) {
         ECKeyPair *ourEphemeral = [Curve25519 generateKeyPair];
-        NSLog(@"ALICE EPHEMERAL: %@", ourEphemeral.publicKey);
-        NSLog(@"BOB EPHEMERAL: %@", theirEphemeral);
         self.senderRootChain = [[RootChain alloc] iterateRootKeyWithTheirEphemeral:theirEphemeral
                                                                       ourEphemeral:ourEphemeral];
     }

@@ -11,6 +11,7 @@
 #import "KSendable.h"
 
 @class IdentityKey;
+@class KStorageManager;
 
 @interface KUser : KYapDatabaseObject <YapDatabaseRelationshipNode, KSendable>
 
@@ -27,10 +28,11 @@
 
 + (KUser *)fetchObjectWithUsername:(NSString *)username;
 
+- (void)setPasswordCryptInKeychain:(NSString *)password;
+- (BOOL)authenticatePassword:(NSString *)password;
+
 - (instancetype)initWithUsername:(NSString *)username;
 - (instancetype)initWithUsername:(NSString *)username password:(NSString *)password;
-
-- (void)encryptPassword:(NSString *)password;
 
 - (void)registerUsername;
 - (void)finishUserRegistration;

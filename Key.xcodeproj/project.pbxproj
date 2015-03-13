@@ -25,6 +25,7 @@
 		EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B011AAF330A00F3B9AF /* PreKeyTests.m */; };
 		EF524B071AAF330A00F3B9AF /* SessionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B021AAF330A00F3B9AF /* SessionTests.m */; };
 		EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B091AB0DE4300F3B9AF /* HttpManager.m */; };
+		EF524B0F1AB31FDF00F3B9AF /* KUserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524B0E1AB31FDF00F3B9AF /* KUserTests.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
@@ -111,6 +112,7 @@
 		EF524B081AB0DE4300F3B9AF /* HttpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HttpManager.h; path = Network/HttpManager.h; sourceTree = "<group>"; };
 		EF524B091AB0DE4300F3B9AF /* HttpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HttpManager.m; path = Network/HttpManager.m; sourceTree = "<group>"; };
 		EF524B0D1AB0DF0D00F3B9AF /* KSendable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSendable.h; sourceTree = "<group>"; };
+		EF524B0E1AB31FDF00F3B9AF /* KUserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KUserTests.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
 		EFC6BE9D1A6857D400B0EB8F /* Key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Key.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -334,6 +336,7 @@
 				EF524B021AAF330A00F3B9AF /* SessionTests.m */,
 				EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */,
 				EFC6BEBA1A6857D500B0EB8F /* Supporting Files */,
+				EF524B0E1AB31FDF00F3B9AF /* KUserTests.m */,
 			);
 			path = KeyTests;
 			sourceTree = "<group>";
@@ -681,6 +684,7 @@
 				EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */,
 				EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */,
 				EF524B041AAF330A00F3B9AF /* EncryptedMessageTests.m in Sources */,
+				EF524B0F1AB31FDF00F3B9AF /* KUserTests.m in Sources */,
 				EF524B071AAF330A00F3B9AF /* SessionTests.m in Sources */,
 				EF524B051AAF330A00F3B9AF /* FreeKeyTests.m in Sources */,
 			);
