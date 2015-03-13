@@ -9,6 +9,8 @@
 #import "HttpManager.h"
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
 
+#define kRemoteEndpoint @"http://127.0.0.1:9393"
+
 @implementation HttpManager
 
 + (instancetype)sharedManager {
@@ -20,48 +22,60 @@
     return sharedMyManager;
 }
 
+- (NSString *)endpointForObject:(id <KSendable>)object {
+    return [NSString stringWithFormat:@"%@/%@.json", kRemoteEndpoint, [self remoteAlias:object]];
+}
+
+- (NSString *)remoteAlias:(id <KSendable>)object {
+    NSString *lowercaseClass = [NSStringFromClass([object class]) lowercaseString];
+    return [lowercaseClass substringFromIndex:1];
+}
+
 - (void)put:(id <KSendable>)object {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[[object class] remoteEndpoint] parameters:@{[[object class] remoteAlias] : [object toDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"%@", responseObject);
+    [manager PUT:[self endpointForObject:object]
+      parameters:@{[self remoteAlias:object] : [object toDictionary]}
+         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+             
         if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
-            [object setUniqueId:responseObject[[[object class] remoteAlias]][@"uniqueId"]];
+            [object setUniqueId:responseObject[[self remoteAlias:object]][@"uniqueId"]];
             [object setRemoteStatus:kRemotePutSuccessStatus];
         }else {
             [object setRemoteStatus:kRemotePutFailureStatus];
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteCreateNotification] object:self];
-        });
+        [self fireNotification:kRemotePutNotification object:object];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [object setRemoteStatus:kRemotePutNetworkFailureStatus];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] remoteCreateNotification] object:self];
-        });
+        [self fireNotification:kRemotePutNotification object:object];
     }];
 }
 
 - (void)post:(id <KSendable>)object {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[[self class] remoteEndpoint] parameters:@{[[object class] remoteAlias] : [object toDictionary]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager POST:[self endpointForObject:object]
+       parameters:@{[self remoteAlias:object] : [object toDictionary]}
+          success:^(AFHTTPRequestOperation *operation, id responseObject) {
+              
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
             [object setRemoteStatus:kRemotePostSuccessStatus];
         } else {
             [object setRemoteStatus:kRemotePostFailureStatus];
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:[[object class] remoteUpdateNotification] object:self];
-        });
+        [self fireNotification:kRemotePostNotification object:object];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [object setRemoteStatus:kRemotePostNetworkFailureStatus];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:[[object class] remoteUpdateNotification] object:self];
-        });
+        [self fireNotification:kRemotePostNotification object:object];
     }];
 }
 
 - (void)get:(NSDictionary *)parameters {
 
+}
+
+- (void)fireNotification:(NSString *)notfication object:(id <KSendable>)object {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kRemotePutNotification object:object];
+    });
 }
 
 - (NSDictionary *)toDictionary {

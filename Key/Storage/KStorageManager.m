@@ -14,11 +14,10 @@
 #import "NSData+Base64.h"
 #import "KYapDatabaseView.h"
 #import "KYapDatabaseSecondaryIndex.h"
+#import "KUser.h"
+#import "Util.h"
 
 NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnectionDidUpdateNotification";
-
-static NSString *keychainService          = @"KKeyChainService";
-static NSString *keychainDBPassAccount    = @"KDatabasePass";
 
 @interface KStorageManager ()
 
@@ -109,17 +108,15 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
     NSFileManager* fileManager = [NSFileManager defaultManager];
     NSURL *fileURL = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSString *path = [fileURL path];
-    return [path stringByAppendingFormat:@"/%@", [[KAccountManager sharedManager] uniqueId]];
+    return [path stringByAppendingFormat:@"/%@", [[[KAccountManager sharedManager] user] username]];
 }
 
 - (NSString*)databasePassword {
-    [SSKeychain setAccessibilityType:kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly];
     NSString *dbPassword = [SSKeychain passwordForService:keychainService account:keychainDBPassAccount];
     
     if (!dbPassword) {
-        dbPassword = @"TODO: SET DB PASSWORD";
+        dbPassword = [[NSString alloc] initWithData:[Util generateRandomData:30] encoding:NSUTF8StringEncoding];
         [SSKeychain setPassword:dbPassword forService:keychainService account:keychainDBPassAccount];
-        //DDLogError(@"Set new password from keychain ...");
     }
     return dbPassword;
 }

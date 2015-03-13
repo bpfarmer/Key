@@ -20,6 +20,9 @@ NSString *KMessageDatabaseViewExtensionName = @"KMessageDatabaseViewExtension";
 @implementation KYapDatabaseView
 
 + (BOOL) registerThreadDatabaseView {
+    if ([[KStorageManager sharedManager].database registeredExtension:KThreadDatabaseViewExtensionName]) {
+        return YES;
+    }
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {
         if ([object isKindOfClass:[KThread class]]){
             return KInboxGroup;

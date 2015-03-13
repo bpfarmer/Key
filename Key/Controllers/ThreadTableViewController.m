@@ -39,7 +39,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    self.currentUser = [KAccountManager currentUser];
+    self.currentUser = [[KAccountManager sharedManager] user];
     
     if (self.thread) {
         [self setupDatabaseView];

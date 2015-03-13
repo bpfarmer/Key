@@ -21,14 +21,4 @@
     return sharedMyManager;
 }
 
-+ (KUser *)currentUser {
-    return [[KStorageManager sharedManager] objectForKey:[[self sharedManager] uniqueId] inCollection:[KUser collection]];
-}
-
-- (instancetype) initWithUniqueId:(NSString *)uniqueId {
-    _uniqueId = uniqueId;
-    [[KStorageManager sharedManager] setupDatabase];
-    return self;
-}
-
 @end

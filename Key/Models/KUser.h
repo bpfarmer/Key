@@ -17,7 +17,6 @@
 @property (nonatomic) NSString *firstName;
 @property (nonatomic) NSString *lastName;
 @property (nonatomic) NSString *username;
-@property (nonatomic) NSString *plainPassword;
 @property (nonatomic) NSData *passwordSalt;
 @property (nonatomic) NSData *passwordCrypt;
 @property (nonatomic) NSString *localStatus;
@@ -26,10 +25,17 @@
 // KSendable Protocol
 @property (nonatomic) NSString *remoteStatus;
 
++ (KUser *)fetchObjectWithUsername:(NSString *)username;
+
 - (instancetype)initWithUsername:(NSString *)username;
 - (instancetype)initWithUsername:(NSString *)username password:(NSString *)password;
+
+- (void)encryptPassword:(NSString *)password;
+
+- (void)registerUsername;
+- (void)finishUserRegistration;
 
 @end
 
 //Notification Center
-#define KUserRegisterUsernameStatusNotification @"KUserRegisterUsernameStatusNotification"
+#define kRegisterUsernameStatusNotification @"kRegisterUsernameStatusNotification"

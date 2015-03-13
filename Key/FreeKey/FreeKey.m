@@ -19,7 +19,7 @@
 + (void)setupPreKeysForUser:(KUser *)user {
     int index = 0;
     NSMutableSet *preKeys;
-    ECKeyPair *identityKeyPair = user.activeIdentityKey.keyPair;
+    ECKeyPair *identityKeyPair = user.identityKey.keyPair;
     //TODO: why the distinction between PreKeys and signed PreKeys?
     while(index < 100) {
         ECKeyPair *baseKeyPair = [Curve25519 generateKeyPair];
@@ -55,6 +55,6 @@
     
 }
 
-
+// TODO: write methods for session serialization and persistence
 
 @end

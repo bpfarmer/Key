@@ -11,6 +11,9 @@
 
 extern NSString *const KUIDatabaseConnectionDidUpdateNotification;
 
+static NSString *keychainService          = @"KKeyChainService";
+static NSString *keychainDBPassAccount    = @"KDatabasePass";
+
 @interface KStorageManager : NSObject
 
 + (instancetype)sharedManager;

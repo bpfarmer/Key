@@ -7,6 +7,9 @@
 //
 
 #import "LoginViewController.h"
+#import "KUser.h"
+#import "KAccountManager.h"
+#import "KStorageManager.h"
 
 @interface LoginViewController ()
 
@@ -22,6 +25,24 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)login:(id)sender {
+    KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text];
+    [user encryptPassword:self.passwordText.text];
+    KUser *retrievedUser = [KUser fetchObjectWithUsername:user.username];
+    if(retrievedUser && [retrievedUser.passwordCrypt isEqual:user.passwordCrypt]) {
+        [[KAccountManager sharedManager] setUser:retrievedUser];
+        [self showInbox];
+    }else {
+        NSLog(@"ERROR LOGGING IN");
+    }
+}
+
+- (void)showInbox {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
+    [self presentViewController:inboxView animated:YES completion:nil];
 }
 
 /*

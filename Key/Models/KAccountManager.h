@@ -13,10 +13,8 @@
 @interface KAccountManager : NSObject
 
 @property (nonatomic) NSString *uniqueId;
-@property (nonatomic) NSString *username;
+@property (nonatomic) KUser *user;
 
 + (instancetype)sharedManager;
-+ (KUser *)currentUser;
-- (instancetype)initWithUniqueId:(NSString *)uniqueId;
 
 @end

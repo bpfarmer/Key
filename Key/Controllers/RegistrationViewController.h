@@ -10,7 +10,8 @@
 
 @interface RegistrationViewController : UIViewController
 
-@property (strong, nonatomic) IBOutlet UITextField *usernameText;
-@property (strong, nonatomic) IBOutlet UITextField *passwordText;
+@property (nonatomic, strong) IBOutlet UITextField *emailText;
+@property (nonatomic, strong) IBOutlet UITextField *usernameText;
+@property (nonatomic, strong) IBOutlet UITextField *passwordText;
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation Util
 
-+ (NSData *)generateRandomString:(NSInteger)length {
++ (NSData *)generateRandomData:(NSInteger)length {
     uint8_t randomBytes[(size_t)length];
     SecRandomCopyBytes(kSecRandomDefault, (size_t)length, &randomBytes);
     return [[NSData alloc] initWithBytes:randomBytes length:length];
