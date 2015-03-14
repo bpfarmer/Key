@@ -11,7 +11,7 @@
 
 @class ECKeyPair;
 
-@interface PreKey : NSObject <NSSecureCoding>
+@interface PreKey : NSObject
 
 @property (nonatomic, readonly) NSData *identityKey;
 @property (nonatomic, readonly) NSString *userId;

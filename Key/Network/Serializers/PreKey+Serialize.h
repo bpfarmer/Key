@@ -1,5 +1,5 @@
 //
-//  IdentityKey+Serialize.h
+//  PreKey+Serialize.h
 //  Key
 //
 //  Created by Brendan Farmer on 3/14/15.
@@ -7,10 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "IdentityKey.h"
 
-@interface IdentityKey(Serialize) <NSSecureCoding>
-
-+ (NSString *)collection;
+@interface PreKey_Serialize : NSObject
 
 @end

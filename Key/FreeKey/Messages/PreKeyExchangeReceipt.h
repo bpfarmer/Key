@@ -10,7 +10,7 @@
 
 @class IdentityKey;
 
-@interface PreKeyExchangeReceipt : NSObject <NSSecureCoding>
+@interface PreKeyExchangeReceipt : NSObject
 
 @property (nonatomic, readonly) NSString *senderId;
 @property (nonatomic, readonly) NSString *receiverId;

@@ -14,6 +14,7 @@
 #define kCoderKeyPair  @"keyPair"
 #define kCoderPublicKey @"publicKey"
 #define kCoderUserId @"userId"
+#define kStorageCollection @"IdentityKey"
 
 @implementation IdentityKey(Serialize)
 
@@ -33,6 +34,10 @@
     [aCoder encodeObject:self.keyPair forKey:kCoderKeyPair];
     [aCoder encodeObject:self.publicKey forKey:kCoderPublicKey];
     [aCoder encodeObject:self.userId forKey:kCoderUserId];
+}
+
++ (NSString *)collection {
+    return kStorageCollection;
 }
 
 @end

@@ -12,6 +12,9 @@
 		EF2CDEAE1AB48C3F001E2F20 /* KUser+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEAD1AB48C3F001E2F20 /* KUser+Serialize.m */; };
 		EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */; };
 		EF2CDEB81AB49A6F001E2F20 /* IdentityKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEB71AB49A6F001E2F20 /* IdentityKey+Serialize.m */; };
+		EF2CDEBB1AB4A354001E2F20 /* PreKeyExchange+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEBA1AB4A354001E2F20 /* PreKeyExchange+Serialize.m */; };
+		EF2CDEBD1AB4A78E001E2F20 /* IdentityKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEBC1AB4A78E001E2F20 /* IdentityKeyTests.m */; };
+		EF2CDEC01AB4AB42001E2F20 /* PreKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEBF1AB4AB42001E2F20 /* PreKey+Serialize.m */; };
 		EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD31AAE238600F3B9AF /* KStorageKeys.m */; };
 		EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD51AAE238600F3B9AF /* KStorageManager.m */; };
 		EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD71AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m */; };
@@ -91,6 +94,11 @@
 		EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KMessage+Serialize.m"; path = "Network/Serializers/KMessage+Serialize.m"; sourceTree = "<group>"; };
 		EF2CDEB61AB49A6F001E2F20 /* IdentityKey+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IdentityKey+Serialize.h"; path = "Network/Serializers/IdentityKey+Serialize.h"; sourceTree = "<group>"; };
 		EF2CDEB71AB49A6F001E2F20 /* IdentityKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IdentityKey+Serialize.m"; path = "Network/Serializers/IdentityKey+Serialize.m"; sourceTree = "<group>"; };
+		EF2CDEB91AB4A354001E2F20 /* PreKeyExchange+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PreKeyExchange+Serialize.h"; path = "Network/Serializers/PreKeyExchange+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDEBA1AB4A354001E2F20 /* PreKeyExchange+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PreKeyExchange+Serialize.m"; path = "Network/Serializers/PreKeyExchange+Serialize.m"; sourceTree = "<group>"; };
+		EF2CDEBC1AB4A78E001E2F20 /* IdentityKeyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityKeyTests.m; sourceTree = "<group>"; };
+		EF2CDEBE1AB4AB42001E2F20 /* PreKey+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PreKey+Serialize.h"; path = "Network/Serializers/PreKey+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDEBF1AB4AB42001E2F20 /* PreKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PreKey+Serialize.m"; path = "Network/Serializers/PreKey+Serialize.m"; sourceTree = "<group>"; };
 		EF524AD21AAE238600F3B9AF /* KStorageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageKeys.h; sourceTree = "<group>"; };
 		EF524AD31AAE238600F3B9AF /* KStorageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageKeys.m; sourceTree = "<group>"; };
 		EF524AD41AAE238600F3B9AF /* KStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageManager.h; sourceTree = "<group>"; };
@@ -244,6 +252,10 @@
 				EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */,
 				EF2CDEB61AB49A6F001E2F20 /* IdentityKey+Serialize.h */,
 				EF2CDEB71AB49A6F001E2F20 /* IdentityKey+Serialize.m */,
+				EF2CDEB91AB4A354001E2F20 /* PreKeyExchange+Serialize.h */,
+				EF2CDEBA1AB4A354001E2F20 /* PreKeyExchange+Serialize.m */,
+				EF2CDEBE1AB4AB42001E2F20 /* PreKey+Serialize.h */,
+				EF2CDEBF1AB4AB42001E2F20 /* PreKey+Serialize.m */,
 			);
 			name = Serializers;
 			sourceTree = "<group>";
@@ -360,6 +372,7 @@
 				EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */,
 				EFC6BEBA1A6857D500B0EB8F /* Supporting Files */,
 				EF524B0E1AB31FDF00F3B9AF /* KUserTests.m */,
+				EF2CDEBC1AB4A78E001E2F20 /* IdentityKeyTests.m */,
 			);
 			path = KeyTests;
 			sourceTree = "<group>";
@@ -679,6 +692,7 @@
 				EF524AE61AAE239800F3B9AF /* Util.m in Sources */,
 				EFF70AC21AAE1CBC006C10D2 /* ContactsTableViewController.m in Sources */,
 				EFF70A921AAE19C3006C10D2 /* PreKeyExchange.m in Sources */,
+				EF2CDEBB1AB4A354001E2F20 /* PreKeyExchange+Serialize.m in Sources */,
 				EFF70AC71AAE1CBC006C10D2 /* ThreadTableViewController.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
 				EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
@@ -697,6 +711,7 @@
 				EF2CDEAE1AB48C3F001E2F20 /* KUser+Serialize.m in Sources */,
 				EF524AEF1AAE255200F3B9AF /* KYapDatabaseObject.m in Sources */,
 				EFF70A8C1AAE19C3006C10D2 /* MessageKey.m in Sources */,
+				EF2CDEC01AB4AB42001E2F20 /* PreKey+Serialize.m in Sources */,
 				EFF70AC31AAE1CBC006C10D2 /* InboxTableViewController.m in Sources */,
 				EFF70A8F1AAE19C3006C10D2 /* RootKey.m in Sources */,
 			);
@@ -709,6 +724,7 @@
 				EF524B031AAF330A00F3B9AF /* CryptoTests.m in Sources */,
 				EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */,
 				EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */,
+				EF2CDEBD1AB4A78E001E2F20 /* IdentityKeyTests.m in Sources */,
 				EF524B041AAF330A00F3B9AF /* EncryptedMessageTests.m in Sources */,
 				EF524B0F1AB31FDF00F3B9AF /* KUserTests.m in Sources */,
 				EF524B071AAF330A00F3B9AF /* SessionTests.m in Sources */,
