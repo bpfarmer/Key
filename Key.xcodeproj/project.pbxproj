@@ -367,12 +367,12 @@
 				EF524AFE1AAF330A00F3B9AF /* CryptoTests.m */,
 				EF524AFF1AAF330A00F3B9AF /* EncryptedMessageTests.m */,
 				EF524B001AAF330A00F3B9AF /* FreeKeyTests.m */,
+				EF2CDEBC1AB4A78E001E2F20 /* IdentityKeyTests.m */,
+				EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */,
+				EF524B0E1AB31FDF00F3B9AF /* KUserTests.m */,
 				EF524B011AAF330A00F3B9AF /* PreKeyTests.m */,
 				EF524B021AAF330A00F3B9AF /* SessionTests.m */,
-				EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */,
 				EFC6BEBA1A6857D500B0EB8F /* Supporting Files */,
-				EF524B0E1AB31FDF00F3B9AF /* KUserTests.m */,
-				EF2CDEBC1AB4A78E001E2F20 /* IdentityKeyTests.m */,
 			);
 			path = KeyTests;
 			sourceTree = "<group>";

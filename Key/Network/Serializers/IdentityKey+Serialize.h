@@ -11,6 +11,5 @@
 
 @interface IdentityKey(Serialize) <NSSecureCoding>
 
-+ (NSString *)collection;
 
 @end

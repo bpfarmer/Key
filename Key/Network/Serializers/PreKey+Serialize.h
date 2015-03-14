@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PreKey.h"
 
-@interface PreKey_Serialize : NSObject
+@interface PreKey(Serialize) <NSSecureCoding>
 
 @end

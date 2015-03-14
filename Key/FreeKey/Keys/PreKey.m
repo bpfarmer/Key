@@ -12,13 +12,11 @@
 
 - (instancetype)initWithUserId:(NSString *)userId
                       deviceId:(NSString *)deviceId
-                      preKeyId:(NSString *)preKeyId
-                  preKeyPublic:(NSData*)preKeyPublic
-            signedPreKeyPublic:(NSData*)signedPreKeyPublic
                 signedPreKeyId:(NSString *)signedPreKeyId
-         signedPreKeySignature:(NSData*)signedPreKeySignature
-                   identityKey:(NSData*)identityKey
-                   baseKeyPair:(ECKeyPair *)baseKeyPair{
+            signedPreKeyPublic:(NSData *)signedPreKeyPublic
+         signedPreKeySignature:(NSData *)signedPreKeySignature
+                   identityKey:(NSData *)identityKey
+                   baseKeyPair:(ECKeyPair *)baseKeyPair {
     
     self = [super init];
     
@@ -26,8 +24,6 @@
         _identityKey           = identityKey;
         _userId                = userId;
         _deviceId              = deviceId;
-        _preKeyPublic          = preKeyPublic;
-        _preKeyId              = preKeyId;
         _signedPreKeyPublic    = signedPreKeyPublic;
         _signedPreKeyId        = signedPreKeyId;
         _signedPreKeySignature = signedPreKeySignature;
@@ -35,6 +31,7 @@
     }
     
     return self;
+    
 }
 
 @end

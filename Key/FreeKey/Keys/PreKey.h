@@ -12,23 +12,18 @@
 @class ECKeyPair;
 
 @interface PreKey : NSObject
-
-@property (nonatomic, readonly) NSData *identityKey;
 @property (nonatomic, readonly) NSString *userId;
 @property (nonatomic, readonly) NSString *deviceId;
-@property (nonatomic, readonly) NSData   *signedPreKeyPublic;
-@property (nonatomic, readonly) NSData   *preKeyPublic;
-@property (nonatomic, readonly) NSString *preKeyId;
 @property (nonatomic, readonly) NSString *signedPreKeyId;
+@property (nonatomic, readonly) NSData   *signedPreKeyPublic;
 @property (nonatomic, readonly) NSData   *signedPreKeySignature;
+@property (nonatomic, readonly) NSData *identityKey;
 @property (nonatomic, readonly) ECKeyPair *baseKeyPair;
 
 - (instancetype)initWithUserId:(NSString *)userId
                       deviceId:(NSString *)deviceId
-                      preKeyId:(NSString *)preKeyId
-                  preKeyPublic:(NSData*)preKeyPublic
-            signedPreKeyPublic:(NSData*)signedPreKeyPublic
                 signedPreKeyId:(NSString *)signedPreKeyId
+            signedPreKeyPublic:(NSData*)signedPreKeyPublic
          signedPreKeySignature:(NSData*)signedPreKeySignature
                    identityKey:(NSData*)identityKey
                    baseKeyPair:(ECKeyPair *)baseKeyPair;

@@ -39,7 +39,7 @@
 
 - (void)addOurPreKey:(PreKey *)ourPreKey preKeyExchange:(PreKeyExchange *)preKeyExchange  {
     _receiverIdentityPublicKey  = preKeyExchange.senderIdentityPublicKey;
-    NSData *theirBaseKey = preKeyExchange.sentBaseKey;
+    NSData *theirBaseKey = preKeyExchange.sentSignedBaseKey;
     
     // TODO: some sort of verification of trust, signatures, etc
   
@@ -47,6 +47,7 @@
                                                                 theirIdentityKey:preKeyExchange.senderIdentityPublicKey
                                                               ourIdentityKeyPair:self.senderIdentityKey.keyPair
                                                                       ourBaseKey:ourPreKey.baseKeyPair];
+    
     [keyBundle setRolesWithFirstKey:theirBaseKey secondKey:ourPreKey.baseKeyPair.publicKey];
     [self setupRootChainsFromKeyBundle:keyBundle];
     [self.senderRootChain setRatchetKeyPair:ourPreKey.baseKeyPair];
@@ -62,6 +63,7 @@
                                                                theirIdentityKey:self.receiverIdentityPublicKey
                                                              ourIdentityKeyPair:self.senderIdentityKey.keyPair
                                                                      ourBaseKey:ourBaseKey];
+    
     [keyBundle setRolesWithFirstKey:ourBaseKey.publicKey secondKey:preKey.signedPreKeyPublic];
     [self setupRootChainsFromKeyBundle:keyBundle];
     PreKeyExchange *preKeyExchange = [self preKeyExchange];
@@ -93,14 +95,14 @@
 }
 
 - (PreKeyExchange *)preKeyExchange {
+    NSData *signature = [Ed25519 sign:self.baseKeyPublic withKeyPair:self.senderIdentityKey.keyPair];
     PreKeyExchange *preKeyExchange = [[PreKeyExchange alloc] initWithSenderId:self.senderId
                                                                    receiverId:self.receiverId
-                                                               targetPreKeyId:self.preKey.preKeyId
                                                          signedTargetPreKeyId:self.preKey.signedPreKeyId
-                                                                  sentBaseKey:self.baseKeyPublic
                                                             sentSignedBaseKey:self.baseKeyPublic
-                                                            senderIdentityPublicKey:self.senderIdentityKey.publicKey
-                                                          receiverIdentityPublicKey:self.receiverIdentityPublicKey];
+                                                      senderIdentityPublicKey:self.senderIdentityKey.publicKey
+                                                    receiverIdentityPublicKey:self.receiverIdentityPublicKey
+                                                             baseKeySignature:signature];
     return preKeyExchange;
 }
 

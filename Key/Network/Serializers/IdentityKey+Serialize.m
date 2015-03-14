@@ -36,8 +36,4 @@
     [aCoder encodeObject:self.userId forKey:kCoderUserId];
 }
 
-+ (NSString *)collection {
-    return kStorageCollection;
-}
-
 @end

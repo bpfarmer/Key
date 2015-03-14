@@ -77,17 +77,14 @@
     
     Session *aliceSession = [[Session alloc] initWithReceiverId:BOB_RECIPIENT_ID identityKey:aliceIdentityKey];
     
-    ECKeyPair *bobPreKeyPair            = [Curve25519 generateKeyPair];
     ECKeyPair *bobSignedPreKeyPair      = [Curve25519 generateKeyPair];
     NSString  *bobUniqueId              = @"bobUniqueId";
     NSData    *bobSignedPreKeySignature = [Ed25519 sign:bobSignedPreKeyPair.publicKey withKeyPair:bobIdentityKey.keyPair];
     
     PreKey *bobPreKey = [[PreKey alloc] initWithUserId:bobUniqueId
                                               deviceId:@"1"
-                                              preKeyId:@"31337"
-                                          preKeyPublic:bobPreKeyPair.publicKey
-                                    signedPreKeyPublic:bobSignedPreKeyPair.publicKey
                                         signedPreKeyId:@"22"
+                                    signedPreKeyPublic:bobSignedPreKeyPair.publicKey
                                  signedPreKeySignature:bobSignedPreKeySignature
                                            identityKey:bobIdentityKey.publicKey
                                            baseKeyPair:bobSignedPreKeyPair];
@@ -95,6 +92,7 @@
     PreKeyExchange *preKeyExchange = [aliceSession addPreKey:bobPreKey];
     
     Session *bobSession = [[Session alloc] initWithReceiverId:ALICE_RECIPIENT_ID identityKey:bobIdentityKey];
+    NSLog(@"THEIR BASE KEY: %@", preKeyExchange.sentSignedBaseKey);
     [bobSession addOurPreKey:bobPreKey preKeyExchange:preKeyExchange];
     return [[NSArray alloc] initWithObjects:aliceSession, bobSession, nil];
 }

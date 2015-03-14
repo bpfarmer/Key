@@ -14,22 +14,20 @@
 
 - (instancetype)initWithSenderId:(NSString *)senderId
                       receiverId:(NSString *)receiverId
-                  targetPreKeyId:(NSString *)targetPreKeyId
             signedTargetPreKeyId:(NSString *)signedTargetPreKeyId
-                     sentBaseKey:(NSData *)sentBaseKey
                sentSignedBaseKey:(NSData *)sentSignedBaseKey
          senderIdentityPublicKey:(NSData *)senderIdentityPublicKey
-       receiverIdentityPublicKey:(NSData *)receiverIdentityPublicKey {
+       receiverIdentityPublicKey:(NSData *)receiverIdentityPublicKey
+                baseKeySignature:(NSData *)baseKeySignature{
     
     self = [super init];
     
     if(self) {
         _senderId = senderId;
         _receiverId = receiverId;
-        _targetPreKeyId = targetPreKeyId;
         _signedTargetPreKeyId = signedTargetPreKeyId;
-        _sentBaseKey = sentBaseKey;
         _senderIdentityPublicKey = senderIdentityPublicKey;
+        _sentSignedBaseKey = sentSignedBaseKey;
         _receiverIdentityPublicKey = receiverIdentityPublicKey;
     }
     
@@ -39,14 +37,10 @@
 - (PreKeyExchangeReceipt *)createPreKeyExchangeReceipt {
     PreKeyExchangeReceipt *receipt = [[PreKeyExchangeReceipt alloc] initFromSenderId:self.senderId
                                                                           receiverId:self.receiverId
-                                                                     receivedBaseKey:self.sentBaseKey
+                                                                     receivedBaseKey:self.sentSignedBaseKey
                                                              senderIdentityPublicKey:self.senderIdentityPublicKey
                                                            receiverIdentityPublicKey:self.receiverIdentityPublicKey];
     return receipt;
-}
-
-- (void)sendToServer {
-    
 }
 
 @end
