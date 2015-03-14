@@ -9,9 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "YapDatabaseRelationshipNode.h"
 #import "YapDatabaseTransaction.h"
-#import <Mantle/MTLModel+NSCoding.h>
 
-@interface KYapDatabaseObject : MTLModel
+@interface KYapDatabaseObject : NSObject <NSSecureCoding>
 
 /**
  *  Initializes a new database object with a unique identifier

@@ -9,6 +9,7 @@
 #import "IdentityKey.h"
 #import <25519/Curve25519.h>
 #import <25519/Ed25519.h>
+#import "IdentityKey+Serialize.h"
 
 @implementation IdentityKey
 
@@ -30,6 +31,22 @@
         _keyPair   = keyPair;
         _userId    = userId;
     }
+    return self;
+}
+
+- (instancetype)initWithUniqueId:(NSString *)uniqueId
+                          userId:(NSString *)userId
+                       publicKey:(NSData *)publicKey
+                         keyPair:(ECKeyPair *)keyPair {
+    self = [super init];
+    
+    if(self) {
+        _uniqueId = uniqueId;
+        _userId   = userId;
+        _publicKey = publicKey;
+        _keyPair  = keyPair;
+    }
+    
     return self;
 }
 

@@ -93,6 +93,7 @@
     if(self.uniqueId) [userDictionary addEntriesFromDictionary:@{@"uniqueId" : self.uniqueId}];
     if(self.username) [userDictionary addEntriesFromDictionary:@{@"username" : self.username}];
     if(self.passwordCrypt) [userDictionary addEntriesFromDictionary:@{@"password" : self.passwordCrypt}];
+    if(self.identityKey) [userDictionary addEntriesFromDictionary:@{@"identityKey" : self.identityKey}];
     return userDictionary;
 }
 

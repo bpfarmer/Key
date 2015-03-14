@@ -19,7 +19,6 @@
 @property (nonatomic) NSString *authorId;
 @property (nonatomic) NSString *threadId;
 @property (nonatomic) NSString *body;
-@property (nonatomic) NSData *attachments;
 @property (nonatomic) NSString *sendStatus;
 @property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *createdAt;

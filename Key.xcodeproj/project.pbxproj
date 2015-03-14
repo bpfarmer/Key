@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		49324C749A49C0F4FB711A5D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
 		710028D1F762C6FE738F0D7A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
+		EF2CDEAE1AB48C3F001E2F20 /* KUser+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEAD1AB48C3F001E2F20 /* KUser+Serialize.m */; };
+		EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */; };
+		EF2CDEB81AB49A6F001E2F20 /* IdentityKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEB71AB49A6F001E2F20 /* IdentityKey+Serialize.m */; };
 		EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD31AAE238600F3B9AF /* KStorageKeys.m */; };
 		EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD51AAE238600F3B9AF /* KStorageManager.m */; };
 		EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD71AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m */; };
@@ -82,6 +85,12 @@
 		C461760CA51ABA0BE7C393EF /* Pods-Key.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.release.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.release.xcconfig"; sourceTree = "<group>"; };
 		DB575E32381FD8118E62EE58 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		DF6091F2DF6E5A8AC8248FE8 /* Pods-KeyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.release.xcconfig"; sourceTree = "<group>"; };
+		EF2CDEAC1AB48C3F001E2F20 /* KUser+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KUser+Serialize.h"; path = "Network/Serializers/KUser+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDEAD1AB48C3F001E2F20 /* KUser+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KUser+Serialize.m"; path = "Network/Serializers/KUser+Serialize.m"; sourceTree = "<group>"; };
+		EF2CDEAF1AB48CB6001E2F20 /* KMessage+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KMessage+Serialize.h"; path = "Network/Serializers/KMessage+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KMessage+Serialize.m"; path = "Network/Serializers/KMessage+Serialize.m"; sourceTree = "<group>"; };
+		EF2CDEB61AB49A6F001E2F20 /* IdentityKey+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "IdentityKey+Serialize.h"; path = "Network/Serializers/IdentityKey+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDEB71AB49A6F001E2F20 /* IdentityKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "IdentityKey+Serialize.m"; path = "Network/Serializers/IdentityKey+Serialize.m"; sourceTree = "<group>"; };
 		EF524AD21AAE238600F3B9AF /* KStorageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageKeys.h; sourceTree = "<group>"; };
 		EF524AD31AAE238600F3B9AF /* KStorageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageKeys.m; sourceTree = "<group>"; };
 		EF524AD41AAE238600F3B9AF /* KStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageManager.h; sourceTree = "<group>"; };
@@ -226,6 +235,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EF2CDEAB1AB48BFD001E2F20 /* Serializers */ = {
+			isa = PBXGroup;
+			children = (
+				EF2CDEAC1AB48C3F001E2F20 /* KUser+Serialize.h */,
+				EF2CDEAD1AB48C3F001E2F20 /* KUser+Serialize.m */,
+				EF2CDEAF1AB48CB6001E2F20 /* KMessage+Serialize.h */,
+				EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */,
+				EF2CDEB61AB49A6F001E2F20 /* IdentityKey+Serialize.h */,
+				EF2CDEB71AB49A6F001E2F20 /* IdentityKey+Serialize.m */,
+			);
+			name = Serializers;
+			sourceTree = "<group>";
+		};
 		EF524ACF1AAE238600F3B9AF /* Storage */ = {
 			isa = PBXGroup;
 			children = (
@@ -308,6 +330,7 @@
 				EFF70A5E1AAE19C3006C10D2 /* FreeKey */,
 				EFC6BEAF1A6857D500B0EB8F /* LaunchScreen.xib */,
 				EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */,
+				EF2CDEAB1AB48BFD001E2F20 /* Serializers */,
 				EFEBDD321A68673D00973E15 /* Models */,
 				EF524AFD1AAF182800F3B9AF /* Network */,
 				EF524ACF1AAE238600F3B9AF /* Storage */,
@@ -632,6 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */,
+				EF2CDEB81AB49A6F001E2F20 /* IdentityKey+Serialize.m in Sources */,
 				EFF70A891AAE19C3006C10D2 /* ChainKey.m in Sources */,
 				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
 				EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */,
@@ -649,6 +673,7 @@
 				EFF70AC61AAE1CBC006C10D2 /* RegistrationViewController.m in Sources */,
 				EFF70A8B1AAE19C3006C10D2 /* MasterKey.m in Sources */,
 				EFF70AC11AAE1CBC006C10D2 /* AddContactViewController.m in Sources */,
+				EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */,
 				EFF70A8A1AAE19C3006C10D2 /* IdentityKey.m in Sources */,
 				EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */,
 				EF524AE61AAE239800F3B9AF /* Util.m in Sources */,
@@ -669,6 +694,7 @@
 				EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */,
 				EFF70A941AAE19C3006C10D2 /* Session.m in Sources */,
 				EFF70AC81AAE1CBC006C10D2 /* WelcomeScreenViewController.m in Sources */,
+				EF2CDEAE1AB48C3F001E2F20 /* KUser+Serialize.m in Sources */,
 				EF524AEF1AAE255200F3B9AF /* KYapDatabaseObject.m in Sources */,
 				EFF70A8C1AAE19C3006C10D2 /* MessageKey.m in Sources */,
 				EFF70AC31AAE1CBC006C10D2 /* InboxTableViewController.m in Sources */,

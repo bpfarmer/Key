@@ -17,7 +17,7 @@
 @class PreKeyExchangeReceipt;
 @class ECKeyPair;
 
-@interface Session : KYapDatabaseObject
+@interface Session : NSObject <NSSecureCoding>
 
 @property (nonatomic, readonly) NSString *senderId;
 @property (nonatomic, readonly) NSString *receiverId;

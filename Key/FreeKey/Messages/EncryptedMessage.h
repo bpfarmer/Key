@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface EncryptedMessage : NSObject
+@interface EncryptedMessage : NSObject <NSSecureCoding>
 
 @property (nonatomic, readonly) NSData *senderRatchetKey;
 @property (nonatomic, readonly) int index;
