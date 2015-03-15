@@ -18,11 +18,11 @@
 #define kRemotePostNetworkFailureStatus @"KRemoteUpdateNetworkFailure"
 #define kRemotePostNotification  @"KRemoteUpdateNotification"
 
-@protocol KSendable <NSObject>
+@protocol KSendable <NSObject, NSSecureCoding>
 
-- (NSDictionary *)toDictionary;
 - (void)setUniqueId:(NSString *)uniqueId;
 - (void)setRemoteStatus:(NSString *)remoteStatus;
+- (NSArray *)keysToSend;
 
 @property (nonatomic) NSString *remoteStatus;
 

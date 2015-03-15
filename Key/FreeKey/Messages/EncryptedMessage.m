@@ -32,4 +32,8 @@
     return self;
 }
 
+- (NSArray *)keysToSend {
+    return @[@"senderRatchetKey", @"cipherText", @"index", @"previousIndex"];
+}
+
 @end

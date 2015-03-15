@@ -12,27 +12,35 @@
 #import <25519/Curve25519.h>
 #import <25519/Ed25519.h>
 #import "IdentityKey.h"
+#import "KStorageManager.h"
 
+#define kPreKeyCollection @"PreKey"
 
 @implementation FreeKey
 
-+ (void)setupPreKeysForUser:(KUser *)user {
++ (NSArray *)generatePreKeysForUser:(KUser *)user {
     int index = 0;
-    NSMutableSet *preKeys;
-    ECKeyPair *identityKeyPair = user.identityKey.keyPair;
-    //TODO: why the distinction between PreKeys and signed PreKeys?
+    NSMutableArray *preKeys;
     while(index < 100) {
         ECKeyPair *baseKeyPair = [Curve25519 generateKeyPair];
-        [preKeys addObject:[[PreKey alloc] initWithUserId:user.uniqueId
-                                                 deviceId:nil
-                                                 preKeyId:[self preKeyId:user]
-                                             preKeyPublic:baseKeyPair.publicKey
+        NSString *uniquePreKeyId = [NSString stringWithFormat:@"%@_%f_%d", user.uniqueId, [[NSDate date] timeIntervalSince1970], index];
+        NSData *preKeySignature = [Ed25519 sign:baseKeyPair.publicKey withKeyPair:user.identityKey.keyPair];
+        PreKey *preKey = [[PreKey alloc] initWithUserId:user.uniqueId
+                                                 deviceId:@"1"
+                                           signedPreKeyId:uniquePreKeyId
                                        signedPreKeyPublic:baseKeyPair.publicKey
-                                           signedPreKeyId:nil
-                                    signedPreKeySignature:[Ed25519 sign:baseKeyPair.publicKey withKeyPair:identityKeyPair]
-                                              identityKey:identityKeyPair.publicKey
-                                              baseKeyPair:baseKeyPair]];
+                                    signedPreKeySignature:preKeySignature
+                                              identityKey:user.publicKey
+                                              baseKeyPair:baseKeyPair];
+        [[KStorageManager sharedManager] setObject:preKey forKey:preKey.signedPreKeyId inCollection:kPreKeyCollection];
+        [preKeys addObject:preKey];
+        index++;
     }
+    return [[NSArray alloc] initWithArray:preKeys];
+}
+
++ (void)sendPreKeysToServer:(NSArray *)preKeys {
+    
 }
          
 + (NSString *)preKeyId:(KUser *)user {

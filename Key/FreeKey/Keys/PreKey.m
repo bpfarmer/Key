@@ -31,7 +31,10 @@
     }
     
     return self;
-    
+}
+
+- (NSArray *)keysToSend {
+    return @[@"userId", @"deviceId", @"signedPreKeyId", @"signedPreKeyPublic", @"signedPreKeySignature", @"identityKey"];
 }
 
 @end

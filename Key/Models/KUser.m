@@ -21,6 +21,7 @@
 #import <SSKeychain/SSKeychain.h>
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
+#import "KUser+Serialize.h"
 
 #define kRemoteCreateNotification @"KUserRemoteCreateNotification"
 #define kRemoteUpdateNotification @"KUserRemoteUpdateNotification"
@@ -44,6 +45,21 @@
     return self;
 }
 
+- (instancetype)initWithUniqueId:(NSString *)uniqueId
+                        username:(NSString *)username
+                   passwordCrypt:(NSData *)passwordCrypt
+                     identityKey:(IdentityKey *)identityKey {
+    self = [super initWithUniqueId:uniqueId];
+    
+    if (self) {
+        _username = username;
+        _passwordCrypt = passwordCrypt;
+        _identityKey = identityKey;
+    }
+    
+    return self;
+}
+
 #pragma mark - User Registration
 - (void)registerUsername {
     [[HttpManager sharedManager] put:self];
@@ -52,6 +68,7 @@
 - (void)finishUserRegistration {
     IdentityKey *identityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:self.uniqueId];
     [self setIdentityKey:identityKey];
+    [self setPublicKey:identityKey.keyPair.publicKey];
     [self save];
     [[HttpManager sharedManager] post:self];
 }
@@ -88,15 +105,6 @@
     return [self username];
 }
 
-- (NSDictionary *)toDictionary {
-    NSMutableDictionary *userDictionary = [[NSMutableDictionary alloc] init];
-    if(self.uniqueId) [userDictionary addEntriesFromDictionary:@{@"uniqueId" : self.uniqueId}];
-    if(self.username) [userDictionary addEntriesFromDictionary:@{@"username" : self.username}];
-    if(self.passwordCrypt) [userDictionary addEntriesFromDictionary:@{@"password" : self.passwordCrypt}];
-    if(self.identityKey) [userDictionary addEntriesFromDictionary:@{@"identityKey" : self.identityKey}];
-    return userDictionary;
-}
-
 #pragma mark - YapDatabase Methods
 
 - (NSArray *)yapDatabaseRelationshipEdges {
@@ -105,6 +113,11 @@
 }
 
 #pragma mark - Convenience Methods
+- (NSArray *)keysToSend {
+    return @[@"uniqueId", @"passwordCrypt", @"publicKey", @"username"];
+}
+
+#pragma mark - Password Handling Methods
 - (NSData *)encryptPassword:(NSString *)password {
     NSData *passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
     if(!self.passwordSalt) {

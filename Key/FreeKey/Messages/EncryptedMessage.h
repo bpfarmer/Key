@@ -23,4 +23,6 @@
                      cipherText:(NSData *)cipherText
                           index:(int)index
                   previousIndex:(int)previousIndex;
+
+- (NSArray *)keysToSend;
 @end

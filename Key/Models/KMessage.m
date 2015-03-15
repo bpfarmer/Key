@@ -36,13 +36,12 @@
 }
 
 - (void)sendToRecipients {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    });
 }
 
 - (NSString *)placeholderUniqueId {
-    NSTimeInterval today = [[NSDate date] timeIntervalSince1970];
-    NSString *uniqueId = [NSString stringWithFormat:@"%@_%f_%@", [[KAccountManager sharedManager] uniqueId], today, [Util insecureRandomString:10]];
+    NSString *uniqueId = [NSString stringWithFormat:@"%@_%f_%@", [[KAccountManager sharedManager] uniqueId],
+                          [[NSDate date] timeIntervalSince1970],
+                          [Util insecureRandomString:10]];
     return uniqueId;
 }
 

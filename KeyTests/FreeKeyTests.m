@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#import "FreeKey.h"
+#import "KUser.h"
 
 @interface FreeKeyTests : XCTestCase
 
@@ -30,10 +32,10 @@
     XCTAssert(YES, @"Pass");
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
+- (void)testPerformanceSetupPreKeys {
+    KUser *user = [[KUser alloc] initWithUniqueId:@"1"];
     [self measureBlock:^{
-        // Put the code you want to measure the time of here.
+        [FreeKey generatePreKeysForUser:user];
     }];
 }
 

@@ -34,9 +34,8 @@
 - (void)put:(id <KSendable>)object {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager PUT:[self endpointForObject:object]
-      parameters:@{[self remoteAlias:object] : [object toDictionary]}
+      parameters:@{[self remoteAlias:object] : [self toDictionary:object]}
          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-             
         if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
             [object setUniqueId:responseObject[[self remoteAlias:object]][@"uniqueId"]];
             [object setRemoteStatus:kRemotePutSuccessStatus];
@@ -53,7 +52,7 @@
 - (void)post:(id <KSendable>)object {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[self endpointForObject:object]
-       parameters:@{[self remoteAlias:object] : [object toDictionary]}
+       parameters:@{[self remoteAlias:object] : [self toDictionary:object]}
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
               
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
@@ -78,8 +77,9 @@
     });
 }
 
-- (NSDictionary *)toDictionary {
-    return nil;
+- (NSDictionary *)toDictionary:(id <KSendable>)object {
+    NSObject *objectForDictionary = (NSObject *)object;
+    return [objectForDictionary dictionaryWithValuesForKeys:[object keysToSend]];
 }
 
 + (NSString *)remoteEndpoint {

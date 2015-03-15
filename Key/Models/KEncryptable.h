@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KSendable.h"
 
-@protocol KEncryptable <NSObject>
+@protocol KEncryptable <KSendable>
 
 @end

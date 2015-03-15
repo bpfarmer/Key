@@ -22,6 +22,7 @@
 @property (nonatomic) NSData *passwordCrypt;
 @property (nonatomic) NSString *localStatus;
 @property (nonatomic) IdentityKey *identityKey;
+@property (nonatomic) NSData *publicKey;
 
 // KSendable Protocol
 @property (nonatomic) NSString *remoteStatus;
@@ -33,6 +34,10 @@
 
 - (instancetype)initWithUsername:(NSString *)username;
 - (instancetype)initWithUsername:(NSString *)username password:(NSString *)password;
+- (instancetype)initWithUniqueId:(NSString *)uniqueId
+                        username:(NSString *)username
+                   passwordCrypt:(NSData *)passwordCrypt
+                     identityKey:(IdentityKey *)identityKey;
 
 - (void)registerUsername;
 - (void)finishUserRegistration;
