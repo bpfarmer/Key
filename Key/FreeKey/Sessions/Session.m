@@ -157,6 +157,7 @@
                                                                        cipherText:encryptedText
                                                                             index:senderChainKey.index
                                                                     previousIndex:self.previousIndex];
+    [encryptedMessage setMac];
     [self setSenderRootChain:[senderRootChain iterateChainKey]];
     return encryptedMessage;
 }

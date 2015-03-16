@@ -11,6 +11,7 @@
 @interface EncryptedMessage : NSObject
 
 @property (nonatomic, readonly) NSData *senderRatchetKey;
+@property (nonatomic, readonly) NSString *receiverId;
 @property (nonatomic, readonly) int index;
 @property (nonatomic, readonly) int previousIndex;
 @property (nonatomic, readonly) NSData *cipherText;
@@ -25,10 +26,11 @@
                  previousIndex:(int)previousIndex;
 
 - (instancetype) initWithSenderRatchetKey:(NSData *)senderRatchetKey
+                               receiverId:(NSString *)receiverId
                            serializedData:(NSData *)serializedData
                                     index:(int)index
                             previousIndex:(int)previousIndex;
 
-
+- (void)setMac;
 - (NSArray *)keysToSend;
 @end
