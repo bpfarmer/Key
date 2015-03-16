@@ -10,6 +10,7 @@
 #import "KEncryptable.h"
 
 #define kRetrievedPreKeyNotification @"RetrievedPreKeyNotification"
+#define kUserRemoteAlias @"user"
 
 @class KUser;
 @class EncryptedMessage;
@@ -18,7 +19,15 @@
 @class PreKey;
 @class Session;
 
+#define kPreKeyCollection @"PreKey"
+#define kSessionCollection @"Session"
+#define kPreKeyExchangeCollection @"PreKeyExchange"
+#define kPreKeyRemoteAlias @"pre_key"
+#define kPreKeyExchangeRemoteAlias @"pre_key_exchange"
+
 @interface FreeKey : NSObject
+
++ (instancetype)sharedManager;
 
 - (EncryptedMessage *)encryptObject:(id <KEncryptable>)object
                           localUser:(KUser *)localUser
@@ -32,5 +41,9 @@
 - (Session *)createSessionFromUser:(KUser *)localUser withPreKeyExchange:(PreKeyExchange *)preKeyExchange;
 - (NSArray *)generatePreKeysForUser:(KUser *)user;
 - (void)sendPreKeysToServer:(NSArray *)preKeys;
+- (void)getRemotePreKeyForUserId:(NSString *)recipientId;
+
+- (void)receiveRemoteObject:(NSDictionary *)object ofType:(NSString *)type;
+- (PreKey *)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary;
 
 @end

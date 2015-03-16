@@ -20,10 +20,11 @@
 
 @protocol KSendable <NSObject, NSSecureCoding>
 
++ (void)createFromRemoteDictionary:(NSDictionary *)dictionary;
 - (void)setUniqueId:(NSString *)uniqueId;
 - (void)setRemoteStatus:(NSString *)remoteStatus;
 - (NSArray *)keysToSend;
-- (NSString *)remoteAlias;
++ (NSString *)remoteAlias;
 
 @property (nonatomic) NSString *remoteStatus;
 

@@ -15,7 +15,9 @@
 @interface PreKeyExchange : NSObject
 
 @property (nonatomic, readonly) NSString *senderId;
+@property (nonatomic, readonly) NSString *senderDeviceId;
 @property (nonatomic, readonly) NSString *receiverId;
+@property (nonatomic, readonly) NSString *receiverDeviceId;
 @property (nonatomic, readonly) NSString *signedTargetPreKeyId;
 @property (nonatomic, readonly) NSData *sentSignedBaseKey;
 @property (nonatomic, readonly) NSData *senderIdentityPublicKey;

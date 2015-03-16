@@ -8,6 +8,7 @@
 
 #import "HttpManager.h"
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
+#import "FreeKey.h"
 
 #define kRemoteEndpoint @"http://127.0.0.1:9393"
 
@@ -34,8 +35,7 @@
 - (void)put:(id <KSendable>)object {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager PUT:[self endpointForObject:[self remoteAlias:object]]
-      parameters:@{[self remoteAlias:object] : [self toDictionary:object]}
-         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+      parameters:@{[self remoteAlias:object] : [self toDictionary:object]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
             [object setUniqueId:responseObject[[self remoteAlias:object]][@"uniqueId"]];
             [object setRemoteStatus:kRemotePutSuccessStatus];
@@ -52,9 +52,7 @@
 - (void)post:(id <KSendable>)object {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager POST:[self endpointForObject:[self remoteAlias:object]]
-       parameters:@{[self remoteAlias:object] : [self toDictionary:object]}
-          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-              
+       parameters:@{[self remoteAlias:object] : [self toDictionary:object]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
             [object setRemoteStatus:kRemotePostSuccessStatus];
         } else {
@@ -69,12 +67,20 @@
 
 - (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[self endpointForObject:remoteAlias] parameters:parameters
-         success:^(AFHTTPRequestOperation *operation, id responseObject) {
-             
+    [manager GET:[self endpointForObject:remoteAlias] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
          if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-             
+             [[FreeKey sharedManager] receiveRemoteObject:responseObject ofType:remoteAlias];
          }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        // TODO: try again
+    }];
+}
+
+- (void)batchPut:(NSString *)remoteAlias objects:(NSArray *)objects {
+    NSLog(@"REMOTE ENDPOINT: %@", [self endpointForObject:remoteAlias]);
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager PUT:[self endpointForObject:remoteAlias] parameters:@{remoteAlias : objects} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"REQUEST OBJECT: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
     }];

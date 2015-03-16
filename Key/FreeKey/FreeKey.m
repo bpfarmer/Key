@@ -17,17 +17,21 @@
 #import "PreKeyExchange.h"
 #import "HttpManager.h"
 
-#define kPreKeyCollection @"PreKey"
-#define kSessionCollection @"Session"
-#define kPreKeyExchangeCollection @"PreKeyExchange"
-#define kPreKeyRemoteAlias @"PreKey"
-
 @implementation FreeKey
+
++ (instancetype)sharedManager {
+    static FreeKey *sharedMyManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedMyManager = [[self alloc] init];
+    });
+    return sharedMyManager;
+}
 
 #pragma  mark - PreKey Generation
 - (NSArray *)generatePreKeysForUser:(KUser *)user {
     int index = 0;
-    NSMutableArray *preKeys;
+    NSMutableArray *preKeys = [[NSMutableArray alloc] init];
     while(index < 100) {
         ECKeyPair *baseKeyPair = [Curve25519 generateKeyPair];
         NSString *uniquePreKeyId = [NSString stringWithFormat:@"%@_%f_%d", user.uniqueId, [[NSDate date] timeIntervalSince1970], index];
@@ -40,14 +44,14 @@
                                               identityKey:user.publicKey
                                               baseKeyPair:baseKeyPair];
         [[KStorageManager sharedManager] setObject:preKey forKey:preKey.signedPreKeyId inCollection:kPreKeyCollection];
-        [preKeys addObject:preKey];
+        [preKeys addObject:[preKey dictionaryWithValuesForKeys:[preKey keysToSend]]];
         index++;
     }
     return [[NSArray alloc] initWithArray:preKeys];
 }
 
 - (void)sendPreKeysToServer:(NSArray *)preKeys {
-    
+    [[HttpManager sharedManager] batchPut:kPreKeyRemoteAlias objects:preKeys];
 }
 
 #pragma mark - Encryption and Decryption Queue
@@ -64,9 +68,9 @@
         if(preKeyExchange) {
             session = [self createSessionFromUser:localUser withPreKeyExchange:preKeyExchange];
         }else {
-            PreKey *preKey = [self getPreKeyForRecipientId:recipientId];
+            PreKey *preKey = [self getPreKeyForUserId:recipientId];
             if(!preKey) {
-                [self getRemotePreKey:recipientId];
+                [self getRemotePreKeyForUserId:recipientId];
                 return nil;
             }else {
                 session = [self createSessionFromUser:localUser withPreKey:preKey];
@@ -108,15 +112,52 @@
 }
 
 #pragma mark - Retrieving PreKeys for Remote Users
-- (PreKey *)getPreKeyForRecipientId:(NSString *)recipientId {
-    KUser *user = (KUser *)[[KStorageManager sharedManager] objectForKey:recipientId inCollection:[KUser collection]];
+- (PreKey *)getPreKeyForUserId:(NSString *)userId {
+    KUser *user = (KUser *)[[KStorageManager sharedManager] objectForKey:userId inCollection:[KUser collection]];
     return user.preKey;
 }
 
-- (void)getRemotePreKey:(NSString *)recipientId {
-    NSDictionary *query = @{@"object" : kPreKeyRemoteAlias,
-                            @"query" : @{@"userId" : recipientId}};
-    [[HttpManager sharedManager] get:query];
+- (void)getRemotePreKeyForUserId:(NSString *)userId {
+    NSDictionary *parameters = @{@"userId" : userId};
+    [[HttpManager sharedManager] getObjectsWithRemoteAlias:kPreKeyRemoteAlias parameters:parameters];
+}
+
+/* 
+   Note: trying hard to keep all nasty serialization and networking methods out of the main
+   FreeKey classes. Not sure if this is a good idea.
+*/
+
+- (void)receiveRemoteObject:(NSDictionary *)dictionary ofType:(NSString *)type {
+    if([type isEqualToString:kPreKeyExchangeRemoteAlias]) {
+        [self createPreKeyExchangeFromRemoteDictionary:dictionary[kPreKeyExchangeRemoteAlias]];
+    }else if([type isEqualToString:kPreKeyRemoteAlias]) {
+        [self createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
+    }else {
+        Class <KSendable> objectClass = NSClassFromString(type);
+        [objectClass createFromRemoteDictionary:dictionary];
+    }
+}
+
+- (PreKey *)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary {
+    PreKey *preKey = [[PreKey alloc] initWithUserId:dictionary[@"userId"]
+                                           deviceId:dictionary[@"deviceId"]
+                                     signedPreKeyId:dictionary[@"signedPreKeyId"]
+                                 signedPreKeyPublic:dictionary[@"signedPreKeyPublic"]
+                              signedPreKeySignature:dictionary[@"signedPreKeySignature"]
+                                        identityKey:dictionary[@"identityKey"]
+                                        baseKeyPair:nil];
+    return preKey;
+}
+
+- (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary {
+    PreKeyExchange *preKeyExchange = [[PreKeyExchange alloc] initWithSenderId:dictionary[@"senderId"]
+                                                                   receiverId:dictionary[@"receiverId"]
+                                                         signedTargetPreKeyId:dictionary[@"signedTargetPreKeyId"]
+                                                            sentSignedBaseKey:dictionary[@"sentSignedBaseKey"]
+                                                      senderIdentityPublicKey:dictionary[@"senderIdentityPublicKey"]
+                                                    receiverIdentityPublicKey:dictionary[@"receiverIdentityPublicKey"]
+                                                             baseKeySignature:dictionary[@"baseKeySignature"]];
+    return preKeyExchange;
 }
 
 @end

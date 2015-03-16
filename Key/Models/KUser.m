@@ -62,6 +62,36 @@
     return self;
 }
 
+- (instancetype)initWithUniqueId:(NSString *)uniqueId
+                        username:(NSString *)username
+                       publicKey:(NSData *)publicKey
+                          preKey:(PreKey *)preKey {
+    self = [super initWithUniqueId:uniqueId];
+    
+    if(self) {
+        _username = username;
+        _publicKey = publicKey;
+        _preKey = preKey;
+    }
+    
+    return self;
+}
+
++ (void)createFromRemoteDictionary:(NSDictionary *)dictionary {
+    NSDictionary *userDictionary = dictionary[[self remoteAlias]];
+    PreKey *preKey = [[FreeKey sharedManager] createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
+    KUser *user = [[KUser alloc] initWithUniqueId:userDictionary[@"uniqueId"]
+                                         username:userDictionary[@"username"]
+                                        publicKey:userDictionary[@"publicKey"]
+                                           preKey:preKey];
+    [user save];
+}
+
++ (NSString *)remoteAlias {
+    return kUserRemoteAlias;
+}
+
+
 #pragma mark - User Registration
 - (void)registerUsername {
     [[HttpManager sharedManager] put:self];

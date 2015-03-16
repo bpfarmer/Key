@@ -20,7 +20,6 @@
 
 - (void)setUp {
     [super setUp];
-    KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
 }
 
 - (void)tearDown {
@@ -28,11 +27,32 @@
     [super tearDown];
 }
 
+- (void)testPreKeyGeneration {
+    KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
+    FreeKey *testFreeKey = [[FreeKey alloc] init];
+    NSArray *preKeys = [testFreeKey generatePreKeysForUser:user];
+    XCTAssert([preKeys count] == 100);
+}
+
+- (void)testPreKeySending {
+    KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
+    FreeKey *testFreeKey = [[FreeKey alloc] init];
+    NSArray *preKeys = [testFreeKey generatePreKeysForUser:user];
+    [testFreeKey sendPreKeysToServer:preKeys];
+    // TODO: how do we test reception?
+}
+
+- (void)testRetrieveUser {
+    
+}
+
 - (void)testSessionCreation {
     FreeKey *freeKey = [[FreeKey alloc] init];
     
     XCTAssert(YES, @"Pass");
 }
+
+
 
 - (void)testPerformanceSetupPreKeys {
     KUser *user = [[KUser alloc] initWithUniqueId:@"1"];

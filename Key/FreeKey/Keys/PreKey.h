@@ -17,7 +17,7 @@
 @property (nonatomic, readonly) NSString *signedPreKeyId;
 @property (nonatomic, readonly) NSData   *signedPreKeyPublic;
 @property (nonatomic, readonly) NSData   *signedPreKeySignature;
-@property (nonatomic, readonly) NSData *identityKey;
+@property (nonatomic, readonly) NSData   *identityKey;
 @property (nonatomic, readonly) ECKeyPair *baseKeyPair;
 
 - (instancetype)initWithUserId:(NSString *)userId
@@ -27,5 +27,7 @@
          signedPreKeySignature:(NSData*)signedPreKeySignature
                    identityKey:(NSData*)identityKey
                    baseKeyPair:(ECKeyPair *)baseKeyPair;
+
+- (NSArray *)keysToSend;
 
 @end
