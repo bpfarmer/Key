@@ -37,6 +37,32 @@
     return self;
 }
 
+- (instancetype)initWithSenderId:(NSString *)senderId
+                      receiverId:(NSString *)receiverId
+                          preKey:(PreKey *)preKey
+                   baseKeyPublic:(NSData *)baseKeyPublic
+               senderIdentityKey:(IdentityKey *)senderIdentityKey
+       receiverIdentityPublicKey:(NSData *)receiverIdentityPublicKey
+                 senderRootChain:(RootChain *)senderRootChain
+               receiverRootChain:(RootChain *)receiverRootChain
+                   previousIndex:(int)previousIndex
+           previousSessionStates:(NSDictionary *)previousSessionStates {
+    self = [super init];
+    if(self) {
+        _senderId = senderId;
+        _receiverId = receiverId;
+        _preKey = preKey;
+        _baseKeyPublic = baseKeyPublic;
+        _senderIdentityKey = senderIdentityKey;
+        _receiverIdentityPublicKey = receiverIdentityPublicKey;
+        _senderRootChain = senderRootChain;
+        _receiverRootChain = receiverRootChain;
+        _previousIndex = previousIndex;
+        _previousSessionStates = previousSessionStates;
+    }
+    return self;
+}
+
 - (void)addOurPreKey:(PreKey *)ourPreKey preKeyExchange:(PreKeyExchange *)preKeyExchange  {
     _receiverIdentityPublicKey  = preKeyExchange.senderIdentityPublicKey;
     NSData *theirBaseKey = preKeyExchange.sentSignedBaseKey;

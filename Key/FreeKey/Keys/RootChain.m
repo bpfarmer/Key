@@ -24,6 +24,20 @@
     return self;
 }
 
+- (instancetype)initWithRootKey:(RootKey *)rootKey
+                       chainKey:(ChainKey *)chainKey
+                 ratchetKeyPair:(ECKeyPair *)ratchetKeyPair
+                     ratchetKey:(NSData *)ratchetKey {
+    self = [super init];
+    if(self) {
+        _rootKey = rootKey;
+        _chainKey = chainKey;
+        _ratchetKeyPair = ratchetKeyPair;
+        _ratchetKey = ratchetKey;
+    }
+    return self;
+}
+
 - (instancetype)iterateRootKeyWithTheirEphemeral:(NSData *)theirEphemeral ourEphemeral:(ECKeyPair *)ourEphemeral {
     NSData *sharedSecret = [Curve25519 generateSharedSecretFromPublicKey:theirEphemeral andKeyPair:ourEphemeral];
     

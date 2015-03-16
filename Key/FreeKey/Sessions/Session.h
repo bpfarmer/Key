@@ -25,12 +25,23 @@
 @property (nonatomic, readonly) NSData *baseKeyPublic;
 @property (nonatomic, readonly) IdentityKey *senderIdentityKey;
 @property (nonatomic, readonly) NSData *receiverIdentityPublicKey;
-@property (nonatomic, retain) RootChain *senderRootChain;
-@property (nonatomic, retain) RootChain *receiverRootChain;
-@property (nonatomic) int previousIndex;
-@property (nonatomic, retain) NSDictionary *previousSessionStates;
+@property (nonatomic, readwrite) RootChain *senderRootChain;
+@property (nonatomic, readwrite) RootChain *receiverRootChain;
+@property (nonatomic, readwrite) int previousIndex;
+@property (nonatomic, readwrite) NSDictionary *previousSessionStates;
 
 - (instancetype)initWithReceiverId:(NSString *)receiverId identityKey:(IdentityKey *)identityKey;
+- (instancetype)initWithSenderId:(NSString *)senderId
+                      receiverId:(NSString *)receiverId
+                          preKey:(PreKey *)preKey
+                   baseKeyPublic:(NSData *)baseKeyPublic
+               senderIdentityKey:(IdentityKey *)senderIdentityKey
+       receiverIdentityPublicKey:(NSData *)receiverIdentityPublicKey
+                 senderRootChain:(RootChain *)senderRootChain
+               receiverRootChain:(RootChain *)receiverRootChain
+                   previousIndex:(int)previousIndex
+           previousSessionStates:(NSDictionary *)previousSessionStates;
+
 - (void)addOurPreKey:(PreKey *)ourPreKey preKeyExchange:(PreKeyExchange *)preKeyExchange;
 - (PreKeyExchange *)addPreKey:(PreKey *)preKey;
 

@@ -20,7 +20,11 @@
 @property (nonatomic, strong) ECKeyPair *ratchetKeyPair;
 @property (nonatomic, strong) NSData *ratchetKey;
 
-- (instancetype)initWithRootKey:(RootKey*)rootKey chainKey:(ChainKey*)chainKey;
+- (instancetype)initWithRootKey:(RootKey *)rootKey chainKey:(ChainKey *)chainKey;
+- (instancetype)initWithRootKey:(RootKey *)rootKey
+                       chainKey:(ChainKey *)chainKey
+                 ratchetKeyPair:(ECKeyPair *)ratchetKeyPair
+                     ratchetKey:(NSData *)ratchetKey;
 - (instancetype)iterateChainKey;
 - (instancetype)iterateRootKeyWithTheirEphemeral:(NSData *)theirEphemeral ourEphemeral:(ECKeyPair *)ourEphemeral;
 

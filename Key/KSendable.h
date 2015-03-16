@@ -23,6 +23,7 @@
 - (void)setUniqueId:(NSString *)uniqueId;
 - (void)setRemoteStatus:(NSString *)remoteStatus;
 - (NSArray *)keysToSend;
+- (NSString *)remoteAlias;
 
 @property (nonatomic) NSString *remoteStatus;
 

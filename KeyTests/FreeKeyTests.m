@@ -10,6 +10,7 @@
 #import <XCTest/XCTest.h>
 #import "FreeKey.h"
 #import "KUser.h"
+#import "KStorageManager.h"
 
 @interface FreeKeyTests : XCTestCase
 
@@ -19,7 +20,7 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
 }
 
 - (void)tearDown {
@@ -27,15 +28,17 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
+- (void)testSessionCreation {
+    FreeKey *freeKey = [[FreeKey alloc] init];
+    
     XCTAssert(YES, @"Pass");
 }
 
 - (void)testPerformanceSetupPreKeys {
     KUser *user = [[KUser alloc] initWithUniqueId:@"1"];
     [self measureBlock:^{
-        [FreeKey generatePreKeysForUser:user];
+        FreeKey *freeKey = [[FreeKey alloc] init];
+        [freeKey generatePreKeysForUser:user];
     }];
 }
 

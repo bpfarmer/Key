@@ -22,8 +22,8 @@
     return sharedMyManager;
 }
 
-- (NSString *)endpointForObject:(id <KSendable>)object {
-    return [NSString stringWithFormat:@"%@/%@.json", kRemoteEndpoint, [self remoteAlias:object]];
+- (NSString *)endpointForObject:(NSString *)objectAlias {
+    return [NSString stringWithFormat:@"%@/%@.json", kRemoteEndpoint, objectAlias];
 }
 
 - (NSString *)remoteAlias:(id <KSendable>)object {
@@ -33,7 +33,7 @@
 
 - (void)put:(id <KSendable>)object {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager PUT:[self endpointForObject:object]
+    [manager PUT:[self endpointForObject:[self remoteAlias:object]]
       parameters:@{[self remoteAlias:object] : [self toDictionary:object]}
          success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
@@ -51,7 +51,7 @@
 
 - (void)post:(id <KSendable>)object {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[self endpointForObject:object]
+    [manager POST:[self endpointForObject:[self remoteAlias:object]]
        parameters:@{[self remoteAlias:object] : [self toDictionary:object]}
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
               
@@ -67,35 +67,28 @@
     }];
 }
 
-- (void)get:(NSDictionary *)parameters {
-
+- (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[self endpointForObject:remoteAlias] parameters:parameters
+         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+             
+         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
+             
+         }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
 }
 
-- (void)fireNotification:(NSString *)notfication object:(id <KSendable>)object {
+- (void)fireNotification:(NSString *)notification object:(id <KSendable>)object {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kRemotePutNotification object:object];
+        [[NSNotificationCenter defaultCenter] postNotificationName:notification object:object];
     });
 }
 
 - (NSDictionary *)toDictionary:(id <KSendable>)object {
     NSObject *objectForDictionary = (NSObject *)object;
     return [objectForDictionary dictionaryWithValuesForKeys:[object keysToSend]];
-}
-
-+ (NSString *)remoteEndpoint {
-    return nil;
-}
-
-+ (NSString *)remoteAlias {
-    return nil;
-}
-
-+ (NSString *)remoteCreateNotification {
-    return nil;
-}
-
-+ (NSString *)remoteUpdateNotification {
-    return nil;
 }
 
 @end

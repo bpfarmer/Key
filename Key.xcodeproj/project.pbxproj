@@ -15,6 +15,12 @@
 		EF2CDEBB1AB4A354001E2F20 /* PreKeyExchange+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEBA1AB4A354001E2F20 /* PreKeyExchange+Serialize.m */; };
 		EF2CDEBD1AB4A78E001E2F20 /* IdentityKeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEBC1AB4A78E001E2F20 /* IdentityKeyTests.m */; };
 		EF2CDEC01AB4AB42001E2F20 /* PreKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEBF1AB4AB42001E2F20 /* PreKey+Serialize.m */; };
+		EF2CDEC61AB52FCA001E2F20 /* Session+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEC51AB52FCA001E2F20 /* Session+Serialize.m */; };
+		EF2CDEC91AB52FE0001E2F20 /* SessionState+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEC81AB52FE0001E2F20 /* SessionState+Serialize.m */; };
+		EF2CDECF1AB5C20F001E2F20 /* RootChain+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDECE1AB5C20F001E2F20 /* RootChain+Serialize.m */; };
+		EF2CDED21AB5C22F001E2F20 /* MessageKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDED11AB5C22F001E2F20 /* MessageKey+Serialize.m */; };
+		EF2CDED51AB5C972001E2F20 /* RootKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDED41AB5C972001E2F20 /* RootKey+Serialize.m */; };
+		EF2CDED81AB5C988001E2F20 /* ChainKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDED71AB5C988001E2F20 /* ChainKey+Serialize.m */; };
 		EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD31AAE238600F3B9AF /* KStorageKeys.m */; };
 		EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD51AAE238600F3B9AF /* KStorageManager.m */; };
 		EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD71AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m */; };
@@ -99,6 +105,18 @@
 		EF2CDEBC1AB4A78E001E2F20 /* IdentityKeyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentityKeyTests.m; sourceTree = "<group>"; };
 		EF2CDEBE1AB4AB42001E2F20 /* PreKey+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PreKey+Serialize.h"; path = "Network/Serializers/PreKey+Serialize.h"; sourceTree = "<group>"; };
 		EF2CDEBF1AB4AB42001E2F20 /* PreKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PreKey+Serialize.m"; path = "Network/Serializers/PreKey+Serialize.m"; sourceTree = "<group>"; };
+		EF2CDEC41AB52FCA001E2F20 /* Session+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Session+Serialize.h"; path = "Network/Serializers/Session+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDEC51AB52FCA001E2F20 /* Session+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Session+Serialize.m"; path = "Network/Serializers/Session+Serialize.m"; sourceTree = "<group>"; };
+		EF2CDEC71AB52FE0001E2F20 /* SessionState+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SessionState+Serialize.h"; path = "Network/Serializers/SessionState+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDEC81AB52FE0001E2F20 /* SessionState+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SessionState+Serialize.m"; path = "Network/Serializers/SessionState+Serialize.m"; sourceTree = "<group>"; };
+		EF2CDECD1AB5C20F001E2F20 /* RootChain+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RootChain+Serialize.h"; path = "Network/Serializers/RootChain+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDECE1AB5C20F001E2F20 /* RootChain+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RootChain+Serialize.m"; path = "Network/Serializers/RootChain+Serialize.m"; sourceTree = "<group>"; };
+		EF2CDED01AB5C22F001E2F20 /* MessageKey+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MessageKey+Serialize.h"; path = "Network/Serializers/MessageKey+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDED11AB5C22F001E2F20 /* MessageKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MessageKey+Serialize.m"; path = "Network/Serializers/MessageKey+Serialize.m"; sourceTree = "<group>"; };
+		EF2CDED31AB5C972001E2F20 /* RootKey+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "RootKey+Serialize.h"; path = "Network/Serializers/RootKey+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDED41AB5C972001E2F20 /* RootKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RootKey+Serialize.m"; path = "Network/Serializers/RootKey+Serialize.m"; sourceTree = "<group>"; };
+		EF2CDED61AB5C988001E2F20 /* ChainKey+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ChainKey+Serialize.h"; path = "Network/Serializers/ChainKey+Serialize.h"; sourceTree = "<group>"; };
+		EF2CDED71AB5C988001E2F20 /* ChainKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ChainKey+Serialize.m"; path = "Network/Serializers/ChainKey+Serialize.m"; sourceTree = "<group>"; };
 		EF524AD21AAE238600F3B9AF /* KStorageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageKeys.h; sourceTree = "<group>"; };
 		EF524AD31AAE238600F3B9AF /* KStorageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageKeys.m; sourceTree = "<group>"; };
 		EF524AD41AAE238600F3B9AF /* KStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageManager.h; sourceTree = "<group>"; };
@@ -246,23 +264,45 @@
 		EF2CDEAB1AB48BFD001E2F20 /* Serializers */ = {
 			isa = PBXGroup;
 			children = (
+				EF2CDED91AB5C998001E2F20 /* FreeKey */,
 				EF2CDEAC1AB48C3F001E2F20 /* KUser+Serialize.h */,
 				EF2CDEAD1AB48C3F001E2F20 /* KUser+Serialize.m */,
 				EF2CDEAF1AB48CB6001E2F20 /* KMessage+Serialize.h */,
 				EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */,
+			);
+			name = Serializers;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		EF2CDED91AB5C998001E2F20 /* FreeKey */ = {
+			isa = PBXGroup;
+			children = (
 				EF2CDEB61AB49A6F001E2F20 /* IdentityKey+Serialize.h */,
 				EF2CDEB71AB49A6F001E2F20 /* IdentityKey+Serialize.m */,
 				EF2CDEB91AB4A354001E2F20 /* PreKeyExchange+Serialize.h */,
 				EF2CDEBA1AB4A354001E2F20 /* PreKeyExchange+Serialize.m */,
 				EF2CDEBE1AB4AB42001E2F20 /* PreKey+Serialize.h */,
 				EF2CDEBF1AB4AB42001E2F20 /* PreKey+Serialize.m */,
+				EF2CDEC41AB52FCA001E2F20 /* Session+Serialize.h */,
+				EF2CDEC51AB52FCA001E2F20 /* Session+Serialize.m */,
+				EF2CDEC71AB52FE0001E2F20 /* SessionState+Serialize.h */,
+				EF2CDEC81AB52FE0001E2F20 /* SessionState+Serialize.m */,
+				EF2CDECD1AB5C20F001E2F20 /* RootChain+Serialize.h */,
+				EF2CDECE1AB5C20F001E2F20 /* RootChain+Serialize.m */,
+				EF2CDED01AB5C22F001E2F20 /* MessageKey+Serialize.h */,
+				EF2CDED11AB5C22F001E2F20 /* MessageKey+Serialize.m */,
+				EF2CDED31AB5C972001E2F20 /* RootKey+Serialize.h */,
+				EF2CDED41AB5C972001E2F20 /* RootKey+Serialize.m */,
+				EF2CDED61AB5C988001E2F20 /* ChainKey+Serialize.h */,
+				EF2CDED71AB5C988001E2F20 /* ChainKey+Serialize.m */,
 			);
-			name = Serializers;
+			name = FreeKey;
 			sourceTree = "<group>";
 		};
 		EF524ACF1AAE238600F3B9AF /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				EF2CDEAB1AB48BFD001E2F20 /* Serializers */,
 				EF524AED1AAE255200F3B9AF /* KYapDatabaseObject.h */,
 				EF524AEE1AAE255200F3B9AF /* KYapDatabaseObject.m */,
 				EF524AD21AAE238600F3B9AF /* KStorageKeys.h */,
@@ -342,7 +382,6 @@
 				EFF70A5E1AAE19C3006C10D2 /* FreeKey */,
 				EFC6BEAF1A6857D500B0EB8F /* LaunchScreen.xib */,
 				EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */,
-				EF2CDEAB1AB48BFD001E2F20 /* Serializers */,
 				EFEBDD321A68673D00973E15 /* Models */,
 				EF524AFD1AAF182800F3B9AF /* Network */,
 				EF524ACF1AAE238600F3B9AF /* Storage */,
@@ -670,6 +709,7 @@
 				EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */,
 				EF2CDEB81AB49A6F001E2F20 /* IdentityKey+Serialize.m in Sources */,
 				EFF70A891AAE19C3006C10D2 /* ChainKey.m in Sources */,
+				EF2CDED21AB5C22F001E2F20 /* MessageKey+Serialize.m in Sources */,
 				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
 				EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */,
 				EFF70AC51AAE1CBC006C10D2 /* MessageComposeViewController.m in Sources */,
@@ -679,10 +719,13 @@
 				EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */,
 				EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */,
 				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
+				EF2CDECF1AB5C20F001E2F20 /* RootChain+Serialize.m in Sources */,
 				EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */,
+				EF2CDED81AB5C988001E2F20 /* ChainKey+Serialize.m in Sources */,
 				EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */,
 				EF524AE91AAE247800F3B9AF /* NSData+Base64.m in Sources */,
 				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
+				EF2CDED51AB5C972001E2F20 /* RootKey+Serialize.m in Sources */,
 				EFF70AC61AAE1CBC006C10D2 /* RegistrationViewController.m in Sources */,
 				EFF70A8B1AAE19C3006C10D2 /* MasterKey.m in Sources */,
 				EFF70AC11AAE1CBC006C10D2 /* AddContactViewController.m in Sources */,
@@ -694,6 +737,7 @@
 				EFF70A921AAE19C3006C10D2 /* PreKeyExchange.m in Sources */,
 				EF2CDEBB1AB4A354001E2F20 /* PreKeyExchange+Serialize.m in Sources */,
 				EFF70AC71AAE1CBC006C10D2 /* ThreadTableViewController.m in Sources */,
+				EF2CDEC91AB52FE0001E2F20 /* SessionState+Serialize.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
 				EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
 				EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */,
@@ -704,6 +748,7 @@
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
 				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,
 				EF524AF51AAE2BAC00F3B9AF /* FreeKey.m in Sources */,
+				EF2CDEC61AB52FCA001E2F20 /* Session+Serialize.m in Sources */,
 				EFF70A8E1AAE19C3006C10D2 /* RootChain.m in Sources */,
 				EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */,
 				EFF70A941AAE19C3006C10D2 /* Session.m in Sources */,

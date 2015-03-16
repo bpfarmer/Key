@@ -9,18 +9,28 @@
 #import <Foundation/Foundation.h>
 #import "KEncryptable.h"
 
+#define kRetrievedPreKeyNotification @"RetrievedPreKeyNotification"
+
 @class KUser;
 @class EncryptedMessage;
 @class PreKeyExchange;
 @class PreKeyReceipt;
+@class PreKey;
+@class Session;
 
 @interface FreeKey : NSObject
 
-+ (EncryptedMessage *)encryptObject:(id <KEncryptable>)object toUser:(NSString *)userId;
-+ (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage fromUser:(NSString *)userId;
-+ (void)respondToPreKeyExchange:(PreKeyExchange *)preKeyExchange;
-+ (void)respondToPreKeyRecript:(PreKeyReceipt *)preKeyReceipt;
-+ (NSArray *)generatePreKeysForUser:(KUser *)user;
-+ (void)sendPreKeysToServer:(NSArray *)preKeys;
+- (EncryptedMessage *)encryptObject:(id <KEncryptable>)object
+                          localUser:(KUser *)localUser
+                        recipientId:(NSString *)recipientId;
+
+- (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage
+                                   localUser:(KUser *)localUser
+                                    senderId:(NSString *)senderId;
+
+- (Session *)createSessionFromUser:(KUser *)localUser withPreKey:(PreKey *)preKey;
+- (Session *)createSessionFromUser:(KUser *)localUser withPreKeyExchange:(PreKeyExchange *)preKeyExchange;
+- (NSArray *)generatePreKeysForUser:(KUser *)user;
+- (void)sendPreKeysToServer:(NSArray *)preKeys;
 
 @end

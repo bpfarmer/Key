@@ -12,6 +12,7 @@
 
 @class IdentityKey;
 @class KStorageManager;
+@class PreKey;
 
 @interface KUser : KYapDatabaseObject <YapDatabaseRelationshipNode, KSendable>
 
@@ -23,6 +24,7 @@
 @property (nonatomic) NSString *localStatus;
 @property (nonatomic) IdentityKey *identityKey;
 @property (nonatomic) NSData *publicKey;
+@property (nonatomic) PreKey *preKey;
 
 // KSendable Protocol
 @property (nonatomic) NSString *remoteStatus;
@@ -37,7 +39,8 @@
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         username:(NSString *)username
                    passwordCrypt:(NSData *)passwordCrypt
-                     identityKey:(IdentityKey *)identityKey;
+                     identityKey:(IdentityKey *)identityKey
+                          preKey:(PreKey *)preKey;
 
 - (void)registerUsername;
 - (void)finishUserRegistration;

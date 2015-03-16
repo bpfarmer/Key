@@ -48,13 +48,15 @@
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         username:(NSString *)username
                    passwordCrypt:(NSData *)passwordCrypt
-                     identityKey:(IdentityKey *)identityKey {
+                     identityKey:(IdentityKey *)identityKey
+                          preKey:(PreKey *)preKey {
     self = [super initWithUniqueId:uniqueId];
     
     if (self) {
         _username = username;
         _passwordCrypt = passwordCrypt;
         _identityKey = identityKey;
+        _preKey = preKey;
     }
     
     return self;
