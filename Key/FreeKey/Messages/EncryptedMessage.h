@@ -16,13 +16,19 @@
 @property (nonatomic, readonly) NSData *cipherText;
 @property (nonatomic, readonly) NSData *serializedData;
 
-- (instancetype) initWithMacKey:(NSData *)macKey
-              senderIdentityKey:(NSData *)senderIdentityKey
-            receiverIdentityKey:(NSData *)receiverIdentityKey
-               senderRatchetKey:(NSData *)senderRatchetKey
-                     cipherText:(NSData *)cipherText
-                          index:(int)index
-                  previousIndex:(int)previousIndex;
+- (instancetype)initWithMacKey:(NSData *)macKey
+             senderIdentityKey:(NSData *)senderIdentityKey
+           receiverIdentityKey:(NSData *)receiverIdentityKey
+              senderRatchetKey:(NSData *)senderRatchetKey
+                    cipherText:(NSData *)cipherText
+                         index:(int)index
+                 previousIndex:(int)previousIndex;
+
+- (instancetype) initWithSenderRatchetKey:(NSData *)senderRatchetKey
+                           serializedData:(NSData *)serializedData
+                                    index:(int)index
+                            previousIndex:(int)previousIndex;
+
 
 - (NSArray *)keysToSend;
 @end

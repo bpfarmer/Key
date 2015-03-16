@@ -16,6 +16,7 @@
 #import "Session.h"
 #import "PreKeyExchange.h"
 #import "HttpManager.h"
+#import "EncryptedMessage.h"
 
 @implementation FreeKey
 
@@ -132,6 +133,8 @@
         [self createPreKeyExchangeFromRemoteDictionary:dictionary[kPreKeyExchangeRemoteAlias]];
     }else if([type isEqualToString:kPreKeyRemoteAlias]) {
         [self createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
+    }else if([type isEqualToString:kEncryptedMessageRemoteAlias]) {
+        [self createEncryptedMessageFromRemoteDictionary:dictionary[kEncryptedMessageRemoteAlias]];
     }else {
         Class <KSendable> objectClass = NSClassFromString(type);
         [objectClass createFromRemoteDictionary:dictionary];
@@ -146,6 +149,10 @@
                               signedPreKeySignature:dictionary[@"signedPreKeySignature"]
                                         identityKey:dictionary[@"identityKey"]
                                         baseKeyPair:nil];
+    
+    [[KStorageManager sharedManager] setObject:preKey
+                                        forKey:preKey.userId
+                                  inCollection:kPreKeyCollection];
     return preKey;
 }
 
@@ -157,7 +164,24 @@
                                                       senderIdentityPublicKey:dictionary[@"senderIdentityPublicKey"]
                                                     receiverIdentityPublicKey:dictionary[@"receiverIdentityPublicKey"]
                                                              baseKeySignature:dictionary[@"baseKeySignature"]];
+    [[KStorageManager sharedManager] setObject:preKeyExchange
+                                        forKey:preKeyExchange.signedTargetPreKeyId
+                                  inCollection:kPreKeyExchangeCollection];
     return preKeyExchange;
+}
+
+- (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary {
+    NSNumber *index = (NSNumber *)dictionary[@"index"];
+    NSNumber *previousIndex = (NSNumber *)dictionary[@"previousIndex"];
+    EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[@"senderRatchetKey"]
+                                                                             serializedData:dictionary[@"serializedData"]
+                                                                                      index:[index intValue]
+                                                                              previousIndex:[previousIndex intValue]];
+    NSString *uniqueMessageId = [NSString stringWithFormat:@"%f_%@", [[NSDate date] timeIntervalSince1970], index];
+
+    [[KStorageManager sharedManager] setObject:encryptedMessage forKey:uniqueMessageId inCollection:kEncryptedMessageCollection];
+    
+    return encryptedMessage;
 }
 
 @end

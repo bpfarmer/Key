@@ -24,6 +24,8 @@
 #define kPreKeyExchangeCollection @"PreKeyExchange"
 #define kPreKeyRemoteAlias @"pre_key"
 #define kPreKeyExchangeRemoteAlias @"pre_key_exchange"
+#define kEncryptedMessageRemoteAlias @"message"
+#define kEncryptedMessageCollection @"EncryptedMessage"
 
 @interface FreeKey : NSObject
 

@@ -32,6 +32,21 @@
     return self;
 }
 
+- (instancetype)initWithSenderRatchetKey:(NSData *)senderRatchetKey
+                          serializedData:(NSData *)serializedData
+                                   index:(int)index
+                           previousIndex:(int)previousIndex {
+    self = [super init];
+    
+    if(self) {
+        _senderRatchetKey = senderRatchetKey;
+        _serializedData   = serializedData;
+        _index            = index;
+        _previousIndex    = previousIndex;
+    }
+    return self;
+}
+
 - (NSArray *)keysToSend {
     return @[@"senderRatchetKey", @"cipherText", @"index", @"previousIndex"];
 }

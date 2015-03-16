@@ -52,5 +52,7 @@
     XCTAssert([authenticatingUser authenticatePassword:@"12345"]);
 }
 
+- (void)testRemoteQuerying
+
 @end
 
