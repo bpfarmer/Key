@@ -26,11 +26,8 @@
 #define kPreKeyExchangeRemoteAlias   @"pre_key_exchange"
 #define kEncryptedMessageRemoteAlias @"message"
 #define kEncryptedMessageCollection  @"EncryptedMessage"
+#define kFeedRemoteAlias             @"Feed"
 
-#define kDBReadQueue        @"dbReadQueue"
-#define kDBWriteQueue       @"dbWriteQueue"
-#define kHTTPRequestQueue   @"httpRequestQueue"
-#define kHTTPResponseQueue  @"httpResponseQueue"
 #define kEncryptObjectQueue @"encryptObjectQueue"
 #define kDecryptObjectQueue @"decryptObjectQueue"
 
@@ -53,10 +50,9 @@
 - (void)getRemotePreKeyForUserId:(NSString *)recipientId;
 
 - (void)receiveRemoteObject:(NSDictionary *)object ofType:(NSString *)type;
+- (void)receiveRemoteFeed:(NSDictionary *)objects;
 - (void)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary;
 - (void)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary;
 - (void)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary;
-
-- (void)startReceiveMessagesQueue;
 
 @end

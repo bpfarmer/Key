@@ -123,7 +123,7 @@
 }
 
 /* 
-   Note: trying hard to keep all nasty serialization and networking methods out of the main
+   Note: trying hard to keep all serialization and networking methods out of the main
    FreeKey classes. Not sure if this is a good idea.
 */
 
@@ -140,13 +140,28 @@
     }
 }
 
+- (void)receiveRemoteFeed:(NSDictionary *)objects {
+    if(objects[kPreKeyExchangeRemoteAlias]) {
+        for(NSDictionary *preKeyExchangeDictionary in objects[kPreKeyExchangeRemoteAlias]) {
+            [self createPreKeyExchangeFromRemoteDictionary:preKeyExchangeDictionary];
+        }
+    }
+    if(objects[kEncryptedMessageRemoteAlias]) {
+        for(NSDictionary *encryptedMessageDictionary in objects[kEncryptedMessageRemoteAlias]) {
+            [self createEncryptedMessageFromRemoteDictionary:encryptedMessageDictionary];
+        }
+    }
+    
+}
+
 - (void)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary {
-    PreKey *preKey = [[PreKey alloc] initWithUserId:dictionary[@"userId"]
-                                           deviceId:dictionary[@"deviceId"]
-                                     signedPreKeyId:dictionary[@"signedPreKeyId"]
-                                 signedPreKeyPublic:dictionary[@"signedPreKeyPublic"]
-                              signedPreKeySignature:dictionary[@"signedPreKeySignature"]
-                                        identityKey:dictionary[@"identityKey"]
+    NSArray *remoteKeys = [PreKey remoteKeys];
+    PreKey *preKey = [[PreKey alloc] initWithUserId:dictionary[remoteKeys[0]]
+                                           deviceId:dictionary[remoteKeys[1]]
+                                     signedPreKeyId:dictionary[remoteKeys[2]]
+                                 signedPreKeyPublic:dictionary[remoteKeys[3]]
+                              signedPreKeySignature:dictionary[remoteKeys[4]]
+                                        identityKey:dictionary[remoteKeys[5]]
                                         baseKeyPair:nil];
     
     [[KStorageManager sharedManager] setObject:preKey
@@ -155,33 +170,37 @@
 }
 
 - (void)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary {
-    PreKeyExchange *preKeyExchange = [[PreKeyExchange alloc] initWithSenderId:dictionary[@"senderId"]
-                                                                   receiverId:dictionary[@"receiverId"]
-                                                         signedTargetPreKeyId:dictionary[@"signedTargetPreKeyId"]
-                                                            sentSignedBaseKey:dictionary[@"sentSignedBaseKey"]
-                                                      senderIdentityPublicKey:dictionary[@"senderIdentityPublicKey"]
-                                                    receiverIdentityPublicKey:dictionary[@"receiverIdentityPublicKey"]
-                                                             baseKeySignature:dictionary[@"baseKeySignature"]];
+    NSArray *remoteKeys = [PreKeyExchange remoteKeys];
+    PreKeyExchange *preKeyExchange = [[PreKeyExchange alloc] initWithSenderId:dictionary[remoteKeys[0]]
+                                                                   receiverId:dictionary[remoteKeys[1]]
+                                                         signedTargetPreKeyId:dictionary[remoteKeys[2]]
+                                                            sentSignedBaseKey:dictionary[remoteKeys[3]]
+                                                      senderIdentityPublicKey:dictionary[remoteKeys[4]]
+                                                    receiverIdentityPublicKey:dictionary[remoteKeys[5]]
+                                                             baseKeySignature:dictionary[remoteKeys[6]]];
     [[KStorageManager sharedManager] setObject:preKeyExchange
                                         forKey:preKeyExchange.signedTargetPreKeyId
                                   inCollection:kPreKeyExchangeCollection];
 }
 
 - (void)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary {
-    NSNumber *index = (NSNumber *)dictionary[@"index"];
-    NSNumber *previousIndex = (NSNumber *)dictionary[@"previousIndex"];
-    EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[@"senderRatchetKey"]
-                                                                                 receiverId:dictionary[@"receiverId"]
-                                                                             serializedData:dictionary[@"serializedData"]
+    NSArray *remoteKeys = [EncryptedMessage remoteKeys];
+    NSNumber *index = (NSNumber *)dictionary[remoteKeys[4]];
+    NSNumber *previousIndex = (NSNumber *)dictionary[remoteKeys[5]];
+    EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[remoteKeys[1]]
+                                                                                 receiverId:dictionary[remoteKeys[2]]
+                                                                             serializedData:dictionary[remoteKeys[3]]
                                                                                       index:[index intValue]
                                                                               previousIndex:[previousIndex intValue]];
     
     NSString *uniqueMessageId = [NSString stringWithFormat:@"%@_%f_%@",
-                                 dictionary[@"receiverId"],
+                                 dictionary[encryptedMessage],
                                  [[NSDate date] timeIntervalSince1970],
                                  index];
 
-    [[KStorageManager sharedManager] setObject:encryptedMessage forKey:uniqueMessageId inCollection:kEncryptedMessageCollection];
+    [[KStorageManager sharedManager] setObject:encryptedMessage
+                                        forKey:uniqueMessageId
+                                  inCollection:kEncryptedMessageCollection];
 }
 
 @end

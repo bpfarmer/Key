@@ -32,6 +32,6 @@
                                     index:(int)index
                             previousIndex:(int)previousIndex;
 
-- (NSArray *)keysToSend;
++ (NSArray *)remoteKeys;
 - (NSData *)mac;
 @end

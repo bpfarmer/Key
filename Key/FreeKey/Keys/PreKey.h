@@ -28,6 +28,6 @@
                    identityKey:(NSData*)identityKey
                    baseKeyPair:(ECKeyPair *)baseKeyPair;
 
-- (NSArray *)keysToSend;
++ (NSArray *)remoteKeys;
 
 @end

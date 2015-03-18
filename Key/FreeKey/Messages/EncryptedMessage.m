@@ -61,8 +61,8 @@
     return self;
 }
 
-- (NSArray *)keysToSend {
-    return @[@"senderRatchetKey", @"receiverId", @"serializedData", @"index", @"previousIndex"];
++ (NSArray *)remoteKeys {
+    return @[@"uniqueId", @"senderRatchetKey", @"receiverId", @"serializedData", @"index", @"previousIndex"];
 }
 
 @end

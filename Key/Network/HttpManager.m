@@ -69,7 +69,11 @@
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:[self endpointForObject:remoteAlias] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
          if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-             [[FreeKey sharedManager] receiveRemoteObject:responseObject ofType:remoteAlias];
+             if([remoteAlias isEqualToString:kFeedRemoteAlias]) {
+                 [[FreeKey sharedManager] receiveRemoteFeed:responseObject];
+             }else {
+                 [[FreeKey sharedManager] receiveRemoteObject:responseObject ofType:remoteAlias];
+             }
          }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         // TODO: try again

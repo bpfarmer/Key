@@ -44,4 +44,9 @@
     return receipt;
 }
 
++ (NSArray *)remoteKeys {
+    return @[@"senderId", @"receiverId", @"signedTargetPreKeyId", @"sentSignedBaseKey", @"sentSignedBaseKey",
+             @"senderIdentityPublicKey", @"receiverIdentityPublicKey", @"baseKeySignature"];
+}
+
 @end

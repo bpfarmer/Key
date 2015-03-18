@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "KSendable.h"
 
+#define kHTTPRequestQueue   @"httpRequestQueue"
+#define kHTTPResponseQueue  @"httpResponseQueue"
+
 @interface HttpManager : NSObject
 
 + (instancetype)sharedManager;

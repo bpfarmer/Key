@@ -34,4 +34,6 @@
 
 - (PreKeyExchangeReceipt *)createPreKeyExchangeReceipt;
 
++ (NSArray *)remoteKeys;
+
 @end

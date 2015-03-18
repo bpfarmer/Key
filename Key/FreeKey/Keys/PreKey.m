@@ -34,7 +34,7 @@
     return self;
 }
 
-- (NSArray *)keysToSend {
++ (NSArray *)remoteKeys {
     return @[@"userId", @"deviceId", @"signedPreKeyId", @"signedPreKeyPublic", @"signedPreKeySignature", @"identityKey"];
 }
 
