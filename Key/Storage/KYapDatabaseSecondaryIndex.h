@@ -13,7 +13,9 @@
 @interface KYapDatabaseSecondaryIndex : NSObject
 
 + (BOOL)registerUsernameIndex;
++ (BOOL)registerMessageSentIndex;
 
 @end
 
 #define KUsernameSQLiteIndex @"KUsernameIndex"
+#define KMessageStatusSQLiteIndex @"KMessageStatusIndex"

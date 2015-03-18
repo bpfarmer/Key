@@ -8,22 +8,29 @@
 #import <Foundation/Foundation.h>
 #import <YapDatabase/YapDatabaseRelationshipNode.h>
 #import "KYapDatabaseObject.h"
+#import "KEncryptable.h"
 
 @class KUser;
 @class KGroup;
 @class KMessageCrypt;
 @class KThread;
 
-@interface KMessage : KYapDatabaseObject <YapDatabaseRelationshipNode>
+@interface KMessage : KYapDatabaseObject <YapDatabaseRelationshipNode, KEncryptable>
 
 @property (nonatomic) NSString *authorId;
 @property (nonatomic) NSString *threadId;
 @property (nonatomic) NSString *body;
-@property (nonatomic) NSString *sendStatus;
+@property (nonatomic) NSString *status;
 @property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *createdAt;
 
-- (instancetype)initFromAuthorId:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body;
+- (instancetype)initWithAuthorId:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body;
+- (instancetype)initWithUniqueId:(NSString *)uniqueId
+                        authorId:(NSString *)authorId
+                        threadId:(NSString *)threadId
+                            body:(NSString *)body
+                          status:(NSString *)status
+                       createdAt:(NSDate *)createdAt;
 - (void)sendToRecipients;
 
 @end

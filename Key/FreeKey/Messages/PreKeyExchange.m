@@ -9,6 +9,7 @@
 #import "PreKeyExchange.h"
 #import "PreKeyExchangeReceipt.h"
 #import "PreKey.h"
+#import "PreKeyExchange+Serialize.h"
 
 @implementation PreKeyExchange
 

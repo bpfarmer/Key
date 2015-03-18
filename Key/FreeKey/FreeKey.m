@@ -114,8 +114,7 @@
 
 #pragma mark - Retrieving PreKeys for Remote Users
 - (PreKey *)getPreKeyForUserId:(NSString *)userId {
-    KUser *user = (KUser *)[[KStorageManager sharedManager] objectForKey:userId inCollection:[KUser collection]];
-    return user.preKey;
+    return (PreKey *)[[KStorageManager sharedManager] objectForKey:userId inCollection:kPreKeyCollection];
 }
 
 - (void)getRemotePreKeyForUserId:(NSString *)userId {
@@ -141,7 +140,7 @@
     }
 }
 
-- (PreKey *)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary {
+- (void)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary {
     PreKey *preKey = [[PreKey alloc] initWithUserId:dictionary[@"userId"]
                                            deviceId:dictionary[@"deviceId"]
                                      signedPreKeyId:dictionary[@"signedPreKeyId"]
@@ -153,10 +152,9 @@
     [[KStorageManager sharedManager] setObject:preKey
                                         forKey:preKey.userId
                                   inCollection:kPreKeyCollection];
-    return preKey;
 }
 
-- (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary {
+- (void)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary {
     PreKeyExchange *preKeyExchange = [[PreKeyExchange alloc] initWithSenderId:dictionary[@"senderId"]
                                                                    receiverId:dictionary[@"receiverId"]
                                                          signedTargetPreKeyId:dictionary[@"signedTargetPreKeyId"]
@@ -167,21 +165,23 @@
     [[KStorageManager sharedManager] setObject:preKeyExchange
                                         forKey:preKeyExchange.signedTargetPreKeyId
                                   inCollection:kPreKeyExchangeCollection];
-    return preKeyExchange;
 }
 
-- (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary {
+- (void)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary {
     NSNumber *index = (NSNumber *)dictionary[@"index"];
     NSNumber *previousIndex = (NSNumber *)dictionary[@"previousIndex"];
     EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[@"senderRatchetKey"]
+                                                                                 receiverId:dictionary[@"receiverId"]
                                                                              serializedData:dictionary[@"serializedData"]
                                                                                       index:[index intValue]
                                                                               previousIndex:[previousIndex intValue]];
-    NSString *uniqueMessageId = [NSString stringWithFormat:@"%f_%@", [[NSDate date] timeIntervalSince1970], index];
+    
+    NSString *uniqueMessageId = [NSString stringWithFormat:@"%@_%f_%@",
+                                 dictionary[@"receiverId"],
+                                 [[NSDate date] timeIntervalSince1970],
+                                 index];
 
     [[KStorageManager sharedManager] setObject:encryptedMessage forKey:uniqueMessageId inCollection:kEncryptedMessageCollection];
-    
-    return encryptedMessage;
 }
 
 @end

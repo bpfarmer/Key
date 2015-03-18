@@ -9,6 +9,7 @@
 #import "RootKey.h"
 #import "ChainKey.h"
 #import "RootChain.h"
+#import "RootKey+Serialize.h"
 
 @implementation RootKey
 

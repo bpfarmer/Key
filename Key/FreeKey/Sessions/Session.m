@@ -25,6 +25,8 @@
 #import "SessionState.h"
 #import "PreKeyExchange.h"
 #import "PreKeyExchangeReceipt.h"
+#import "HMAC.h"
+#import "Session+Serialize.h"
 
 @implementation Session
 
@@ -157,7 +159,6 @@
                                                                        cipherText:encryptedText
                                                                             index:senderChainKey.index
                                                                     previousIndex:self.previousIndex];
-    [encryptedMessage setMac];
     [self setSenderRootChain:[senderRootChain iterateChainKey]];
     return encryptedMessage;
 }
@@ -166,13 +167,20 @@
     [self processReceiverChain:encryptedMessage];
     NSString *messageIndex = [NSString stringWithFormat:@"%d", encryptedMessage.index];
     SessionState *sessionState = self.previousSessionStates[encryptedMessage.senderRatchetKey][messageIndex];
-    // TODO: verify HMAC
     
-    NSData *decryptedText = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
+    if(![HMAC verifyWithMac:[encryptedMessage mac]
+          senderIdentityKey:self.receiverIdentityPublicKey
+        receiverIdentityKey:self.senderIdentityKey.publicKey
+                     macKey:sessionState.messageKey.macKey
+             serializedData:encryptedMessage.serializedData]) {
+        //THROW AN ERROR
+    }
+    
+    NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
                                             withKey:sessionState.messageKey.cipherKey
                                              withIV:sessionState.messageKey.iv];
     
-    return decryptedText;
+    return decryptedData;
 }
 
 - (void)processReceiverChain:(EncryptedMessage *)encryptedMessage {

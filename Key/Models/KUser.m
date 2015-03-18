@@ -31,6 +31,7 @@
 #pragma mark - Initializers
 - (instancetype)initWithUsername:(NSString *)username {
     self = [super initWithUniqueId:nil];
+    
     if (self) {
         _username = username;
     }
@@ -48,15 +49,17 @@
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         username:(NSString *)username
                    passwordCrypt:(NSData *)passwordCrypt
+                    passwordSalt:(NSData *)passwordSalt
                      identityKey:(IdentityKey *)identityKey
-                          preKey:(PreKey *)preKey {
+                       publicKey:(NSData *)publicKey{
     self = [super initWithUniqueId:uniqueId];
     
     if (self) {
         _username = username;
         _passwordCrypt = passwordCrypt;
+        _passwordSalt  = passwordSalt;
         _identityKey = identityKey;
-        _preKey = preKey;
+        _publicKey   = publicKey;
     }
     
     return self;
@@ -64,14 +67,12 @@
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         username:(NSString *)username
-                       publicKey:(NSData *)publicKey
-                          preKey:(PreKey *)preKey {
+                       publicKey:(NSData *)publicKey {
     self = [super initWithUniqueId:uniqueId];
     
     if(self) {
         _username = username;
         _publicKey = publicKey;
-        _preKey = preKey;
     }
     
     return self;
@@ -79,11 +80,10 @@
 
 + (void)createFromRemoteDictionary:(NSDictionary *)dictionary {
     NSDictionary *userDictionary = dictionary[[self remoteAlias]];
-    PreKey *preKey = [[FreeKey sharedManager] createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
+    [[FreeKey sharedManager] createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
     KUser *user = [[KUser alloc] initWithUniqueId:userDictionary[@"uniqueId"]
                                          username:userDictionary[@"username"]
-                                        publicKey:userDictionary[@"publicKey"]
-                                           preKey:preKey];
+                                        publicKey:userDictionary[@"publicKey"]];
     [user save];
 }
 

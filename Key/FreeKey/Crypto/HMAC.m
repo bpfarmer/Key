@@ -11,7 +11,7 @@
 
 @implementation HMAC
 
-- (NSData*)generateMacWithMacKey:(NSData *)macKey
++ (NSData*)generateMacWithMacKey:(NSData *)macKey
                senderIdentityKey:(NSData *)senderIdentityKey
              receiverIdentityKey:(NSData *)receiverIdentityKey
                   serializedData:(NSData *)serializedData {
@@ -27,7 +27,7 @@
     return [NSData dataWithBytes:ourHmac length:8];
 }
 
-- (void)verifyWithMac:(NSData *)mac
++ (BOOL)verifyWithMac:(NSData *)mac
     senderIdentityKey:(NSData *)senderIdentityKey
   receiverIdentityKey:(NSData*)receiverIdentityKey
                macKey:(NSData *)macKey
@@ -42,7 +42,9 @@
     
     if (![theirMac isEqualToData:ourMac]) {
         //@throw [NSException exceptionWithName:InvalidMessageException reason:@"Bad Mac!" userInfo:@{}];
+        return NO;
     }
+    return YES;
 }
 
 @end

@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "KMessage.h"
 
-@interface KMessage(Serialize)
+@interface KMessage(Serialize) <NSSecureCoding>
 
 @end

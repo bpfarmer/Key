@@ -13,6 +13,8 @@
 #define kCoderUniqueId @"uniqueId"
 #define kCoderUsername @"username"
 #define kCoderPasswordCrypt @"passwordCrypt"
+#define kCoderPasswordSalt @"passwordSalt"
+#define kCoderPublicKey @"publicKey"
 #define kCoderIdentityKey @"identityKey"
 #define kCoderPreKey @"preKey"
 
@@ -26,16 +28,18 @@
     return [self initWithUniqueId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]
                          username:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUsername]
                     passwordCrypt:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderPasswordCrypt]
+                     passwordSalt:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderPasswordSalt]
                       identityKey:[aDecoder decodeObjectOfClass:[IdentityKey class] forKey:kCoderIdentityKey]
-                           preKey:[aDecoder decodeObjectOfClass:[PreKey class] forKey:kCoderPreKey]];
+                        publicKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderPublicKey]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder{
     [aCoder encodeObject:self.uniqueId forKey:kCoderUniqueId];
     [aCoder encodeObject:self.username forKey:kCoderUsername];
     [aCoder encodeObject:self.passwordCrypt forKey:kCoderPasswordCrypt];
+    [aCoder encodeObject:self.passwordSalt forKey:kCoderPasswordSalt];
     [aCoder encodeObject:self.identityKey forKey:kCoderIdentityKey];
-    [aCoder encodeObject:self.preKey forKey:kCoderPreKey];
+    [aCoder encodeObject:self.publicKey forKey:kCoderPublicKey];
 }
 
 @end

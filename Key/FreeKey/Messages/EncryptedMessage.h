@@ -16,6 +16,7 @@
 @property (nonatomic, readonly) int previousIndex;
 @property (nonatomic, readonly) NSData *cipherText;
 @property (nonatomic, readonly) NSData *serializedData;
+@property (nonatomic, readonly) NSData *mac;
 
 - (instancetype)initWithMacKey:(NSData *)macKey
              senderIdentityKey:(NSData *)senderIdentityKey
@@ -31,6 +32,6 @@
                                     index:(int)index
                             previousIndex:(int)previousIndex;
 
-- (void)setMac;
 - (NSArray *)keysToSend;
+- (NSData *)mac;
 @end

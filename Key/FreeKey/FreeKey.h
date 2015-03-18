@@ -19,13 +19,20 @@
 @class PreKey;
 @class Session;
 
-#define kPreKeyCollection @"PreKey"
-#define kSessionCollection @"Session"
-#define kPreKeyExchangeCollection @"PreKeyExchange"
-#define kPreKeyRemoteAlias @"pre_key"
-#define kPreKeyExchangeRemoteAlias @"pre_key_exchange"
+#define kPreKeyCollection            @"PreKey"
+#define kSessionCollection           @"Session"
+#define kPreKeyExchangeCollection    @"PreKeyExchange"
+#define kPreKeyRemoteAlias           @"pre_key"
+#define kPreKeyExchangeRemoteAlias   @"pre_key_exchange"
 #define kEncryptedMessageRemoteAlias @"message"
-#define kEncryptedMessageCollection @"EncryptedMessage"
+#define kEncryptedMessageCollection  @"EncryptedMessage"
+
+#define kDBReadQueue        @"dbReadQueue"
+#define kDBWriteQueue       @"dbWriteQueue"
+#define kHTTPRequestQueue   @"httpRequestQueue"
+#define kHTTPResponseQueue  @"httpResponseQueue"
+#define kEncryptObjectQueue @"encryptObjectQueue"
+#define kDecryptObjectQueue @"decryptObjectQueue"
 
 @interface FreeKey : NSObject
 
@@ -46,6 +53,10 @@
 - (void)getRemotePreKeyForUserId:(NSString *)recipientId;
 
 - (void)receiveRemoteObject:(NSDictionary *)object ofType:(NSString *)type;
-- (PreKey *)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary;
+- (void)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary;
+- (void)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary;
+- (void)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary;
+
+- (void)startReceiveMessagesQueue;
 
 @end

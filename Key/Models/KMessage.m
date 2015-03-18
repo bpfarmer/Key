@@ -23,25 +23,42 @@
     return edges;
 }
 
-- (instancetype)initFromAuthorId:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body {
-    self = [super initWithUniqueId:[self placeholderUniqueId]];
+- (instancetype)initWithUniqueId:(NSString *)uniqueId
+                        authorId:(NSString *)authorId
+                        threadId:(NSString *)threadId
+                            body:(NSString *)body
+                          status:(NSString *)status
+                       createdAt:(NSDate *)createdAt{
+    self = [super initWithUniqueId:uniqueId];
     
-    if (self) {
+    if(self) {
         _authorId = authorId;
         _threadId = threadId;
         _body     = body;
-        _sendStatus = kStatusUnsent;
+        _status   = status;
+        _createdAt = createdAt;
     }
     return self;
 }
 
-- (void)sendToRecipients {
+- (instancetype)initWithAuthorId:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body {
+    self = [super init];
+    
+    if(self) {
+        _authorId = authorId;
+        _threadId = threadId;
+        _body     = body;
+        [self setUniqueId:[self generateUniqueId]];
+    }
+    
+    return self;
 }
 
-- (NSString *)placeholderUniqueId {
-    NSString *uniqueId = [NSString stringWithFormat:@"%@_%f_%@", [[KAccountManager sharedManager] uniqueId],
+- (NSString *)generateUniqueId {
+    NSString *uniqueId = [NSString stringWithFormat:@"%@_%f_%@", self.authorId,
                           [[NSDate date] timeIntervalSince1970],
                           [Util insecureRandomString:10]];
+    
     return uniqueId;
 }
 

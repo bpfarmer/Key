@@ -10,12 +10,12 @@
 
 @interface HMAC : NSObject
 
-- (NSData*)generateMacWithMacKey:(NSData *)macKey
++ (NSData*)generateMacWithMacKey:(NSData *)macKey
                senderIdentityKey:(NSData *)senderIdentityKey
              receiverIdentityKey:(NSData *)receiverIdentityKey
                   serializedData:(NSData *)serializedData;
 
-- (void)verifyWithMac:(NSData *)mac
++ (BOOL)verifyWithMac:(NSData *)mac
     senderIdentityKey:(NSData *)senderIdentityKey
   receiverIdentityKey:(NSData*)receiverIdentityKey
                macKey:(NSData *)macKey

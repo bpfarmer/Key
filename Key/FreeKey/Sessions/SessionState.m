@@ -8,10 +8,13 @@
 
 #import "SessionState.h"
 #import "ChainKey.h"
+#import "SessionState+Serialize.h"
 
 @implementation SessionState
 
-- (instancetype)initWithMessageKey:(MessageKey *)messageKey senderRatchetKey:(NSData *)senderRatchetKey index:(int)index {
+- (instancetype)initWithMessageKey:(MessageKey *)messageKey
+                  senderRatchetKey:(NSData *)senderRatchetKey
+                             index:(int)index {
     self = [super init];
     
     if(self) {

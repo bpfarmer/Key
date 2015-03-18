@@ -9,6 +9,7 @@
 #import "EncryptedMessage.h"
 #import <CommonCrypto/CommonCrypto.h>
 #import "HMAC.h"
+#import "EncryptedMessage+Serialize.h"
 
 @implementation EncryptedMessage
 
@@ -26,7 +27,16 @@
     if(self) {
         _senderRatchetKey = senderRatchetKey;
         _cipherText       = cipherText;
-        _serializedData   = cipherText;
+        
+        NSMutableData *messageAndMac = [[NSMutableData alloc] init];
+        NSData *mac = [HMAC generateMacWithMacKey:macKey
+                                senderIdentityKey:senderIdentityKey
+                              receiverIdentityKey:receiverIdentityKey
+                                   serializedData:cipherText];
+        [messageAndMac appendData:cipherText];
+        [messageAndMac appendData:mac];
+        _mac              = mac;
+        _serializedData   = messageAndMac;
         _index            = index;
         _previousIndex    = previousIndex;
     }
@@ -49,18 +59,6 @@
         _previousIndex    = previousIndex;
     }
     return self;
-}
-
-// TODO: use MAC generation here
-// TODO: check MAC
-- (void)setMac {
-    NSMutableData *serializedWithMac = [[NSMutableData alloc] initWithBase64EncodedData:self.serializedData options:0];
-    for( unsigned int i = 0 ; i < 2 ; ++i )
-    {
-        u_int32_t randomBits = arc4random();
-        [serializedWithMac appendBytes:(void*)&randomBits length:4];
-    }
-    _serializedData = serializedWithMac;
 }
 
 - (NSArray *)keysToSend {

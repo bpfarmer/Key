@@ -10,6 +10,7 @@
 #import "KeyDerivation.h"
 #import "MessageKey.h"
 #import <CommonCrypto/CommonCrypto.h>
+#import "ChainKey+Serialize.h"
 
 @implementation ChainKey
 

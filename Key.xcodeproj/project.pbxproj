@@ -10,6 +10,7 @@
 		49324C749A49C0F4FB711A5D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
 		710028D1F762C6FE738F0D7A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
 		EF0F4DBB1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F4DBA1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m */; };
+		EF0F4DBE1AB8D3BA00BB2AFC /* PushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F4DBD1AB8D3BA00BB2AFC /* PushManager.m */; };
 		EF2CDEAE1AB48C3F001E2F20 /* KUser+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEAD1AB48C3F001E2F20 /* KUser+Serialize.m */; };
 		EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */; };
 		EF2CDEB81AB49A6F001E2F20 /* IdentityKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEB71AB49A6F001E2F20 /* IdentityKey+Serialize.m */; };
@@ -97,6 +98,8 @@
 		DF6091F2DF6E5A8AC8248FE8 /* Pods-KeyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.release.xcconfig"; sourceTree = "<group>"; };
 		EF0F4DB91AB76B0500BB2AFC /* EncryptedMessage+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EncryptedMessage+Serialize.h"; path = "Network/Serializers/FreeKey/EncryptedMessage+Serialize.h"; sourceTree = "<group>"; };
 		EF0F4DBA1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EncryptedMessage+Serialize.m"; path = "Network/Serializers/FreeKey/EncryptedMessage+Serialize.m"; sourceTree = "<group>"; };
+		EF0F4DBC1AB8D3BA00BB2AFC /* PushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PushManager.h; path = Network/PushManager.h; sourceTree = "<group>"; };
+		EF0F4DBD1AB8D3BA00BB2AFC /* PushManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PushManager.m; path = Network/PushManager.m; sourceTree = "<group>"; };
 		EF2CDEAC1AB48C3F001E2F20 /* KUser+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KUser+Serialize.h"; path = "Network/Serializers/KUser+Serialize.h"; sourceTree = "<group>"; };
 		EF2CDEAD1AB48C3F001E2F20 /* KUser+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KUser+Serialize.m"; path = "Network/Serializers/KUser+Serialize.m"; sourceTree = "<group>"; };
 		EF2CDEAF1AB48CB6001E2F20 /* KMessage+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KMessage+Serialize.h"; path = "Network/Serializers/KMessage+Serialize.h"; sourceTree = "<group>"; };
@@ -343,6 +346,8 @@
 			children = (
 				EF524B081AB0DE4300F3B9AF /* HttpManager.h */,
 				EF524B091AB0DE4300F3B9AF /* HttpManager.m */,
+				EF0F4DBC1AB8D3BA00BB2AFC /* PushManager.h */,
+				EF0F4DBD1AB8D3BA00BB2AFC /* PushManager.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -755,6 +760,7 @@
 				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,
 				EF524AF51AAE2BAC00F3B9AF /* FreeKey.m in Sources */,
 				EF2CDEC61AB52FCA001E2F20 /* Session+Serialize.m in Sources */,
+				EF0F4DBE1AB8D3BA00BB2AFC /* PushManager.m in Sources */,
 				EFF70A8E1AAE19C3006C10D2 /* RootChain.m in Sources */,
 				EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */,
 				EFF70A941AAE19C3006C10D2 /* Session.m in Sources */,

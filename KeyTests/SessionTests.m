@@ -92,7 +92,7 @@
     PreKeyExchange *preKeyExchange = [aliceSession addPreKey:bobPreKey];
     
     Session *bobSession = [[Session alloc] initWithReceiverId:ALICE_RECIPIENT_ID identityKey:bobIdentityKey];
-    NSLog(@"THEIR BASE KEY: %@", preKeyExchange.sentSignedBaseKey);
+
     [bobSession addOurPreKey:bobPreKey preKeyExchange:preKeyExchange];
     return [[NSArray alloc] initWithObjects:aliceSession, bobSession, nil];
 }
