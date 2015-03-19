@@ -6,8 +6,12 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "ContactViewController.h"
+#import <UIKit/UIKit.h>
 
-@interface ThreadViewController : ContactViewController
+@class KThread;
+
+@interface ThreadViewController : UIViewController
+
+@property (nonatomic, retain) KThread *thread;
 
 @end

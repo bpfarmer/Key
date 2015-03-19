@@ -50,11 +50,14 @@
 - (NSArray *)generatePreKeysForUser:(KUser *)user;
 - (void)sendPreKeysToServer:(NSArray *)preKeys;
 - (void)getRemotePreKeyForUserId:(NSString *)recipientId;
+- (void)getRemoteUserWithUsername:(NSString *)username;
 
 - (void)receiveRemoteObject:(NSDictionary *)object ofType:(NSString *)type;
 - (void)receiveRemoteFeed:(NSDictionary *)objects;
-- (void)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary;
-- (void)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary;
-- (void)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary;
+- (PreKey *)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary;
+- (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary;
+- (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary;
+
+- (void)enqueueEncryptableObject:(id <KEncryptable>)object;
 
 @end

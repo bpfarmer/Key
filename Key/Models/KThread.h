@@ -20,7 +20,13 @@
 @property (nonatomic) NSDate *lastMessageAt;
 @property (nonatomic) NSDate *archivedAt;
 
-- (instancetype)initWithUsers:(NSArray *)userIds;
+- (instancetype)initWithUsers:(NSArray *)user;
 - (instancetype)initFromRemote:(NSDictionary *)threadDictionary;
+- (instancetype)initWithUniqueId:(NSString *)uniqueId
+                         userIds:(NSArray *)userIds
+                            name:(NSString *)name
+                   latestMessage:(KMessage *)latestMessage
+                   lastMessageAt:(NSDate *)lastMessageAt
+                      archivedAt:(NSDate *)archivedAt;
 
 @end

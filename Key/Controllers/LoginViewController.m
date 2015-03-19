@@ -41,7 +41,7 @@
 
 - (void)showInbox {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
+    UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
     [self presentViewController:inboxView animated:YES completion:nil];
 }
 

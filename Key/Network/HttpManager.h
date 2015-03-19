@@ -18,7 +18,7 @@
 
 - (void)put:(id <KSendable>)object;
 - (void)post:(id <KSendable>)object;
-- (void)get: (NSDictionary *)parameters;
+//- (void)get: (NSDictionary *)parameters;
 - (void)batchPut:(NSString *)remoteAlias objects:(NSArray *)objects;
 - (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters;
 

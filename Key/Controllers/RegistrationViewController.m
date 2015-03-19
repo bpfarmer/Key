@@ -45,8 +45,8 @@
 
 - (void)receiveUserStatusNotification:(NSNotification *)notification {
     KUser *user = (KUser *) notification.object;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kRemotePutNotification object:nil];
     if([user.remoteStatus isEqualToString:kRemotePutSuccessStatus]) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:kRemotePutNotification object:nil];
         [user setPasswordCryptInKeychain:self.passwordText.text];
         [[KAccountManager sharedManager] setUser:user];
         [[KStorageManager sharedManager] setupDatabase];

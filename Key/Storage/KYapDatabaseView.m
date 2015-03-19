@@ -14,13 +14,15 @@
 
 NSString *KInboxGroup                       = @"KInboxGroup";
 NSString *KThreadGroup                      = @"KThreadGroup";
-NSString *KThreadDatabaseViewExtensionName  = @"KThreadDatabaseViewExtension";
-NSString *KMessageDatabaseViewExtensionName = @"KMessageDatabaseViewExtension";
+NSString *KContactGroup                     = @"KContactGroup";
+NSString *KThreadDatabaseViewName  = @"KThreadDatabaseViewExtension";
+NSString *KMessageDatabaseViewName = @"KMessageDatabaseViewExtension";
+NSString *KContactDatabaseViewName = @"KContactDatabaseViewExtension";
 
 @implementation KYapDatabaseView
 
 + (BOOL) registerThreadDatabaseView {
-    if ([[KStorageManager sharedManager].database registeredExtension:KThreadDatabaseViewExtensionName]) {
+    if ([[KStorageManager sharedManager].database registeredExtension:KThreadDatabaseViewName]) {
         return YES;
     }
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {
@@ -41,17 +43,20 @@ NSString *KMessageDatabaseViewExtensionName = @"KMessageDatabaseViewExtension";
                                                                    versionTag:@"1"
                                                                       options:options];
     
-    return [[[KStorageManager sharedManager] database] registerExtension:databaseView withName:KThreadDatabaseViewExtensionName];
+    return [[[KStorageManager sharedManager] database] registerExtension:databaseView withName:KThreadDatabaseViewName];
 }
 
 + (BOOL) registerMessageDatabaseView {
-    if ([[KStorageManager sharedManager].database registeredExtension:KMessageDatabaseViewExtensionName]) {
+    if ([[KStorageManager sharedManager].database registeredExtension:KMessageDatabaseViewName]) {
         return YES;
     }
     
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {
         if ([object isKindOfClass:[KMessage class]]){
-            return ((KMessage *) object).threadId;
+            KMessage *message = (KMessage *)object;
+            if(message.threadId) {
+                return ((KMessage *) object).threadId;
+            }
         }
         return nil;
     }];
@@ -67,10 +72,36 @@ NSString *KMessageDatabaseViewExtensionName = @"KMessageDatabaseViewExtension";
                                                            versionTag:@"1"
                                                               options:options];
     
-    return [[KStorageManager sharedManager].database registerExtension:view withName:KMessageDatabaseViewExtensionName];
+    return [[KStorageManager sharedManager].database registerExtension:view withName:KMessageDatabaseViewName];
 }
 
-+ (YapDatabaseViewSorting *) messageSorting {
++ (BOOL)registerContactDatabaseView {
+    if([[KStorageManager sharedManager].database registeredExtension:KContactDatabaseViewName]) {
+        return YES;
+    }
+    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {
+        if ([object isKindOfClass:[KUser class]]){
+            NSLog(@"YOU KNOW I'M HERE");
+            return KContactGroup;
+        }
+        return nil;
+    }];
+    YapDatabaseViewSorting *viewSorting = [self userSorting];
+    
+    YapDatabaseViewOptions *options = [[YapDatabaseViewOptions alloc] init];
+    options.isPersistent = YES;
+    options.allowedCollections = [[YapWhitelistBlacklist alloc] initWithWhitelist:[NSSet setWithObject:[KUser collection]]];
+    
+    YapDatabaseView *databaseView = [[YapDatabaseView alloc] initWithGrouping:viewGrouping
+                                                                      sorting:viewSorting
+                                                                   versionTag:@"1"
+                                                                      options:options];
+    
+    return [[[KStorageManager sharedManager] database] registerExtension:databaseView withName:KContactDatabaseViewName];
+
+}
+
++ (YapDatabaseViewSorting *)messageSorting {
     return [YapDatabaseViewSorting withObjectBlock:^NSComparisonResult(NSString *group, NSString *collection1, NSString *key1, id object1, NSString *collection2, NSString *key2, id object2) {
         /*if ([object1 isKindOfClass:[KMessage class]] && [object2 isKindOfClass:[KMessage class]]) {
             KMessage *message1 = (KMessage *) object1;
@@ -82,10 +113,10 @@ NSString *KMessageDatabaseViewExtensionName = @"KMessageDatabaseViewExtension";
     }];
 }
 
-+ (YapDatabaseViewSorting*) threadSorting {
++ (YapDatabaseViewSorting *)threadSorting {
     return [YapDatabaseViewSorting withObjectBlock:^NSComparisonResult(NSString *group, NSString *collection1, NSString *key1, id object1, NSString *collection2, NSString *key2, id object2) {
-        if ([group isEqualToString:KInboxGroup]) {
-            if ([object1 isKindOfClass:[KThread class]] && [object2 isKindOfClass:[KThread class]]){
+        if([group isEqualToString:KInboxGroup]) {
+            if([object1 isKindOfClass:[KThread class]] && [object2 isKindOfClass:[KThread class]]){
                 KThread *thread1 = (KThread *)object1;
                 KThread *thread2 = (KThread *)object2;
                 
@@ -94,7 +125,20 @@ NSString *KMessageDatabaseViewExtensionName = @"KMessageDatabaseViewExtension";
         }
         return NSOrderedSame;
     }];
-    
+}
+
++ (YapDatabaseViewSorting *)userSorting {
+    return [YapDatabaseViewSorting withObjectBlock:^NSComparisonResult(NSString *group, NSString *collection1, NSString *key1, id object1, NSString *collection2, NSString *key2, id object2) {
+        if([group isEqualToString:KContactGroup]) {
+            if([object1 isKindOfClass:[KUser class]] && [object2 isKindOfClass:[KUser class]]) {
+                KUser *user1 = (KUser *)object1;
+                KUser *user2 = (KUser *)object2;
+                
+                return [[user1 displayName] compare:[user2 displayName]];
+            }
+        }
+                                                        return NSOrderedSame;
+    }];
 }
 
 @end

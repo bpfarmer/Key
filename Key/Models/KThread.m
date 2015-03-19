@@ -28,19 +28,41 @@
     return self;
 }
 
-- (instancetype)initWithUsers:(NSArray *)userIds {
-    self = [super initWithUniqueId:nil];
+- (instancetype)initWithUsers:(NSArray *)users {
+    NSMutableArray *userIds = [[NSMutableArray alloc] init];
+    [users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        KUser *user = (KUser *)obj;
+        [userIds addObject:user.uniqueId];
+    }];
+    NSArray *sortedUserIds = [userIds sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return obj1 > obj2;
+    }];
+    self = [super initWithUniqueId:[sortedUserIds componentsJoinedByString:@"_"]];
     if (self) {
-        _userIds = [userIds sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return obj1 > obj2;
+        _userIds = sortedUserIds;
+        NSMutableArray *usernames = [[NSMutableArray alloc] init];
+        [users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            KUser *user = (KUser *)obj;
+            [usernames addObject:user.username];
         }];
-        NSString *uniqueId = [userIds componentsJoinedByString:@"_"];
-        KThread *thread = [[KStorageManager sharedManager] objectForKey:uniqueId inCollection:[KThread collection]];
-        if (!thread) {
-            [self setUniqueId:uniqueId];
-        }else {
-            self = thread;
-        }
+        _name = [usernames componentsJoinedByString:@", "];
+    }
+    return self;
+}
+
+- (instancetype)initWithUniqueId:(NSString *)uniqueId
+                         userIds:(NSArray *)userIds
+                            name:(NSString *)name
+                   latestMessage:(KMessage *)latestMessage
+                   lastMessageAt:(NSDate *)lastMessageAt
+                      archivedAt:(NSDate *)archivedAt {
+    self = [super initWithUniqueId:uniqueId];
+    if (self) {
+        _name = name;
+        _userIds       = userIds;
+        _latestMessage = latestMessage;
+        _lastMessageAt = lastMessageAt;
+        _archivedAt    = archivedAt;
     }
     return self;
 }

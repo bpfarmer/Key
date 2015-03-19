@@ -44,6 +44,8 @@
 		EF6B44A81ABA2F8A00B88323 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44A71ABA2F8A00B88323 /* ContactViewController.m */; };
 		EF6B44AB1ABA399D00B88323 /* ThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44AA1ABA399D00B88323 /* ThreadViewController.m */; };
 		EF6B44AD1ABA5DDB00B88323 /* KThreadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44AC1ABA5DDB00B88323 /* KThreadTests.m */; };
+		EF6B44AF1ABA607E00B88323 /* KYapDatabaseViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44AE1ABA607E00B88323 /* KYapDatabaseViewTests.m */; };
+		EF6B44B21ABA877F00B88323 /* KThread+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44B11ABA877F00B88323 /* KThread+Serialize.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
@@ -72,7 +74,6 @@
 		EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A7D1AAE19C3006C10D2 /* PreKeyExchangeReceipt.m */; };
 		EFF70A941AAE19C3006C10D2 /* Session.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A801AAE19C3006C10D2 /* Session.m */; };
 		EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A821AAE19C3006C10D2 /* SessionState.m */; };
-		EFF70AC11AAE1CBC006C10D2 /* AddContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70AB21AAE1CBC006C10D2 /* AddContactViewController.m */; };
 		EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */; };
 		EFF70AC61AAE1CBC006C10D2 /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */; };
 		EFF70AC71AAE1CBC006C10D2 /* ThreadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70ABE1AAE1CBC006C10D2 /* ThreadTableViewController.m */; };
@@ -162,6 +163,9 @@
 		EF6B44A91ABA399D00B88323 /* ThreadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadViewController.h; sourceTree = "<group>"; };
 		EF6B44AA1ABA399D00B88323 /* ThreadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadViewController.m; sourceTree = "<group>"; };
 		EF6B44AC1ABA5DDB00B88323 /* KThreadTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KThreadTests.m; sourceTree = "<group>"; };
+		EF6B44AE1ABA607E00B88323 /* KYapDatabaseViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYapDatabaseViewTests.m; sourceTree = "<group>"; };
+		EF6B44B01ABA877F00B88323 /* KThread+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KThread+Serialize.h"; path = "Network/Serializers/KThread+Serialize.h"; sourceTree = "<group>"; };
+		EF6B44B11ABA877F00B88323 /* KThread+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KThread+Serialize.m"; path = "Network/Serializers/KThread+Serialize.m"; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
 		EFC6BE9D1A6857D400B0EB8F /* Key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Key.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -216,8 +220,6 @@
 		EFF70A801AAE19C3006C10D2 /* Session.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Session.m; sourceTree = "<group>"; };
 		EFF70A811AAE19C3006C10D2 /* SessionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionState.h; sourceTree = "<group>"; };
 		EFF70A821AAE19C3006C10D2 /* SessionState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionState.m; sourceTree = "<group>"; };
-		EFF70AB11AAE1CBC006C10D2 /* AddContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddContactViewController.h; sourceTree = "<group>"; };
-		EFF70AB21AAE1CBC006C10D2 /* AddContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddContactViewController.m; sourceTree = "<group>"; };
 		EFF70AB71AAE1CBC006C10D2 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationViewController.h; sourceTree = "<group>"; };
@@ -277,6 +279,8 @@
 				EF2CDEAD1AB48C3F001E2F20 /* KUser+Serialize.m */,
 				EF2CDEAF1AB48CB6001E2F20 /* KMessage+Serialize.h */,
 				EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */,
+				EF6B44B01ABA877F00B88323 /* KThread+Serialize.h */,
+				EF6B44B11ABA877F00B88323 /* KThread+Serialize.m */,
 			);
 			name = Serializers;
 			path = ..;
@@ -425,6 +429,7 @@
 				EF524B021AAF330A00F3B9AF /* SessionTests.m */,
 				EFC6BEBA1A6857D500B0EB8F /* Supporting Files */,
 				EF6B44AC1ABA5DDB00B88323 /* KThreadTests.m */,
+				EF6B44AE1ABA607E00B88323 /* KYapDatabaseViewTests.m */,
 			);
 			path = KeyTests;
 			sourceTree = "<group>";
@@ -531,8 +536,6 @@
 		EFF70AB01AAE1CBC006C10D2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				EFF70AB11AAE1CBC006C10D2 /* AddContactViewController.h */,
-				EFF70AB21AAE1CBC006C10D2 /* AddContactViewController.m */,
 				EF6B44A61ABA2F8A00B88323 /* ContactViewController.h */,
 				EF6B44A71ABA2F8A00B88323 /* ContactViewController.m */,
 				EF0F4DC21ABA19DE00BB2AFC /* HomeViewController.h */,
@@ -740,7 +743,6 @@
 				EF2CDED51AB5C972001E2F20 /* RootKey+Serialize.m in Sources */,
 				EFF70AC61AAE1CBC006C10D2 /* RegistrationViewController.m in Sources */,
 				EFF70A8B1AAE19C3006C10D2 /* MasterKey.m in Sources */,
-				EFF70AC11AAE1CBC006C10D2 /* AddContactViewController.m in Sources */,
 				EF0F4DBB1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m in Sources */,
 				EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */,
 				EFF70A8A1AAE19C3006C10D2 /* IdentityKey.m in Sources */,
@@ -755,6 +757,7 @@
 				EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
 				EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */,
 				EFF70A901AAE19C3006C10D2 /* SessionKeyBundle.m in Sources */,
+				EF6B44B21ABA877F00B88323 /* KThread+Serialize.m in Sources */,
 				EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */,
 				EF524ADE1AAE238600F3B9AF /* KYapDatabaseView.m in Sources */,
 				EFF70A8D1AAE19C3006C10D2 /* PreKey.m in Sources */,
@@ -781,6 +784,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF6B44AF1ABA607E00B88323 /* KYapDatabaseViewTests.m in Sources */,
 				EF6B44AD1ABA5DDB00B88323 /* KThreadTests.m in Sources */,
 				EF524B031AAF330A00F3B9AF /* CryptoTests.m in Sources */,
 				EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */,

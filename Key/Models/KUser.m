@@ -22,6 +22,7 @@
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
 #import "KUser+Serialize.h"
+#import "PreKey.h"
 
 #define kRemoteCreateNotification @"KUserRemoteCreateNotification"
 #define kRemoteUpdateNotification @"KUserRemoteUpdateNotification"
@@ -80,7 +81,15 @@
 
 + (void)createFromRemoteDictionary:(NSDictionary *)dictionary {
     NSDictionary *userDictionary = dictionary[[self remoteAlias]];
-    [[FreeKey sharedManager] createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
+    
+    
+    if(![dictionary[kPreKeyRemoteAlias] isKindOfClass:[NSNull class]]) {
+        PreKey *preKey = [[FreeKey sharedManager] createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
+        [[KStorageManager sharedManager] setObject:preKey
+                                            forKey:preKey.userId
+                                      inCollection:kTheirPreKeyCollection];
+    }
+    
     KUser *user = [[KUser alloc] initWithUniqueId:userDictionary[@"uniqueId"]
                                          username:userDictionary[@"username"]
                                         publicKey:userDictionary[@"publicKey"]];
@@ -103,6 +112,12 @@
     [self setPublicKey:identityKey.keyPair.publicKey];
     [self save];
     [[HttpManager sharedManager] post:self];
+    [self setupPreKeys];
+}
+
+- (void)setupPreKeys {
+    NSArray *preKeys = [[FreeKey sharedManager] generatePreKeysForUser:self];
+    [[FreeKey sharedManager] sendPreKeysToServer:preKeys];
 }
 
 #pragma mark - Batch Query Methods
@@ -131,9 +146,28 @@
     return user;
 }
 
++ (void)retrieveUserWithUsername:(NSString *)username {
+    [[FreeKey sharedManager] getRemoteUserWithUsername:username];
+}
+
++ (NSArray *)userIdsWithUsernames:(NSArray *)usernames {
+    NSMutableArray *userIds = [[NSMutableArray alloc] init];
+    NSLog(@"USERNAMES: %@", usernames);
+    for(NSString *username in usernames) {
+        KUser *user = [self fetchObjectWithUsername:username];
+        NSLog(@"USER UNIQUE ID: %@", user.uniqueId);
+        if(user) [userIds addObject:user.uniqueId];
+    }
+    return userIds;
+}
+
 #pragma mark - User Custom Attributes
 
 - (NSString *)fullName {
+    return [self username];
+}
+
+- (NSString *)displayName {
     return [self username];
 }
 

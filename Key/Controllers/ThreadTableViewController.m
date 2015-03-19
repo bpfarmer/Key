@@ -84,18 +84,22 @@ static NSString *TableViewCellIdentifier = @"Messages";
     if (!self.thread) {
         [self setupThread];
     }
-    KMessage *message = [[KMessage alloc] initFromAuthorId:self.currentUser.uniqueId threadId:self.thread.uniqueId body:self.messageTextField.text];
+    KMessage *message = [[KMessage alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId
+                                                  threadId:self.thread.uniqueId
+                                                      body:self.messageTextField.text];
     [message save];
-    [message sendToRecipients];
+    //[message sendToRecipients];
 }
 
 - (void)setupThread {
     NSArray *usernames = [self.recipientTextField.text componentsSeparatedByString:@", "];
-    NSMutableArray *recipientIds = [NSMutableArray arrayWithObjects:self.currentUser.uniqueId, nil];
-    for (NSString *username in usernames) {
-        [recipientIds addObject:username];
-    };
-    self.thread = [[KThread alloc] initWithUsers:recipientIds];
+    NSMutableArray *users = [[NSMutableArray alloc] init];
+    [usernames enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        KUser *user = [KUser fetchObjectWithUsername:obj];
+        [users addObject:user];
+    }];
+    self.thread = [[KThread alloc] initWithUsers:users];
+    NSLog(@"THREAD NAME: %@", self.thread.name);
     [self setupDatabaseView];
 }
 

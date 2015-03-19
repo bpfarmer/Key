@@ -13,13 +13,14 @@
 #import "KStorageManager.h"
 #import "KYapDatabaseView.h"
 #import "ThreadTableViewController.h"
+#import "KMessage.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
 
 YapDatabaseViewMappings *mappings;
 YapDatabaseConnection *databaseConnection;
 
-@interface HomeViewController () <UITableViewDataSource>
+@interface HomeViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *threadsTableView;
 @property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
 @property (nonatomic, strong) YapDatabaseViewMappings *threadMappings;
@@ -32,6 +33,7 @@ YapDatabaseConnection *databaseConnection;
     [super viewDidLoad];
 
     self.threadsTableView.dataSource = self;
+    self.threadsTableView.delegate = self;
     [self.threadsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
     [self setupDatabaseView];
@@ -40,7 +42,7 @@ YapDatabaseConnection *databaseConnection;
 - (void) setupDatabaseView {
     _databaseConnection = [[KStorageManager sharedManager] newDatabaseConnection];
     [self.databaseConnection beginLongLivedReadTransaction];
-    _threadMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[@"KInboxGroup"] view:@"KThreadDatabaseViewExtension"];
+    _threadMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[@"KInboxGroup"] view:KThreadDatabaseViewName];
     
     [self.databaseConnection beginLongLivedReadTransaction];
     [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
@@ -63,7 +65,7 @@ YapDatabaseConnection *databaseConnection;
     NSArray *sectionChanges = nil;
     NSArray *rowChanges = nil;
     
-    [[self.databaseConnection ext:@"KThreadDatabaseViewExtensionName"] getSectionChanges:&sectionChanges
+    [[self.databaseConnection ext:KThreadDatabaseViewName] getSectionChanges:&sectionChanges
                                                                               rowChanges:&rowChanges
                                                                         forNotifications:notifications
                                                                             withMappings:self.threadMappings];
@@ -146,7 +148,7 @@ YapDatabaseConnection *databaseConnection;
 {
     __block KThread *thread = nil;
     [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        thread = [[transaction extension:@"KThreadDatabaseViewExtension"] objectAtIndexPath:indexPath withMappings:self.threadMappings];
+        thread = (KThread *)[[transaction extension:KThreadDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.threadMappings];
     }];
     
     UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
@@ -157,10 +159,17 @@ YapDatabaseConnection *databaseConnection;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     __block KThread *thread = nil;
     [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        thread = [[transaction extension:@"KThreadDatabaseViewExtension"] objectAtIndexPath:indexPath withMappings:self.threadMappings];
+        thread = [[transaction extension:KThreadDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.threadMappings];
     }];
-    //if(thread) [self goToThread:thread];
+    if(thread) [self goToThread:thread];
 }
 
+- (void) goToThread:(KThread *)thread {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    ThreadTableViewController *threadView = [storyboard instantiateViewControllerWithIdentifier:@"ThreadViewController"];
+    threadView.thread = thread;
+    [self presentViewController:threadView animated:YES completion:nil];
+    
+}
 
 @end
