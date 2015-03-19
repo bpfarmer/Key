@@ -9,6 +9,8 @@
 #import "HttpManager.h"
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
 #import "FreeKey.h"
+#import "NSData+Base64.h"
+#import "EncryptedMessage.h"
 
 #define kRemoteEndpoint @"http://127.0.0.1:9393"
 
@@ -28,15 +30,14 @@
 }
 
 - (NSString *)remoteAlias:(id <KSendable>)object {
-    NSString *lowercaseClass = [NSStringFromClass([object class]) lowercaseString];
-    return [lowercaseClass substringFromIndex:1];
+    return [[object class] remoteAlias];
 }
 
 - (void)put:(id <KSendable>)object {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager PUT:[self endpointForObject:[self remoteAlias:object]]
       parameters:@{[self remoteAlias:object] : [self toDictionary:object]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"status"]  isEqual:@"SUCCESS"]) {
+        if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
             [object setUniqueId:responseObject[[self remoteAlias:object]][@"uniqueId"]];
             [object setRemoteStatus:kRemotePutSuccessStatus];
         }else {
@@ -67,9 +68,13 @@
 
 - (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    NSLog(@"PARAMETERS: %@", parameters);
+    NSLog(@"ENDPOINT: %@", [self endpointForObject:remoteAlias]);
     [manager GET:[self endpointForObject:remoteAlias] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         NSLog(@"RESPONSE OBJECT: %@", responseObject);
          if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
              if([remoteAlias isEqualToString:kFeedRemoteAlias]) {
+                 NSLog(@"RESPONSE OBJECT: %@", responseObject);
                  [[FreeKey sharedManager] receiveRemoteFeed:responseObject];
              }else {
                  [[FreeKey sharedManager] receiveRemoteObject:responseObject ofType:remoteAlias];
@@ -95,8 +100,19 @@
 }
 
 - (NSDictionary *)toDictionary:(id <KSendable>)object {
+    NSMutableDictionary *requestDictionary = [[NSMutableDictionary alloc] init];
     NSObject *objectForDictionary = (NSObject *)object;
-    return [objectForDictionary dictionaryWithValuesForKeys:[[object class] remoteKeys]];
+    [[[object class] remoteKeys] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSObject *property = [objectForDictionary dictionaryWithValuesForKeys:@[obj]][obj];
+        if([property isKindOfClass:[NSData class]]) {
+            NSData *dataProperty = (NSData *)property;
+            NSString *encodedString = [dataProperty base64EncodedString];
+            [requestDictionary addEntriesFromDictionary:@{obj : encodedString}];
+        }else {
+            [requestDictionary addEntriesFromDictionary:@{obj : property}];
+        }
+    }];
+    return requestDictionary;
 }
 
 @end

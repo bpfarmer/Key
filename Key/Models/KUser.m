@@ -140,7 +140,6 @@
         YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:@"WHERE username = ?", username];
         [[transaction ext:KUsernameSQLiteIndex] enumerateKeysAndObjectsMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, id object, BOOL *stop) {
             user = (KUser *)object;
-            NSLog(@"KEY: %@", key);
         }];
     }];
     return user;

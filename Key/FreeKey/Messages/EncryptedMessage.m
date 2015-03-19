@@ -10,6 +10,7 @@
 #import <CommonCrypto/CommonCrypto.h>
 #import "HMAC.h"
 #import "EncryptedMessage+Serialize.h"
+#import "FreeKey.h"
 
 @implementation EncryptedMessage
 
@@ -62,7 +63,11 @@
 }
 
 + (NSArray *)remoteKeys {
-    return @[@"senderRatchetKey", @"receiverId", @"serializedData", @"index", @"previousIndex"];
+    return @[@"senderRatchetKey", @"receiverId", @"senderId", @"serializedData", @"index", @"previousIndex"];
+}
+
++ (NSString *)remoteAlias {
+    return kEncryptedMessageRemoteAlias;
 }
 
 @end

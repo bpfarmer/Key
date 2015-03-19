@@ -12,7 +12,6 @@
 #import "KThread.h"
 #import "KStorageManager.h"
 #import "KYapDatabaseView.h"
-#import "ThreadTableViewController.h"
 #import "KMessage.h"
 #import "FreeKey.h"
 
@@ -25,6 +24,7 @@ YapDatabaseConnection *databaseConnection;
 @property (nonatomic, strong) IBOutlet UITableView *messagesTableView;
 @property (nonatomic, strong) IBOutlet UITextField *messageTextField;
 @property (nonatomic, strong) IBOutlet UITextField *recipientTextField;
+@property (nonatomic, strong) IBOutlet UIView *headerView;
 @property (nonatomic, strong) KUser *curentUser;
 @property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
 @property (nonatomic, strong) YapDatabaseViewMappings *messageMappings;
@@ -38,6 +38,7 @@ YapDatabaseConnection *databaseConnection;
     self.messagesTableView.dataSource = self;
     [self.messagesTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
+    NSLog(@"DB PATH: %@", [[KStorageManager sharedManager] dbPath]);
     if(self.thread) {
         [self setupDatabaseView];
     }
@@ -46,7 +47,8 @@ YapDatabaseConnection *databaseConnection;
 - (void) setupDatabaseView {
     _databaseConnection = [[KStorageManager sharedManager] newDatabaseConnection];
     [self.databaseConnection beginLongLivedReadTransaction];
-    _messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[self.thread.uniqueId] view:@"KMessageDatabaseViewExtension"];
+    _messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[self.thread.uniqueId]
+                                                                  view:@"KMessageDatabaseViewExtension"];
 
     
     [self.databaseConnection beginLongLivedReadTransaction];
@@ -166,11 +168,21 @@ YapDatabaseConnection *databaseConnection;
     if (!self.thread) {
         [self setupThread];
     }
+    
+    [self.messagesTableView reloadData];
+    
     KMessage *message = [[KMessage alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId
                                                   threadId:self.thread.uniqueId
                                                       body:self.messageTextField.text];
     [message save];
-    [[FreeKey sharedManager] enqueueEncryptableObject:message];
+    KUser *currentUser = [[KAccountManager sharedManager] user];
+    
+    [self.thread.userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if(![obj isEqual:currentUser.uniqueId]) {
+            [[FreeKey sharedManager] enqueueEncryptableObject:message fromUser:currentUser toUserId:obj];
+        }
+    }];
+    self.messageTextField.text = @"";
 }
 
 - (void)setupThread {
@@ -180,8 +192,15 @@ YapDatabaseConnection *databaseConnection;
         KUser *user = [KUser fetchObjectWithUsername:obj];
         if(user) [users addObject:user];
     }];
+    [users addObject:[[KAccountManager sharedManager] user]];
     self.thread = [[KThread alloc] initWithUsers:users];
-    NSLog(@"THREAD NAME: %@", self.thread.name);
+    [self.thread save];
+    KUser *currentUser = [[KAccountManager sharedManager] user];
+    [self.thread.userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if(![obj isEqual:currentUser.uniqueId]) {
+            [[FreeKey sharedManager] enqueueEncryptableObject:self.thread fromUser:currentUser toUserId:obj];
+        }
+    }];
     [self setupDatabaseView];
 }
 

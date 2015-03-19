@@ -81,7 +81,6 @@ NSString *KContactDatabaseViewName = @"KContactDatabaseViewExtension";
     }
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {
         if ([object isKindOfClass:[KUser class]]){
-            NSLog(@"YOU KNOW I'M HERE");
             return KContactGroup;
         }
         return nil;

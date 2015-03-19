@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KSendable.h"
 
 @class PreKey;
 @class IdentityKey;
 @class PreKeyExchangeReceipt;
 
-@interface PreKeyExchange : NSObject
+@interface PreKeyExchange : NSObject <KSendable>
 
 @property (nonatomic, readonly) NSString *senderId;
 @property (nonatomic, readonly) NSString *senderDeviceId;
@@ -23,6 +24,7 @@
 @property (nonatomic, readonly) NSData *senderIdentityPublicKey;
 @property (nonatomic, readonly) NSData *receiverIdentityPublicKey;
 @property (nonatomic, readonly) NSData *baseKeySignature;
+@property (nonatomic, readwrite) NSString *remoteStatus;
 
 - (instancetype)initWithSenderId:(NSString *)senderId
                       receiverId:(NSString *)receiverId

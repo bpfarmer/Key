@@ -109,7 +109,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
     NSFileManager* fileManager = [NSFileManager defaultManager];
     NSURL *fileURL = [[fileManager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSString *path = [fileURL path];
-    return [path stringByAppendingFormat:@"/%@", [[[KAccountManager sharedManager] user] username]];
+    return [path stringByAppendingFormat:@"/%@", [KAccountManager sharedManager].user.username];
 }
 
 - (NSString *)databasePassword {

@@ -8,6 +8,7 @@
 
 #import "PreKey.h"
 #import "PreKey+Serialize.h"
+#import "FreeKey.h"
 
 @implementation PreKey
 
@@ -36,6 +37,10 @@
 
 + (NSArray *)remoteKeys {
     return @[@"userId", @"deviceId", @"signedPreKeyId", @"signedPreKeyPublic", @"signedPreKeySignature", @"identityKey"];
+}
+
++ (NSString *)remoteAlias {
+    return kPreKeyRemoteAlias;
 }
 
 @end

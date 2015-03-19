@@ -10,6 +10,7 @@
 #import "PreKeyExchangeReceipt.h"
 #import "PreKey.h"
 #import "PreKeyExchange+Serialize.h"
+#import "FreeKey.h"
 
 @implementation PreKeyExchange
 
@@ -30,6 +31,7 @@
         _senderIdentityPublicKey = senderIdentityPublicKey;
         _sentSignedBaseKey = sentSignedBaseKey;
         _receiverIdentityPublicKey = receiverIdentityPublicKey;
+        _baseKeySignature = baseKeySignature;
     }
     
     return self;
@@ -47,6 +49,10 @@
 + (NSArray *)remoteKeys {
     return @[@"senderId", @"receiverId", @"signedTargetPreKeyId", @"sentSignedBaseKey",
              @"senderIdentityPublicKey", @"receiverIdentityPublicKey", @"baseKeySignature"];
+}
+
++ (NSString *)remoteAlias {
+    return kPreKeyExchangeRemoteAlias;
 }
 
 @end

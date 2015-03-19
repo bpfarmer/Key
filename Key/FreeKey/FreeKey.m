@@ -19,6 +19,8 @@
 #import "EncryptedMessage.h"
 #import "KAccountManager.h"
 #import "KMessage.h"
+#import "NSData+Base64.h"
+#import "KSendable.h"
 
 @implementation FreeKey
 
@@ -47,10 +49,26 @@
                                               identityKey:user.publicKey
                                               baseKeyPair:baseKeyPair];
         [[KStorageManager sharedManager] setObject:preKey forKey:preKey.signedPreKeyId inCollection:kOurPreKeyCollection];
-        [preKeys addObject:[preKey dictionaryWithValuesForKeys:[[preKey class] remoteKeys]]];
+        [preKeys addObject:[self base64EncodedPreKeyDictionary:preKey]];
         index++;
     }
     return [[NSArray alloc] initWithArray:preKeys];
+}
+
+- (NSDictionary *)base64EncodedPreKeyDictionary:(PreKey *)preKey {
+    NSMutableDictionary *objectDictionary = [[NSMutableDictionary alloc] init];
+    [[PreKey remoteKeys] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSObject *property = [preKey dictionaryWithValuesForKeys:@[obj]][obj];
+        if([property isKindOfClass:[NSData class]]) {
+            NSData *dataProperty = (NSData *)property;
+            NSString *encodedString = [dataProperty base64EncodedString];
+            [objectDictionary addEntriesFromDictionary:@{obj : encodedString}];
+        }else {
+            [objectDictionary addEntriesFromDictionary:@{obj : property}];
+        }
+
+    }];
+    return objectDictionary;
 }
 
 - (void)sendPreKeysToServer:(NSArray *)preKeys {
@@ -81,7 +99,12 @@
         }
     }
     NSData *serializedData = [NSKeyedArchiver archivedDataWithRootObject:object];
-    return [session encryptMessage:serializedData];
+    EncryptedMessage *encryptedMessage = [session encryptMessage:serializedData];
+    
+    // TODO: find a way to do this without exposing metadata
+    [encryptedMessage setSenderId:localUser.uniqueId];
+    [encryptedMessage setReceiverId:recipientId];
+    return encryptedMessage;
 }
 
 - (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage
@@ -104,7 +127,8 @@
 #pragma mark - Session Generation
 - (Session *)createSessionFromUser:(KUser *)localUser withPreKey:(PreKey *)preKey {
     Session *session = [[Session alloc] initWithReceiverId:preKey.userId identityKey:localUser.identityKey];
-    [session addPreKey:preKey];
+    PreKeyExchange *preKeyExchange = [session addPreKey:preKey];
+    [self enqueueSendableObject:preKeyExchange];
     return session;
 }
 
@@ -154,29 +178,38 @@
     return classNames[type];
 }
 
-- (void)receiveRemoteFeed:(NSDictionary *)objects {
-    if(objects[kPreKeyExchangeRemoteAlias]) {
-        for(NSDictionary *preKeyExchangeDictionary in objects[kPreKeyExchangeRemoteAlias]) {
-            [self createPreKeyExchangeFromRemoteDictionary:preKeyExchangeDictionary];
+- (void)pollFeedForLocalUser:(KUser *)localUser {
+    dispatch_queue_t queue = dispatch_queue_create([kHTTPRequestQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    dispatch_async(queue, ^{
+        [[HttpManager sharedManager] getObjectsWithRemoteAlias:kFeedRemoteAlias parameters:@{@"uniqueId" : localUser.uniqueId}];
+    });
+}
+
+- (void)receiveRemoteFeed:(NSDictionary *)objects withLocalUser:(KUser *)localUser {
+    dispatch_queue_t queue = dispatch_queue_create([kHTTPResponseQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    dispatch_async(queue, ^{
+        if(objects[kPreKeyExchangeRemoteAlias]) {
+            for(NSDictionary *preKeyExchangeDictionary in objects[kPreKeyExchangeRemoteAlias]) {
+                [self createPreKeyExchangeFromRemoteDictionary:preKeyExchangeDictionary];
+            }
         }
-    }
-    if(objects[kEncryptedMessageRemoteAlias]) {
-        for(NSDictionary *encryptedMessageDictionary in objects[kEncryptedMessageRemoteAlias]) {
-            [self createEncryptedMessageFromRemoteDictionary:encryptedMessageDictionary];
+        if(objects[kEncryptedMessageRemoteAlias]) {
+            for(NSDictionary *encryptedMessageDictionary in objects[kEncryptedMessageRemoteAlias]) {
+                EncryptedMessage *message = [self createEncryptedMessageFromRemoteDictionary:encryptedMessageDictionary];
+                [self enqueueDecryptableObject:message toLocalUser:localUser];
+            }
         }
-    }
-    
+    });
 }
 
 - (PreKey *)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary {
-    NSLog(@"DICTIONARY RESPONSE: %@", dictionary);
     NSArray *remoteKeys = [PreKey remoteKeys];
     PreKey *preKey = [[PreKey alloc] initWithUserId:dictionary[remoteKeys[0]]
                                            deviceId:dictionary[remoteKeys[1]]
                                      signedPreKeyId:dictionary[remoteKeys[2]]
-                                 signedPreKeyPublic:dictionary[remoteKeys[3]]
-                              signedPreKeySignature:dictionary[remoteKeys[4]]
-                                        identityKey:dictionary[remoteKeys[5]]
+                                 signedPreKeyPublic:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[3]]]
+                              signedPreKeySignature:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[4]]]
+                                        identityKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[5]]]
                                         baseKeyPair:nil];
     
     return preKey;
@@ -187,10 +220,10 @@
     PreKeyExchange *preKeyExchange = [[PreKeyExchange alloc] initWithSenderId:dictionary[remoteKeys[0]]
                                                                    receiverId:dictionary[remoteKeys[1]]
                                                          signedTargetPreKeyId:dictionary[remoteKeys[2]]
-                                                            sentSignedBaseKey:dictionary[remoteKeys[3]]
-                                                      senderIdentityPublicKey:dictionary[remoteKeys[4]]
-                                                    receiverIdentityPublicKey:dictionary[remoteKeys[5]]
-                                                             baseKeySignature:dictionary[remoteKeys[6]]];
+                                                            sentSignedBaseKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[3]]]
+                                                      senderIdentityPublicKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[4]]]
+                                                    receiverIdentityPublicKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[5]]]
+                                                             baseKeySignature:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[6]]]];
     
     return preKeyExchange;
 }
@@ -199,22 +232,53 @@
     NSArray *remoteKeys = [EncryptedMessage remoteKeys];
     NSNumber *index = (NSNumber *)dictionary[remoteKeys[3]];
     NSNumber *previousIndex = (NSNumber *)dictionary[remoteKeys[4]];
-    EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[remoteKeys[0]]
-                                                                                 receiverId:dictionary[remoteKeys[1]]
-                                                                             serializedData:dictionary[remoteKeys[2]]
-                                                                                      index:[index intValue]
-                                                                              previousIndex:[previousIndex intValue]];
+    EncryptedMessage *encryptedMessage =
+    [[EncryptedMessage alloc] initWithSenderRatchetKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[0]]]
+                                            receiverId:dictionary[remoteKeys[1]]
+                                        serializedData:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[2]]]
+                                                 index:[index intValue]
+                                         previousIndex:[previousIndex intValue]];
     
     NSString *uniqueMessageId = [NSString stringWithFormat:@"%@_%f_%@",
                                  dictionary[encryptedMessage],
                                  [[NSDate date] timeIntervalSince1970],
                                  index];
+    
+    [[KStorageManager sharedManager]setObject:encryptedMessage forKey:uniqueMessageId inCollection:kEncryptedMessageCollection];
+    
+    
 
     return encryptedMessage;
 }
 
-- (void)enqueueEncryptableObject:(id<KEncryptable>)object {
-    
+- (void)enqueueEncryptableObject:(id<KEncryptable>)object fromUser:(KUser *)localUser toUserId:(NSString *)userId {
+    dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    dispatch_async(queue, ^{
+        EncryptedMessage *encryptedMessage = [self encryptObject:object localUser:localUser recipientId:userId];
+        [self enqueueSendableObject:encryptedMessage];
+    });
+}
+
+- (void)enqueueSendableObject:(id<KSendable>)object {
+    dispatch_queue_t queue = dispatch_queue_create([kHTTPRequestQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    dispatch_async(queue, ^{
+        [[HttpManager sharedManager] put:object];
+    });
+}
+
+- (void)enqueueDecryptableObject:(EncryptedMessage *)message toLocalUser:(KUser *)localUser {
+    dispatch_queue_t queue = dispatch_queue_create([kDecryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    dispatch_async(queue, ^{
+        id <KEncryptable> object = [self decryptEncryptedMessage:message localUser:localUser senderId:message.senderId];
+        [object save];
+    });
+}
+
+- (void)enqueueGetRequestWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
+    dispatch_queue_t queue = dispatch_queue_create([kHTTPRequestQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    dispatch_async(queue, ^{
+        [[HttpManager sharedManager] getObjectsWithRemoteAlias:remoteAlias parameters:parameters];
+    });
 }
 
 @end

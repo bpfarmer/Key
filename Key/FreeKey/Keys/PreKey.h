@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "KYapDatabaseObject.h"
+#import "KSendable.h"
 
 @class ECKeyPair;
 
-@interface PreKey : NSObject
+@interface PreKey : NSObject <KSendable>
+
 @property (nonatomic, readonly) NSString *userId;
 @property (nonatomic, readonly) NSString *deviceId;
 @property (nonatomic, readonly) NSString *signedPreKeyId;

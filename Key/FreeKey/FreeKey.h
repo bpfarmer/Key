@@ -22,11 +22,12 @@
 #define kOurPreKeyCollection         @"OurPreKey"
 #define kTheirPreKeyCollection       @"TheirPreKey"
 #define kSessionCollection           @"Session"
+#define kEncryptedMessageCollection  @"EncryptedMessage"
 #define kPreKeyExchangeCollection    @"PreKeyExchange"
 #define kPreKeyRemoteAlias           @"pre_key"
 #define kPreKeyExchangeRemoteAlias   @"pre_key_exchange"
 #define kEncryptedMessageRemoteAlias @"message"
-#define kFeedRemoteAlias             @"Feed"
+#define kFeedRemoteAlias             @"feed"
 #define kOurEncryptedMessageCollection    @"OurEncryptedMessage"
 #define kTheirEncryptedMessageCollection  @"TheirEncryptedMessage"
 
@@ -58,6 +59,10 @@
 - (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary;
 - (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary;
 
-- (void)enqueueEncryptableObject:(id <KEncryptable>)object;
+- (void)enqueueEncryptableObject:(id <KEncryptable>)object fromUser:(KUser *)localUser toUserId:(NSString *)userId;
+- (void)enqueueDecryptableObject:(EncryptedMessage *)object toLocalUser:(KUser *)localUser;
+- (void)enqueueGetRequestWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters;
+
+- (void)pollFeedForLocalUser:(KUser *)localUser;
 
 @end

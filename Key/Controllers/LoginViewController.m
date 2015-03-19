@@ -29,17 +29,20 @@
 
 - (IBAction)login:(id)sender {
     KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text];
+    [[KAccountManager sharedManager] setUser:user];
     // TODO: refactor to use
     if([user authenticatePassword:self.passwordText.text]) {
+        [[KStorageManager sharedManager] setupDatabase];
         KUser *retrievedUser = [KUser fetchObjectWithUsername:user.username];
-        [[KAccountManager sharedManager] setUser:retrievedUser];
-        [self showInbox];
-    }else {
-        NSLog(@"ERROR LOGGING IN");
+        if(retrievedUser) {
+            [[KAccountManager sharedManager] setUser:retrievedUser];
+            [self showHome];
+        }
     }
+    //NSLog(@"ERROR LOGGING IN");
 }
 
-- (void)showInbox {
+- (void)showHome {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
     [self presentViewController:inboxView animated:YES completion:nil];

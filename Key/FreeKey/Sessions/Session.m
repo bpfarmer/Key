@@ -94,10 +94,11 @@
     
     [keyBundle setRolesWithFirstKey:ourBaseKey.publicKey secondKey:preKey.signedPreKeyPublic];
     [self setupRootChainsFromKeyBundle:keyBundle];
-    PreKeyExchange *preKeyExchange = [self preKeyExchange];
-    
     // In effect, the sender root chain ratchet key is the preKey base key...
     [self ratchetSenderRootChain:preKey.signedPreKeyPublic];
+    
+    PreKeyExchange *preKeyExchange = [self preKeyExchange];
+    NSLog(@"PREKEY EXCHANGE SIGNATURE: %@", preKeyExchange.baseKeySignature);
     return preKeyExchange;
 }
 

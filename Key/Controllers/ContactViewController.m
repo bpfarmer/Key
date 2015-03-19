@@ -12,7 +12,6 @@
 #import "KThread.h"
 #import "KStorageManager.h"
 #import "KYapDatabaseView.h"
-#import "ThreadTableViewController.h"
 #import "KMessage.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";

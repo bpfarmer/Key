@@ -7,16 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KSendable.h"
 
-@interface EncryptedMessage : NSObject
+@interface EncryptedMessage : NSObject <KSendable>
 
 @property (nonatomic, readonly) NSData *senderRatchetKey;
-@property (nonatomic, readonly) NSString *receiverId;
 @property (nonatomic, readonly) int index;
 @property (nonatomic, readonly) int previousIndex;
 @property (nonatomic, readonly) NSData *cipherText;
 @property (nonatomic, readonly) NSData *serializedData;
 @property (nonatomic, readonly) NSData *mac;
+@property (nonatomic, readwrite) NSString *senderId;
+@property (nonatomic, readwrite) NSString *receiverId;
+@property (nonatomic, readwrite) NSString *remoteStatus;
 
 - (instancetype)initWithMacKey:(NSData *)macKey
              senderIdentityKey:(NSData *)senderIdentityKey

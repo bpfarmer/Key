@@ -7,6 +7,8 @@
 //
 
 #import "KMessage+Serialize.h"
+#import "KThread.h"
+#import "KStorageManager.h"
 
 #define kCoderUniqueId @"uniqueId"
 #define kCoderAuthorId @"authorId"
@@ -22,8 +24,7 @@
     return YES;
 }
 
-- (id)initWithCoder:(NSCoder *)decoder {
-    
+- (id)initWithCoder:(NSCoder *)decoder {    
     return [self initWithUniqueId:[decoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]
                          authorId:[decoder decodeObjectOfClass:[NSString class] forKey:kCoderAuthorId]
                          threadId:[decoder decodeObjectOfClass:[NSString class] forKey:kCoderThreadId]

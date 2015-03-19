@@ -12,8 +12,9 @@
 #import "KThread.h"
 #import "KStorageManager.h"
 #import "KYapDatabaseView.h"
-#import "ThreadTableViewController.h"
 #import "KMessage.h"
+#import "ThreadViewController.h"
+#import "FreeKey.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
 
@@ -37,6 +38,7 @@ YapDatabaseConnection *databaseConnection;
     [self.threadsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
     [self setupDatabaseView];
+    NSLog(@"DB PATH: %@", [[KStorageManager sharedManager] dbPath]);
 }
 
 - (void) setupDatabaseView {
@@ -55,6 +57,10 @@ YapDatabaseConnection *databaseConnection;
                                                object:self.databaseConnection.database];
 }
 
+- (IBAction)pollFeed:(id)sender {
+    [[FreeKey sharedManager] pollFeedForLocalUser:[KAccountManager sharedManager].user];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -66,9 +72,9 @@ YapDatabaseConnection *databaseConnection;
     NSArray *rowChanges = nil;
     
     [[self.databaseConnection ext:KThreadDatabaseViewName] getSectionChanges:&sectionChanges
-                                                                              rowChanges:&rowChanges
-                                                                        forNotifications:notifications
-                                                                            withMappings:self.threadMappings];
+                                                                  rowChanges:&rowChanges
+                                                            forNotifications:notifications
+                                                                withMappings:self.threadMappings];
     
     if ([sectionChanges count] == 0 & [rowChanges count] == 0)
     {
@@ -141,6 +147,7 @@ YapDatabaseConnection *databaseConnection;
 
 - (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section
 {
+    NSLog(@"SHOULD BE %lu ROWS", (long) [self.threadMappings numberOfItemsInSection:section]);
     return [self.threadMappings numberOfItemsInSection:section];
 }
 
@@ -148,11 +155,13 @@ YapDatabaseConnection *databaseConnection;
 {
     __block KThread *thread = nil;
     [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        thread = (KThread *)[[transaction extension:KThreadDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.threadMappings];
+        thread = (KThread *)[[transaction extension:KThreadDatabaseViewName] objectAtIndexPath:indexPath
+                                                                                  withMappings:self.threadMappings];
     }];
     
-    UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    cell.textLabel.text = [thread uniqueId];
+    UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
+                                                                        forIndexPath:indexPath];
+    cell.textLabel.text = [thread name];
     return cell;
 }
 
@@ -166,7 +175,7 @@ YapDatabaseConnection *databaseConnection;
 
 - (void) goToThread:(KThread *)thread {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    ThreadTableViewController *threadView = [storyboard instantiateViewControllerWithIdentifier:@"ThreadViewController"];
+    ThreadViewController *threadView = [storyboard instantiateViewControllerWithIdentifier:@"ThreadViewController"];
     threadView.thread = thread;
     [self presentViewController:threadView animated:YES completion:nil];
     

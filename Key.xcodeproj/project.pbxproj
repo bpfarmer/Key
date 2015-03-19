@@ -76,7 +76,6 @@
 		EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A821AAE19C3006C10D2 /* SessionState.m */; };
 		EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */; };
 		EFF70AC61AAE1CBC006C10D2 /* RegistrationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */; };
-		EFF70AC71AAE1CBC006C10D2 /* ThreadTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70ABE1AAE1CBC006C10D2 /* ThreadTableViewController.m */; };
 		EFF70AC81AAE1CBC006C10D2 /* WelcomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70AC01AAE1CBC006C10D2 /* WelcomeScreenViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -224,8 +223,6 @@
 		EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationViewController.h; sourceTree = "<group>"; };
 		EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationViewController.m; sourceTree = "<group>"; };
-		EFF70ABD1AAE1CBC006C10D2 /* ThreadTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadTableViewController.h; sourceTree = "<group>"; };
-		EFF70ABE1AAE1CBC006C10D2 /* ThreadTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ThreadTableViewController.m; sourceTree = "<group>"; };
 		EFF70ABF1AAE1CBC006C10D2 /* WelcomeScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeScreenViewController.h; sourceTree = "<group>"; };
 		EFF70AC01AAE1CBC006C10D2 /* WelcomeScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeScreenViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -544,8 +541,6 @@
 				EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */,
 				EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */,
 				EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */,
-				EFF70ABD1AAE1CBC006C10D2 /* ThreadTableViewController.h */,
-				EFF70ABE1AAE1CBC006C10D2 /* ThreadTableViewController.m */,
 				EF6B44A91ABA399D00B88323 /* ThreadViewController.h */,
 				EF6B44AA1ABA399D00B88323 /* ThreadViewController.m */,
 				EFF70ABF1AAE1CBC006C10D2 /* WelcomeScreenViewController.h */,
@@ -751,7 +746,6 @@
 				EFF70A921AAE19C3006C10D2 /* PreKeyExchange.m in Sources */,
 				EF6B44AB1ABA399D00B88323 /* ThreadViewController.m in Sources */,
 				EF2CDEBB1AB4A354001E2F20 /* PreKeyExchange+Serialize.m in Sources */,
-				EFF70AC71AAE1CBC006C10D2 /* ThreadTableViewController.m in Sources */,
 				EF2CDEC91AB52FE0001E2F20 /* SessionState+Serialize.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
 				EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */,

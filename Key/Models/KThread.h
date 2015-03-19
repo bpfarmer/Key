@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <YapDatabase/YapDatabaseRelationshipNode.h>
 #import "KYapDatabaseObject.h"
+#import "KEncryptable.h"
 
 @class KMessage;
 
-@interface KThread : KYapDatabaseObject <YapDatabaseRelationshipNode>
+@interface KThread : KYapDatabaseObject <YapDatabaseRelationshipNode, KEncryptable>
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSArray *userIds;

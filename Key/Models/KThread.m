@@ -10,6 +10,7 @@
 #import "Util.h"
 #import "KUser.h"
 #import "KStorageManager.h"
+#import "FreeKey.h"
 
 #define KThreadRemoteEndpoint @"http://127.0.0.1:9393/user.json"
 #define KThreadRemoteAlias @"thread"
@@ -65,6 +66,23 @@
         _archivedAt    = archivedAt;
     }
     return self;
+}
+
+- (instancetype)initWithRemoteId:(NSString *)threadId {
+    NSArray *userIds = [threadId componentsSeparatedByString:@"_"];
+    [userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        KUser *user = [[KStorageManager sharedManager] objectForKey:obj inCollection:[KUser collection]];
+        if(!user) {
+            [[FreeKey sharedManager] enqueueGetRequestWithRemoteAlias:kUserRemoteAlias
+                                                           parameters:@{@"uniqueId" : user.uniqueId}];
+        }
+    }];
+    return [self initWithUniqueId:threadId
+                          userIds:userIds
+                             name:nil
+                    latestMessage:nil
+                    lastMessageAt:nil
+                       archivedAt:nil];
 }
 
 - (NSDictionary *)toDictionary {

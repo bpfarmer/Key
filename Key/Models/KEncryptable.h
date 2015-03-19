@@ -11,4 +11,6 @@
 
 @protocol KEncryptable
 
+- (void)save;
+
 @end
