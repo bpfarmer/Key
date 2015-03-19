@@ -62,7 +62,7 @@
 }
 
 + (NSArray *)remoteKeys {
-    return @[@"uniqueId", @"senderRatchetKey", @"receiverId", @"serializedData", @"index", @"previousIndex"];
+    return @[@"senderRatchetKey", @"receiverId", @"serializedData", @"index", @"previousIndex"];
 }
 
 @end

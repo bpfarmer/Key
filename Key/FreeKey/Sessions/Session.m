@@ -179,7 +179,6 @@
     NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
                                             withKey:sessionState.messageKey.cipherKey
                                              withIV:sessionState.messageKey.iv];
-    
     return decryptedData;
 }
 

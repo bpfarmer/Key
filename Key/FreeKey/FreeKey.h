@@ -19,14 +19,16 @@
 @class PreKey;
 @class Session;
 
-#define kPreKeyCollection            @"PreKey"
+#define kOurPreKeyCollection         @"OurPreKey"
+#define kTheirPreKeyCollection       @"TheirPreKey"
 #define kSessionCollection           @"Session"
 #define kPreKeyExchangeCollection    @"PreKeyExchange"
 #define kPreKeyRemoteAlias           @"pre_key"
 #define kPreKeyExchangeRemoteAlias   @"pre_key_exchange"
 #define kEncryptedMessageRemoteAlias @"message"
-#define kEncryptedMessageCollection  @"EncryptedMessage"
 #define kFeedRemoteAlias             @"Feed"
+#define kOurEncryptedMessageCollection    @"OurEncryptedMessage"
+#define kTheirEncryptedMessageCollection  @"TheirEncryptedMessage"
 
 #define kEncryptObjectQueue @"encryptObjectQueue"
 #define kDecryptObjectQueue @"decryptObjectQueue"

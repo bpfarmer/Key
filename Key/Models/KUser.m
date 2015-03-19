@@ -145,7 +145,7 @@
 }
 
 #pragma mark - Convenience Methods
-- (NSArray *)keysToSend {
++ (NSArray *)remoteKeys {
     return @[@"uniqueId", @"passwordCrypt", @"publicKey", @"username"];
 }
 

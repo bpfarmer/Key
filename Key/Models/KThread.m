@@ -50,11 +50,6 @@
              @"userIds"  : self.userIds};
 }
 
-- (void)setNameFromUsers {
-    NSArray *fullNames = [KUser fullNamesForUserIds:[self userIds]];
-    [self setName:[fullNames componentsJoinedByString:@", "]];
-}
-
 + (NSString *)remoteEndpoint {
     return KThreadRemoteEndpoint;
 }

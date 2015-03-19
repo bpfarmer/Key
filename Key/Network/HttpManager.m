@@ -81,10 +81,8 @@
 }
 
 - (void)batchPut:(NSString *)remoteAlias objects:(NSArray *)objects {
-    NSLog(@"REMOTE ENDPOINT: %@", [self endpointForObject:remoteAlias]);
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager PUT:[self endpointForObject:remoteAlias] parameters:@{remoteAlias : objects} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"REQUEST OBJECT: %@", responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
     }];
@@ -98,7 +96,7 @@
 
 - (NSDictionary *)toDictionary:(id <KSendable>)object {
     NSObject *objectForDictionary = (NSObject *)object;
-    return [objectForDictionary dictionaryWithValuesForKeys:[object keysToSend]];
+    return [objectForDictionary dictionaryWithValuesForKeys:[[object class] remoteKeys]];
 }
 
 @end

@@ -51,7 +51,6 @@
         [[KAccountManager sharedManager] setUser:user];
         [[KStorageManager sharedManager] setupDatabase];
         [user save];
-        NSLog(@"DB PATH: %@", [[KStorageManager sharedManager] dbPath]);
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [user finishUserRegistration];
         });
@@ -64,7 +63,7 @@
 
 - (void)showInbox {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"InboxTableViewController"];
+    UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
     [self presentViewController:inboxView animated:YES completion:nil];
 }
 

@@ -23,7 +23,7 @@
 + (void)createFromRemoteDictionary:(NSDictionary *)dictionary;
 - (void)setUniqueId:(NSString *)uniqueId;
 - (void)setRemoteStatus:(NSString *)remoteStatus;
-- (NSArray *)keysToSend;
++ (NSArray *)remoteKeys;
 + (NSString *)remoteAlias;
 
 @property (nonatomic) NSString *remoteStatus;
