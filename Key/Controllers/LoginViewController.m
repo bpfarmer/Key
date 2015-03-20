@@ -10,6 +10,7 @@
 #import "KUser.h"
 #import "KAccountManager.h"
 #import "KStorageManager.h"
+#import "HomeViewController.h"
 
 @interface LoginViewController ()
 
@@ -21,11 +22,8 @@
     [super viewDidLoad];
     self.usernameText.delegate = self;
     self.passwordText.delegate = self;
+    
     // Do any additional setup after loading the view.
-}
-
-- (BOOL)textFieldShouldClear:(UITextField *)textField {
-    return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -43,19 +41,23 @@
     [[KAccountManager sharedManager] setUser:user];
     // TODO: refactor to use
     if([user authenticatePassword:self.passwordText.text]) {
+        //[[KStorageManager sharedManager] refreshDatabaseAndConnection];
         [[KStorageManager sharedManager] setupDatabase];
         KUser *retrievedUser = [KUser fetchObjectWithUsername:user.username];
         if(retrievedUser) {
             [[KAccountManager sharedManager] setUser:retrievedUser];
             [self showHome];
+        }else {
+            NSLog(@"PROBLEM RETRIEVING USER FROM DB");
         }
+    }else {
+      NSLog(@"ERROR LOGGING IN");
     }
-    //NSLog(@"ERROR LOGGING IN");
 }
 
 - (void)showHome {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
+    HomeViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
     [self presentViewController:inboxView animated:YES completion:nil];
 }
 

@@ -13,6 +13,7 @@
 
 @property (nonatomic, readwrite) NSString *uniqueId;
 
-- (void)save;
+- (void) save;
+- (NSString *) collection;
 
 @end

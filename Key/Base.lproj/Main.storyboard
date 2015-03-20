@@ -8,7 +8,7 @@
         <!--LoginViewController-->
         <scene sceneID="Qzs-or-DVs">
             <objects>
-                <viewController title="LoginViewController" id="KMm-q7-cQ9" customClass="LoginViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" title="LoginViewController" id="KMm-q7-cQ9" customClass="LoginViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="dZT-cO-VGX"/>
                         <viewControllerLayoutGuide type="bottom" id="bbL-We-EUy"/>
@@ -394,15 +394,27 @@
                                     <action selector="pollFeed:" destination="7vg-Se-yPB" eventType="touchUpInside" id="DM3-Ov-nmm"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kqc-AI-e3M">
+                                <rect key="frame" x="464" y="562" width="120" height="30"/>
+                                <state key="normal" title="Log Out">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="logout:" destination="7vg-Se-yPB" eventType="touchUpInside" id="ptE-MJ-9Jd"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Kqc-AI-e3M" firstAttribute="trailing" secondItem="bJT-vV-PLu" secondAttribute="trailingMargin" id="6A3-d7-nDU"/>
                             <constraint firstItem="GlA-PV-UAu" firstAttribute="leading" secondItem="bJT-vV-PLu" secondAttribute="leadingMargin" id="Ipo-3O-p97"/>
                             <constraint firstItem="h8n-5w-wJv" firstAttribute="leading" secondItem="bJT-vV-PLu" secondAttribute="leadingMargin" id="MJZ-5V-tiT"/>
                             <constraint firstItem="yfF-wG-4BP" firstAttribute="trailing" secondItem="bJT-vV-PLu" secondAttribute="trailingMargin" id="QkO-cz-ghO"/>
+                            <constraint firstItem="ppS-su-gc7" firstAttribute="top" secondItem="Kqc-AI-e3M" secondAttribute="bottom" constant="8" id="RY6-6C-MqX"/>
                             <constraint firstItem="h8n-5w-wJv" firstAttribute="top" secondItem="yfF-wG-4BP" secondAttribute="bottom" constant="26" id="VLq-1Y-J9c"/>
                             <constraint firstItem="hBS-N1-Dtu" firstAttribute="trailing" secondItem="bJT-vV-PLu" secondAttribute="trailingMargin" id="Xdz-JT-YWh"/>
                             <constraint firstItem="yfF-wG-4BP" firstAttribute="leading" secondItem="bJT-vV-PLu" secondAttribute="leadingMargin" id="iCZ-Jj-OXO"/>
+                            <constraint firstItem="h8n-5w-wJv" firstAttribute="top" secondItem="Kqc-AI-e3M" secondAttribute="top" id="ulU-Eb-SKo"/>
                             <constraint firstItem="ppS-su-gc7" firstAttribute="top" secondItem="h8n-5w-wJv" secondAttribute="bottom" constant="8" id="whI-9G-6FJ"/>
                         </constraints>
                     </view>

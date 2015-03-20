@@ -54,6 +54,10 @@
     return NSStringFromClass([self class]);
 }
 
+- (NSString *)collection {
+    return [[self class] collection];
+}
+
 + (instancetype) fetchObjectWithUniqueId:(NSString *)uniqueId transaction:(YapDatabaseReadTransaction *)transaction {
     return [transaction objectForKey:uniqueId inCollection:[self collection]];
 }

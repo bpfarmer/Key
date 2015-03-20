@@ -70,7 +70,7 @@
     NSData *theirBaseKey = preKeyExchange.sentSignedBaseKey;
     
     // TODO: some sort of verification of trust, signatures, etc
-  
+    
     SessionKeyBundle *keyBundle = [[SessionKeyBundle alloc] initWithTheirBaseKey:theirBaseKey
                                                                 theirIdentityKey:preKeyExchange.senderIdentityPublicKey
                                                               ourIdentityKeyPair:self.senderIdentityKey.keyPair
@@ -81,7 +81,7 @@
     [self.senderRootChain setRatchetKeyPair:ourPreKey.baseKeyPair];
 }
 
-- (PreKeyExchange *)addPreKey:(PreKey *)preKey {
+- (void)addPreKey:(PreKey *)preKey {
     _receiverIdentityPublicKey  = preKey.identityKey;
     _preKey = preKey;
     ECKeyPair *ourBaseKey = [Curve25519 generateKeyPair];
@@ -96,10 +96,6 @@
     [self setupRootChainsFromKeyBundle:keyBundle];
     // In effect, the sender root chain ratchet key is the preKey base key...
     [self ratchetSenderRootChain:preKey.signedPreKeyPublic];
-    
-    PreKeyExchange *preKeyExchange = [self preKeyExchange];
-    NSLog(@"PREKEY EXCHANGE SIGNATURE: %@", preKeyExchange.baseKeySignature);
-    return preKeyExchange;
 }
 
 
@@ -176,7 +172,7 @@
         receiverIdentityKey:self.senderIdentityKey.publicKey
                      macKey:sessionState.messageKey.macKey
              serializedData:encryptedMessage.serializedData]) {
-        //THROW AN ERROR
+        // TODO: throw an error
     }
     
     NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText

@@ -21,6 +21,7 @@
 //- (void)get: (NSDictionary *)parameters;
 - (void)batchPut:(NSString *)remoteAlias objects:(NSArray *)objects;
 - (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters;
-
+- (void)enqueueSendableObject:(id<KSendable>)object;
+- (void)enqueueGetWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters;
 
 @end

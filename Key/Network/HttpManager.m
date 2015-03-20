@@ -8,7 +8,7 @@
 
 #import "HttpManager.h"
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
-#import "FreeKey.h"
+#import "FreeKeyNetworkManager.h"
 #import "NSData+Base64.h"
 #import "EncryptedMessage.h"
 #import "KAccountManager.h"
@@ -73,9 +73,9 @@
         NSLog(@"RESPONSE OBJECT: %@", responseObject);
          if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
              if([remoteAlias isEqualToString:kFeedRemoteAlias]) {
-                 [[FreeKey sharedManager] receiveRemoteFeed:responseObject withLocalUser:[KAccountManager sharedManager].user];
+                 [[FreeKeyNetworkManager sharedManager] receiveRemoteFeed:responseObject withLocalUser:[KAccountManager sharedManager].user];
              }else {
-                 [[FreeKey sharedManager] receiveRemoteObject:responseObject ofType:remoteAlias];
+                 [[FreeKeyNetworkManager sharedManager] receiveRemoteObject:responseObject ofType:remoteAlias];
              }
          }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -94,6 +94,20 @@
 - (void)fireNotification:(NSString *)notification object:(id <KSendable>)object {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:notification object:object];
+    });
+}
+
+- (void)enqueueSendableObject:(id<KSendable>)object {
+    dispatch_queue_t queue = dispatch_queue_create([kHTTPRequestQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    dispatch_async(queue, ^{
+        [self put:object];
+    });
+}
+
+- (void)enqueueGetWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
+    dispatch_queue_t queue = dispatch_queue_create([kHTTPRequestQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    dispatch_async(queue, ^{
+        [self getObjectsWithRemoteAlias:remoteAlias parameters:parameters];
     });
 }
 

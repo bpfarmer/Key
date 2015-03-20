@@ -40,6 +40,12 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
 - (instancetype)init {
     self = [super init];
     
+    [self refreshDatabaseAndConnection];
+    
+    return self;
+}
+
+- (void)refreshDatabaseAndConnection {
     YapDatabaseOptions *options = [[YapDatabaseOptions alloc] init];
     options.corruptAction = YapDatabaseCorruptAction_Fail;
     options.passphraseBlock = ^{
@@ -55,7 +61,6 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
                                 metadataSanitizer:NULL
                                           options:options];
     _dbConnection = self.newDatabaseConnection;
-    return self;
 }
 
 - (void)setupDatabase {
@@ -113,11 +118,12 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
 }
 
 - (NSString *)databasePassword {
-    NSString *dbPassword = [SSKeychain passwordForService:keychainService account:keychainDBPassAccount];
+    NSString *keychainDBPassKey = [NSString stringWithFormat:@"%@_%@", keychainDBPassAccount, [KAccountManager sharedManager].user.username];
+    NSString *dbPassword = [SSKeychain passwordForService:keychainService account:keychainDBPassKey];
     
     if (!dbPassword) {
-        dbPassword = [[NSString alloc] initWithData:[Util generateRandomData:30] encoding:NSUTF8StringEncoding];
-        [SSKeychain setPassword:dbPassword forService:keychainService account:keychainDBPassAccount];
+        dbPassword = [[Util generateRandomData:32] base64EncodedString];
+        [SSKeychain setPassword:dbPassword forService:keychainService account:keychainDBPassKey];
     }
     return dbPassword;
 }

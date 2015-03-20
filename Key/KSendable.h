@@ -18,7 +18,7 @@
 #define kRemotePostNetworkFailureStatus @"KRemoteUpdateNetworkFailure"
 #define kRemotePostNotification  @"KRemoteUpdateNotification"
 
-@protocol KSendable <NSObject, NSSecureCoding>
+@protocol KSendable <NSObject>
 
 + (void)createFromRemoteDictionary:(NSDictionary *)dictionary;
 - (void)setUniqueId:(NSString *)uniqueId;

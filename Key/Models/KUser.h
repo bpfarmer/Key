@@ -29,7 +29,8 @@
 @property (nonatomic) NSString *remoteStatus;
 
 + (KUser *)fetchObjectWithUsername:(NSString *)username;
-+ (void)retrieveUserWithUsername:(NSString *)username;
++ (void)retrieveRemoteUserWithUsername:(NSString *)username;
++ (void)retrieveRemoteUserWithUserId:(NSString *)userId;
 + (NSArray *)userIdsWithUsernames:(NSArray *)usernames;
 
 - (void)setPasswordCryptInKeychain:(NSString *)password;

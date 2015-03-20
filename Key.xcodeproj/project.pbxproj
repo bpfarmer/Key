@@ -46,6 +46,10 @@
 		EF6B44AD1ABA5DDB00B88323 /* KThreadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44AC1ABA5DDB00B88323 /* KThreadTests.m */; };
 		EF6B44AF1ABA607E00B88323 /* KYapDatabaseViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44AE1ABA607E00B88323 /* KYapDatabaseViewTests.m */; };
 		EF6B44B21ABA877F00B88323 /* KThread+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44B11ABA877F00B88323 /* KThread+Serialize.m */; };
+		EF6B44B81ABC943C00B88323 /* FreeKeyNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44B71ABC943C00B88323 /* FreeKeyNetworkManager.m */; };
+		EF6B44BB1ABC944B00B88323 /* FreeKeySessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44BA1ABC944B00B88323 /* FreeKeySessionManager.m */; };
+		EF6B44BD1ABC997D00B88323 /* FreeKeySessionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44BC1ABC997D00B88323 /* FreeKeySessionManagerTests.m */; };
+		EF6B44BF1ABC998B00B88323 /* FreeKeyPushManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44BE1ABC998B00B88323 /* FreeKeyPushManagerTests.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
@@ -165,6 +169,12 @@
 		EF6B44AE1ABA607E00B88323 /* KYapDatabaseViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYapDatabaseViewTests.m; sourceTree = "<group>"; };
 		EF6B44B01ABA877F00B88323 /* KThread+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KThread+Serialize.h"; path = "Network/Serializers/KThread+Serialize.h"; sourceTree = "<group>"; };
 		EF6B44B11ABA877F00B88323 /* KThread+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KThread+Serialize.m"; path = "Network/Serializers/KThread+Serialize.m"; sourceTree = "<group>"; };
+		EF6B44B61ABC943C00B88323 /* FreeKeyNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKeyNetworkManager.h; sourceTree = "<group>"; };
+		EF6B44B71ABC943C00B88323 /* FreeKeyNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeyNetworkManager.m; sourceTree = "<group>"; };
+		EF6B44B91ABC944B00B88323 /* FreeKeySessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKeySessionManager.h; sourceTree = "<group>"; };
+		EF6B44BA1ABC944B00B88323 /* FreeKeySessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeySessionManager.m; sourceTree = "<group>"; };
+		EF6B44BC1ABC997D00B88323 /* FreeKeySessionManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeySessionManagerTests.m; sourceTree = "<group>"; };
+		EF6B44BE1ABC998B00B88323 /* FreeKeyPushManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeyPushManagerTests.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
 		EFC6BE9D1A6857D400B0EB8F /* Key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Key.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -418,15 +428,17 @@
 			children = (
 				EF524AFE1AAF330A00F3B9AF /* CryptoTests.m */,
 				EF524AFF1AAF330A00F3B9AF /* EncryptedMessageTests.m */,
+				EF6B44BE1ABC998B00B88323 /* FreeKeyPushManagerTests.m */,
+				EF6B44BC1ABC997D00B88323 /* FreeKeySessionManagerTests.m */,
 				EF524B001AAF330A00F3B9AF /* FreeKeyTests.m */,
 				EF2CDEBC1AB4A78E001E2F20 /* IdentityKeyTests.m */,
 				EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */,
+				EF6B44AC1ABA5DDB00B88323 /* KThreadTests.m */,
 				EF524B0E1AB31FDF00F3B9AF /* KUserTests.m */,
+				EF6B44AE1ABA607E00B88323 /* KYapDatabaseViewTests.m */,
 				EF524B011AAF330A00F3B9AF /* PreKeyTests.m */,
 				EF524B021AAF330A00F3B9AF /* SessionTests.m */,
 				EFC6BEBA1A6857D500B0EB8F /* Supporting Files */,
-				EF6B44AC1ABA5DDB00B88323 /* KThreadTests.m */,
-				EF6B44AE1ABA607E00B88323 /* KYapDatabaseViewTests.m */,
 			);
 			path = KeyTests;
 			sourceTree = "<group>";
@@ -466,6 +478,10 @@
 				EFF70A7E1AAE19C3006C10D2 /* Sessions */,
 				EF524AF31AAE2BAC00F3B9AF /* FreeKey.h */,
 				EF524AF41AAE2BAC00F3B9AF /* FreeKey.m */,
+				EF6B44B61ABC943C00B88323 /* FreeKeyNetworkManager.h */,
+				EF6B44B71ABC943C00B88323 /* FreeKeyNetworkManager.m */,
+				EF6B44B91ABC944B00B88323 /* FreeKeySessionManager.h */,
+				EF6B44BA1ABC944B00B88323 /* FreeKeySessionManager.m */,
 			);
 			path = FreeKey;
 			sourceTree = "<group>";
@@ -737,6 +753,7 @@
 				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
 				EF2CDED51AB5C972001E2F20 /* RootKey+Serialize.m in Sources */,
 				EFF70AC61AAE1CBC006C10D2 /* RegistrationViewController.m in Sources */,
+				EF6B44BB1ABC944B00B88323 /* FreeKeySessionManager.m in Sources */,
 				EFF70A8B1AAE19C3006C10D2 /* MasterKey.m in Sources */,
 				EF0F4DBB1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m in Sources */,
 				EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */,
@@ -757,6 +774,7 @@
 				EFF70A8D1AAE19C3006C10D2 /* PreKey.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
 				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,
+				EF6B44B81ABC943C00B88323 /* FreeKeyNetworkManager.m in Sources */,
 				EF524AF51AAE2BAC00F3B9AF /* FreeKey.m in Sources */,
 				EF2CDEC61AB52FCA001E2F20 /* Session+Serialize.m in Sources */,
 				EF0F4DBE1AB8D3BA00BB2AFC /* PushManager.m in Sources */,
@@ -779,6 +797,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF6B44AF1ABA607E00B88323 /* KYapDatabaseViewTests.m in Sources */,
+				EF6B44BF1ABC998B00B88323 /* FreeKeyPushManagerTests.m in Sources */,
+				EF6B44BD1ABC997D00B88323 /* FreeKeySessionManagerTests.m in Sources */,
 				EF6B44AD1ABA5DDB00B88323 /* KThreadTests.m in Sources */,
 				EF524B031AAF330A00F3B9AF /* CryptoTests.m in Sources */,
 				EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */,

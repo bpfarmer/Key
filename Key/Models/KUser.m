@@ -23,6 +23,8 @@
 #import "NSString+Base64.h"
 #import "KUser+Serialize.h"
 #import "PreKey.h"
+#import "FreeKeyNetworkManager.h"
+#import "FreeKeySessionManager.h"
 
 #define kRemoteCreateNotification @"KUserRemoteCreateNotification"
 #define kRemoteUpdateNotification @"KUserRemoteUpdateNotification"
@@ -84,7 +86,9 @@
     
     
     if(![dictionary[kPreKeyRemoteAlias] isKindOfClass:[NSNull class]]) {
-        PreKey *preKey = [[FreeKey sharedManager] createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
+        PreKey *preKey =
+        [[FreeKeyNetworkManager sharedManager] createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
+        
         [[KStorageManager sharedManager] setObject:preKey
                                             forKey:preKey.userId
                                       inCollection:kTheirPreKeyCollection];
@@ -116,8 +120,8 @@
 }
 
 - (void)setupPreKeys {
-    NSArray *preKeys = [[FreeKey sharedManager] generatePreKeysForUser:self];
-    [[FreeKey sharedManager] sendPreKeysToServer:preKeys];
+    //NSArray *preKeys = [[FreeKey sharedManager] generatePreKeysForUser:self];
+    //[[FreeKeySessionManager sharedManager] sendPreKeysToServer:preKeys];
 }
 
 #pragma mark - Batch Query Methods
@@ -135,26 +139,34 @@
 
 #pragma mark - Query Methods
 + (KUser *)fetchObjectWithUsername:(NSString *)username {
-    __block KUser *user;
+    __block NSString *userId;
     [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:@"WHERE username = ?", username];
-        [[transaction ext:KUsernameSQLiteIndex] enumerateKeysAndObjectsMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, id object, BOOL *stop) {
-            user = (KUser *)object;
+        [[transaction ext:KUsernameSQLiteIndex] enumerateKeysMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, BOOL *stop) {
+            NSLog(@"KEY: %@", key);
+            userId = key;
+            *stop = YES;
         }];
     }];
-    return user;
+    if(userId) {
+        return (KUser *)[[KStorageManager sharedManager] objectForKey:userId inCollection:[KUser collection]];
+    }else {
+        return nil;
+    }
 }
 
-+ (void)retrieveUserWithUsername:(NSString *)username {
-    [[FreeKey sharedManager] getRemoteUserWithUsername:username];
++ (void)retrieveRemoteUserWithUsername:(NSString *)username {
+    [[HttpManager sharedManager] enqueueGetWithRemoteAlias:kUserRemoteAlias parameters:@{@"username" : username}];
+}
+
++ (void)retrieveRemoteUserWithUserId:(NSString *)userId {
+    [[HttpManager sharedManager] enqueueGetWithRemoteAlias:kUserRemoteAlias parameters:@{@"userId" : userId}];
 }
 
 + (NSArray *)userIdsWithUsernames:(NSArray *)usernames {
     NSMutableArray *userIds = [[NSMutableArray alloc] init];
-    NSLog(@"USERNAMES: %@", usernames);
     for(NSString *username in usernames) {
         KUser *user = [self fetchObjectWithUsername:username];
-        NSLog(@"USER UNIQUE ID: %@", user.uniqueId);
         if(user) [userIds addObject:user.uniqueId];
     }
     return userIds;

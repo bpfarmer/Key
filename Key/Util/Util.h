@@ -10,7 +10,9 @@
 
 @interface Util : NSObject
 
-+ (NSData *)generateRandomData:(NSInteger)length;
+
++ (NSData *)generateRandomData:(int)length;
 + (NSString *)insecureRandomString:(NSInteger)length;
+
 
 @end

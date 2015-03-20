@@ -45,6 +45,7 @@
 }
 
 - (instancetype)initWithSenderRatchetKey:(NSData *)senderRatchetKey
+                                senderId:(NSString *)senderId
                               receiverId:(NSString *)receiverId
                           serializedData:(NSData *)serializedData
                                    index:(int)index
@@ -53,6 +54,7 @@
     
     if(self) {
         _senderRatchetKey = senderRatchetKey;
+        _senderId         = senderId;
         _receiverId       = receiverId;
         _serializedData   = serializedData;
         _cipherText       = [serializedData subdataWithRange:NSMakeRange(0, serializedData.length - 8)];
@@ -68,6 +70,11 @@
 
 + (NSString *)remoteAlias {
     return kEncryptedMessageRemoteAlias;
+}
+
+- (void)addMetadataFromLocalUserId:(NSString *)localUserId toRemoteUserId:(NSString *)remoteUserId {
+    self.senderId = localUserId;
+    self.receiverId = remoteUserId;
 }
 
 @end

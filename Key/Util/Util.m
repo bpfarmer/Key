@@ -10,11 +10,17 @@
 
 @implementation Util
 
-+ (NSData *)generateRandomData:(NSInteger)length {
-    uint8_t randomBytes[(size_t)length];
-    SecRandomCopyBytes(kSecRandomDefault, (size_t)length, &randomBytes);
-    return [[NSData alloc] initWithBytes:randomBytes length:length];
+
++ (NSData *)generateRandomData:(int)numberBytes {
+    NSMutableData* randomBytes = [NSMutableData dataWithLength:numberBytes];
+    int err = 0;
+    err = SecRandomCopyBytes(kSecRandomDefault,numberBytes,[randomBytes mutableBytes]);
+    if(err != noErr && [randomBytes length] != numberBytes) {
+        //@throw [NSException exceptionWithName:@"random problem" reason:@"problem generating the random " userInfo:nil];
+    }
+    return [NSData dataWithData:randomBytes];
 }
+
 
 + (NSString *)insecureRandomString:(NSInteger)length {
     NSString *alphabet  = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";

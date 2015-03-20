@@ -36,33 +36,7 @@
 
 @interface FreeKey : NSObject
 
-+ (instancetype)sharedManager;
-
-- (EncryptedMessage *)encryptObject:(id <KEncryptable>)object
-                          localUser:(KUser *)localUser
-                        recipientId:(NSString *)recipientId;
-
-- (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage
-                                   localUser:(KUser *)localUser
-                                    senderId:(NSString *)senderId;
-
-- (Session *)createSessionFromUser:(KUser *)localUser withPreKey:(PreKey *)preKey;
-- (Session *)createSessionFromUser:(KUser *)localUser withPreKeyExchange:(PreKeyExchange *)preKeyExchange;
-- (NSArray *)generatePreKeysForUser:(KUser *)user;
-- (void)sendPreKeysToServer:(NSArray *)preKeys;
-- (void)getRemotePreKeyForUserId:(NSString *)recipientId;
-- (void)getRemoteUserWithUsername:(NSString *)username;
-
-- (void)receiveRemoteObject:(NSDictionary *)object ofType:(NSString *)type;
-- (void)receiveRemoteFeed:(NSDictionary *)objects withLocalUser:(KUser *)localUser;
-- (PreKey *)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary;
-- (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary;
-- (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary;
-
-- (void)enqueueEncryptableObject:(id <KEncryptable>)object fromUser:(KUser *)localUser toUserId:(NSString *)userId;
-- (void)enqueueDecryptableObject:(EncryptedMessage *)object toLocalUser:(KUser *)localUser;
-- (void)enqueueGetRequestWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters;
-
-- (void)pollFeedForLocalUser:(KUser *)localUser;
++ (EncryptedMessage *)encryptObject:(id <KEncryptable>)object session:(Session *)session;
++ (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session;
 
 @end

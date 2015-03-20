@@ -20,6 +20,9 @@
 #import "PreKeyExchange.h"
 #import "EncryptedMessage.h"
 #import "NSData+Base64.h"
+#import "RootChain.h"
+#import "ChainKey.h"
+#import "MessageKey.h"
 
 @interface FreeKeyTests : XCTestCase
 
@@ -57,36 +60,7 @@
 
 - (void)testSessionCreationAndEncryption {
     
-    NSString *bobId = @"bobUniqueId";
-    NSString *aliceId = @"aliceUniqueId";
-    
-    KUser *alice = [[KUser alloc] initWithUniqueId:bobId];
-    [alice setUsername:@"alice"];
-    
-    KUser *bob   = [[KUser alloc] initWithUniqueId:bobId];
-    [bob setUsername:@"bob"];
-    
-    IdentityKey *aliceIdentityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:aliceId];
-    [alice setIdentityKey:aliceIdentityKey];
-    
-    IdentityKey *bobIdentityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:bobId];
-    [bob setPublicKey:bobIdentityKey.keyPair.publicKey];
-    
-    [alice save];
-    [bob save];
-    
-    ECKeyPair *bobSignedPreKeyPair      = [Curve25519 generateKeyPair];
-    NSData    *bobSignedPreKeySignature = [Ed25519 sign:bobSignedPreKeyPair.publicKey withKeyPair:bobIdentityKey.keyPair];
-    
-    NSDictionary *bobPreKeyDictionary = @{@"userId" : bobId,
-                                          @"signedPreKeyId" : @"42",
-                                          @"signedPreKeyPublic" : [bobSignedPreKeyPair.publicKey base64EncodedString],
-                                          @"signedPreKeySignature" : [bobSignedPreKeySignature base64EncodedString],
-                                          @"identityKey" : [bobIdentityKey.publicKey base64EncodedString]};
-    
-    [[FreeKey sharedManager] createPreKeyFromRemoteDictionary:bobPreKeyDictionary];
-    
-    KMessage *message = [[KMessage alloc] initWithAuthorId:aliceId threadId:@"1" body:@"HERE"];
+
     
     [self measureBlock:^{
         [[FreeKey sharedManager] encryptObject:message localUser:alice recipientId:bobId];
@@ -96,7 +70,9 @@
 }
 
 - (void)testResponseToFeed {
-    [KStorageManager sharedManager];
+    [[KStorageManager sharedManager].dbConnection readWriteWithBlock:^(YapDatabaseReadWriteTransaction *transaction) {
+        [transaction removeAllObjectsInAllCollections];
+    }];
     NSArray *preKeyExchangeRemoteKeys = [PreKeyExchange remoteKeys];
     NSArray *encryptedMessageRemoteKeys = [EncryptedMessage remoteKeys];
     
@@ -123,32 +99,43 @@
        }];
     }];
     
-    NSData *preKeySignature = [Ed25519 sign:preKey.signedPreKeyPublic withKeyPair:recipient.identityKey.keyPair];
+    ECKeyPair *senderBaseKey = [Curve25519 generateKeyPair];
+    PreKeyExchange *preKeyExchange = (PreKeyExchange *)[[KStorageManager sharedManager] objectForKey:recipient.uniqueId inCollection:kPreKeyExchangeCollection];
+    NSData *preKeyExchangeSignature = [Ed25519 sign:senderBaseKey.publicKey withKeyPair:senderIdKey.keyPair];
+    
     [[KStorageManager sharedManager] setObject:preKey forKey:recipient.uniqueId inCollection:kTheirPreKeyCollection];
     
     KMessage *message = [[KMessage alloc] initWithAuthorId:sender.uniqueId threadId:@"1" body:@"TEST OF MESSAGE ENCRYPTION"];
     EncryptedMessage *encryptedMessage = [[FreeKey sharedManager] encryptObject:message localUser:sender recipientId:recipient.uniqueId];
     
-    NSDictionary *sampleFeed = @{@"status" : @"SUCCESS",
-    kPreKeyExchangeRemoteAlias : @[@{preKeyExchangeRemoteKeys[0] : @"2",
-                                 preKeyExchangeRemoteKeys[1] : @"1",
-                                 preKeyExchangeRemoteKeys[2] : preKey.signedPreKeyId,
-                                 preKeyExchangeRemoteKeys[3] : [preKey.signedPreKeyPublic base64EncodedString],
-                                 preKeyExchangeRemoteKeys[4] : [sender.identityKey.publicKey base64EncodedString],
-                                 preKeyExchangeRemoteKeys[5] : [recipient.identityKey.publicKey base64EncodedString],
-                                 preKeyExchangeRemoteKeys[6] : [preKeySignature base64EncodedString]}],
-    kEncryptedMessageRemoteAlias :@[@{encryptedMessageRemoteKeys[0] : [encryptedMessage.senderRatchetKey base64EncodedString],
-                                  encryptedMessageRemoteKeys[1] : sender.uniqueId,
-                                  encryptedMessageRemoteKeys[2] : [encryptedMessage.serializedData base64EncodedString],
-                                  encryptedMessageRemoteKeys[3] : [NSNumber numberWithInt:encryptedMessage.index],
-                                  encryptedMessageRemoteKeys[4] : [NSNumber numberWithInt:encryptedMessage.previousIndex]}]};
+    NSDictionary *encryptedMessageDictionary =
+    @{encryptedMessageRemoteKeys[0] : [encryptedMessage.senderRatchetKey base64EncodedString],
+      encryptedMessageRemoteKeys[1] : recipient.uniqueId,
+      encryptedMessageRemoteKeys[2] : sender.uniqueId,
+      encryptedMessageRemoteKeys[3] : [encryptedMessage.serializedData base64EncodedString],
+      encryptedMessageRemoteKeys[4] : [NSNumber numberWithInt:encryptedMessage.index],
+      encryptedMessageRemoteKeys[5] : [NSNumber numberWithInt:encryptedMessage.previousIndex]};
+    
+    NSDictionary *preKeyExchangeDictionary = @{preKeyExchangeRemoteKeys[0] : @"2",
+                                               preKeyExchangeRemoteKeys[1] : @"1",
+                                               preKeyExchangeRemoteKeys[2] : preKey.signedPreKeyId,
+                                               preKeyExchangeRemoteKeys[3] : [senderBaseKey.publicKey base64EncodedString],
+                                               preKeyExchangeRemoteKeys[4] : [sender.identityKey.publicKey base64EncodedString],
+                                               preKeyExchangeRemoteKeys[5] : [recipient.identityKey.publicKey base64EncodedString],
+                                               preKeyExchangeRemoteKeys[6] : [preKeyExchangeSignature base64EncodedString]};
 
-    [[FreeKey sharedManager] receiveRemoteFeed:sampleFeed withLocalUser:recipient];
+    PreKeyExchange *PKE =
+    [[FreeKey sharedManager] createPreKeyExchangeFromRemoteDictionary:preKeyExchangeDictionary];
+    XCTAssert([PKE.signedTargetPreKeyId isEqualToString:preKey.signedPreKeyId]);
     
-    PreKeyExchange *storedPKE = (PreKeyExchange *)[[KStorageManager sharedManager] objectForKey:sender.uniqueId inCollection:kPreKeyExchangeCollection];
+    EncryptedMessage *EM = [[FreeKey sharedManager] createEncryptedMessageFromRemoteDictionary:encryptedMessageDictionary];
+    XCTAssert([EM.receiverId isEqualToString:recipient.uniqueId]);
     
-    XCTAssert(storedPKE.signedTargetPreKeyId);
+    Session *recipientSession = [[FreeKey sharedManager] createSessionFromUser:recipient withPreKeyExchange:PKE];
+    NSLog(@"RECIPIENT MESSAGE KEY: %@", recipientSession.senderRootChain.chainKey.messageKey.cipherKey);
     
+    
+    /*
     __block EncryptedMessage *storedEncryptedMessage;
     
     [connection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
@@ -160,6 +147,7 @@
     KMessage *decryptedMessage = (KMessage *)[[FreeKey sharedManager] decryptEncryptedMessage:storedEncryptedMessage localUser:recipient senderId:sender.uniqueId];
     
     XCTAssert([decryptedMessage.body isEqualToString:message.body]);
+     */
 }
 
 

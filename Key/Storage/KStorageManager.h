@@ -16,15 +16,18 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
 
 @interface KStorageManager : NSObject
 
+@property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
+@property (nonatomic, readonly) YapDatabase *database;
+
+
 + (instancetype)sharedManager;
+- (void)refreshDatabaseAndConnection;
 
 - (void)setupDatabase;
-
 - (YapDatabase *)database;
 - (YapDatabaseConnection *)newDatabaseConnection;
-- (NSString *)dbPath;
-// TODO: Remove this:
 - (NSString *)databasePassword;
+- (NSString *)dbPath;
 
 - (NSUInteger)numberOfKeysInCollection:(NSString *)collection;
 - (void)setObject:(id)object forKey:(NSString*)key inCollection:(NSString*)collection;
@@ -36,8 +39,5 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
 - (NSData *)dataForKey:(NSString*)key inCollection:(NSString*)collection;
 
 - (void)purgeCollection:(NSString*)collection;
-
-@property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
-
 - (void)wipe;
 @end

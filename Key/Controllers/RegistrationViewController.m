@@ -12,7 +12,7 @@
 #import "KStorageManager.h"
 #import "HttpManager.h"
 
-@interface RegistrationViewController ()
+@interface RegistrationViewController () <UITextFieldDelegate>
 
 @end
 
@@ -25,7 +25,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.emailText.delegate = self;
+    self.passwordText.delegate = self;
+    self.usernameText.delegate = self;
 }
 
 - (IBAction)createNewUser:(id)sender {

@@ -14,6 +14,7 @@
 #import "KYapDatabaseView.h"
 #import "KMessage.h"
 #import "ThreadViewController.h"
+#import "LoginViewController.h"
 #import "FreeKey.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
@@ -38,7 +39,6 @@ YapDatabaseConnection *databaseConnection;
     [self.threadsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
     [self setupDatabaseView];
-    NSLog(@"DB PATH: %@", [[KStorageManager sharedManager] dbPath]);
 }
 
 - (void) setupDatabaseView {
@@ -59,6 +59,12 @@ YapDatabaseConnection *databaseConnection;
 
 - (IBAction)pollFeed:(id)sender {
     [[FreeKey sharedManager] pollFeedForLocalUser:[KAccountManager sharedManager].user];
+}
+
+- (IBAction)logout:(id)sender {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    LoginViewController *loginView = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    [self presentViewController:loginView animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -147,7 +153,6 @@ YapDatabaseConnection *databaseConnection;
 
 - (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"SHOULD BE %lu ROWS", (long) [self.threadMappings numberOfItemsInSection:section]);
     return [self.threadMappings numberOfItemsInSection:section];
 }
 

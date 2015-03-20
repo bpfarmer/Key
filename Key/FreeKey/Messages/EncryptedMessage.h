@@ -30,6 +30,7 @@
                  previousIndex:(int)previousIndex;
 
 - (instancetype) initWithSenderRatchetKey:(NSData *)senderRatchetKey
+                                 senderId:(NSString *)senderId
                                receiverId:(NSString *)receiverId
                            serializedData:(NSData *)serializedData
                                     index:(int)index
@@ -37,4 +38,6 @@
 
 + (NSArray *)remoteKeys;
 - (NSData *)mac;
+- (void)addMetadataFromLocalUserId:(NSString *)localUser toRemoteUserId:(NSString *)remoteUserId;
+
 @end

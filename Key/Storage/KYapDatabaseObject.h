@@ -28,7 +28,8 @@
  *  @return Key (string) identifying the collection
  */
 
-+ (NSString*)collection;
++ (NSString *)collection;
+- (NSString *)collection;
 
 /**
  *  Fetches the object with the provided identifier

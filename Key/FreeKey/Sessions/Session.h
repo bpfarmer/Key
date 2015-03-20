@@ -43,7 +43,7 @@
            previousSessionStates:(NSDictionary *)previousSessionStates;
 
 - (void)addOurPreKey:(PreKey *)ourPreKey preKeyExchange:(PreKeyExchange *)preKeyExchange;
-- (PreKeyExchange *)addPreKey:(PreKey *)preKey;
+- (void)addPreKey:(PreKey *)preKey;
 
 - (PreKeyExchange *)preKeyExchange;
 - (EncryptedMessage *)encryptMessage:(NSData *)message;
