@@ -134,8 +134,4 @@
     return objectDictionary;
 }
 
-- (void)sendPreKeysToServer:(NSArray *)preKeys {
-    [[HttpManager sharedManager] batchPut:kPreKeyRemoteAlias objects:preKeys];
-}
-
 @end

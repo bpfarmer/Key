@@ -23,7 +23,8 @@
 #import "RootChain.h"
 #import "ChainKey.h"
 #import "MessageKey.h"
-#import "FreeKeySessionManagerTests.m"
+#import "FreeKeySessionManager.h"
+#import "FreeKeyNetworkManager.h"
 
 @interface FreeKeyTests : XCTestCase
 
@@ -42,16 +43,14 @@
 
 - (void)testPreKeyGeneration {
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
-    FreeKey *testFreeKey = [FreeKeySessionManager sharedManager];
-    NSArray *preKeys = [testFreeKey generatePreKeysForUser:user];
+    NSArray *preKeys = [[FreeKeySessionManager sharedManager] generatePreKeysForLocalUser:user];
     XCTAssert([preKeys count] == 100);
 }
 
 - (void)testPreKeySending {
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
-    FreeKey *testFreeKey = [FreeKeySessionManager sharedManager];
-    NSArray *preKeys = [testFreeKey generatePreKeysForUser:user];
-    [testFreeKey sendPreKeysToServer:preKeys];
+    NSArray *preKeys = [[FreeKeySessionManager sharedManager] generatePreKeysForLocalUser:user];
+    [[FreeKeyNetworkManager sharedManager] sendPreKeysToServer:preKeys];
 }
 
 
