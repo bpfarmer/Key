@@ -9,7 +9,21 @@
 #import "KYapDatabaseObject.h"
 #import "KStorageManager.h"
 
+#define kCoderUniqueId @"uniqueId"
+
 @implementation KYapDatabaseObject
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    return [self initWithUniqueId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]];
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:self.uniqueId forKey:kCoderUniqueId];
+}
 
 - (id)init{
     if (self = [super init])

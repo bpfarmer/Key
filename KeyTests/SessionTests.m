@@ -41,10 +41,7 @@
  */
 
 - (void)testSimpleExchange {
-    NSArray *aliceBobSessions = [self aliceBobSessions];
-    Session *aliceSession = aliceBobSessions[0];
-    Session *bobSession   = aliceBobSessions[1];
-
+    /*
     NSString *sendingMessage = @"Free Key!";
     NSData *sendingMessageData = [sendingMessage dataUsingEncoding:NSUTF8StringEncoding];
     EncryptedMessage *encryptedMessage = [aliceSession encryptMessage:sendingMessageData];
@@ -64,37 +61,7 @@
     XCTAssert(doubleReplyEncryptedMessage.cipherText);
     NSData *doubleDecryptedReplyMessageData = [aliceSession decryptMessage:doubleReplyEncryptedMessage];
     XCTAssert([doubleDecryptedReplyMessageData isEqual:doubleReplyMessageData]);
-    
-    
-}
-
-- (NSArray *)aliceBobSessions {
-    NSString *BOB_RECIPIENT_ID   = @"+3828923892";
-    NSString *ALICE_RECIPIENT_ID = @"alice@gmail.com";
-    
-    IdentityKey *aliceIdentityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:ALICE_RECIPIENT_ID];
-    IdentityKey *bobIdentityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:BOB_RECIPIENT_ID];
-    
-    Session *aliceSession = [[Session alloc] initWithReceiverId:BOB_RECIPIENT_ID identityKey:aliceIdentityKey];
-    
-    ECKeyPair *bobSignedPreKeyPair      = [Curve25519 generateKeyPair];
-    NSString  *bobUniqueId              = @"bobUniqueId";
-    NSData    *bobSignedPreKeySignature = [Ed25519 sign:bobSignedPreKeyPair.publicKey withKeyPair:bobIdentityKey.keyPair];
-    
-    PreKey *bobPreKey = [[PreKey alloc] initWithUserId:bobUniqueId
-                                              deviceId:@"1"
-                                        signedPreKeyId:@"22"
-                                    signedPreKeyPublic:bobSignedPreKeyPair.publicKey
-                                 signedPreKeySignature:bobSignedPreKeySignature
-                                           identityKey:bobIdentityKey.publicKey
-                                           baseKeyPair:bobSignedPreKeyPair];
-    
-    PreKeyExchange *preKeyExchange = [aliceSession addPreKey:bobPreKey];
-    
-    Session *bobSession = [[Session alloc] initWithReceiverId:ALICE_RECIPIENT_ID identityKey:bobIdentityKey];
-
-    [bobSession addOurPreKey:bobPreKey preKeyExchange:preKeyExchange];
-    return [[NSArray alloc] initWithObjects:aliceSession, bobSession, nil];
+    */
 }
 
 @end

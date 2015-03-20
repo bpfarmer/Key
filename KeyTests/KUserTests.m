@@ -29,6 +29,7 @@
 }
 
 - (void)testFetchingObjects {
+    [[KStorageManager sharedManager] setupDatabase];
     NSString *username = @"TESTER";
     KUser *savingUser = [[KUser alloc] initWithUsername:username];
     [savingUser setUniqueId:@"12345"];

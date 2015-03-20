@@ -12,6 +12,7 @@
 @class KUser;
 @class PreKey;
 @class PreKeyExchange;
+@class ECKeyPair;
 
 @interface FreeKeySessionManager : NSObject
 
@@ -19,14 +20,17 @@
 
 - (Session *)sessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
 - (Session *)createSessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
-- (Session *)createSessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser preKey:(PreKey *)preKey;
 - (Session *)createSessionWithLocalUser:(KUser *)localUser
                              remoteUser:(KUser *)remoteUser
-                         preKeyExchange:(PreKeyExchange *)preKeyExchange;
+                             ourBaseKey:(ECKeyPair *)ourBaseKey
+                            theirPreKey:(PreKey *)theirPreKey;
+- (Session *)createSessionWithLocalUser:(KUser *)localUser
+                             remoteUser:(KUser *)remoteUser
+                              ourPreKey:(PreKey *)ourPreKey
+                    theirPreKeyExchange:(PreKeyExchange *)theirPreKeyExchange;
 
 - (void)getPreKeyWithRemoteUser:(KUser *)remoteUser;
 
-- (PreKeyExchange *)preKeyExchangeWithSession:(Session *)session;
 - (PreKey *)getPreKeyForUserId:(NSString *)userId;
 - (NSArray *)generatePreKeysForLocalUser:(KUser *)localUser;
 

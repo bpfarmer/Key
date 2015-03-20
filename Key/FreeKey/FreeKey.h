@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
+// TODO: resolve identity key / base key / ECKeyPair naming conventions
 #import <Foundation/Foundation.h>
 #import "KEncryptable.h"
 

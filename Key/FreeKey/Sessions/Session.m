@@ -81,10 +81,9 @@
     [self.senderRootChain setRatchetKeyPair:ourPreKey.baseKeyPair];
 }
 
-- (void)addPreKey:(PreKey *)preKey {
+- (void)addPreKey:(PreKey *)preKey ourBaseKey:(ECKeyPair *)ourBaseKey {
     _receiverIdentityPublicKey  = preKey.identityKey;
     _preKey = preKey;
-    ECKeyPair *ourBaseKey = [Curve25519 generateKeyPair];
     _baseKeyPublic = ourBaseKey.publicKey;
     
     SessionKeyBundle *keyBundle = [[SessionKeyBundle alloc] initWithTheirBaseKey:preKey.signedPreKeyPublic

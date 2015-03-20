@@ -40,38 +40,45 @@
 - (Session *)createSessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     PreKey *preKey = [self getPreKeyForUserId:remoteUser.uniqueId];
     if(preKey) {
-        return [self createSessionWithLocalUser:localUser remoteUser:remoteUser preKey:preKey];
+        return [self createSessionWithLocalUser:localUser
+                                     remoteUser:remoteUser
+                                     ourBaseKey:[Curve25519 generateKeyPair]
+                                    theirPreKey:preKey];
     }else {
         PreKeyExchange *preKeyExchange = [self getPreKeyExchangeForUserId:remoteUser.uniqueId];
         if(!preKeyExchange) {
             [self getPreKeyWithRemoteUser:remoteUser];
             return nil;
         }else {
-            return [self createSessionWithLocalUser:localUser remoteUser:remoteUser preKeyExchange:preKeyExchange];
+            PreKey *ourPreKey = [[KStorageManager sharedManager] objectForKey:preKeyExchange.signedTargetPreKeyId
+                                                                 inCollection:kOurPreKeyCollection];
+            if(!ourPreKey) return nil;
+            return [self createSessionWithLocalUser:localUser
+                                         remoteUser:remoteUser
+                                          ourPreKey:ourPreKey
+                                theirPreKeyExchange:preKeyExchange];
         }
     }
 }
 
-- (Session *)createSessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser preKey:(PreKey *)preKey {
+- (Session *)createSessionWithLocalUser:(KUser *)localUser
+                             remoteUser:(KUser *)remoteUser
+                             ourBaseKey:(ECKeyPair *)ourBaseKey
+                            theirPreKey:(PreKey *)theirPreKey {
     Session *session = [[Session alloc] initWithReceiverId:remoteUser.uniqueId identityKey:localUser.identityKey];
-    [session addPreKey:preKey];
+    [session addPreKey:theirPreKey ourBaseKey:ourBaseKey];
     [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
     return session;
 }
 
 - (Session *)createSessionWithLocalUser:(KUser *)localUser
                              remoteUser:(KUser *)remoteUser
-                         preKeyExchange:(PreKeyExchange *)preKeyExchange {
+                              ourPreKey:(PreKey *)ourPreKey
+                    theirPreKeyExchange:(PreKeyExchange *)theirPreKeyExchange {
     Session *session = [[Session alloc] initWithReceiverId:remoteUser.uniqueId identityKey:localUser.identityKey];
-    PreKey *preKey = [[KStorageManager sharedManager] objectForKey:preKeyExchange.signedTargetPreKeyId
-                                                      inCollection:kOurPreKeyCollection];
-    if(preKey) {
-        [session addOurPreKey:preKey preKeyExchange:preKeyExchange];
-        [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
-        return session;
-    }else {
-        return nil;
-    }
+    [session addOurPreKey:ourPreKey preKeyExchange:theirPreKeyExchange];
+    [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
+    return session;
 }
 
 #pragma mark - Retrieving PreKeys and PreKeyExchanges for Remote Users

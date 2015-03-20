@@ -31,6 +31,5 @@
                             body:(NSString *)body
                           status:(NSString *)status
                        createdAt:(NSDate *)createdAt;
-- (void)sendToRecipients;
 
 @end

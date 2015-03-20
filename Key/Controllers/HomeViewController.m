@@ -58,7 +58,7 @@ YapDatabaseConnection *databaseConnection;
 }
 
 - (IBAction)pollFeed:(id)sender {
-    [[FreeKey sharedManager] pollFeedForLocalUser:[KAccountManager sharedManager].user];
+    //[[FreeKey sharedManager] pollFeedForLocalUser:[KAccountManager sharedManager].user];
 }
 
 - (IBAction)logout:(id)sender {

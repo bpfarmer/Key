@@ -166,7 +166,7 @@ YapDatabaseConnection *databaseConnection;
 - (IBAction)addContact:(id)sender {
     KUser *targetUser = [KUser fetchObjectWithUsername:self.contactTextField.text];
     if(!targetUser) {
-        [KUser retrieveUserWithUsername:self.contactTextField.text];
+        [KUser retrieveRemoteUserWithUsername:self.contactTextField.text];
         self.contactTextField.text = @"";
     }
 }
