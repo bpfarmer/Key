@@ -54,7 +54,7 @@
 - (void)getRemoteUserWithUsername:(NSString *)username;
 
 - (void)receiveRemoteObject:(NSDictionary *)object ofType:(NSString *)type;
-- (void)receiveRemoteFeed:(NSDictionary *)objects;
+- (void)receiveRemoteFeed:(NSDictionary *)objects withLocalUser:(KUser *)localUser;
 - (PreKey *)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary;
 - (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary;
 - (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary;

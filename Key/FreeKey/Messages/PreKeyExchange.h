@@ -15,7 +15,7 @@
 
 @interface PreKeyExchange : NSObject <KSendable>
 
-@property (nonatomic, readonly) NSString *senderId;
+@property (nonatomic, readwrite) NSString *senderId;
 @property (nonatomic, readonly) NSString *senderDeviceId;
 @property (nonatomic, readonly) NSString *receiverId;
 @property (nonatomic, readonly) NSString *receiverDeviceId;

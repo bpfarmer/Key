@@ -75,8 +75,6 @@
     [[HttpManager sharedManager] batchPut:kPreKeyRemoteAlias objects:preKeys];
 }
 
-#pragma mark - Encryption and Decryption Queue
-
 #pragma mark - Encryption and Decryption Wrappers
 - (EncryptedMessage *)encryptObject:(id<KEncryptable>)object
                           localUser:(KUser *)localUser
@@ -101,7 +99,8 @@
     NSData *serializedData = [NSKeyedArchiver archivedDataWithRootObject:object];
     EncryptedMessage *encryptedMessage = [session encryptMessage:serializedData];
     
-    // TODO: find a way to do this without exposing metadata
+    [[KStorageManager sharedManager] setObject:session forKey:recipientId inCollection:kSessionCollection];
+    
     [encryptedMessage setSenderId:localUser.uniqueId];
     [encryptedMessage setReceiverId:recipientId];
     return encryptedMessage;
@@ -121,6 +120,9 @@
         }
     }
     NSData *decryptedData = [session decryptMessage:encryptedMessage];
+    
+    [[KStorageManager sharedManager] setObject:session forKey:senderId inCollection:kSessionCollection];
+    
     return [NSKeyedUnarchiver unarchiveObjectWithData:decryptedData];
 }
 
@@ -128,6 +130,7 @@
 - (Session *)createSessionFromUser:(KUser *)localUser withPreKey:(PreKey *)preKey {
     Session *session = [[Session alloc] initWithReceiverId:preKey.userId identityKey:localUser.identityKey];
     PreKeyExchange *preKeyExchange = [session addPreKey:preKey];
+    [preKeyExchange setSenderId:localUser.uniqueId];
     [self enqueueSendableObject:preKeyExchange];
     return session;
 }
@@ -224,7 +227,6 @@
                                                       senderIdentityPublicKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[4]]]
                                                     receiverIdentityPublicKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[5]]]
                                                              baseKeySignature:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[6]]]];
-    
     return preKeyExchange;
 }
 
@@ -235,7 +237,7 @@
     EncryptedMessage *encryptedMessage =
     [[EncryptedMessage alloc] initWithSenderRatchetKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[0]]]
                                             receiverId:dictionary[remoteKeys[1]]
-                                        serializedData:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[2]]]
+                                        serializedData:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[3]]]
                                                  index:[index intValue]
                                          previousIndex:[previousIndex intValue]];
     
@@ -244,10 +246,10 @@
                                  [[NSDate date] timeIntervalSince1970],
                                  index];
     
+    NSLog(@"SERIALIZED DATA: %@", encryptedMessage.serializedData);
+    
     [[KStorageManager sharedManager]setObject:encryptedMessage forKey:uniqueMessageId inCollection:kEncryptedMessageCollection];
     
-    
-
     return encryptedMessage;
 }
 
@@ -269,7 +271,8 @@
 - (void)enqueueDecryptableObject:(EncryptedMessage *)message toLocalUser:(KUser *)localUser {
     dispatch_queue_t queue = dispatch_queue_create([kDecryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     dispatch_async(queue, ^{
-        id <KEncryptable> object = [self decryptEncryptedMessage:message localUser:localUser senderId:message.senderId];
+        KMessage *object = (KMessage *)[self decryptEncryptedMessage:message localUser:localUser senderId:message.senderId];
+        NSLog(@"OBJECT ID: %@", object.body);
         [object save];
     });
 }

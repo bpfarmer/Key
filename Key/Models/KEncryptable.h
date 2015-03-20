@@ -11,6 +11,8 @@
 
 @protocol KEncryptable
 
+@property (nonatomic, readwrite) NSString *uniqueId;
+
 - (void)save;
 
 @end

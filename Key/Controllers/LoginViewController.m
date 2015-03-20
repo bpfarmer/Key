@@ -19,7 +19,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.usernameText.delegate = self;
+    self.passwordText.delegate = self;
     // Do any additional setup after loading the view.
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning {

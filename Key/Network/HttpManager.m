@@ -11,6 +11,7 @@
 #import "FreeKey.h"
 #import "NSData+Base64.h"
 #import "EncryptedMessage.h"
+#import "KAccountManager.h"
 
 #define kRemoteEndpoint @"http://127.0.0.1:9393"
 
@@ -68,14 +69,11 @@
 
 - (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSLog(@"PARAMETERS: %@", parameters);
-    NSLog(@"ENDPOINT: %@", [self endpointForObject:remoteAlias]);
     [manager GET:[self endpointForObject:remoteAlias] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-         NSLog(@"RESPONSE OBJECT: %@", responseObject);
+        NSLog(@"RESPONSE OBJECT: %@", responseObject);
          if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
              if([remoteAlias isEqualToString:kFeedRemoteAlias]) {
-                 NSLog(@"RESPONSE OBJECT: %@", responseObject);
-                 [[FreeKey sharedManager] receiveRemoteFeed:responseObject];
+                 [[FreeKey sharedManager] receiveRemoteFeed:responseObject withLocalUser:[KAccountManager sharedManager].user];
              }else {
                  [[FreeKey sharedManager] receiveRemoteObject:responseObject ofType:remoteAlias];
              }

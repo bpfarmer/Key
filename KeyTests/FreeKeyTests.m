@@ -19,6 +19,7 @@
 #import "KMessage.h"
 #import "PreKeyExchange.h"
 #import "EncryptedMessage.h"
+#import "NSData+Base64.h"
 
 @interface FreeKeyTests : XCTestCase
 
@@ -79,9 +80,9 @@
     
     NSDictionary *bobPreKeyDictionary = @{@"userId" : bobId,
                                           @"signedPreKeyId" : @"42",
-                                          @"signedPreKeyPublic" : bobSignedPreKeyPair.publicKey,
-                                          @"signedPreKeySignature" : bobSignedPreKeySignature,
-                                          @"identityKey" : bobIdentityKey.publicKey};
+                                          @"signedPreKeyPublic" : [bobSignedPreKeyPair.publicKey base64EncodedString],
+                                          @"signedPreKeySignature" : [bobSignedPreKeySignature base64EncodedString],
+                                          @"identityKey" : [bobIdentityKey.publicKey base64EncodedString]};
     
     [[FreeKey sharedManager] createPreKeyFromRemoteDictionary:bobPreKeyDictionary];
     
@@ -132,17 +133,17 @@
     kPreKeyExchangeRemoteAlias : @[@{preKeyExchangeRemoteKeys[0] : @"2",
                                  preKeyExchangeRemoteKeys[1] : @"1",
                                  preKeyExchangeRemoteKeys[2] : preKey.signedPreKeyId,
-                                 preKeyExchangeRemoteKeys[3] : preKey.signedPreKeyPublic,
-                                 preKeyExchangeRemoteKeys[4] : sender.identityKey.publicKey,
-                                 preKeyExchangeRemoteKeys[5] : recipient.identityKey.publicKey,
-                                 preKeyExchangeRemoteKeys[6] : preKeySignature}],
-    kEncryptedMessageRemoteAlias :@[@{encryptedMessageRemoteKeys[0] : encryptedMessage.senderRatchetKey,
+                                 preKeyExchangeRemoteKeys[3] : [preKey.signedPreKeyPublic base64EncodedString],
+                                 preKeyExchangeRemoteKeys[4] : [sender.identityKey.publicKey base64EncodedString],
+                                 preKeyExchangeRemoteKeys[5] : [recipient.identityKey.publicKey base64EncodedString],
+                                 preKeyExchangeRemoteKeys[6] : [preKeySignature base64EncodedString]}],
+    kEncryptedMessageRemoteAlias :@[@{encryptedMessageRemoteKeys[0] : [encryptedMessage.senderRatchetKey base64EncodedString],
                                   encryptedMessageRemoteKeys[1] : sender.uniqueId,
-                                  encryptedMessageRemoteKeys[2] : encryptedMessage.serializedData,
+                                  encryptedMessageRemoteKeys[2] : [encryptedMessage.serializedData base64EncodedString],
                                   encryptedMessageRemoteKeys[3] : [NSNumber numberWithInt:encryptedMessage.index],
                                   encryptedMessageRemoteKeys[4] : [NSNumber numberWithInt:encryptedMessage.previousIndex]}]};
 
-    [[FreeKey sharedManager] receiveRemoteFeed:sampleFeed];
+    [[FreeKey sharedManager] receiveRemoteFeed:sampleFeed withLocalUser:recipient];
     
     PreKeyExchange *storedPKE = (PreKeyExchange *)[[KStorageManager sharedManager] objectForKey:sender.uniqueId inCollection:kPreKeyExchangeCollection];
     
