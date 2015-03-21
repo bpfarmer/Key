@@ -62,7 +62,6 @@ YapDatabaseConnection *databaseConnection;
 }
 
 - (IBAction)logout:(id)sender {
-    [[KStorageManager sharedManager] releaseDatabaseAndConnection];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     LoginViewController *loginView = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
     [self presentViewController:loginView animated:YES completion:nil];

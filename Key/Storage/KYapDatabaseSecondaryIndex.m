@@ -28,7 +28,7 @@
     
     YapDatabaseSecondaryIndexHandler *handler = [YapDatabaseSecondaryIndexHandler withObjectBlock:block];
     YapDatabaseSecondaryIndex *secondaryIndex = [[YapDatabaseSecondaryIndex alloc] initWithSetup:setup handler:handler];
-    return [[KStorageManager sharedManager].database registerExtension:secondaryIndex withName:KUsernameSQLiteIndex];
+    return [[[KStorageManager sharedManager] database] registerExtension:secondaryIndex withName:KUsernameSQLiteIndex];
 }
 
 + (BOOL)registerMessageSentIndex {
@@ -46,7 +46,7 @@
     
     YapDatabaseSecondaryIndexHandler *handler = [YapDatabaseSecondaryIndexHandler withObjectBlock:block];
     YapDatabaseSecondaryIndex *secondaryIndex = [[YapDatabaseSecondaryIndex alloc] initWithSetup:setup handler:handler];
-    return [[KStorageManager sharedManager].database registerExtension:secondaryIndex withName:KMessageStatusSQLiteIndex];
+    return [[[KStorageManager sharedManager] database] registerExtension:secondaryIndex withName:KMessageStatusSQLiteIndex];
 }
 
 @end

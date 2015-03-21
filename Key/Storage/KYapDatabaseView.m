@@ -22,7 +22,7 @@ NSString *KContactDatabaseViewName = @"KContactDatabaseViewExtension";
 @implementation KYapDatabaseView
 
 + (BOOL) registerThreadDatabaseView {
-    if ([[KStorageManager sharedManager].database registeredExtension:KThreadDatabaseViewName]) {
+    if ([[[KStorageManager sharedManager] database] registeredExtension:KThreadDatabaseViewName]) {
         return YES;
     }
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {
@@ -47,7 +47,7 @@ NSString *KContactDatabaseViewName = @"KContactDatabaseViewExtension";
 }
 
 + (BOOL) registerMessageDatabaseView {
-    if ([[KStorageManager sharedManager].database registeredExtension:KMessageDatabaseViewName]) {
+    if ([[[KStorageManager sharedManager] database] registeredExtension:KMessageDatabaseViewName]) {
         return YES;
     }
     
@@ -72,11 +72,11 @@ NSString *KContactDatabaseViewName = @"KContactDatabaseViewExtension";
                                                            versionTag:@"1"
                                                               options:options];
     
-    return [[KStorageManager sharedManager].database registerExtension:view withName:KMessageDatabaseViewName];
+    return [[[KStorageManager sharedManager] database] registerExtension:view withName:KMessageDatabaseViewName];
 }
 
 + (BOOL)registerContactDatabaseView {
-    if([[KStorageManager sharedManager].database registeredExtension:KContactDatabaseViewName]) {
+    if([[[KStorageManager sharedManager] database] registeredExtension:KContactDatabaseViewName]) {
         return YES;
     }
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {

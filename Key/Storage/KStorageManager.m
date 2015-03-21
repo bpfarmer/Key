@@ -21,8 +21,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
 
 @interface KStorageManager ()
 
-@property NSMutableDictionary *databases;
-@property YapDatabase *database;
+@property (nonatomic, retain) NSMutableDictionary *databases;
 
 @end
 
@@ -46,9 +45,8 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
     return self;
 }
 
-- (void)releaseDatabaseAndConnection {
-    _database = nil;
-    _dbConnection = nil;
+- (YapDatabase *)database {
+    return [self.databases objectForKey:[KAccountManager sharedManager].user.username];
 }
 
 - (void)refreshDatabaseAndConnection {
@@ -59,8 +57,11 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
     };
     
     NSString *username = [KAccountManager sharedManager].user.username;
+    if(!_databases) {
+        _databases = [[NSMutableDictionary alloc] init];
+    }
     
-    if(![self.databases objectForKey:username]) {
+    if(![_databases objectForKey:username]) {
         YapDatabase *newDatabase = [[YapDatabase alloc] initWithPath:[self dbPath]
                                                     objectSerializer:NULL
                                                   objectDeserializer:NULL
@@ -69,7 +70,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
                                                      objectSanitizer:NULL
                                                    metadataSanitizer:NULL
                                                              options:options];
-        [self.databases addEntriesFromDictionary:@{username : newDatabase}];
+        [_databases setObject:newDatabase forKey:username];
     }
     
     _dbConnection = self.newDatabaseConnection;
@@ -211,7 +212,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
 }
 
 - (void)wipe{
-    self.database = nil;
+    [_databases setObject:nil forKey:[KAccountManager sharedManager].user.username];
     NSError *error;
     [[NSFileManager defaultManager] removeItemAtPath:[self dbPath] error:&error];
     
