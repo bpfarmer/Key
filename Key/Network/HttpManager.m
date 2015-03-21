@@ -127,23 +127,29 @@
     return requestDictionary;
 }
 
+/**
+ * Method to convert Base64-encoded strings back to NSData. This might be the most
+ * inefficient method in the world.
+ * 
+ * @param dictionary - Dictionary possibly containing Base64-encoded strings
+ */
 - (NSDictionary *)base64DecodedDictionary:(NSDictionary *)dictionary {
     NSMutableDictionary *decodedDictionary = [[NSMutableDictionary alloc] initWithDictionary:dictionary];
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if([obj isKindOfClass:[NSArray class]]) {
             NSArray *arrayObject = (NSArray *)obj;
-            [arrayObject enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                if([obj isKindOfClass:[NSDictionary class]]) {
-                    [decodedDictionary setObject:[self base64DecodedDictionary:dictionary] forKey:key];
-                }else if([[self base64EncodedKeys] containsObject:obj]) {
-                    NSString *stringObject = (NSString *)obj;
+            for(id member in arrayObject) {
+                if([member isKindOfClass:[NSDictionary class]]) {
+                    [decodedDictionary setObject:[self base64DecodedDictionary:member] forKey:key];
+                }else if([[self base64EncodedKeys] containsObject:member]) {
+                    NSString *stringObject = (NSString *)member;
                     [decodedDictionary setObject:[stringObject base64DecodedData] forKey:key];
                 }
-            }];
+            }
         }else if([obj isKindOfClass:[NSDictionary class]]) {
             [decodedDictionary setObject:[self base64DecodedDictionary:obj] forKey:key];
         }
-        if([[self base64EncodedKeys] containsObject:obj]) {
+        if([[self base64EncodedKeys] containsObject:key]) {
             NSString *stringObject = (NSString *)obj;
             [decodedDictionary setObject:[stringObject base64DecodedData] forKey:key];
         }

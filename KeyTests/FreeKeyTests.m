@@ -27,6 +27,7 @@
 #import "FreeKeyNetworkManager.h"
 #import "FreeKeyTestExample.h"
 #import "KThread.h"
+#import "HttpManager.h"
 
 @interface FreeKeyTests : XCTestCase
 
@@ -94,7 +95,8 @@
     NSArray *remoteKeys = [EncryptedMessage remoteKeys];
     encryptedMessageDictionary[remoteKeys[0]] = [encryptedMessageDictionary[remoteKeys[0]] base64EncodedString];
     encryptedMessageDictionary[remoteKeys[3]] = [encryptedMessageDictionary[remoteKeys[3]] base64EncodedString];
-    EncryptedMessage *receivedEncryptedMessage = [[FreeKeyNetworkManager sharedManager] createEncryptedMessageFromRemoteDictionary:encryptedMessageDictionary];
+    NSDictionary *decodedMessageDictionary = [[HttpManager sharedManager] base64DecodedDictionary:encryptedMessageDictionary];
+    EncryptedMessage *receivedEncryptedMessage = [[FreeKeyNetworkManager sharedManager] createEncryptedMessageFromRemoteDictionary:decodedMessageDictionary];
     KMessage *receivedMessage = (KMessage *)[FreeKey decryptEncryptedMessage:receivedEncryptedMessage session:_bobSession];
     XCTAssert([sentMessage.body isEqualToString:receivedMessage.body]);
 }

@@ -82,52 +82,58 @@
     return session;
 }
 
-#pragma mark - Retrieving PreKeys and PreKeyExchanges for Remote Users
+- (Session *)processNewPreKey:(PreKey *)preKey localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
+    Session *session  = [self sessionWithLocalUser:localUser remoteUser:remoteUser];
+    PreKeyExchange *previousExchange = [[KStorageManager sharedManager] objectForKey:remoteUser.uniqueId
+                                                                        inCollection:kPreKeyExchangeCollection];
+    if(!session && !previousExchange) {
+        session = [self createSessionWithLocalUser:localUser
+                              remoteUser:remoteUser
+                              ourBaseKey:[Curve25519 generateKeyPair]
+                             theirPreKey:preKey];
+        
+        PreKeyExchange *preKeyExchange = [session preKeyExchange];
+        [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
+        [[KStorageManager sharedManager] setObject:preKeyExchange
+                                            forKey:remoteUser.uniqueId
+                                      inCollection:kPreKeyExchangeCollection];
+        [[HttpManager sharedManager] enqueueSendableObject:preKeyExchange];
+    }else if(previousExchange) {
+        PreKey *ourPreKey = [[KStorageManager sharedManager] objectForKey:previousExchange.signedTargetPreKeyId
+                                                             inCollection:kOurPreKeyCollection];
+        session = [self createSessionWithLocalUser:localUser
+                                        remoteUser:remoteUser
+                                         ourPreKey:ourPreKey
+                               theirPreKeyExchange:previousExchange];
+        
+        [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
+    }
+    return session;
+}
+
+- (Session *)processNewPreKeyExchange:(PreKeyExchange *)preKeyExchange
+                            localUser:(KUser *)localUser
+                           remoteUser:(KUser *)remoteUser {
+    Session *session  = [self sessionWithLocalUser:localUser remoteUser:remoteUser];
+    
+    if(!session) {
+        PreKey *ourPreKey = [[KStorageManager sharedManager] objectForKey:preKeyExchange.signedTargetPreKeyId
+                                                             inCollection:kOurPreKeyCollection];
+        session = [self createSessionWithLocalUser:localUser
+                                        remoteUser:remoteUser
+                                         ourPreKey:ourPreKey
+                               theirPreKeyExchange:preKeyExchange];
+    }
+    
+    return session;
+}
+
 - (PreKey *)getPreKeyForUserId:(NSString *)userId {
     return (PreKey *)[[KStorageManager sharedManager] objectForKey:userId inCollection:kTheirPreKeyCollection];
 }
 
 - (PreKeyExchange *)getPreKeyExchangeForUserId:(NSString *)userId {
     return (PreKeyExchange *)[[KStorageManager sharedManager] objectForKey:userId inCollection:kPreKeyExchangeCollection];
-}
-
-#pragma mark - Generating PreKeys
-
-- (NSArray *)generatePreKeysForLocalUser:(KUser *)localUser {
-    int index = 0;
-    NSMutableArray *preKeys = [[NSMutableArray alloc] init];
-    while(index < 100) {
-        ECKeyPair *baseKeyPair = [Curve25519 generateKeyPair];
-        NSString *uniquePreKeyId = [NSString stringWithFormat:@"%@_%f_%d", localUser.uniqueId, [[NSDate date] timeIntervalSince1970], index];
-        NSData *preKeySignature = [Ed25519 sign:baseKeyPair.publicKey withKeyPair:localUser.identityKey.keyPair];
-        PreKey *preKey = [[PreKey alloc] initWithUserId:localUser.uniqueId
-                                               deviceId:@"1"
-                                         signedPreKeyId:uniquePreKeyId
-                                     signedPreKeyPublic:baseKeyPair.publicKey
-                                  signedPreKeySignature:preKeySignature
-                                            identityKey:localUser.publicKey
-                                            baseKeyPair:baseKeyPair];
-        [[KStorageManager sharedManager] setObject:preKey forKey:preKey.signedPreKeyId inCollection:kOurPreKeyCollection];
-        [preKeys addObject:[self base64EncodedPreKeyDictionary:preKey]];
-        index++;
-    }
-    return [[NSArray alloc] initWithArray:preKeys];
-}
-
-- (NSDictionary *)base64EncodedPreKeyDictionary:(PreKey *)preKey {
-    NSMutableDictionary *objectDictionary = [[NSMutableDictionary alloc] init];
-    [[PreKey remoteKeys] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSObject *property = [preKey dictionaryWithValuesForKeys:@[obj]][obj];
-        if([property isKindOfClass:[NSData class]]) {
-            NSData *dataProperty = (NSData *)property;
-            NSString *encodedString = [dataProperty base64EncodedString];
-            [objectDictionary addEntriesFromDictionary:@{obj : encodedString}];
-        }else {
-            [objectDictionary addEntriesFromDictionary:@{obj : property}];
-        }
-        
-    }];
-    return objectDictionary;
 }
 
 @end

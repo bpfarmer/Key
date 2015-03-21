@@ -83,7 +83,14 @@
 
 + (void)createFromRemoteDictionary:(NSDictionary *)dictionary {
     NSDictionary *userDictionary = dictionary[[self remoteAlias]];
+    KUser *user;
     
+    if(userDictionary) {
+        user = [[KUser alloc] initWithUniqueId:userDictionary[@"uniqueId"]
+                                      username:userDictionary[@"username"]
+                                     publicKey:userDictionary[@"publicKey"]];
+        [user save];
+    }
     
     if(![dictionary[kPreKeyRemoteAlias] isKindOfClass:[NSNull class]]) {
         PreKey *preKey =
@@ -93,11 +100,6 @@
                                             forKey:preKey.userId
                                       inCollection:kTheirPreKeyCollection];
     }
-    
-    KUser *user = [[KUser alloc] initWithUniqueId:userDictionary[@"uniqueId"]
-                                         username:userDictionary[@"username"]
-                                        publicKey:userDictionary[@"publicKey"]];
-    [user save];
 }
 
 + (NSString *)remoteAlias {
@@ -120,7 +122,7 @@
 }
 
 - (void)setupPreKeys {
-    NSArray *preKeys = [[FreeKeySessionManager sharedManager] generatePreKeysForLocalUser:self];
+    NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:self];
     [[FreeKeyNetworkManager sharedManager] sendPreKeysToServer:preKeys];
 }
 
@@ -217,7 +219,7 @@
 }
 
 - (BOOL)authenticatePassword:(NSString *)password {
-    // TODO: eventually support remote authentication
+    // TODO: eventually do remote authentication
     NSData *passwordCrypt = [self encryptPassword:password];
     return [[passwordCrypt base64EncodedString] isEqual:[self getPasswordCryptFromKeychain]];
 }

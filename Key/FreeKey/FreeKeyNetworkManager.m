@@ -17,6 +17,10 @@
 #import "FreeKey.h"
 #import "NSData+Base64.h"
 #import "FreeKeySessionManager.h"
+#import "KAccountManager.h"
+#import <25519/Curve25519.h>
+#import <25519/Ed25519.h>
+#import "IdentityKey.h"
 
 @implementation FreeKeyNetworkManager
 
@@ -63,10 +67,30 @@
                                         identityKey:dictionary[remoteKeys[5]]
                                         baseKeyPair:nil];
     
+    // TODO: unify how we're calling collection methods
+    if(preKey) {
+        KUser *remoteUser = [[KStorageManager sharedManager] objectForKey:preKey.userId inCollection:[KUser collection]];
+        if(remoteUser) {
+            KUser *currentUser = [KAccountManager sharedManager].user;
+            Session *session = [[FreeKeySessionManager sharedManager] processNewPreKey:preKey
+                                                                             localUser:currentUser
+                                                                            remoteUser:remoteUser];
+            if(session) {
+                [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
+            }else {
+                // TODO: throw invalid PreKey error
+            }
+        }else {
+            [[HttpManager sharedManager] enqueueGetWithRemoteAlias:kUserRemoteAlias parameters:@{@"userId" : preKey.userId}];
+        }
+    }else {
+        // TODO: throw invalid PreKey error
+    }
     return preKey;
 }
 
 - (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary {
+    NSLog(@"DICTIONARY PARAM: %@", dictionary);
     NSArray *remoteKeys = [PreKeyExchange remoteKeys];
     PreKeyExchange *preKeyExchange =
     [[PreKeyExchange alloc]  initWithSenderId:dictionary[remoteKeys[0]]
@@ -76,6 +100,22 @@
                       senderIdentityPublicKey:dictionary[remoteKeys[4]]
                     receiverIdentityPublicKey:dictionary[remoteKeys[5]]
                              baseKeySignature:dictionary[remoteKeys[6]]];
+    
+    if(preKeyExchange) {
+        KUser *remoteUser = (KUser *)[[KStorageManager sharedManager] objectForKey:preKeyExchange.senderId
+                                                                      inCollection:[KUser collection]];
+        if(remoteUser) {
+            KUser *currentUser = [KAccountManager sharedManager].user;
+            Session *session = [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange
+                                                                                     localUser:currentUser
+                                                                                    remoteUser:remoteUser];
+            if(session) {
+                [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
+            }else {
+                // TODO: throw invalid PreKeyExchange error
+            }
+        }
+    }
     return preKeyExchange;
 }
 
@@ -113,15 +153,21 @@
                                  index];
     
     [[KStorageManager sharedManager]setObject:encryptedMessage forKey:uniqueMessageId inCollection:kEncryptedMessageCollection];
-    
     return encryptedMessage;
 }
 
-- (void)enqueueDecryptableObject:(EncryptedMessage *)message toLocalUser:(KUser *)localUser {
+- (void)enqueueDecryptableMessage:(EncryptedMessage *)encryptedMessage toLocalUser:(KUser *)localUser {
     dispatch_queue_t queue = dispatch_queue_create([kDecryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     dispatch_async(queue, ^{
-        //KMessage *object = (KMessage *)[self decryptEncryptedMessage:message localUser:localUser senderId:message.senderId];
-        //[object save];
+        KUser *remoteUser = [[KStorageManager sharedManager] objectForKey:encryptedMessage.senderId
+                                                             inCollection:[KUser collection]];
+        if(remoteUser) {
+            Session *session = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
+            id <KEncryptable> object = [FreeKey decryptEncryptedMessage:encryptedMessage session:session];
+            [object save];
+        }else {
+            [KUser retrieveRemoteUserWithUserId:encryptedMessage.senderId];
+        }
     });
 }
 
@@ -157,6 +203,45 @@
 - (void)getPreKeyWithRemoteUser:(KUser *)remoteUser {
     NSDictionary *parameters = @{@"userId" : remoteUser.uniqueId};
     [[HttpManager sharedManager] getObjectsWithRemoteAlias:kPreKeyRemoteAlias parameters:parameters];
+}
+
+#pragma mark - Generating PreKeys
+
+- (NSArray *)generatePreKeysForLocalUser:(KUser *)localUser {
+    int index = 0;
+    NSMutableArray *preKeys = [[NSMutableArray alloc] init];
+    while(index < 100) {
+        ECKeyPair *baseKeyPair = [Curve25519 generateKeyPair];
+        NSString *uniquePreKeyId = [NSString stringWithFormat:@"%@_%f_%d", localUser.uniqueId, [[NSDate date] timeIntervalSince1970], index];
+        NSData *preKeySignature = [Ed25519 sign:baseKeyPair.publicKey withKeyPair:localUser.identityKey.keyPair];
+        PreKey *preKey = [[PreKey alloc] initWithUserId:localUser.uniqueId
+                                               deviceId:@"1"
+                                         signedPreKeyId:uniquePreKeyId
+                                     signedPreKeyPublic:baseKeyPair.publicKey
+                                  signedPreKeySignature:preKeySignature
+                                            identityKey:localUser.publicKey
+                                            baseKeyPair:baseKeyPair];
+        [[KStorageManager sharedManager] setObject:preKey forKey:preKey.signedPreKeyId inCollection:kOurPreKeyCollection];
+        [preKeys addObject:[self base64EncodedPreKeyDictionary:preKey]];
+        index++;
+    }
+    return [[NSArray alloc] initWithArray:preKeys];
+}
+
+- (NSDictionary *)base64EncodedPreKeyDictionary:(PreKey *)preKey {
+    NSMutableDictionary *objectDictionary = [[NSMutableDictionary alloc] init];
+    [[PreKey remoteKeys] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSObject *property = [preKey dictionaryWithValuesForKeys:@[obj]][obj];
+        if([property isKindOfClass:[NSData class]]) {
+            NSData *dataProperty = (NSData *)property;
+            NSString *encodedString = [dataProperty base64EncodedString];
+            [objectDictionary addEntriesFromDictionary:@{obj : encodedString}];
+        }else {
+            [objectDictionary addEntriesFromDictionary:@{obj : property}];
+        }
+        
+    }];
+    return objectDictionary;
 }
 
 

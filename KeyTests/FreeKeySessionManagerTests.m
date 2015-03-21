@@ -92,13 +92,13 @@
 
 - (void)testPreKeyGeneration {
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
-    NSArray *preKeys = [[FreeKeySessionManager sharedManager] generatePreKeysForLocalUser:user];
+    NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:user];
     XCTAssert([preKeys count] == 100);
 }
 
 - (void)testPreKeySending {
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
-    NSArray *preKeys = [[FreeKeySessionManager sharedManager] generatePreKeysForLocalUser:user];
+    NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:user];
     [[FreeKeyNetworkManager sharedManager] sendPreKeysToServer:preKeys];
 }
 

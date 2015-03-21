@@ -21,6 +21,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
 
 @interface KStorageManager ()
 
+@property NSMutableDictionary *databases;
 @property YapDatabase *database;
 
 @end
@@ -57,16 +58,25 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
         return [self databasePassword];
     };
     
-    _database = [[YapDatabase alloc] initWithPath:[self dbPath]
-                                 objectSerializer:NULL
-                               objectDeserializer:NULL
-                               metadataSerializer:NULL
-                             metadataDeserializer:NULL
-                                  objectSanitizer:NULL
-                                metadataSanitizer:NULL
-                                          options:options];
+    NSString *username = [KAccountManager sharedManager].user.username;
+    
+    if(![self.databases objectForKey:username]) {
+        YapDatabase *newDatabase = [[YapDatabase alloc] initWithPath:[self dbPath]
+                                                    objectSerializer:NULL
+                                                  objectDeserializer:NULL
+                                                  metadataSerializer:NULL
+                                                metadataDeserializer:NULL
+                                                     objectSanitizer:NULL
+                                                   metadataSanitizer:NULL
+                                                             options:options];
+        [self.databases addEntriesFromDictionary:@{username : newDatabase}];
+    }
     
     _dbConnection = self.newDatabaseConnection;
+}
+
+- (YapDatabase *)currentDatabase {
+    return [self.databases objectForKey:[KAccountManager sharedManager].user.username];
 }
 
 - (void)setupDatabase {
@@ -105,7 +115,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
 }
 
 - (YapDatabaseConnection *)newDatabaseConnection {
-    return self.database.newConnection;
+    return [self currentDatabase].newConnection;
 }
 
 - (BOOL)userSetPassword {

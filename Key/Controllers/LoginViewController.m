@@ -39,8 +39,8 @@
 - (IBAction)login:(id)sender {
     KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString]];
     [[KAccountManager sharedManager] setUser:user];
-    // TODO: refactor to use
     if([user authenticatePassword:self.passwordText.text]) {
+        [[KStorageManager sharedManager] refreshDatabaseAndConnection];
         [[KStorageManager sharedManager] setupDatabase];
         KUser *retrievedUser = [KUser fetchObjectWithUsername:user.username];
         if(retrievedUser) {

@@ -23,5 +23,6 @@
 - (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters;
 - (void)enqueueSendableObject:(id<KSendable>)object;
 - (void)enqueueGetWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters;
+- (NSDictionary *)base64DecodedDictionary:(NSDictionary *)dictionary;
 
 @end

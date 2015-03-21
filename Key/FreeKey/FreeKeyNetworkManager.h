@@ -36,5 +36,6 @@
 - (void)pollFeedForLocalUser:(KUser *)localUser;
 - (void)sendPreKeysToServer:(NSArray *)preKeys;
 - (void)getPreKeyWithRemoteUser:(KUser *)remoteUser;
+- (NSArray *)generatePreKeysForLocalUser:(KUser *)localUser;
 
 @end

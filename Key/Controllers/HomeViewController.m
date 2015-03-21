@@ -15,7 +15,7 @@
 #import "KMessage.h"
 #import "ThreadViewController.h"
 #import "LoginViewController.h"
-#import "FreeKey.h"
+#import "FreeKeyNetworkManager.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
 
@@ -58,7 +58,7 @@ YapDatabaseConnection *databaseConnection;
 }
 
 - (IBAction)pollFeed:(id)sender {
-    //[[FreeKey sharedManager] pollFeedForLocalUser:[KAccountManager sharedManager].user];
+    [[FreeKeyNetworkManager sharedManager] pollFeedForLocalUser:[KAccountManager sharedManager].user];
 }
 
 - (IBAction)logout:(id)sender {
