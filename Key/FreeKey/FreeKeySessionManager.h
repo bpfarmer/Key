@@ -29,8 +29,6 @@
                               ourPreKey:(PreKey *)ourPreKey
                     theirPreKeyExchange:(PreKeyExchange *)theirPreKeyExchange;
 
-- (void)getPreKeyWithRemoteUser:(KUser *)remoteUser;
-
 - (PreKey *)getPreKeyForUserId:(NSString *)userId;
 - (NSArray *)generatePreKeysForLocalUser:(KUser *)localUser;
 

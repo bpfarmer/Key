@@ -70,7 +70,6 @@
 - (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:[self endpointForObject:remoteAlias] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"RESPONSE OBJECT: %@", responseObject);
          if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
              if([remoteAlias isEqualToString:kFeedRemoteAlias]) {
                  [[FreeKeyNetworkManager sharedManager] receiveRemoteFeed:responseObject withLocalUser:[KAccountManager sharedManager].user];

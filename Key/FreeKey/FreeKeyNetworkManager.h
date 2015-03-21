@@ -29,11 +29,12 @@
 - (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary;
 - (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary;
 
-- (void)enqueueEncryptableObject:(id <KEncryptable>)object fromUser:(KUser *)localUser toUserId:(NSString *)userId;
+- (void)enqueueEncryptableObject:(id <KEncryptable>)object localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
 - (void)enqueueDecryptableObject:(EncryptedMessage *)object toLocalUser:(KUser *)localUser;
 - (void)enqueueGetRequestWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters;
 
 - (void)pollFeedForLocalUser:(KUser *)localUser;
 - (void)sendPreKeysToServer:(NSArray *)preKeys;
+- (void)getPreKeyWithRemoteUser:(KUser *)remoteUser;
 
 @end

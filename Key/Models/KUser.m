@@ -120,8 +120,8 @@
 }
 
 - (void)setupPreKeys {
-    //NSArray *preKeys = [[FreeKey sharedManager] generatePreKeysForUser:self];
-    //[[FreeKeySessionManager sharedManager] sendPreKeysToServer:preKeys];
+    NSArray *preKeys = [[FreeKeySessionManager sharedManager] generatePreKeysForLocalUser:self];
+    [[FreeKeyNetworkManager sharedManager] sendPreKeysToServer:preKeys];
 }
 
 #pragma mark - Batch Query Methods
@@ -143,7 +143,6 @@
     [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:@"WHERE username = ?", username];
         [[transaction ext:KUsernameSQLiteIndex] enumerateKeysMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, BOOL *stop) {
-            NSLog(@"KEY: %@", key);
             userId = key;
             *stop = YES;
         }];

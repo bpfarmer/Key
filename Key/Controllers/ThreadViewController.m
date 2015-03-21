@@ -14,6 +14,7 @@
 #import "KYapDatabaseView.h"
 #import "KMessage.h"
 #import "FreeKey.h"
+#import "FreeKeyNetworkManager.h"
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
@@ -38,7 +39,6 @@ YapDatabaseConnection *databaseConnection;
     self.messagesTableView.dataSource = self;
     [self.messagesTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
-    NSLog(@"DB PATH: %@", [[KStorageManager sharedManager] dbPath]);
     if(self.thread) {
         [self setupDatabaseView];
     }
@@ -179,7 +179,13 @@ YapDatabaseConnection *databaseConnection;
     
     [self.thread.userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if(![obj isEqual:currentUser.uniqueId]) {
-            [[FreeKey sharedManager] enqueueEncryptableObject:message fromUser:currentUser toUserId:obj];
+            dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+            dispatch_async(queue, ^{
+                KUser *user = (KUser *)[[KStorageManager sharedManager] objectForKey:obj inCollection:[KUser collection]];
+                if(user) {
+                    [[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:message localUser:currentUser remoteUser:user];
+                }
+            });
         }
     }];
     self.messageTextField.text = @"";
@@ -196,9 +202,10 @@ YapDatabaseConnection *databaseConnection;
     self.thread = [[KThread alloc] initWithUsers:users];
     [self.thread save];
     KUser *currentUser = [[KAccountManager sharedManager] user];
-    [self.thread.userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if(![obj isEqual:currentUser.uniqueId]) {
-            [[FreeKey sharedManager] enqueueEncryptableObject:self.thread fromUser:currentUser toUserId:obj];
+    [users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        KUser *user = (KUser *)obj;
+        if(![user.uniqueId isEqual:currentUser.uniqueId]) {
+            [[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:self.thread localUser:currentUser remoteUser:user];
         }
     }];
     [self setupDatabaseView];

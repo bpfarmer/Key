@@ -50,6 +50,7 @@
 		EF6B44BB1ABC944B00B88323 /* FreeKeySessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44BA1ABC944B00B88323 /* FreeKeySessionManager.m */; };
 		EF6B44BD1ABC997D00B88323 /* FreeKeySessionManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44BC1ABC997D00B88323 /* FreeKeySessionManagerTests.m */; };
 		EF6B44BF1ABC998B00B88323 /* FreeKeyPushManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44BE1ABC998B00B88323 /* FreeKeyPushManagerTests.m */; };
+		EF6B44C21ABCDD3600B88323 /* FreeKeyTestExample.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44C11ABCDD3600B88323 /* FreeKeyTestExample.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
@@ -175,6 +176,8 @@
 		EF6B44BA1ABC944B00B88323 /* FreeKeySessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeySessionManager.m; sourceTree = "<group>"; };
 		EF6B44BC1ABC997D00B88323 /* FreeKeySessionManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeySessionManagerTests.m; sourceTree = "<group>"; };
 		EF6B44BE1ABC998B00B88323 /* FreeKeyPushManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeyPushManagerTests.m; sourceTree = "<group>"; };
+		EF6B44C01ABCDD3600B88323 /* FreeKeyTestExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKeyTestExample.h; sourceTree = "<group>"; };
+		EF6B44C11ABCDD3600B88323 /* FreeKeyTestExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeyTestExample.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
 		EFC6BE9D1A6857D400B0EB8F /* Key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Key.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -430,6 +433,8 @@
 				EF524AFF1AAF330A00F3B9AF /* EncryptedMessageTests.m */,
 				EF6B44BE1ABC998B00B88323 /* FreeKeyPushManagerTests.m */,
 				EF6B44BC1ABC997D00B88323 /* FreeKeySessionManagerTests.m */,
+				EF6B44C01ABCDD3600B88323 /* FreeKeyTestExample.h */,
+				EF6B44C11ABCDD3600B88323 /* FreeKeyTestExample.m */,
 				EF524B001AAF330A00F3B9AF /* FreeKeyTests.m */,
 				EF2CDEBC1AB4A78E001E2F20 /* IdentityKeyTests.m */,
 				EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */,
@@ -802,6 +807,7 @@
 				EF6B44AD1ABA5DDB00B88323 /* KThreadTests.m in Sources */,
 				EF524B031AAF330A00F3B9AF /* CryptoTests.m in Sources */,
 				EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */,
+				EF6B44C21ABCDD3600B88323 /* FreeKeyTestExample.m in Sources */,
 				EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */,
 				EF2CDEBD1AB4A78E001E2F20 /* IdentityKeyTests.m in Sources */,
 				EF524B041AAF330A00F3B9AF /* EncryptedMessageTests.m in Sources */,

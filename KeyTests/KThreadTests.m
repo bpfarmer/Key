@@ -40,7 +40,7 @@
     [connection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         numOfKeys = [transaction numberOfKeysInCollection:[KThread collection]];
     }];
-    NSLog(@"NUM OF KEYS: %ld", (long)numOfKeys);
+    
     XCTAssert(numOfKeys > 0);
 }
 
@@ -53,7 +53,6 @@
     [user3 setUsername:@"user3"];
     NSArray *users = @[user1, user2, user3];
     KThread *thread = [[KThread alloc] initWithUsers:users];
-    NSLog(@"THREAD NAME: %@", thread.name);
     XCTAssert([thread.name isEqualToString:@"user1, user2, user3"]);
     XCTAssert([thread.uniqueId isEqualToString:@"1_2_3"]);
 }

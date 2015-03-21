@@ -20,8 +20,6 @@
                          ourBaseKey:(ECKeyPair *)ourBaseKey {
     self = [super init];
     
-    NSLog(@"BASE KEY: %@", theirBaseKey);
-    NSLog(@"PUBLIC KEY: %@", ourBaseKey.publicKey);
     if(self) {
         _theirBaseKey       = theirBaseKey;
         _theirIdentityKey   = theirIdentityKey;

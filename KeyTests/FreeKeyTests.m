@@ -25,8 +25,21 @@
 #import "MessageKey.h"
 #import "FreeKeySessionManager.h"
 #import "FreeKeyNetworkManager.h"
+#import "FreeKeyTestExample.h"
+#import "KThread.h"
 
 @interface FreeKeyTests : XCTestCase
+
+@property KUser *alice;
+@property KUser *bob;
+@property IdentityKey *aliceIdentityKey;
+@property IdentityKey *bobIdentityKey;
+@property ECKeyPair *aliceBaseKeyPair;
+@property ECKeyPair *bobBaseKeyPair;
+@property PreKey *bobPreKey;
+@property PreKeyExchange *alicePreKeyExchange;
+@property Session *aliceSession;
+@property Session *bobSession;
 
 @end
 
@@ -34,6 +47,17 @@
 
 - (void)setUp {
     [super setUp];
+    FreeKeyTestExample *example = [[FreeKeyTestExample alloc] init];
+    _alice            = example.alice;
+    _bob              = example.bob;
+    _aliceIdentityKey = example.aliceIdentityKey;
+    _bobIdentityKey   = example.bobIdentityKey;
+    _aliceBaseKeyPair = example.aliceBaseKeyPair;
+    _bobBaseKeyPair   = example.bobBaseKeyPair;
+    _bobPreKey        = example.bobPreKey;
+    _alicePreKeyExchange = example.alicePreKeyExchange;
+    _aliceSession     = [example aliceSession];
+    _bobSession       = [example bobSession];
 }
 
 - (void)tearDown {
@@ -41,16 +65,38 @@
     [super tearDown];
 }
 
-- (void)testPreKeyGeneration {
-    KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
-    NSArray *preKeys = [[FreeKeySessionManager sharedManager] generatePreKeysForLocalUser:user];
-    XCTAssert([preKeys count] == 100);
+- (void)testSendAndDecryptThread {
+    KThread *sentThread = [[KThread alloc] initWithUsers:@[_alice, _bob]];
+    EncryptedMessage *message = [FreeKey encryptObject:sentThread session:_aliceSession];
+    KThread *receivedThread = (KThread *)[FreeKey decryptEncryptedMessage:message session:_bobSession];
+    XCTAssert([sentThread.uniqueId isEqual:receivedThread.uniqueId]);
 }
 
-- (void)testPreKeySending {
-    KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
-    NSArray *preKeys = [[FreeKeySessionManager sharedManager] generatePreKeysForLocalUser:user];
-    [[FreeKeyNetworkManager sharedManager] sendPreKeysToServer:preKeys];
+- (void)testSendAndDecryptMessage {
+    KThread *sentThread = [[KThread alloc] initWithUsers:@[_alice, _bob]];
+    KMessage *sentMessage = [[KMessage alloc] initWithAuthorId:_alice.uniqueId threadId:sentThread.uniqueId body:@"Great Big Test"];
+    EncryptedMessage *encryptedThread = [FreeKey encryptObject:sentThread session:_aliceSession];
+    EncryptedMessage *encryptedMessage = [FreeKey encryptObject:sentMessage session:_aliceSession];
+    
+    KThread *receivedThread = (KThread *)[FreeKey decryptEncryptedMessage:encryptedThread session:_bobSession];
+    KMessage *receivedMessage = (KMessage *)[FreeKey decryptEncryptedMessage:encryptedMessage session:_bobSession];
+    
+    XCTAssert([sentThread.uniqueId isEqualToString:receivedThread.uniqueId]);
+    XCTAssert([sentMessage.uniqueId isEqualToString:receivedMessage.uniqueId]);
+    XCTAssert([sentMessage.threadId isEqualToString:receivedMessage.threadId]);
+}
+
+- (void)testSendAndDecryptMessageInBase64 {
+    KThread *sentThread = [[KThread alloc] initWithUsers:@[_alice, _bob]];
+    KMessage *sentMessage = [[KMessage alloc] initWithAuthorId:_alice.uniqueId threadId:sentThread.uniqueId body:@"Great Big Test"];
+    EncryptedMessage *encryptedMessage = [FreeKey encryptObject:sentMessage session:_aliceSession];
+    NSMutableDictionary *encryptedMessageDictionary = [[NSMutableDictionary alloc] initWithDictionary:[encryptedMessage dictionaryWithValuesForKeys:[EncryptedMessage remoteKeys]]];
+    NSArray *remoteKeys = [EncryptedMessage remoteKeys];
+    encryptedMessageDictionary[remoteKeys[0]] = [encryptedMessageDictionary[remoteKeys[0]] base64EncodedString];
+    encryptedMessageDictionary[remoteKeys[3]] = [encryptedMessageDictionary[remoteKeys[3]] base64EncodedString];
+    EncryptedMessage *receivedEncryptedMessage = [[FreeKeyNetworkManager sharedManager] createEncryptedMessageFromRemoteDictionary:encryptedMessageDictionary];
+    KMessage *receivedMessage = (KMessage *)[FreeKey decryptEncryptedMessage:receivedEncryptedMessage session:_bobSession];
+    XCTAssert([sentMessage.body isEqualToString:receivedMessage.body]);
 }
 
 

@@ -16,6 +16,7 @@
 #import "HttpManager.h"
 #import "FreeKey.h"
 #import "NSData+Base64.h"
+#import "FreeKeySessionManager.h"
 
 @implementation FreeKeyNetworkManager
 
@@ -75,7 +76,23 @@
                       senderIdentityPublicKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[4]]]
                     receiverIdentityPublicKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[5]]]
                              baseKeySignature:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[6]]]];
-return preKeyExchange;
+    return preKeyExchange;
+}
+
+- (void)enqueueEncryptableObject:(id <KEncryptable>)object localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
+    dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    dispatch_async(queue, ^{
+        Session *session = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
+        if(session) {
+            EncryptedMessage *encryptedMessage = [FreeKey encryptObject:object session:session];
+            [[HttpManager sharedManager] enqueueSendableObject:encryptedMessage];
+        }else {
+            session = [[FreeKeySessionManager sharedManager] createSessionWithLocalUser:localUser remoteUser:remoteUser];
+            if(!session) {
+                
+            }
+        }
+    });
 }
 
 - (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary {
@@ -135,6 +152,11 @@ return preKeyExchange;
 
 - (void)sendPreKeysToServer:(NSArray *)preKeys {
     [[HttpManager sharedManager] batchPut:kPreKeyRemoteAlias objects:preKeys];
+}
+
+- (void)getPreKeyWithRemoteUser:(KUser *)remoteUser {
+    NSDictionary *parameters = @{@"userId" : remoteUser.uniqueId};
+    [[HttpManager sharedManager] getObjectsWithRemoteAlias:kPreKeyRemoteAlias parameters:parameters];
 }
 
 

@@ -19,6 +19,7 @@
 #import "Session.h"
 #import "IdentityKey.h"
 #import "PreKeyExchange.h"
+#import "FreeKeyNetworkManager.h"
 
 @implementation FreeKeySessionManager
 
@@ -47,7 +48,7 @@
     }else {
         PreKeyExchange *preKeyExchange = [self getPreKeyExchangeForUserId:remoteUser.uniqueId];
         if(!preKeyExchange) {
-            [self getPreKeyWithRemoteUser:remoteUser];
+            [[FreeKeyNetworkManager sharedManager] getPreKeyWithRemoteUser:remoteUser];
             return nil;
         }else {
             PreKey *ourPreKey = [[KStorageManager sharedManager] objectForKey:preKeyExchange.signedTargetPreKeyId
@@ -88,11 +89,6 @@
 
 - (PreKeyExchange *)getPreKeyExchangeForUserId:(NSString *)userId {
     return (PreKeyExchange *)[[KStorageManager sharedManager] objectForKey:userId inCollection:kPreKeyExchangeCollection];
-}
-
-- (void)getPreKeyWithRemoteUser:(KUser *)remoteUser {
-    NSDictionary *parameters = @{@"userId" : remoteUser.uniqueId};
-    [[HttpManager sharedManager] getObjectsWithRemoteAlias:kPreKeyRemoteAlias parameters:parameters];
 }
 
 #pragma mark - Generating PreKeys

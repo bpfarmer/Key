@@ -21,6 +21,8 @@
 #import "ChainKey.h"
 #import "MessageKey.h"
 #import "KStorageManager.h"
+#import "FreeKeyTestExample.h"
+#import "FreeKeyNetworkManager.h"
 
 @interface FreeKeySessionManagerTests : XCTestCase
 
@@ -38,43 +40,16 @@
 @implementation FreeKeySessionManagerTests
 
 - (void)setUp {
-    NSString *bobId = @"bobUniqueId";
-    NSString *aliceId = @"aliceUniqueId";
-    
-    _alice = [[KUser alloc] initWithUniqueId:bobId];
-    [_alice setUsername:@"alice"];
-    
-    _bob   = [[KUser alloc] initWithUniqueId:bobId];
-    [_bob setUsername:@"bob"];
-    
-    _aliceIdentityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:aliceId];
-    [_alice setIdentityKey:_aliceIdentityKey];
-    [_alice setPublicKey:_aliceIdentityKey.publicKey];
-    
-    _bobIdentityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:bobId];
-    [_bob setPublicKey:_bobIdentityKey.keyPair.publicKey];
-    [_bob setIdentityKey:_bobIdentityKey];
-    
-    _aliceBaseKeyPair = [Curve25519 generateKeyPair];
-    _bobBaseKeyPair = [Curve25519 generateKeyPair];
-    
-    NSData *preKeySignature = [Ed25519 sign:_bobBaseKeyPair.publicKey withKeyPair:_bobIdentityKey.keyPair];
-    _bobPreKey = [[PreKey alloc] initWithUserId:_bob.uniqueId
-                                       deviceId:@"1"
-                                 signedPreKeyId:@"1"
-                             signedPreKeyPublic:_bobBaseKeyPair.publicKey
-                          signedPreKeySignature:preKeySignature
-                                    identityKey:_bobIdentityKey.publicKey
-                                    baseKeyPair:_bobBaseKeyPair];
-    
-    NSData *preKeyExchangeSignature = [Ed25519 sign:_aliceBaseKeyPair.publicKey withKeyPair:_aliceIdentityKey.keyPair];
-    _alicePreKeyExchange = [[PreKeyExchange alloc] initWithSenderId:_alice.uniqueId
-                                                         receiverId:_bob.uniqueId
-                                               signedTargetPreKeyId:@"1"
-                                                  sentSignedBaseKey:_aliceBaseKeyPair.publicKey
-                                            senderIdentityPublicKey:_aliceIdentityKey.publicKey
-                                          receiverIdentityPublicKey:_bobIdentityKey.publicKey
-                                                   baseKeySignature:preKeyExchangeSignature];
+    FreeKeyTestExample *example = [[FreeKeyTestExample alloc] init];
+    _alice            = example.alice;
+    _bob              = example.bob;
+    _aliceIdentityKey = example.aliceIdentityKey;
+    _bobIdentityKey   = example.bobIdentityKey;
+    _aliceBaseKeyPair = example.aliceBaseKeyPair;
+    _bobBaseKeyPair   = example.bobBaseKeyPair;
+    _bobPreKey        = example.bobPreKey;
+    _alicePreKeyExchange = example.alicePreKeyExchange;
+
 }
 
 - (void)tearDown {
@@ -113,6 +88,18 @@
     XCTAssert([bobSession.senderRootChain.chainKey.messageKey.cipherKey
                isEqual:aliceSession.receiverRootChain.chainKey.messageKey.cipherKey]);
     
+}
+
+- (void)testPreKeyGeneration {
+    KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
+    NSArray *preKeys = [[FreeKeySessionManager sharedManager] generatePreKeysForLocalUser:user];
+    XCTAssert([preKeys count] == 100);
+}
+
+- (void)testPreKeySending {
+    KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
+    NSArray *preKeys = [[FreeKeySessionManager sharedManager] generatePreKeysForLocalUser:user];
+    [[FreeKeyNetworkManager sharedManager] sendPreKeysToServer:preKeys];
 }
 
 @end

@@ -148,7 +148,6 @@
     NSData *senderRatchetKey   = senderRootChain.ratchetKeyPair.publicKey;
     NSData *encryptedText = [AES_CBC encryptCBCMode:message withKey:messageKey.cipherKey withIV:messageKey.iv];
     
-    NSLog(@"MESSAGE KEY: %@", messageKey.cipherKey);
     EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithMacKey:messageKey.macKey
                                                                 senderIdentityKey:self.senderIdentityKey.publicKey
                                                               receiverIdentityKey:self.receiverIdentityPublicKey
@@ -165,7 +164,6 @@
     NSString *messageIndex = [NSString stringWithFormat:@"%d", encryptedMessage.index];
     SessionState *sessionState = self.previousSessionStates[encryptedMessage.senderRatchetKey][messageIndex];
     
-    NSLog(@"MESSAGE KEY: %@", sessionState.messageKey.cipherKey);
     if(![HMAC verifyWithMac:[encryptedMessage mac]
           senderIdentityKey:self.receiverIdentityPublicKey
         receiverIdentityKey:self.senderIdentityKey.publicKey
