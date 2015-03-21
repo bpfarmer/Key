@@ -10,6 +10,7 @@
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
 #import "FreeKeyNetworkManager.h"
 #import "NSData+Base64.h"
+#import "NSString+Base64.h"
 #import "EncryptedMessage.h"
 #import "KAccountManager.h"
 
@@ -72,9 +73,9 @@
     [manager GET:[self endpointForObject:remoteAlias] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
          if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
              if([remoteAlias isEqualToString:kFeedRemoteAlias]) {
-                 [[FreeKeyNetworkManager sharedManager] receiveRemoteFeed:responseObject withLocalUser:[KAccountManager sharedManager].user];
+                 [[FreeKeyNetworkManager sharedManager] receiveRemoteFeed:[self base64DecodedDictionary:responseObject] withLocalUser:[KAccountManager sharedManager].user];
              }else {
-                 [[FreeKeyNetworkManager sharedManager] receiveRemoteObject:responseObject ofType:remoteAlias];
+                 [[FreeKeyNetworkManager sharedManager] receiveRemoteObject:[self base64DecodedDictionary:responseObject] ofType:remoteAlias];
              }
          }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -124,6 +125,41 @@
         }
     }];
     return requestDictionary;
+}
+
+- (NSDictionary *)base64DecodedDictionary:(NSDictionary *)dictionary {
+    NSMutableDictionary *decodedDictionary = [[NSMutableDictionary alloc] initWithDictionary:dictionary];
+    [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if([obj isKindOfClass:[NSArray class]]) {
+            NSArray *arrayObject = (NSArray *)obj;
+            [arrayObject enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                if([obj isKindOfClass:[NSDictionary class]]) {
+                    [decodedDictionary setObject:[self base64DecodedDictionary:dictionary] forKey:key];
+                }else if([[self base64EncodedKeys] containsObject:obj]) {
+                    NSString *stringObject = (NSString *)obj;
+                    [decodedDictionary setObject:[stringObject base64DecodedData] forKey:key];
+                }
+            }];
+        }else if([obj isKindOfClass:[NSDictionary class]]) {
+            [decodedDictionary setObject:[self base64DecodedDictionary:obj] forKey:key];
+        }
+        if([[self base64EncodedKeys] containsObject:obj]) {
+            NSString *stringObject = (NSString *)obj;
+            [decodedDictionary setObject:[stringObject base64DecodedData] forKey:key];
+        }
+    }];
+    return decodedDictionary;
+}
+
+/*
+ * This might be a bad idea, but to simplify the decoding step, we're collecting a list of
+ * properties that are always NSData and always Base64 encoded, so we can decode before
+ * handing off to the FreeKeyNetworkManager
+ *
+ * @return NSArray of all properties for KSendable objects that are of type NSData
+ */
+- (NSArray *)base64EncodedKeys {
+    return @[@"senderRatchetKey", @"serializedData", @"sentSignedBaseKey", @"senderIdentityPublicKey", @"receiverIdentityPublicKey", @"baseKeySignature", @"signedPreKeyPublic", @"signedPreKeySignature", @"identityKey", @"publicKey"];
 }
 
 @end

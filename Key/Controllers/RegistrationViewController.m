@@ -39,7 +39,7 @@
     // TODO: show 'waiting' spinner animation
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // TODO: sanity check on username and password
-        KUser *user = [[KUser alloc] initWithUsername:self.usernameText.text];
+        KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString]];
         [user registerUsername];
         [[KAccountManager sharedManager] setUser:user];
         // TODO: remove 'waiting' spinner animation

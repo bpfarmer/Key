@@ -36,7 +36,7 @@
     self = [super initWithUniqueId:nil];
     
     if (self) {
-        _username = username;
+        _username = [username lowercaseString];
     }
     return self;
 }
@@ -58,7 +58,7 @@
     self = [super initWithUniqueId:uniqueId];
     
     if (self) {
-        _username = username;
+        _username      = [username lowercaseString];
         _passwordCrypt = passwordCrypt;
         _passwordSalt  = passwordSalt;
         _identityKey = identityKey;

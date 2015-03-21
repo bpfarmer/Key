@@ -45,6 +45,11 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
     return self;
 }
 
+- (void)releaseDatabaseAndConnection {
+    _database = nil;
+    _dbConnection = nil;
+}
+
 - (void)refreshDatabaseAndConnection {
     YapDatabaseOptions *options = [[YapDatabaseOptions alloc] init];
     options.corruptAction = YapDatabaseCorruptAction_Fail;
@@ -60,6 +65,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
                                   objectSanitizer:NULL
                                 metadataSanitizer:NULL
                                           options:options];
+    
     _dbConnection = self.newDatabaseConnection;
 }
 

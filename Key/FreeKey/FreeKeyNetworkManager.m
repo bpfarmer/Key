@@ -58,9 +58,9 @@
     PreKey *preKey = [[PreKey alloc] initWithUserId:dictionary[remoteKeys[0]]
                                            deviceId:dictionary[remoteKeys[1]]
                                      signedPreKeyId:dictionary[remoteKeys[2]]
-                                 signedPreKeyPublic:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[3]]]
-                              signedPreKeySignature:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[4]]]
-                                        identityKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[5]]]
+                                 signedPreKeyPublic:dictionary[remoteKeys[3]]
+                              signedPreKeySignature:dictionary[remoteKeys[4]]
+                                        identityKey:dictionary[remoteKeys[5]]
                                         baseKeyPair:nil];
     
     return preKey;
@@ -72,10 +72,10 @@
     [[PreKeyExchange alloc]  initWithSenderId:dictionary[remoteKeys[0]]
                                    receiverId:dictionary[remoteKeys[1]]
                          signedTargetPreKeyId:dictionary[remoteKeys[2]]
-                            sentSignedBaseKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[3]]]
-                      senderIdentityPublicKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[4]]]
-                    receiverIdentityPublicKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[5]]]
-                             baseKeySignature:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[6]]]];
+                            sentSignedBaseKey:dictionary[remoteKeys[3]]
+                      senderIdentityPublicKey:dictionary[remoteKeys[4]]
+                    receiverIdentityPublicKey:dictionary[remoteKeys[5]]
+                             baseKeySignature:dictionary[remoteKeys[6]]];
     return preKeyExchange;
 }
 
@@ -100,10 +100,10 @@
     NSNumber *index = (NSNumber *)dictionary[remoteKeys[4]];
     NSNumber *previousIndex = (NSNumber *)dictionary[remoteKeys[5]];
     EncryptedMessage *encryptedMessage =
-    [[EncryptedMessage alloc] initWithSenderRatchetKey:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[0]]]
+    [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[remoteKeys[0]]
                                               senderId:dictionary[remoteKeys[2]]
                                             receiverId:dictionary[remoteKeys[1]]
-                                        serializedData:[NSData dataWithBase64EncodedString:dictionary[remoteKeys[3]]]
+                                        serializedData:dictionary[remoteKeys[3]]
                                                  index:[index intValue]
                                          previousIndex:[previousIndex intValue]];
     
