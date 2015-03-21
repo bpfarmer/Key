@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <XCTest/XCTest.h>
+#import "KAccountManager.h"
+#import "KUser.h"
 
 @interface FreeKeyPushManagerTests : XCTestCase
 
@@ -17,6 +19,8 @@
 
 - (void)setUp {
     [super setUp];
+    KUser *user = [[KUser alloc] initWithUsername:@"tester"];
+    [[KAccountManager sharedManager] setUser:user];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 

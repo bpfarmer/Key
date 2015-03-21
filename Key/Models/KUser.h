@@ -24,7 +24,6 @@
 @property (nonatomic) NSString *localStatus;
 @property (nonatomic) IdentityKey *identityKey;
 @property (nonatomic) NSData *publicKey;
-
 // KSendable Protocol
 @property (nonatomic) NSString *remoteStatus;
 

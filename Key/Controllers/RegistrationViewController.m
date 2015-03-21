@@ -52,6 +52,7 @@
     if([user.remoteStatus isEqualToString:kRemotePutSuccessStatus]) {
         [user setPasswordCryptInKeychain:self.passwordText.text];
         [[KAccountManager sharedManager] setUser:user];
+        [[KStorageManager sharedManager] refreshDatabaseAndConnection];
         [[KStorageManager sharedManager] setupDatabase];
         [user save];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

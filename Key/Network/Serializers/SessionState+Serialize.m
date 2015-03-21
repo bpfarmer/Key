@@ -20,18 +20,16 @@
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder{
-    NSNumber *number = (NSNumber *)[aDecoder decodeObjectOfClass:[NSNumber class] forKey:kCoderIndex];
     return [self initWithMessageKey:[aDecoder decodeObjectOfClass:[MessageKey class] forKey:kCoderMessageKey]
                    senderRatchetKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderSenderRatchetKey]
-                              index:[number intValue]];
+                              index:[aDecoder decodeIntForKey:kCoderIndex]];
     
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder{
     [aCoder encodeObject:self.messageKey forKey:kCoderMessageKey];
     [aCoder encodeObject:self.senderRatchetKey forKey:kCoderSenderRatchetKey];
-    NSNumber *index = [NSNumber numberWithInt:self.index];
-    [aCoder encodeObject:index forKey:kCoderIndex];
+    [aCoder encodeInt:self.index forKey:kCoderIndex];
     
 }
 

@@ -97,7 +97,7 @@
         [[KStorageManager sharedManager] setObject:preKeyExchange
                                             forKey:remoteUser.uniqueId
                                       inCollection:kPreKeyExchangeCollection];
-        [[HttpManager sharedManager] enqueueSendableObject:preKeyExchange];
+        [[FreeKeyNetworkManager sharedManager] sendPreKeyExchange:preKeyExchange toRemoteUser:remoteUser];
     }else if(previousExchange) {
         PreKey *ourPreKey = [[KStorageManager sharedManager] objectForKey:previousExchange.signedTargetPreKeyId
                                                              inCollection:kOurPreKeyCollection];

@@ -13,6 +13,7 @@
 #import "KStorageManager.h"
 #import "KYapDatabaseView.h"
 #import "KMessage.h"
+#import "FreeKeyNetworkManager.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
 
@@ -151,6 +152,7 @@ YapDatabaseConnection *databaseConnection;
     }];
     
     UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
+    
     cell.textLabel.text = [user displayName];
     return cell;
 }

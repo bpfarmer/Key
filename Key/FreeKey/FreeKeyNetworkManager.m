@@ -44,15 +44,33 @@
     dispatch_queue_t queue = dispatch_queue_create([kHTTPResponseQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     dispatch_async(queue, ^{
         if(objects[kPreKeyExchangeRemoteAlias]) {
-            for(NSDictionary *preKeyExchangeDictionary in objects[kPreKeyExchangeRemoteAlias]) {
-                [self createPreKeyExchangeFromRemoteDictionary:preKeyExchangeDictionary];
+            NSArray *preKeyExchanges;
+            if([objects[kPreKeyExchangeRemoteAlias] isKindOfClass:[NSDictionary class]]) {
+                preKeyExchanges = [[NSArray alloc] initWithObjects:objects[kPreKeyExchangeRemoteAlias], nil];
+            }else {
+                preKeyExchanges = (NSArray *)objects[kPreKeyExchangeRemoteAlias];
             }
+            [preKeyExchanges enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSDictionary *pkeDict = (NSDictionary *)obj;
+                if(pkeDict) {
+                    [self createPreKeyExchangeFromRemoteDictionary:pkeDict];
+                }
+            }];
         }
         if(objects[kEncryptedMessageRemoteAlias]) {
-            for(NSDictionary *encryptedMessageDictionary in objects[kEncryptedMessageRemoteAlias]) {
-                EncryptedMessage *message = [self createEncryptedMessageFromRemoteDictionary:encryptedMessageDictionary];
-                [self enqueueDecryptableObject:message toLocalUser:localUser];
+            NSArray *encryptedMessages;
+            if([objects[kEncryptedMessageRemoteAlias] isKindOfClass:[NSDictionary class]]) {
+                encryptedMessages = [[NSArray alloc] initWithObjects:objects[kEncryptedMessageRemoteAlias], nil];
+            }else {
+                encryptedMessages = (NSArray *)objects[kEncryptedMessageRemoteAlias];
             }
+            [encryptedMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                NSDictionary *emDictionary = (NSDictionary *)obj;
+                if(emDictionary) {
+                    EncryptedMessage *message = [self createEncryptedMessageFromRemoteDictionary:emDictionary];
+                    [self enqueueDecryptableMessage:message toLocalUser:localUser];
+                }
+            }];
         }
     });
 }
@@ -90,7 +108,6 @@
 }
 
 - (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary {
-    NSLog(@"DICTIONARY PARAM: %@", dictionary);
     NSArray *remoteKeys = [PreKeyExchange remoteKeys];
     PreKeyExchange *preKeyExchange =
     [[PreKeyExchange alloc]  initWithSenderId:dictionary[remoteKeys[0]]
@@ -122,15 +139,19 @@
 - (void)enqueueEncryptableObject:(id <KEncryptable>)object localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     dispatch_async(queue, ^{
-        Session *session = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
-        if(session) {
-            EncryptedMessage *encryptedMessage = [FreeKey encryptObject:object session:session];
-            [[HttpManager sharedManager] enqueueSendableObject:encryptedMessage];
+        [FreeKey sendObject:object fromLocalUser:localUser toRemoteUser:remoteUser];
+    });
+}
+
+- (void)enqueueDecryptableMessage:(EncryptedMessage *)encryptedMessage toLocalUser:(KUser *)localUser {
+    dispatch_queue_t queue = dispatch_queue_create([kDecryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    dispatch_async(queue, ^{
+        KUser *remoteUser = (KUser *)[[KStorageManager sharedManager] objectForKey:encryptedMessage.senderId
+                                                                      inCollection:[KUser collection]];
+        if(remoteUser) {
+            [FreeKey receiveEncryptedMessage:encryptedMessage localUser:localUser remoteUser:remoteUser];
         }else {
-            session = [[FreeKeySessionManager sharedManager] createSessionWithLocalUser:localUser remoteUser:remoteUser];
-            if(!session) {
-                
-            }
+            [KUser retrieveRemoteUserWithUserId:encryptedMessage.senderId];
         }
     });
 }
@@ -147,6 +168,9 @@
                                                  index:[index intValue]
                                          previousIndex:[previousIndex intValue]];
     
+    NSLog(@"ENCRYPTED MESSAGE INDEX: %d", encryptedMessage.index);
+    NSLog(@"ENCRYPTED MESSAGE SERIALIZED DATA: %@", encryptedMessage.serializedData);
+    
     NSString *uniqueMessageId = [NSString stringWithFormat:@"%@_%f_%@",
                                  dictionary[encryptedMessage],
                                  [[NSDate date] timeIntervalSince1970],
@@ -154,21 +178,6 @@
     
     [[KStorageManager sharedManager]setObject:encryptedMessage forKey:uniqueMessageId inCollection:kEncryptedMessageCollection];
     return encryptedMessage;
-}
-
-- (void)enqueueDecryptableMessage:(EncryptedMessage *)encryptedMessage toLocalUser:(KUser *)localUser {
-    dispatch_queue_t queue = dispatch_queue_create([kDecryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-    dispatch_async(queue, ^{
-        KUser *remoteUser = [[KStorageManager sharedManager] objectForKey:encryptedMessage.senderId
-                                                             inCollection:[KUser collection]];
-        if(remoteUser) {
-            Session *session = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
-            id <KEncryptable> object = [FreeKey decryptEncryptedMessage:encryptedMessage session:session];
-            [object save];
-        }else {
-            [KUser retrieveRemoteUserWithUserId:encryptedMessage.senderId];
-        }
-    });
 }
 
 - (void)enqueueGetRequestWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
@@ -198,6 +207,12 @@
 
 - (void)sendPreKeysToServer:(NSArray *)preKeys {
     [[HttpManager sharedManager] batchPut:kPreKeyRemoteAlias objects:preKeys];
+}
+
+- (void)sendPreKeyExchange:(PreKeyExchange *)preKeyExchange toRemoteUser:(KUser *)remoteUser {
+    KUser *currentUser = [KAccountManager sharedManager].user;
+    [preKeyExchange setSenderId:currentUser.uniqueId];
+    [[HttpManager sharedManager] enqueueSendableObject:preKeyExchange];
 }
 
 - (void)getPreKeyWithRemoteUser:(KUser *)remoteUser {

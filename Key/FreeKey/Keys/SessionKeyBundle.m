@@ -17,7 +17,8 @@
 - (instancetype)initWithTheirBaseKey:(NSData *)theirBaseKey
                    theirIdentityKey:(NSData *)theirIdentityKey
                  ourIdentityKeyPair:(ECKeyPair *)ourIdentityKeyPair
-                         ourBaseKey:(ECKeyPair *)ourBaseKey {
+                         ourBaseKey:(ECKeyPair *)ourBaseKey
+                            isAlice:(BOOL)isAlice{
     self = [super init];
     
     if(self) {
@@ -25,6 +26,7 @@
         _theirIdentityKey   = theirIdentityKey;
         _ourIdentityKeyPair = ourIdentityKeyPair;
         _ourBaseKey         = ourBaseKey;
+        _isAlice            = isAlice;
     }
     return self;
 }

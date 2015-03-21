@@ -11,6 +11,7 @@
 #import "KStorageManager.h"
 #import "KUser.h"
 #import "KMessage.h"
+#import "KAccountManager.h"
 
 NSString *KInboxGroup                       = @"KInboxGroup";
 NSString *KThreadGroup                      = @"KThreadGroup";
@@ -81,7 +82,9 @@ NSString *KContactDatabaseViewName = @"KContactDatabaseViewExtension";
     }
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {
         if ([object isKindOfClass:[KUser class]]){
-            return KContactGroup;
+            KUser *user = (KUser *)object;
+            if(![user.username isEqual:[KAccountManager sharedManager].user.username])
+                return KContactGroup;
         }
         return nil;
     }];

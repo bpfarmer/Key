@@ -70,11 +70,15 @@
     NSData *theirBaseKey = preKeyExchange.sentSignedBaseKey;
     
     // TODO: some sort of verification of trust, signatures, etc
+    if(![Ed25519 verifySignature:preKeyExchange.baseKeySignature publicKey:preKeyExchange.senderIdentityPublicKey data:preKeyExchange.sentSignedBaseKey]) {
+        // TODO: throw someething crazy!
+    }
     
     SessionKeyBundle *keyBundle = [[SessionKeyBundle alloc] initWithTheirBaseKey:theirBaseKey
                                                                 theirIdentityKey:preKeyExchange.senderIdentityPublicKey
                                                               ourIdentityKeyPair:self.senderIdentityKey.keyPair
-                                                                      ourBaseKey:ourPreKey.baseKeyPair];
+                                                                      ourBaseKey:ourPreKey.baseKeyPair
+                                                                         isAlice:YES];
     
     [keyBundle setRolesWithFirstKey:theirBaseKey secondKey:ourPreKey.baseKeyPair.publicKey];
     [self setupRootChainsFromKeyBundle:keyBundle];
@@ -89,7 +93,8 @@
     SessionKeyBundle *keyBundle = [[SessionKeyBundle alloc] initWithTheirBaseKey:preKey.signedPreKeyPublic
                                                                theirIdentityKey:self.receiverIdentityPublicKey
                                                              ourIdentityKeyPair:self.senderIdentityKey.keyPair
-                                                                     ourBaseKey:ourBaseKey];
+                                                                     ourBaseKey:ourBaseKey
+                                                                        isAlice:NO];
     
     [keyBundle setRolesWithFirstKey:ourBaseKey.publicKey secondKey:preKey.signedPreKeyPublic];
     [self setupRootChainsFromKeyBundle:keyBundle];
@@ -171,6 +176,8 @@
              serializedData:encryptedMessage.serializedData]) {
         // TODO: throw an error
     }
+    
+    NSLog(@"SESSION STATE TARGET: %@", sessionState.messageKey.cipherKey);
     
     NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
                                             withKey:sessionState.messageKey.cipherKey

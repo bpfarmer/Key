@@ -25,6 +25,7 @@
 #import "PreKey.h"
 #import "FreeKeyNetworkManager.h"
 #import "FreeKeySessionManager.h"
+#import "PreKeyExchange.h"
 
 #define kRemoteCreateNotification @"KUserRemoteCreateNotification"
 #define kRemoteUpdateNotification @"KUserRemoteUpdateNotification"
@@ -92,7 +93,14 @@
         [user save];
     }
     
-    if(![dictionary[kPreKeyRemoteAlias] isKindOfClass:[NSNull class]]) {
+    if(dictionary[kPreKeyExchangeRemoteAlias]) {
+        PreKeyExchange *preKeyExchange =
+        [[FreeKeyNetworkManager sharedManager] createPreKeyExchangeFromRemoteDictionary:dictionary[kPreKeyExchangeRemoteAlias]];
+        
+        [[KStorageManager sharedManager] setObject:preKeyExchange
+                                            forKey:preKeyExchange.senderId
+                                      inCollection:kPreKeyExchangeCollection];
+    }else if(dictionary[kPreKeyRemoteAlias]) {
         PreKey *preKey =
         [[FreeKeyNetworkManager sharedManager] createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
         
@@ -157,11 +165,15 @@
 }
 
 + (void)retrieveRemoteUserWithUsername:(NSString *)username {
-    [[HttpManager sharedManager] enqueueGetWithRemoteAlias:kUserRemoteAlias parameters:@{@"username" : username}];
+    NSString *currentUserId = [KAccountManager sharedManager].user.uniqueId;
+    [[HttpManager sharedManager] enqueueGetWithRemoteAlias:kUserRemoteAlias
+                                                parameters:@{@"username" : username, @"currentUserId" : currentUserId}];
 }
 
 + (void)retrieveRemoteUserWithUserId:(NSString *)userId {
-    [[HttpManager sharedManager] enqueueGetWithRemoteAlias:kUserRemoteAlias parameters:@{@"userId" : userId}];
+    NSString *currentUserId = [KAccountManager sharedManager].user.uniqueId;
+    [[HttpManager sharedManager] enqueueGetWithRemoteAlias:kUserRemoteAlias
+                                                parameters:@{@"userId" : userId, @"currentUserId" : currentUserId}];
 }
 
 + (NSArray *)userIdsWithUsernames:(NSArray *)usernames {

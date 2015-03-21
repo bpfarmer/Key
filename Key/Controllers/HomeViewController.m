@@ -166,7 +166,7 @@ YapDatabaseConnection *databaseConnection;
     
     UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
                                                                         forIndexPath:indexPath];
-    cell.textLabel.text = [thread name];
+    cell.textLabel.text = [thread displayName];
     return cell;
 }
 

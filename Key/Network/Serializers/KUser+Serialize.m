@@ -17,6 +17,7 @@
 #define kCoderPublicKey @"publicKey"
 #define kCoderIdentityKey @"identityKey"
 #define kCoderPreKey @"preKey"
+#define kCoderLocalUser @"localUser"
 
 @implementation KUser(Serialize)
 

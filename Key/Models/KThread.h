@@ -30,4 +30,6 @@
                    lastMessageAt:(NSDate *)lastMessageAt
                       archivedAt:(NSDate *)archivedAt;
 
+- (NSString *)displayName;
+
 @end

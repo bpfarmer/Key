@@ -23,17 +23,26 @@
 #import "KSendable.h"
 #import "FreeKeySessionManager.h"
 #import "FreeKeyNetworkManager.h"
+#import "RootChain.h"
+#import "ChainKey.h"
+#import "MessageKey.h"
 
 @implementation FreeKey
 
 #pragma mark - Encryption and Decryption Wrappers
 + (EncryptedMessage *)encryptObject:(id<KEncryptable>)object session:(Session *)session {
+    NSLog(@"PRE SESSION MESSAGE KEY: %@", session.senderRootChain.chainKey.messageKey.cipherKey);
     NSData *serializedObject = [NSKeyedArchiver archivedDataWithRootObject:object];
-    return [session encryptMessage:serializedObject];
+    EncryptedMessage *encryptedMessage = [session encryptMessage:serializedObject];
+    NSLog(@"POST SESSION MESSAGE KEY: %@", session.senderRootChain.chainKey.messageKey.cipherKey);
+    return encryptedMessage;
 }
 
 + (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session {
+    NSLog(@"PRE SESSION MESSAGE KEY FOR RECEIVER: %@", session.receiverRootChain.chainKey.messageKey.cipherKey);
     NSData *decryptedData = [session decryptMessage:encryptedMessage];
+    NSLog(@"POST SESSION MESSAGE KEY FOR RECEIVER: %@", session.receiverRootChain.chainKey.messageKey.cipherKey);
+
     return [NSKeyedUnarchiver unarchiveObjectWithData:decryptedData];
 }
 
@@ -42,7 +51,19 @@
     if(session) {
         EncryptedMessage *encryptedMessage = [self encryptObject:object session:session];
         [encryptedMessage addMetadataFromLocalUserId:localUser.uniqueId toRemoteUserId:remoteUser.uniqueId];
+        NSLog(@"ENCRYPTED MESSAGE INDEX: %d", encryptedMessage.index);
+        NSLog(@"ENCRYPTED MESSAGE TO SEND: %@", encryptedMessage.serializedData);
         [[HttpManager sharedManager] enqueueSendableObject:encryptedMessage];
+    }
+}
+
++ (void)receiveEncryptedMessage:(EncryptedMessage *)encryptedMessage
+                      localUser:(KUser *)localUser
+                     remoteUser:(KUser *)remoteUser {
+    Session *session = [self getOrCreateSessionWithLocalUser:localUser remoteUser:remoteUser];
+    if(session) {
+        id <KEncryptable> object = [FreeKey decryptEncryptedMessage:encryptedMessage session:session];
+        [object save];
     }
 }
 

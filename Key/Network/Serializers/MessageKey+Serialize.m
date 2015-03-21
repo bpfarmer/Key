@@ -20,19 +20,17 @@
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder{
-    NSNumber *number = (NSNumber *)[aDecoder decodeObjectOfClass:[NSNumber class] forKey:kCoderIndex];
     return [self initWithCipherKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderCipherKey]
                             macKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderMacKey]
                                 iv:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderIv]
-                             index:[number intValue]];
+                             index:[aDecoder decodeIntForKey:kCoderIndex]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder{
     [aCoder encodeObject:self.cipherKey forKey:kCoderCipherKey];
     [aCoder encodeObject:self.macKey forKey:kCoderMacKey];
     [aCoder encodeObject:self.iv forKey:kCoderIv];
-    NSNumber *index = [NSNumber numberWithInt:self.index];
-    [aCoder encodeObject:index forKey:kCoderIndex];
+    [aCoder encodeInt:self.index forKey:kCoderIndex];
 }
 
 @end

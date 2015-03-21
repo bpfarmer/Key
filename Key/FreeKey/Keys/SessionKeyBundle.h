@@ -23,7 +23,8 @@
 - (instancetype)initWithTheirBaseKey:(NSData *)theirBaseKey
                     theirIdentityKey:(NSData *)theirIdentityKey
                   ourIdentityKeyPair:(ECKeyPair *)ourIdentityKeyPair
-                          ourBaseKey:(ECKeyPair *)ourBaseKey;
+                          ourBaseKey:(ECKeyPair *)ourBaseKey
+                             isAlice:(BOOL)isAlice;
 
 - (instancetype)oppositeBundle;
 - (void)setRolesWithFirstKey:(NSData *)firstKey secondKey:(NSData *)secondKey;
