@@ -40,6 +40,12 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
 - (instancetype)init {
     self = [super init];
     
+    // TODO: THROWAWAY METHOD
+    if(![KAccountManager sharedManager].user) {
+        KUser *testUser = [[KUser alloc] initWithUsername:@"testUser"];
+        [[KAccountManager sharedManager] setUser:testUser];
+    }
+    
     [self refreshDatabaseAndConnection];
     
     return self;

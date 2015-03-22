@@ -26,16 +26,16 @@
 - (id)initWithCoder:(NSCoder *)aDecoder{
     return [self initWithRootKey:[aDecoder decodeObjectOfClass:[RootKey class] forKey:kCoderRootKey]
                         chainKey:[aDecoder decodeObjectOfClass:[ChainKey class] forKey:kCoderChainKey]
-                  ratchetKeyPair:[aDecoder decodeObjectOfClass:[ECKeyPair class] forKey:kCoderRatchetKeyPair]
-                      ratchetKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderRatchetKey]];
+                  ourRatchetKeyPair:[aDecoder decodeObjectOfClass:[ECKeyPair class] forKey:kCoderRatchetKeyPair]
+                      theirRatchetKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderRatchetKey]];
     
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder{
     [aCoder encodeObject:self.rootKey forKey:kCoderRootKey];
     [aCoder encodeObject:self.chainKey forKey:kCoderChainKey];
-    [aCoder encodeObject:self.ratchetKeyPair forKey:kCoderRatchetKeyPair];
-    [aCoder encodeObject:self.ratchetKey forKey:kCoderRatchetKey];
+    [aCoder encodeObject:self.ourRatchetKeyPair forKey:kCoderRatchetKeyPair];
+    [aCoder encodeObject:self.theirRatchetKey forKey:kCoderRatchetKey];
 }
 
 @end

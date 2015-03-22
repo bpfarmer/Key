@@ -15,16 +15,16 @@
 
 @interface RootChain : NSObject
 
-@property (nonatomic, strong) RootKey  *rootKey;
-@property (nonatomic, strong) ChainKey *chainKey;
-@property (nonatomic, strong) ECKeyPair *ratchetKeyPair;
-@property (nonatomic, strong) NSData *ratchetKey;
+@property (nonatomic, strong) RootKey   *rootKey;
+@property (nonatomic, strong) ChainKey  *chainKey;
+@property (nonatomic, strong) ECKeyPair *ourRatchetKeyPair;
+@property (nonatomic, strong) NSData    *theirRatchetKey;
 
 - (instancetype)initWithRootKey:(RootKey *)rootKey chainKey:(ChainKey *)chainKey;
 - (instancetype)initWithRootKey:(RootKey *)rootKey
                        chainKey:(ChainKey *)chainKey
-                 ratchetKeyPair:(ECKeyPair *)ratchetKeyPair
-                     ratchetKey:(NSData *)ratchetKey;
+              ourRatchetKeyPair:(ECKeyPair *)ourRatchetKeyPair
+                theirRatchetKey:(NSData *)theirRatchetKey;
 - (instancetype)iterateChainKey;
 - (instancetype)iterateRootKeyWithTheirEphemeral:(NSData *)theirEphemeral ourEphemeral:(ECKeyPair *)ourEphemeral;
 

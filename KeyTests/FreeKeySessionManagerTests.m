@@ -85,8 +85,7 @@
                                                                                   ourPreKey:_bobPreKey
                                                                         theirPreKeyExchange:_alicePreKeyExchange];
     
-    XCTAssert([bobSession.senderRootChain.chainKey.messageKey.cipherKey
-               isEqual:aliceSession.receiverRootChain.chainKey.messageKey.cipherKey]);
+    XCTAssert([aliceSession.senderRootChain.chainKey.messageKey.cipherKey isEqual:bobSession.receiverRootChain.chainKey.messageKey.cipherKey]);
     
 }
 

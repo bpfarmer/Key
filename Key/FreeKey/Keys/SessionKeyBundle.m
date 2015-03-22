@@ -20,7 +20,7 @@
                          ourBaseKey:(ECKeyPair *)ourBaseKey
                             isAlice:(BOOL)isAlice{
     self = [super init];
-    
+
     if(self) {
         _theirBaseKey       = theirBaseKey;
         _theirIdentityKey   = theirIdentityKey;

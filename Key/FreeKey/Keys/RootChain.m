@@ -27,14 +27,14 @@
 
 - (instancetype)initWithRootKey:(RootKey *)rootKey
                        chainKey:(ChainKey *)chainKey
-                 ratchetKeyPair:(ECKeyPair *)ratchetKeyPair
-                     ratchetKey:(NSData *)ratchetKey {
+              ourRatchetKeyPair:(ECKeyPair *)ourRatchetKeyPair
+                theirRatchetKey:(NSData *)theirRatchetKey {
     self = [super init];
     if(self) {
         _rootKey = rootKey;
         _chainKey = chainKey;
-        _ratchetKeyPair = ratchetKeyPair;
-        _ratchetKey = ratchetKey;
+        _ourRatchetKeyPair = ourRatchetKeyPair;
+        _theirRatchetKey = theirRatchetKey;
     }
     return self;
 }
@@ -47,15 +47,15 @@
     RootChain *nextRootChain = [[RootChain alloc] initWithRootKey:[[RootKey alloc] initWithData:keyMaterial.cipherKey]
                                                          chainKey:[[ChainKey alloc] initWithData:keyMaterial.macKey
                                                                                            index:0]];
-    [nextRootChain setRatchetKey:theirEphemeral];
-    [nextRootChain setRatchetKeyPair:ourEphemeral];
+    [nextRootChain setTheirRatchetKey:theirEphemeral];
+    [nextRootChain setOurRatchetKeyPair:ourEphemeral];
     return nextRootChain;
 }
 
 - (instancetype)iterateChainKey {
     RootChain *nextRootChain = [[RootChain alloc] initWithRootKey:self.rootKey chainKey:[self.chainKey nextChainKey]];
-    [nextRootChain setRatchetKeyPair:self.ratchetKeyPair];
-    [nextRootChain setRatchetKey:self.ratchetKey];
+    [nextRootChain setOurRatchetKeyPair:self.ourRatchetKeyPair];
+    [nextRootChain setTheirRatchetKey:self.theirRatchetKey];
     return nextRootChain;
 }
 
