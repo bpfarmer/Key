@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "KSendable.h"
+#import <AFNetworking/AFHTTPRequestOperationManager.h>
 
 #define kHTTPRequestQueue   @"httpRequestQueue"
 #define kHTTPResponseQueue  @"httpResponseQueue"
 
 @interface HttpManager : NSObject
+
+@property (nonatomic, readonly) AFHTTPRequestOperationManager *httpOperationManager;
 
 + (instancetype)sharedManager;
 

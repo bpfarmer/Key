@@ -42,6 +42,7 @@
 
 - (void)saveWithTransaction:(YapDatabaseReadWriteTransaction *)transaction{
     [transaction setObject:self forKey:self.uniqueId inCollection:[[self class] collection]];
+    NSLog(@"ATTEMPTING TO SAVE WITH ID: %@", self.uniqueId);
 }
 
 - (void)save{

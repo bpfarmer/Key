@@ -73,15 +73,11 @@
     NSString *sendingMessage = @"Free Key!";
     NSData *sendingMessageData = [sendingMessage dataUsingEncoding:NSUTF8StringEncoding];
     EncryptedMessage *fromAlice = [aliceSession encryptMessage:sendingMessageData];
-    NSLog(@"SENDER RATCHET KEY FROM ALICE: %@", fromAlice.senderRatchetKey);
-    NSLog(@"KEY FROM PKE: %@", _alicePreKeyExchange.sentSignedBaseKey);
     [bobSession decryptMessage:fromAlice];
     XCTAssert([aliceSession.senderRootChain.ourRatchetKeyPair.publicKey isEqual:bobSession.receiverRootChain.theirRatchetKey]);
     XCTAssert([aliceSession.senderRootChain.chainKey.messageKey.cipherKey isEqual:bobSession.receiverRootChain.chainKey.messageKey.cipherKey]);
     
-    NSLog(@"BOB SESSION MESSAGE KEY: %@", bobSession.senderRootChain.chainKey.messageKey.cipherKey);
     EncryptedMessage *fromBob = [bobSession encryptMessage:sendingMessageData];
-    NSLog(@"SERIALIZED DATA: %@", fromBob.cipherText);
     [aliceSession decryptMessage:fromBob];
     XCTAssert([aliceSession.receiverRootChain.theirRatchetKey isEqual:bobSession.senderRootChain.ourRatchetKeyPair.publicKey]);
     XCTAssert([aliceSession.receiverRootChain.chainKey.messageKey.cipherKey isEqual:bobSession.senderRootChain.chainKey.messageKey.cipherKey]);
@@ -91,7 +87,8 @@
 }
 
 /**
- *  Testing session initialization with a basic PrekeyWhisperMessage
+ *  Testing simple exchange
+ 
  */
 
 - (void)testSimpleExchange {
@@ -117,10 +114,10 @@
     NSString *replyMessage = @"I got your message!";
     NSData *replyMessageData = [replyMessage dataUsingEncoding:NSUTF8StringEncoding];
     EncryptedMessage *replyEncryptedMessage = [bobSession encryptMessage:replyMessageData];
-    NSString *replyMessage2 = @"I got your message!";
+    NSString *replyMessage2 = @"I got your message! 2";
     NSData *replyMessageData2 = [replyMessage2 dataUsingEncoding:NSUTF8StringEncoding];
     EncryptedMessage *replyEncryptedMessage2 = [bobSession encryptMessage:replyMessageData2];
-    NSString *replyMessage3 = @"I got your message!";
+    NSString *replyMessage3 = @"I got your message! 3";
     NSData *replyMessageData3 = [replyMessage3 dataUsingEncoding:NSUTF8StringEncoding];
     EncryptedMessage *replyEncryptedMessage3 = [bobSession encryptMessage:replyMessageData3];
 

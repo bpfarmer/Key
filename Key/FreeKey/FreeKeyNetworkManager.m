@@ -44,33 +44,24 @@
     dispatch_queue_t queue = dispatch_queue_create([kHTTPResponseQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     dispatch_async(queue, ^{
         if(objects[kPreKeyExchangeRemoteAlias]) {
-            NSArray *preKeyExchanges;
             if([objects[kPreKeyExchangeRemoteAlias] isKindOfClass:[NSDictionary class]]) {
-                preKeyExchanges = [[NSArray alloc] initWithObjects:objects[kPreKeyExchangeRemoteAlias], nil];
+                [self createPreKeyExchangeFromRemoteDictionary:objects[kPreKeyExchangeRemoteAlias]];
             }else {
-                preKeyExchanges = (NSArray *)objects[kPreKeyExchangeRemoteAlias];
-            }
-            [preKeyExchanges enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                NSDictionary *pkeDict = (NSDictionary *)obj;
-                if(pkeDict) {
-                    [self createPreKeyExchangeFromRemoteDictionary:pkeDict];
+                for(NSDictionary *obj in objects[kEncryptedMessageRemoteAlias]) {
+                    [self createPreKeyExchangeFromRemoteDictionary:obj];
                 }
-            }];
+            }
         }
         if(objects[kEncryptedMessageRemoteAlias]) {
-            NSArray *encryptedMessages;
             if([objects[kEncryptedMessageRemoteAlias] isKindOfClass:[NSDictionary class]]) {
-                encryptedMessages = [[NSArray alloc] initWithObjects:objects[kEncryptedMessageRemoteAlias], nil];
+                EncryptedMessage *message = [self createEncryptedMessageFromRemoteDictionary:objects[kEncryptedMessageRemoteAlias]];
+                [self enqueueDecryptableMessage:message toLocalUser:localUser];
             }else {
-                encryptedMessages = (NSArray *)objects[kEncryptedMessageRemoteAlias];
-            }
-            [encryptedMessages enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                NSDictionary *emDictionary = (NSDictionary *)obj;
-                if(emDictionary) {
-                    EncryptedMessage *message = [self createEncryptedMessageFromRemoteDictionary:emDictionary];
+                for(NSDictionary *obj in objects[kEncryptedMessageRemoteAlias]) {
+                    EncryptedMessage *message = [self createEncryptedMessageFromRemoteDictionary:obj];
                     [self enqueueDecryptableMessage:message toLocalUser:localUser];
                 }
-            }];
+            }
         }
     });
 }
@@ -168,8 +159,6 @@
                                                  index:[index intValue]
                                          previousIndex:[previousIndex intValue]];
     
-    NSLog(@"ENCRYPTED MESSAGE INDEX: %d", encryptedMessage.index);
-    NSLog(@"ENCRYPTED MESSAGE SERIALIZED DATA: %@", encryptedMessage.serializedData);
     
     NSString *uniqueMessageId = [NSString stringWithFormat:@"%@_%f_%@",
                                  dictionary[encryptedMessage],

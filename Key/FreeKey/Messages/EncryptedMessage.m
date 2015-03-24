@@ -73,7 +73,7 @@
 }
 
 - (void)addMetadataFromLocalUserId:(NSString *)localUserId toRemoteUserId:(NSString *)remoteUserId {
-    self.senderId = localUserId;
+    self.senderId   = localUserId;
     self.receiverId = remoteUserId;
 }
 

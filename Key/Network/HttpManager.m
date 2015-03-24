@@ -18,6 +18,17 @@
 
 @implementation HttpManager
 
+- (instancetype)init {
+    self = [super init];
+    if(self) {
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        //manager.requestSerializer = [AFJSONRequestSerializer serializer];
+        //manager.responseSerializer = [AFJSONResponseSerializer serializer];
+        _httpOperationManager = manager;
+    }
+    return self;
+}
+
 + (instancetype)sharedManager {
     static HttpManager *sharedMyManager = nil;
     static dispatch_once_t onceToken;
@@ -36,8 +47,7 @@
 }
 
 - (void)put:(id <KSendable>)object {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager PUT:[self endpointForObject:[self remoteAlias:object]]
+    [self.httpOperationManager PUT:[self endpointForObject:[self remoteAlias:object]]
       parameters:@{[self remoteAlias:object] : [self toDictionary:object]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
             [object setUniqueId:responseObject[[self remoteAlias:object]][@"uniqueId"]];
@@ -53,8 +63,7 @@
 }
 
 - (void)post:(id <KSendable>)object {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager POST:[self endpointForObject:[self remoteAlias:object]]
+    [self.httpOperationManager POST:[self endpointForObject:[self remoteAlias:object]]
        parameters:@{[self remoteAlias:object] : [self toDictionary:object]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
             [object setRemoteStatus:kRemotePostSuccessStatus];
@@ -69,10 +78,11 @@
 }
 
 - (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[self endpointForObject:remoteAlias] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.httpOperationManager GET:[self endpointForObject:remoteAlias] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
          if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
              if([remoteAlias isEqualToString:kFeedRemoteAlias]) {
+                 NSLog(@"RESPONSE OBJECT: %@", responseObject);
+                 NSLog(@"BASE 64 DECODED RESPONSE OBJECT: %@", [self base64DecodedDictionary:responseObject]);
                  [[FreeKeyNetworkManager sharedManager] receiveRemoteFeed:[self base64DecodedDictionary:responseObject] withLocalUser:[KAccountManager sharedManager].user];
              }else {
                  [[FreeKeyNetworkManager sharedManager] receiveRemoteObject:[self base64DecodedDictionary:responseObject] ofType:remoteAlias];
@@ -84,8 +94,9 @@
 }
 
 - (void)batchPut:(NSString *)remoteAlias objects:(NSArray *)objects {
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager PUT:[self endpointForObject:remoteAlias] parameters:@{remoteAlias : objects} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self.httpOperationManager PUT:[self endpointForObject:remoteAlias]
+                        parameters:@{remoteAlias : objects}
+                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
     }];
@@ -138,14 +149,16 @@
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if([obj isKindOfClass:[NSArray class]]) {
             NSArray *arrayObject = (NSArray *)obj;
-            for(id member in arrayObject) {
-                if([member isKindOfClass:[NSDictionary class]]) {
-                    [decodedDictionary setObject:[self base64DecodedDictionary:member] forKey:key];
-                }else if([[self base64EncodedKeys] containsObject:member]) {
-                    NSString *stringObject = (NSString *)member;
-                    [decodedDictionary setObject:[stringObject base64DecodedData] forKey:key];
+            NSMutableArray *decodedArrayObject = [[NSMutableArray alloc] init];
+            [arrayObject enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                if([obj isKindOfClass:[NSDictionary class]]) {
+                    [decodedArrayObject addObject:[self base64DecodedDictionary:obj]];
+                }else if([[self base64EncodedKeys] containsObject:key]) {
+                    NSString *stringObject = (NSString *)obj;
+                    [decodedArrayObject addObject:[stringObject base64DecodedData]];
                 }
-            }
+            }];
+            [decodedDictionary setObject:decodedArrayObject forKey:key];
         }else if([obj isKindOfClass:[NSDictionary class]]) {
             [decodedDictionary setObject:[self base64DecodedDictionary:obj] forKey:key];
         }

@@ -165,30 +165,32 @@ YapDatabaseConnection *databaseConnection;
 }
 
 - (IBAction)createMessage:(id)sender {
-    if (!self.thread) {
-        [self setupThread];
-    }
-    
-    [self.messagesTableView reloadData];
-    
-    KMessage *message = [[KMessage alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId
-                                                  threadId:self.thread.uniqueId
-                                                      body:self.messageTextField.text];
-    [message save];
-    KUser *currentUser = [[KAccountManager sharedManager] user];
-    
-    [self.thread.userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if(![obj isEqual:currentUser.uniqueId]) {
-            dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-            dispatch_async(queue, ^{
-                KUser *user = (KUser *)[[KStorageManager sharedManager] objectForKey:obj inCollection:[KUser collection]];
-                if(user) {
-                    [[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:message localUser:currentUser remoteUser:user];
-                }
-            });
+    if(![self.messageTextField.text isEqualToString:@""]) {
+        if (!self.thread) {
+            [self setupThread];
         }
-    }];
-    self.messageTextField.text = @"";
+
+        [self.messagesTableView reloadData];
+
+        KMessage *message = [[KMessage alloc] initWithAuthorId:[KAccountManager sharedManager].user.uniqueId
+                                                      threadId:self.thread.uniqueId
+                                                          body:self.messageTextField.text];
+        [message save];
+        KUser *currentUser = [[KAccountManager sharedManager] user];
+
+        [self.thread.userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if(![obj isEqual:currentUser.uniqueId]) {
+                dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+                dispatch_async(queue, ^{
+                    KUser *user = (KUser *)[[KStorageManager sharedManager] objectForKey:obj inCollection:[KUser collection]];
+                    if(user) {
+                        [[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:message localUser:currentUser remoteUser:user];
+                    }
+                });
+            }
+        }];
+        self.messageTextField.text = @"";
+    }
 }
 
 - (void)setupThread {

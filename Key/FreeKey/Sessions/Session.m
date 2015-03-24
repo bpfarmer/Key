@@ -189,7 +189,7 @@
              serializedData:encryptedMessage.serializedData]) {
         // TODO: throw an error
     }
-    NSLog(@"ALICE IS ABOUT TO USE: %@", sessionState.messageKey.cipherKey);
+    
     NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
                                             withKey:sessionState.messageKey.cipherKey
                                              withIV:sessionState.messageKey.iv];
