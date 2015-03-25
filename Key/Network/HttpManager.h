@@ -13,19 +13,30 @@
 #define kHTTPRequestQueue   @"httpRequestQueue"
 #define kHTTPResponseQueue  @"httpResponseQueue"
 
+typedef enum {
+    PUT, GET, POST, DELETE
+}httpMethods;
+
+@class HttpRequest;
+
 @interface HttpManager : NSObject
 
 @property (nonatomic, readonly) AFHTTPRequestOperationManager *httpOperationManager;
 
 + (instancetype)sharedManager;
 
-- (void)put:(id <KSendable>)object;
-- (void)post:(id <KSendable>)object;
-//- (void)get: (NSDictionary *)parameters;
-- (void)batchPut:(NSString *)remoteAlias objects:(NSArray *)objects;
-- (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters;
-- (void)enqueueSendableObject:(id<KSendable>)object;
-- (void)enqueueGetWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters;
-- (NSDictionary *)base64DecodedDictionary:(NSDictionary *)dictionary;
+- (void)put:(HttpRequest *)request
+    success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+    failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)post:(HttpRequest *)request
+     success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+     failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)get:(HttpRequest *)request
+     success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
+     failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)enqueueRequest:(HttpRequest *)request;
 
 @end

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="KMm-q7-cQ9">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -363,7 +364,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GlA-PV-UAu">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GlA-PV-UAu">
                                 <rect key="frame" x="16" y="20" width="120" height="30"/>
                                 <state key="normal" title="New Message">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -372,7 +373,7 @@
                                     <segue destination="TYp-lU-Cp9" kind="show" id="dnH-qf-wu9"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hBS-N1-Dtu">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hBS-N1-Dtu">
                                 <rect key="frame" x="464" y="20" width="120" height="30"/>
                                 <state key="normal" title="Contacts">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -382,7 +383,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="yfF-wG-4BP">
-                                <rect key="frame" x="16" y="58" width="568" height="478"/>
+                                <rect key="frame" x="16" y="64" width="568" height="313"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h8n-5w-wJv">
@@ -407,6 +408,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Kqc-AI-e3M" firstAttribute="trailing" secondItem="bJT-vV-PLu" secondAttribute="trailingMargin" id="6A3-d7-nDU"/>
+                            <constraint firstAttribute="centerX" secondItem="yfF-wG-4BP" secondAttribute="centerX" id="B00-vq-kNf"/>
                             <constraint firstItem="GlA-PV-UAu" firstAttribute="leading" secondItem="bJT-vV-PLu" secondAttribute="leadingMargin" id="Ipo-3O-p97"/>
                             <constraint firstItem="h8n-5w-wJv" firstAttribute="leading" secondItem="bJT-vV-PLu" secondAttribute="leadingMargin" id="MJZ-5V-tiT"/>
                             <constraint firstItem="yfF-wG-4BP" firstAttribute="trailing" secondItem="bJT-vV-PLu" secondAttribute="trailingMargin" id="QkO-cz-ghO"/>
@@ -416,6 +418,8 @@
                             <constraint firstItem="yfF-wG-4BP" firstAttribute="leading" secondItem="bJT-vV-PLu" secondAttribute="leadingMargin" id="iCZ-Jj-OXO"/>
                             <constraint firstItem="h8n-5w-wJv" firstAttribute="top" secondItem="Kqc-AI-e3M" secondAttribute="top" id="ulU-Eb-SKo"/>
                             <constraint firstItem="ppS-su-gc7" firstAttribute="top" secondItem="h8n-5w-wJv" secondAttribute="bottom" constant="8" id="whI-9G-6FJ"/>
+                            <constraint firstItem="GlA-PV-UAu" firstAttribute="top" secondItem="Kpe-w8-VA3" secondAttribute="bottom" id="y1J-Hh-FOO"/>
+                            <constraint firstItem="hBS-N1-Dtu" firstAttribute="top" secondItem="Kpe-w8-VA3" secondAttribute="bottom" id="ytq-yg-i3s"/>
                         </constraints>
                     </view>
                     <connections>

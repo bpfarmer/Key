@@ -11,6 +11,7 @@
 #import "KAccountManager.h"
 #import "KStorageManager.h"
 #import "HttpManager.h"
+#import "CollapsingFutures.h"
 
 @interface RegistrationViewController () <UITextFieldDelegate>
 
@@ -38,6 +39,8 @@
                                                      name:kRemotePutNotification
                                                    object:nil];
         // TODO: show 'waiting' spinner animation
+        TOCFuture *userFuture = [KUser asyncCreateUserWithUsername:self.usernameText.text];
+        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             // TODO: sanity check on username and password
             KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString]];

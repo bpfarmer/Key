@@ -13,6 +13,7 @@
 @class IdentityKey;
 @class KStorageManager;
 @class PreKey;
+@class TOCFuture;
 
 @interface KUser : KYapDatabaseObject <YapDatabaseRelationshipNode, KSendable>
 
@@ -26,6 +27,8 @@
 @property (nonatomic) NSData *publicKey;
 // KSendable Protocol
 @property (nonatomic) NSString *remoteStatus;
+
++ (TOCFuture *)asyncCreateUserWithUsername:(NSString *)username;
 
 + (KUser *)fetchObjectWithUsername:(NSString *)username;
 + (void)retrieveRemoteUserWithUsername:(NSString *)username;

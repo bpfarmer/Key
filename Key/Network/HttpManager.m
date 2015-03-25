@@ -13,8 +13,9 @@
 #import "NSString+Base64.h"
 #import "EncryptedMessage.h"
 #import "KAccountManager.h"
+#import "HttpRequest.h"
 
-#define kRemoteEndpoint @"http://127.0.0.1:9393"
+#define kRemoteEndpoint @"https://polar-beyond-3981.herokuapp.com"
 
 @implementation HttpManager
 
@@ -22,8 +23,6 @@
     self = [super init];
     if(self) {
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        //manager.requestSerializer = [AFJSONRequestSerializer serializer];
-        //manager.responseSerializer = [AFJSONResponseSerializer serializer];
         _httpOperationManager = manager;
     }
     return self;
@@ -38,28 +37,25 @@
     return sharedMyManager;
 }
 
-- (NSString *)endpointForObject:(NSString *)objectAlias {
-    return [NSString stringWithFormat:@"%@/%@.json", kRemoteEndpoint, objectAlias];
+- (void)put:(HttpRequest *)request
+    success:(void (^)(AFHTTPRequestOperation *, id))success
+    failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure {
+    
+    [self.httpOperationManager PUT:request.endpoint parameters:request.parameters success:success failure:failure];
 }
 
-- (NSString *)remoteAlias:(id <KSendable>)object {
-    return [[object class] remoteAlias];
+- (void)post:(HttpRequest *)request
+    success:(void (^)(AFHTTPRequestOperation *, id))success
+    failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure {
+    
+    [self.httpOperationManager POST:request.endpoint parameters:request.parameters success:success failure:failure];
 }
 
-- (void)put:(id <KSendable>)object {
-    [self.httpOperationManager PUT:[self endpointForObject:[self remoteAlias:object]]
-      parameters:@{[self remoteAlias:object] : [self toDictionary:object]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-            [object setUniqueId:responseObject[[self remoteAlias:object]][@"uniqueId"]];
-            [object setRemoteStatus:kRemotePutSuccessStatus];
-        }else {
-            [object setRemoteStatus:kRemotePutFailureStatus];
-        }
-        [self fireNotification:kRemotePutNotification object:object];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [object setRemoteStatus:kRemotePutNetworkFailureStatus];
-        [self fireNotification:kRemotePutNotification object:object];
-    }];
+- (void)get:(HttpRequest *)request
+     success:(void (^)(AFHTTPRequestOperation *, id))success
+     failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure {
+    
+    [self.httpOperationManager GET:request.endpoint parameters:request.parameters success:success failure:failure];
 }
 
 - (void)post:(id <KSendable>)object {

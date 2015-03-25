@@ -21,7 +21,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 YapDatabaseViewMappings *mappings;
 YapDatabaseConnection *databaseConnection;
 
-@interface ThreadViewController () <UITableViewDataSource>
+@interface ThreadViewController () <UITableViewDataSource, UITextFieldDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *messagesTableView;
 @property (nonatomic, strong) IBOutlet UITextField *messageTextField;
 @property (nonatomic, strong) IBOutlet UITextField *recipientTextField;
@@ -39,9 +39,46 @@ YapDatabaseConnection *databaseConnection;
     self.messagesTableView.dataSource = self;
     [self.messagesTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
+    self.messageTextField.delegate = self;
+    self.recipientTextField.delegate = self;
+    self.messageTextField.tag = 1;
+    
     if(self.thread) {
         [self setupDatabaseView];
     }
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    if(textField.tag == 1)
+        [self animateTextField: textField up: YES];
+}
+
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if(textField.tag == 1)
+        [self animateTextField: textField up: NO];
+}
+
+- (void) animateTextField: (UITextField*) textField up: (BOOL) up
+{
+    const int movementDistance = 220; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    int movement = (up ? -movementDistance : movementDistance);
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField*)aTextField
+{
+    [aTextField resignFirstResponder];
+    return YES;
 }
 
 - (void) setupDatabaseView {

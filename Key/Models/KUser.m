@@ -82,6 +82,31 @@
     return self;
 }
 
++ (TOCFuture *)asyncCreateUserWithUsername:(NSString *)username {
+    
+    
+    // did we fail right away? Then return an already-failed future
+    if (creationError != nil) {
+        return [TOCFuture futureWithFailure:(__bridge_transfer id)creationError];
+    }
+    
+    // we need to make an asynchronous call, so we'll use a future source
+    // that way we can return its future right away and fill it in later
+    TOCFutureSource *resultSource = [FutureSource new];
+    
+    id arcAddressBook = (__bridge_transfer id)addressBookRef; // retain the address book in ARC land
+    ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef requestAccessError) {
+        // time to fill in the future we returned
+        if (granted) {
+            [resultSource trySetResult:arcAddressBook];
+        } else {
+            [resultSource trySetFailure:(__bridge id)requestAccessError];
+        }
+    });
+    
+    return resultSource.future;
+}
+
 + (void)createFromRemoteDictionary:(NSDictionary *)dictionary {
     NSDictionary *userDictionary = dictionary[[self remoteAlias]];
     KUser *user;
