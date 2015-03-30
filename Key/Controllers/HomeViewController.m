@@ -38,7 +38,7 @@ YapDatabaseConnection *databaseConnection;
     self.threadsTableView.delegate = self;
     [self.threadsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
-    //[[FreeKeyNetworkManager sharedManager] pollFeedForLocalUser:[KAccountManager sharedManager].user];
+    [[KAccountManager sharedManager].user asyncGetFeed];
     
     [self setupDatabaseView];
 }

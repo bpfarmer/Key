@@ -134,6 +134,22 @@
     XCTAssert(doubleReplyEncryptedMessage.cipherText);
     NSData *doubleDecryptedReplyMessageData = [aliceSession decryptMessage:doubleReplyEncryptedMessage];
     XCTAssert([doubleDecryptedReplyMessageData isEqual:doubleReplyMessageData]);
+    
+    NSMutableArray *sentMessages = [[NSMutableArray alloc] init];
+    NSString *manyTestString = @"I got your message!";
+    NSData *manyTestData = [manyTestString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    for (int i = 0; i < 100; i++) {
+        EncryptedMessage *em = [bobSession encryptMessage:manyTestData];
+        if(i % 2 == 0) {
+            [sentMessages addObject:em];
+        }
+    }
+    
+    for(EncryptedMessage *message in sentMessages) {
+        NSData *decryptedData = [aliceSession decryptMessage:message];
+        XCTAssert([decryptedData isEqual:manyTestData]);
+    }
 }
 
 - (void)testBobSendingFirst {

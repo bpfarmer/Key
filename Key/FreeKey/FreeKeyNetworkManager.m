@@ -25,6 +25,7 @@
 #import "FreeKeyResponseHandler.h"
 #import "Session.h"
 #import "SendPreKeyExchangeRequest.h"
+#import "SendMessageRequest.h"
 
 @implementation FreeKeyNetworkManager
 
@@ -83,7 +84,7 @@
                   remoteUser:(KUser *)remoteUser {
     EncryptedMessage *newEncryptedMessage = [FreeKey encryptObject:object session:session];
     [newEncryptedMessage addMetadataFromLocalUserId:localUser.uniqueId toRemoteUserId:remoteUser.uniqueId];
-    [[HttpManager sharedManager] enqueueSendableObject:newEncryptedMessage];
+    [SendMessageRequest makeRequestWithSendableMessage:newEncryptedMessage];
 }
 
 - (void)decryptAndSaveMessage:(EncryptedMessage *)encryptedMessage

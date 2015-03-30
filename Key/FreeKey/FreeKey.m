@@ -33,11 +33,13 @@
 + (EncryptedMessage *)encryptObject:(id<KEncryptable>)object session:(Session *)session {
     NSData *serializedObject = [NSKeyedArchiver archivedDataWithRootObject:object];
     EncryptedMessage *encryptedMessage = [session encryptMessage:serializedObject];
+    [[KStorageManager sharedManager] setObject:session forKey:session.receiverId inCollection:kSessionCollection];
     return encryptedMessage;
 }
 
 + (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session {
     NSData *decryptedData = [session decryptMessage:encryptedMessage];
+    [[KStorageManager sharedManager] setObject:session forKey:session.receiverId inCollection:kSessionCollection];
     return [NSKeyedUnarchiver unarchiveObjectWithData:decryptedData];
 }
 

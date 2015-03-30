@@ -57,43 +57,6 @@
     [self.httpOperationManager GET:request.endpoint parameters:request.parameters success:success failure:failure];
 }
 
-- (NSString *)endpointForObject:(NSString *)objectAlias {
-    return [NSString stringWithFormat:@"%@/%@.json", kRemoteEndpoint, objectAlias];
-}
-
-- (NSString *)remoteAlias:(id <KSendable>)object {
-    return [[object class] remoteAlias];
-}
-
-- (void)put:(id <KSendable>)object {
-    [self.httpOperationManager PUT:[self endpointForObject:[self remoteAlias:object]]
-                        parameters:@{[self remoteAlias:object] : [self toDictionary:object]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                            if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-                                [object setUniqueId:responseObject[[self remoteAlias:object]][@"uniqueId"]];
-                                [object setRemoteStatus:kRemotePutSuccessStatus];
-                            }else {
-                                [object setRemoteStatus:kRemotePutFailureStatus];
-                            }
-                            [self fireNotification:kRemotePutNotification object:object];
-                        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                            [object setRemoteStatus:kRemotePutNetworkFailureStatus];
-                            [self fireNotification:kRemotePutNotification object:object];
-                        }];
-}
-
-- (void)fireNotification:(NSString *)notification object:(id <KSendable>)object {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:notification object:object];
-    });
-}
-
-- (void)enqueueSendableObject:(id<KSendable>)object {
-    dispatch_queue_t queue = dispatch_queue_create([kHTTPRequestQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-    dispatch_async(queue, ^{
-        [self put:object];
-    });
-}
-
 - (NSDictionary *)toDictionary:(id <KSendable>)object {
     NSMutableDictionary *requestDictionary = [[NSMutableDictionary alloc] init];
     NSObject *objectForDictionary = (NSObject *)object;
