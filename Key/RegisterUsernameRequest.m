@@ -11,30 +11,25 @@
 #import "KUser.h"
 #import "HttpManager.h"
 
-#define kUserEndpoint @"user.json"
-#define kUserUsername @"username"
-#define kUserAlias @"user"
-#define kUserUsername @"username"
-
 @implementation RegisterUsernameRequest
 
 - (instancetype)initWithUser:(KUser *)user {
-    NSDictionary *parameters = @{kUserUsername : user.username};
-    return [super initWithHttpMethod:PUT endpoint:kUserEndpoint parameters:parameters];
+    NSDictionary *parameters = @{kUserAlias : @{kUserUsername : user.username,
+                                                kUserPasswordCrypt: user.passwordCrypt}};
+    return [super initWithHttpMethod:PUT endpoint:[super urlForEndpoint:kUserEndpoint] parameters:parameters];
 }
 
 + (TOCFuture *)makeRequestWithUser:(KUser *)user {
-    CFErrorRef registerError = nil;
     TOCFutureSource *resultSource = [TOCFutureSource new];
     RegisterUsernameRequest *request = [[RegisterUsernameRequest alloc] initWithUser:user];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
     ^(AFHTTPRequestOperation *operation, id responseObject){
-        [user setUsername:responseObject[kUserAlias][kUserUsername]];
+        [user setUniqueId:responseObject[kUserAlias][kUserUniqueId]];
         [resultSource trySetResult:user];
     };
-    void (^failure)(AFHTTPRequestOperation *operation, id responseObject) =
-    ^(AFHTTPRequestOperation *operation, id responseObject){
-        [resultSource trySetFailure:(__bridge id)registerError];
+    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
+    ^(AFHTTPRequestOperation *operation, NSError *error){
+        [resultSource trySetFailure:error];
     };
     [request makeRequestWithSuccess:success failure:failure];
     return resultSource.future;

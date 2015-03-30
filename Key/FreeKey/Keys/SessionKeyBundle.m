@@ -28,6 +28,11 @@
         _ourBaseKey         = ourBaseKey;
         _isAlice            = isAlice;
     }
+    
+    NSLog(@"THEIR BASE KEY: %@", theirBaseKey);
+    NSLog(@"OUR BASE KEY: %@", ourBaseKey.publicKey);
+    NSLog(@"THEIR ID KEY: %@", theirIdentityKey);
+    NSLog(@"OUR ID KEY: %@", ourIdentityKeyPair.publicKey);
     return self;
 }
 

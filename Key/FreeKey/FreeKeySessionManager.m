@@ -20,6 +20,7 @@
 #import "IdentityKey.h"
 #import "PreKeyExchange.h"
 #import "FreeKeyNetworkManager.h"
+#import "CollapsingFutures.h"
 
 @implementation FreeKeySessionManager
 
@@ -39,26 +40,21 @@
 }
 
 - (Session *)createSessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
-    PreKey *preKey = [self getPreKeyForUserId:remoteUser.uniqueId];
-    if(preKey) {
+    PreKeyExchange *preKeyExchange = [self getPreKeyExchangeForUserId:remoteUser.uniqueId];
+    
+    if(!preKeyExchange) {
+        PreKey *preKey = [self getPreKeyForUserId:remoteUser.uniqueId];
+        
+        return [self createSessionWithLocalUser:localUser
+                               remoteUser:remoteUser
+                               ourBaseKey:[Curve25519 generateKeyPair]
+                              theirPreKey:preKey];
+    }else {
+        PreKey *targetPreKey = [self getPreKeyWithId:preKeyExchange.signedTargetPreKeyId];
         return [self createSessionWithLocalUser:localUser
                                      remoteUser:remoteUser
-                                     ourBaseKey:[Curve25519 generateKeyPair]
-                                    theirPreKey:preKey];
-    }else {
-        PreKeyExchange *preKeyExchange = [self getPreKeyExchangeForUserId:remoteUser.uniqueId];
-        if(!preKeyExchange) {
-            [[FreeKeyNetworkManager sharedManager] getPreKeyWithRemoteUser:remoteUser];
-            return nil;
-        }else {
-            PreKey *ourPreKey = [[KStorageManager sharedManager] objectForKey:preKeyExchange.signedTargetPreKeyId
-                                                                 inCollection:kOurPreKeyCollection];
-            if(!ourPreKey) return nil;
-            return [self createSessionWithLocalUser:localUser
-                                         remoteUser:remoteUser
-                                          ourPreKey:ourPreKey
-                                theirPreKeyExchange:preKeyExchange];
-        }
+                                      ourPreKey:targetPreKey
+                            theirPreKeyExchange:preKeyExchange];
     }
 }
 
@@ -82,11 +78,24 @@
     return session;
 }
 
+- (Session *)processNewKeyExchange:(id)keyExchange localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
+    if([keyExchange isKindOfClass:[PreKey class]]) {
+        return [self processNewPreKey:keyExchange localUser:localUser remoteUser:remoteUser];
+    }else if([keyExchange isKindOfClass:[PreKeyExchange class]]) {
+        return [self processNewKeyExchange:keyExchange localUser:localUser remoteUser:remoteUser];
+    }else {
+        return nil;
+    }
+}
+
 - (Session *)processNewPreKey:(PreKey *)preKey localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     Session *session  = [self sessionWithLocalUser:localUser remoteUser:remoteUser];
-    PreKeyExchange *previousExchange = [[KStorageManager sharedManager] objectForKey:remoteUser.uniqueId
-                                                                        inCollection:kPreKeyExchangeCollection];
-    if(!session && !previousExchange) {
+    
+    if(!session) {
+        PreKeyExchange *previousExchange = [self getPreKeyExchangeForUserId:remoteUser.uniqueId];
+        
+        if(previousExchange) return [self processNewPreKeyExchange:previousExchange localUser:localUser remoteUser:remoteUser];
+        
         session = [self createSessionWithLocalUser:localUser
                               remoteUser:remoteUser
                               ourBaseKey:[Curve25519 generateKeyPair]
@@ -97,16 +106,6 @@
         [[KStorageManager sharedManager] setObject:preKeyExchange
                                             forKey:remoteUser.uniqueId
                                       inCollection:kPreKeyExchangeCollection];
-        [[FreeKeyNetworkManager sharedManager] sendPreKeyExchange:preKeyExchange toRemoteUser:remoteUser];
-    }else if(previousExchange) {
-        PreKey *ourPreKey = [[KStorageManager sharedManager] objectForKey:previousExchange.signedTargetPreKeyId
-                                                             inCollection:kOurPreKeyCollection];
-        session = [self createSessionWithLocalUser:localUser
-                                        remoteUser:remoteUser
-                                         ourPreKey:ourPreKey
-                               theirPreKeyExchange:previousExchange];
-        
-        [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
     }
     return session;
 }
@@ -117,19 +116,24 @@
     Session *session  = [self sessionWithLocalUser:localUser remoteUser:remoteUser];
     
     if(!session) {
-        PreKey *ourPreKey = [[KStorageManager sharedManager] objectForKey:preKeyExchange.signedTargetPreKeyId
-                                                             inCollection:kOurPreKeyCollection];
-        session = [self createSessionWithLocalUser:localUser
-                                        remoteUser:remoteUser
-                                         ourPreKey:ourPreKey
-                               theirPreKeyExchange:preKeyExchange];
+        PreKey *ourPreKey = [[KStorageManager sharedManager] objectForKey:preKeyExchange.signedTargetPreKeyId inCollection:kOurPreKeyCollection];
+        if(ourPreKey) {
+            session = [self createSessionWithLocalUser:localUser
+                                            remoteUser:remoteUser
+                                             ourPreKey:ourPreKey
+                                   theirPreKeyExchange:preKeyExchange];
+            [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
+        }
     }
-    
     return session;
 }
 
 - (PreKey *)getPreKeyForUserId:(NSString *)userId {
     return (PreKey *)[[KStorageManager sharedManager] objectForKey:userId inCollection:kTheirPreKeyCollection];
+}
+
+- (PreKey *)getPreKeyWithId:(NSString *)uniqueId {
+    return (PreKey *)[[KStorageManager sharedManager] objectForKey:uniqueId inCollection:kOurPreKeyCollection];
 }
 
 - (PreKeyExchange *)getPreKeyExchangeForUserId:(NSString *)userId {

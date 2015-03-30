@@ -6,8 +6,15 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import "HttpRequest.h"
+#import "UserRequest.h"
 
-@interface UpdateUserRequest : HTTPRequest
+@class TOCFuture;
+@class KUser;
+
+@interface UpdateUserRequest : HttpRequest
+
+- (instancetype)initWithUser:(KUser *)user;
++ (TOCFuture *)makeRequestWithUser:(KUser *)user;
 
 @end

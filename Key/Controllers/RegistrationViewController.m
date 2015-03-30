@@ -34,39 +34,25 @@
 
 - (IBAction)createNewUser:(id)sender {
     if(![self.usernameText.text isEqualToString:@""]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(receiveUserStatusNotification:)
-                                                     name:kRemotePutNotification
-                                                   object:nil];
         // TODO: show 'waiting' spinner animation
-        TOCFuture *userFuture = [KUser asyncCreateUserWithUsername:self.usernameText.text];
+        TOCFuture *futureUser = [KUser asyncCreateWithUsername:self.usernameText.text password:self.passwordText.text];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            // TODO: sanity check on username and password
-            KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString]];
-            [user registerUsername];
+        [futureUser catchDo:^(id error) {
+            NSLog(@"There was an error (%@) creating the user.", error);
+        }];
+        [futureUser thenDo:^(KUser *user) {
             [[KAccountManager sharedManager] setUser:user];
-            // TODO: remove 'waiting' spinner animation
-        });
-    }
-}
-
-- (void)receiveUserStatusNotification:(NSNotification *)notification {
-    KUser *user = (KUser *) notification.object;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kRemotePutNotification object:nil];
-    if([user.remoteStatus isEqualToString:kRemotePutSuccessStatus]) {
-        [user setPasswordCryptInKeychain:self.passwordText.text];
-        [[KAccountManager sharedManager] setUser:user];
-        [[KStorageManager sharedManager] refreshDatabaseAndConnection];
-        [[KStorageManager sharedManager] setupDatabase];
-        [user save];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [user finishUserRegistration];
-        });
-        [self showInbox];
-    }else if([user.remoteStatus isEqualToString:kRemotePutFailureStatus]) {
-        [[KAccountManager sharedManager] setUser:nil];
-        NSLog(@"Failed to create user");
+            [[KStorageManager sharedManager] refreshDatabaseAndConnection];
+            [[KStorageManager sharedManager] setupDatabase];
+            [user save];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [user setupIdentityKey];
+                [user save];
+                [user asyncUpdate];
+                [user asyncSetupPreKeys];
+            });
+            [self showInbox];
+        }];
     }
 }
 

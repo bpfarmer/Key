@@ -53,11 +53,16 @@
 		EF6B44C21ABCDD3600B88323 /* FreeKeyTestExample.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44C11ABCDD3600B88323 /* FreeKeyTestExample.m */; };
 		EF6B44C41ABDAE1D00B88323 /* HttpManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44C31ABDAE1D00B88323 /* HttpManagerTests.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
+		EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */; };
+		EF99E2771AC72F71002583E2 /* FreeKeyResponseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E2761AC72F71002583E2 /* FreeKeyResponseHandler.m */; };
 		EFC1819A1AC3412800BE8B0B /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181991AC3412800BE8B0B /* HttpRequest.m */; };
 		EFC1819E1AC3534F00BE8B0B /* RegisterUsernameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC1819D1AC3534F00BE8B0B /* RegisterUsernameRequest.m */; };
 		EFC181A11AC3715B00BE8B0B /* UpdateUserRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181A01AC3715B00BE8B0B /* UpdateUserRequest.m */; };
 		EFC181A41AC3717400BE8B0B /* SendMessageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181A31AC3717400BE8B0B /* SendMessageRequest.m */; };
 		EFC181A71AC3719800BE8B0B /* GetMessagesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181A61AC3719800BE8B0B /* GetMessagesRequest.m */; };
+		EFC181AA1AC371C300BE8B0B /* SendPreKeysRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181A91AC371C300BE8B0B /* SendPreKeysRequest.m */; };
+		EFC181AD1AC372F500BE8B0B /* GetUserRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181AC1AC372F500BE8B0B /* GetUserRequest.m */; };
+		EFC181B01AC3739800BE8B0B /* SendPreKeyExchangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181AF1AC3739800BE8B0B /* SendPreKeyExchangeRequest.m */; };
 		EFC6BEA31A6857D400B0EB8F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA21A6857D400B0EB8F /* main.m */; };
 		EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEA51A6857D400B0EB8F /* AppDelegate.m */; };
 		EFC6BEAC1A6857D400B0EB8F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */; };
@@ -187,6 +192,13 @@
 		EF6B44C31ABDAE1D00B88323 /* HttpManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpManagerTests.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
+		EF99E26D1AC5E7C9002583E2 /* UserRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserRequest.h; path = Network/Requests/User/UserRequest.h; sourceTree = "<group>"; };
+		EF99E26E1AC612EC002583E2 /* GetKeyExchangeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetKeyExchangeRequest.h; path = Network/Requests/PreKey/GetKeyExchangeRequest.h; sourceTree = "<group>"; };
+		EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetKeyExchangeRequest.m; path = Network/Requests/PreKey/GetKeyExchangeRequest.m; sourceTree = "<group>"; };
+		EF99E2711AC61354002583E2 /* PreKeyRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreKeyRequest.h; sourceTree = "<group>"; };
+		EF99E2751AC72F71002583E2 /* FreeKeyResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKeyResponseHandler.h; sourceTree = "<group>"; };
+		EF99E2761AC72F71002583E2 /* FreeKeyResponseHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeyResponseHandler.m; sourceTree = "<group>"; };
+		EF99E27B1AC9D5AC002583E2 /* MessageRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MessageRequest.h; path = Network/Requests/Message/MessageRequest.h; sourceTree = "<group>"; };
 		EFC181981AC3412800BE8B0B /* HttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HttpRequest.h; path = Network/HttpRequest.h; sourceTree = "<group>"; };
 		EFC181991AC3412800BE8B0B /* HttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HttpRequest.m; path = Network/HttpRequest.m; sourceTree = "<group>"; };
 		EFC1819C1AC3534F00BE8B0B /* RegisterUsernameRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterUsernameRequest.h; sourceTree = "<group>"; };
@@ -197,6 +209,12 @@
 		EFC181A31AC3717400BE8B0B /* SendMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SendMessageRequest.m; path = Network/Requests/SendMessageRequest.m; sourceTree = "<group>"; };
 		EFC181A51AC3719800BE8B0B /* GetMessagesRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GetMessagesRequest.h; path = Network/Requests/GetMessagesRequest.h; sourceTree = "<group>"; };
 		EFC181A61AC3719800BE8B0B /* GetMessagesRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GetMessagesRequest.m; path = Network/Requests/GetMessagesRequest.m; sourceTree = "<group>"; };
+		EFC181A81AC371C300BE8B0B /* SendPreKeysRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendPreKeysRequest.h; sourceTree = "<group>"; };
+		EFC181A91AC371C300BE8B0B /* SendPreKeysRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendPreKeysRequest.m; sourceTree = "<group>"; };
+		EFC181AB1AC372F500BE8B0B /* GetUserRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetUserRequest.h; sourceTree = "<group>"; };
+		EFC181AC1AC372F500BE8B0B /* GetUserRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetUserRequest.m; sourceTree = "<group>"; };
+		EFC181AE1AC3739800BE8B0B /* SendPreKeyExchangeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendPreKeyExchangeRequest.h; sourceTree = "<group>"; };
+		EFC181AF1AC3739800BE8B0B /* SendPreKeyExchangeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendPreKeyExchangeRequest.m; sourceTree = "<group>"; };
 		EFC6BE9D1A6857D400B0EB8F /* Key.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Key.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFC6BEA11A6857D400B0EB8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFC6BEA21A6857D400B0EB8F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -397,17 +415,52 @@
 			name = Protocols;
 			sourceTree = "<group>";
 		};
-		EFC1819B1AC3524F00BE8B0B /* Requests */ = {
+		EF99E26A1AC5E773002583E2 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				EFC181AB1AC372F500BE8B0B /* GetUserRequest.h */,
+				EFC181AC1AC372F500BE8B0B /* GetUserRequest.m */,
 				EFC1819C1AC3534F00BE8B0B /* RegisterUsernameRequest.h */,
 				EFC1819D1AC3534F00BE8B0B /* RegisterUsernameRequest.m */,
 				EFC1819F1AC3715B00BE8B0B /* UpdateUserRequest.h */,
 				EFC181A01AC3715B00BE8B0B /* UpdateUserRequest.m */,
+				EF99E26D1AC5E7C9002583E2 /* UserRequest.h */,
+			);
+			name = User;
+			sourceTree = "<group>";
+		};
+		EF99E26B1AC5E787002583E2 /* Message */ = {
+			isa = PBXGroup;
+			children = (
 				EFC181A21AC3717400BE8B0B /* SendMessageRequest.h */,
 				EFC181A31AC3717400BE8B0B /* SendMessageRequest.m */,
 				EFC181A51AC3719800BE8B0B /* GetMessagesRequest.h */,
 				EFC181A61AC3719800BE8B0B /* GetMessagesRequest.m */,
+				EF99E27B1AC9D5AC002583E2 /* MessageRequest.h */,
+			);
+			name = Message;
+			sourceTree = "<group>";
+		};
+		EF99E26C1AC5E793002583E2 /* PreKey */ = {
+			isa = PBXGroup;
+			children = (
+				EFC181A81AC371C300BE8B0B /* SendPreKeysRequest.h */,
+				EFC181A91AC371C300BE8B0B /* SendPreKeysRequest.m */,
+				EFC181AE1AC3739800BE8B0B /* SendPreKeyExchangeRequest.h */,
+				EFC181AF1AC3739800BE8B0B /* SendPreKeyExchangeRequest.m */,
+				EF99E26E1AC612EC002583E2 /* GetKeyExchangeRequest.h */,
+				EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */,
+				EF99E2711AC61354002583E2 /* PreKeyRequest.h */,
+			);
+			name = PreKey;
+			sourceTree = "<group>";
+		};
+		EFC1819B1AC3524F00BE8B0B /* Requests */ = {
+			isa = PBXGroup;
+			children = (
+				EF99E26C1AC5E793002583E2 /* PreKey */,
+				EF99E26B1AC5E787002583E2 /* Message */,
+				EF99E26A1AC5E773002583E2 /* User */,
 			);
 			name = Requests;
 			sourceTree = "<group>";
@@ -523,6 +576,8 @@
 				EF6B44B71ABC943C00B88323 /* FreeKeyNetworkManager.m */,
 				EF6B44B91ABC944B00B88323 /* FreeKeySessionManager.h */,
 				EF6B44BA1ABC944B00B88323 /* FreeKeySessionManager.m */,
+				EF99E2751AC72F71002583E2 /* FreeKeyResponseHandler.h */,
+				EF99E2761AC72F71002583E2 /* FreeKeyResponseHandler.m */,
 			);
 			path = FreeKey;
 			sourceTree = "<group>";
@@ -776,6 +831,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */,
+				EFC181AA1AC371C300BE8B0B /* SendPreKeysRequest.m in Sources */,
 				EF2CDEB81AB49A6F001E2F20 /* IdentityKey+Serialize.m in Sources */,
 				EFF70A891AAE19C3006C10D2 /* ChainKey.m in Sources */,
 				EF2CDED21AB5C22F001E2F20 /* MessageKey+Serialize.m in Sources */,
@@ -785,6 +841,7 @@
 				EF524AE51AAE239800F3B9AF /* NSData+keyVersionByte.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */,
+				EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */,
 				EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */,
 				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
 				EF2CDECF1AB5C20F001E2F20 /* RootChain+Serialize.m in Sources */,
@@ -802,6 +859,7 @@
 				EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */,
 				EFF70A8A1AAE19C3006C10D2 /* IdentityKey.m in Sources */,
 				EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */,
+				EFC181B01AC3739800BE8B0B /* SendPreKeyExchangeRequest.m in Sources */,
 				EF524AE61AAE239800F3B9AF /* Util.m in Sources */,
 				EFF70A921AAE19C3006C10D2 /* PreKeyExchange.m in Sources */,
 				EF6B44AB1ABA399D00B88323 /* ThreadViewController.m in Sources */,
@@ -817,7 +875,9 @@
 				EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */,
 				EF524ADE1AAE238600F3B9AF /* KYapDatabaseView.m in Sources */,
 				EFF70A8D1AAE19C3006C10D2 /* PreKey.m in Sources */,
+				EFC181AD1AC372F500BE8B0B /* GetUserRequest.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
+				EF99E2771AC72F71002583E2 /* FreeKeyResponseHandler.m in Sources */,
 				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,
 				EF6B44B81ABC943C00B88323 /* FreeKeyNetworkManager.m in Sources */,
 				EF524AF51AAE2BAC00F3B9AF /* FreeKey.m in Sources */,

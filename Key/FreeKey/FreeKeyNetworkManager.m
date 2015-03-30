@@ -21,6 +21,10 @@
 #import <25519/Curve25519.h>
 #import <25519/Ed25519.h>
 #import "IdentityKey.h"
+#import "CollapsingFutures.h"
+#import "FreeKeyResponseHandler.h"
+#import "Session.h"
+#import "SendPreKeyExchangeRequest.h"
 
 @implementation FreeKeyNetworkManager
 
@@ -33,104 +37,27 @@
     return sharedMyManager;
 }
 
-- (void)pollFeedForLocalUser:(KUser *)localUser {
-    dispatch_queue_t queue = dispatch_queue_create([kHTTPRequestQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-    dispatch_async(queue, ^{
-        [[HttpManager sharedManager] getObjectsWithRemoteAlias:kFeedRemoteAlias parameters:@{@"uniqueId" : localUser.uniqueId}];
-    });
-}
-
-- (void)receiveRemoteFeed:(NSDictionary *)objects withLocalUser:(KUser *)localUser {
-    dispatch_queue_t queue = dispatch_queue_create([kHTTPResponseQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-    dispatch_async(queue, ^{
-        if(objects[kPreKeyExchangeRemoteAlias]) {
-            if([objects[kPreKeyExchangeRemoteAlias] isKindOfClass:[NSDictionary class]]) {
-                [self createPreKeyExchangeFromRemoteDictionary:objects[kPreKeyExchangeRemoteAlias]];
-            }else {
-                for(NSDictionary *obj in objects[kEncryptedMessageRemoteAlias]) {
-                    [self createPreKeyExchangeFromRemoteDictionary:obj];
-                }
-            }
-        }
-        if(objects[kEncryptedMessageRemoteAlias]) {
-            if([objects[kEncryptedMessageRemoteAlias] isKindOfClass:[NSDictionary class]]) {
-                EncryptedMessage *message = [self createEncryptedMessageFromRemoteDictionary:objects[kEncryptedMessageRemoteAlias]];
-                [self enqueueDecryptableMessage:message toLocalUser:localUser];
-            }else {
-                for(NSDictionary *obj in objects[kEncryptedMessageRemoteAlias]) {
-                    EncryptedMessage *message = [self createEncryptedMessageFromRemoteDictionary:obj];
-                    [self enqueueDecryptableMessage:message toLocalUser:localUser];
-                }
-            }
-        }
-    });
-}
-
-- (PreKey *)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary {
-    NSArray *remoteKeys = [PreKey remoteKeys];
-    PreKey *preKey = [[PreKey alloc] initWithUserId:dictionary[remoteKeys[0]]
-                                           deviceId:dictionary[remoteKeys[1]]
-                                     signedPreKeyId:dictionary[remoteKeys[2]]
-                                 signedPreKeyPublic:dictionary[remoteKeys[3]]
-                              signedPreKeySignature:dictionary[remoteKeys[4]]
-                                        identityKey:dictionary[remoteKeys[5]]
-                                        baseKeyPair:nil];
-    
-    // TODO: unify how we're calling collection methods
-    if(preKey) {
-        KUser *remoteUser = [[KStorageManager sharedManager] objectForKey:preKey.userId inCollection:[KUser collection]];
-        if(remoteUser) {
-            KUser *currentUser = [KAccountManager sharedManager].user;
-            Session *session = [[FreeKeySessionManager sharedManager] processNewPreKey:preKey
-                                                                             localUser:currentUser
-                                                                            remoteUser:remoteUser];
-            if(session) {
-                [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
-            }else {
-                // TODO: throw invalid PreKey error
-            }
-        }else {
-            [[HttpManager sharedManager] enqueueGetWithRemoteAlias:kUserRemoteAlias parameters:@{@"userId" : preKey.userId}];
-        }
-    }else {
-        // TODO: throw invalid PreKey error
-    }
-    return preKey;
-}
-
-- (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary {
-    NSArray *remoteKeys = [PreKeyExchange remoteKeys];
-    PreKeyExchange *preKeyExchange =
-    [[PreKeyExchange alloc]  initWithSenderId:dictionary[remoteKeys[0]]
-                                   receiverId:dictionary[remoteKeys[1]]
-                         signedTargetPreKeyId:dictionary[remoteKeys[2]]
-                            sentSignedBaseKey:dictionary[remoteKeys[3]]
-                      senderIdentityPublicKey:dictionary[remoteKeys[4]]
-                    receiverIdentityPublicKey:dictionary[remoteKeys[5]]
-                             baseKeySignature:dictionary[remoteKeys[6]]];
-    
-    if(preKeyExchange) {
-        KUser *remoteUser = (KUser *)[[KStorageManager sharedManager] objectForKey:preKeyExchange.senderId
-                                                                      inCollection:[KUser collection]];
-        if(remoteUser) {
-            KUser *currentUser = [KAccountManager sharedManager].user;
-            Session *session = [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange
-                                                                                     localUser:currentUser
-                                                                                    remoteUser:remoteUser];
-            if(session) {
-                [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
-            }else {
-                // TODO: throw invalid PreKeyExchange error
-            }
-        }
-    }
-    return preKeyExchange;
-}
-
 - (void)enqueueEncryptableObject:(id <KEncryptable>)object localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     dispatch_async(queue, ^{
-        [FreeKey sendObject:object fromLocalUser:localUser toRemoteUser:remoteUser];
+        Session *session = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
+        if(!session) {
+            TOCFuture *futureKeyExchange = [localUser asyncRetrieveKeyExchangeWithRemoteUser:remoteUser];
+            [futureKeyExchange thenDo:^(id keyExchange) {
+                Session *newSession = [[FreeKeySessionManager sharedManager] processNewKeyExchange:keyExchange
+                                                                                         localUser:localUser
+                                                                                        remoteUser:remoteUser];
+                if(newSession) {
+                    // TODO: need to relate PKE with messages until it's acknowledged with a receipt
+                    PreKeyExchange *preKeyExchange = [newSession preKeyExchange];
+                    [preKeyExchange setSenderId:localUser.uniqueId];
+                    [SendPreKeyExchangeRequest makeRequestWithPreKeyExchange:preKeyExchange];
+                    [self encryptAndSendObject:object session:newSession localUser:localUser remoteUser:remoteUser];
+                }
+            }];
+        }else {
+            [self encryptAndSendObject:object session:session localUser:localUser remoteUser:remoteUser];
+        }
     });
 }
 
@@ -140,73 +67,64 @@
         KUser *remoteUser = (KUser *)[[KStorageManager sharedManager] objectForKey:encryptedMessage.senderId
                                                                       inCollection:[KUser collection]];
         if(remoteUser) {
-            [FreeKey receiveEncryptedMessage:encryptedMessage localUser:localUser remoteUser:remoteUser];
+            [self decryptAndSaveMessage:encryptedMessage localUser:localUser remoteUser:remoteUser];
         }else {
-            [KUser retrieveRemoteUserWithUserId:encryptedMessage.senderId];
+            TOCFuture *futureUser = [KUser asyncRetrieveWithUniqueId:encryptedMessage.senderId];
+            [futureUser thenDo:^(KUser *user){
+                [self decryptAndSaveMessage:encryptedMessage localUser:localUser remoteUser:user];
+            }];
         }
     });
 }
 
-- (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary {
-    NSArray *remoteKeys = [EncryptedMessage remoteKeys];
-    NSNumber *index = (NSNumber *)dictionary[remoteKeys[4]];
-    NSNumber *previousIndex = (NSNumber *)dictionary[remoteKeys[5]];
-    EncryptedMessage *encryptedMessage =
-    [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[remoteKeys[0]]
-                                              senderId:dictionary[remoteKeys[2]]
-                                            receiverId:dictionary[remoteKeys[1]]
-                                        serializedData:dictionary[remoteKeys[3]]
-                                                 index:[index intValue]
-                                         previousIndex:[previousIndex intValue]];
-    
-    
-    NSString *uniqueMessageId = [NSString stringWithFormat:@"%@_%f_%@",
-                                 dictionary[encryptedMessage],
-                                 [[NSDate date] timeIntervalSince1970],
-                                 index];
-    
-    [[KStorageManager sharedManager]setObject:encryptedMessage forKey:uniqueMessageId inCollection:kEncryptedMessageCollection];
-    return encryptedMessage;
+- (void)encryptAndSendObject:(id <KEncryptable>)object
+                     session:(Session *)session
+                   localUser:(KUser *)localUser
+                  remoteUser:(KUser *)remoteUser {
+    EncryptedMessage *newEncryptedMessage = [FreeKey encryptObject:object session:session];
+    [newEncryptedMessage addMetadataFromLocalUserId:localUser.uniqueId toRemoteUserId:remoteUser.uniqueId];
+    [[HttpManager sharedManager] enqueueSendableObject:newEncryptedMessage];
 }
 
-- (void)enqueueGetRequestWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
-    dispatch_queue_t queue = dispatch_queue_create([kHTTPRequestQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-    dispatch_async(queue, ^{
-        [[HttpManager sharedManager] getObjectsWithRemoteAlias:remoteAlias parameters:parameters];
-    });
-}
-
-- (void)receiveRemoteObject:(NSDictionary *)dictionary ofType:(NSString *)type {
-    if([type isEqualToString:kPreKeyExchangeRemoteAlias]) {
-        [self createPreKeyExchangeFromRemoteDictionary:dictionary[kPreKeyExchangeRemoteAlias]];
-    }else if([type isEqualToString:kPreKeyRemoteAlias]) {
-        [self createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
-    }else if([type isEqualToString:kEncryptedMessageRemoteAlias]) {
-        [self createEncryptedMessageFromRemoteDictionary:dictionary[kEncryptedMessageRemoteAlias]];
-    }else {
-        Class <KSendable> objectClass = NSClassFromString([self getClassNameFromType:type]);
-        [objectClass createFromRemoteDictionary:dictionary];
+- (void)decryptAndSaveMessage:(EncryptedMessage *)encryptedMessage
+                    localUser:(KUser *)localUser
+                   remoteUser:(KUser *)remoteUser {
+    Session *session = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
+    if(!session) {
+        PreKeyExchange *preKeyExchange = [[FreeKeySessionManager sharedManager] getPreKeyExchangeForUserId:remoteUser.uniqueId];
+        if(preKeyExchange) {
+            NSLog(@"PKE PUB KEY: %@", preKeyExchange.senderIdentityPublicKey);
+            NSLog(@"PKE BASE KEY: %@", preKeyExchange.sentSignedBaseKey);
+            Session *session = [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange
+                                                                                     localUser:localUser
+                                                                                    remoteUser:remoteUser];
+            if(session) {
+                id <KEncryptable> object = [FreeKey decryptEncryptedMessage:encryptedMessage session:session];
+                [object save];
+                [[KStorageManager sharedManager] removeObjectForKey:remoteUser.uniqueId inCollection:kPreKeyExchangeCollection];
+            }
+        }else {
+            TOCFuture *futureKeyExchange = [localUser asyncRetrieveKeyExchangeWithRemoteUser:remoteUser];
+            [futureKeyExchange thenDo:^(id keyExchange) {
+                Session *newSession = [[FreeKeySessionManager sharedManager] processNewKeyExchange:keyExchange
+                                                                                         localUser:localUser
+                                                                                        remoteUser:remoteUser];
+                if(newSession) {
+                    id <KEncryptable> object = [FreeKey decryptEncryptedMessage:encryptedMessage session:newSession];
+                    [object save];
+                }
+            }];
+        }
+    }
+    if(session) {
+        id <KEncryptable> object = [FreeKey decryptEncryptedMessage:encryptedMessage session:session];
+        [object save];
     }
 }
 
 - (NSString *)getClassNameFromType:(NSString *)type {
     NSDictionary *classNames = @{kUserRemoteAlias : @"KUser"};
     return classNames[type];
-}
-
-- (void)sendPreKeysToServer:(NSArray *)preKeys {
-    [[HttpManager sharedManager] batchPut:kPreKeyRemoteAlias objects:preKeys];
-}
-
-- (void)sendPreKeyExchange:(PreKeyExchange *)preKeyExchange toRemoteUser:(KUser *)remoteUser {
-    KUser *currentUser = [KAccountManager sharedManager].user;
-    [preKeyExchange setSenderId:currentUser.uniqueId];
-    [[HttpManager sharedManager] enqueueSendableObject:preKeyExchange];
-}
-
-- (void)getPreKeyWithRemoteUser:(KUser *)remoteUser {
-    NSDictionary *parameters = @{@"userId" : remoteUser.uniqueId};
-    [[HttpManager sharedManager] getObjectsWithRemoteAlias:kPreKeyRemoteAlias parameters:parameters];
 }
 
 #pragma mark - Generating PreKeys

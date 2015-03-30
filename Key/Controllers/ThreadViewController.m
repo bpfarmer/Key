@@ -235,7 +235,9 @@ YapDatabaseConnection *databaseConnection;
     NSMutableArray *users = [[NSMutableArray alloc] init];
     [usernames enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         KUser *user = [KUser fetchObjectWithUsername:obj];
-        if(user) [users addObject:user];
+        if(user) {
+            [users addObject:user];
+        }
     }];
     [users addObject:[[KAccountManager sharedManager] user]];
     self.thread = [[KThread alloc] initWithUsers:users];

@@ -39,9 +39,5 @@
 
 + (EncryptedMessage *)encryptObject:(id <KEncryptable>)object session:(Session *)session;
 + (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session;
-+ (void)sendObject:(id <KEncryptable>)object fromLocalUser:(KUser *)localUser toRemoteUser:(KUser *)remoteUser;
-+ (void)receiveEncryptedMessage:(EncryptedMessage *)encryptedMessage
-                      localUser:(KUser *)localUser
-                     remoteUser:(KUser *)remoteUser;
 
 @end

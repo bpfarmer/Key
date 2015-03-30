@@ -14,8 +14,7 @@
 #import "EncryptedMessage.h"
 #import "KAccountManager.h"
 #import "HttpRequest.h"
-
-#define kRemoteEndpoint @"https://polar-beyond-3981.herokuapp.com"
+#import "FreeKeyResponseHandler.h"
 
 @implementation HttpManager
 
@@ -58,44 +57,28 @@
     [self.httpOperationManager GET:request.endpoint parameters:request.parameters success:success failure:failure];
 }
 
-- (void)post:(id <KSendable>)object {
-    [self.httpOperationManager POST:[self endpointForObject:[self remoteAlias:object]]
-       parameters:@{[self remoteAlias:object] : [self toDictionary:object]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-            [object setRemoteStatus:kRemotePostSuccessStatus];
-        } else {
-            [object setRemoteStatus:kRemotePostFailureStatus];
-        }
-        [self fireNotification:kRemotePostNotification object:object];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        [object setRemoteStatus:kRemotePostNetworkFailureStatus];
-        [self fireNotification:kRemotePostNotification object:object];
-    }];
+- (NSString *)endpointForObject:(NSString *)objectAlias {
+    return [NSString stringWithFormat:@"%@/%@.json", kRemoteEndpoint, objectAlias];
 }
 
-- (void)getObjectsWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
-    [self.httpOperationManager GET:[self endpointForObject:remoteAlias] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-         if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
-             if([remoteAlias isEqualToString:kFeedRemoteAlias]) {
-                 NSLog(@"RESPONSE OBJECT: %@", responseObject);
-                 NSLog(@"BASE 64 DECODED RESPONSE OBJECT: %@", [self base64DecodedDictionary:responseObject]);
-                 [[FreeKeyNetworkManager sharedManager] receiveRemoteFeed:[self base64DecodedDictionary:responseObject] withLocalUser:[KAccountManager sharedManager].user];
-             }else {
-                 [[FreeKeyNetworkManager sharedManager] receiveRemoteObject:[self base64DecodedDictionary:responseObject] ofType:remoteAlias];
-             }
-         }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        // TODO: try again
-    }];
+- (NSString *)remoteAlias:(id <KSendable>)object {
+    return [[object class] remoteAlias];
 }
 
-- (void)batchPut:(NSString *)remoteAlias objects:(NSArray *)objects {
-    [self.httpOperationManager PUT:[self endpointForObject:remoteAlias]
-                        parameters:@{remoteAlias : objects}
-                           success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-    }];
+- (void)put:(id <KSendable>)object {
+    [self.httpOperationManager PUT:[self endpointForObject:[self remoteAlias:object]]
+                        parameters:@{[self remoteAlias:object] : [self toDictionary:object]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                            if([responseObject[@"status"] isEqual:@"SUCCESS"]) {
+                                [object setUniqueId:responseObject[[self remoteAlias:object]][@"uniqueId"]];
+                                [object setRemoteStatus:kRemotePutSuccessStatus];
+                            }else {
+                                [object setRemoteStatus:kRemotePutFailureStatus];
+                            }
+                            [self fireNotification:kRemotePutNotification object:object];
+                        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                            [object setRemoteStatus:kRemotePutNetworkFailureStatus];
+                            [self fireNotification:kRemotePutNotification object:object];
+                        }];
 }
 
 - (void)fireNotification:(NSString *)notification object:(id <KSendable>)object {
@@ -108,13 +91,6 @@
     dispatch_queue_t queue = dispatch_queue_create([kHTTPRequestQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     dispatch_async(queue, ^{
         [self put:object];
-    });
-}
-
-- (void)enqueueGetWithRemoteAlias:(NSString *)remoteAlias parameters:(NSDictionary *)parameters {
-    dispatch_queue_t queue = dispatch_queue_create([kHTTPRequestQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-    dispatch_async(queue, ^{
-        [self getObjectsWithRemoteAlias:remoteAlias parameters:parameters];
     });
 }
 
@@ -137,7 +113,7 @@
 /**
  * Method to convert Base64-encoded strings back to NSData. This might be the most
  * inefficient method in the world.
- * 
+ *
  * @param dictionary - Dictionary possibly containing Base64-encoded strings
  */
 - (NSDictionary *)base64DecodedDictionary:(NSDictionary *)dictionary {

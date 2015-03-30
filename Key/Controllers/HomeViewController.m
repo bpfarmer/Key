@@ -38,7 +38,7 @@ YapDatabaseConnection *databaseConnection;
     self.threadsTableView.delegate = self;
     [self.threadsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
-    [[FreeKeyNetworkManager sharedManager] pollFeedForLocalUser:[KAccountManager sharedManager].user];
+    //[[FreeKeyNetworkManager sharedManager] pollFeedForLocalUser:[KAccountManager sharedManager].user];
     
     [self setupDatabaseView];
 }
@@ -60,7 +60,7 @@ YapDatabaseConnection *databaseConnection;
 }
 
 - (IBAction)pollFeed:(id)sender {
-    [[FreeKeyNetworkManager sharedManager] pollFeedForLocalUser:[KAccountManager sharedManager].user];
+    [[KAccountManager sharedManager].user asyncGetFeed];
 }
 
 - (IBAction)logout:(id)sender {

@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import "HttpRequest.h"
 
-@interface SendMessageRequest : HTTPRequest
+@interface SendMessageRequest : HttpRequest
 
 @end

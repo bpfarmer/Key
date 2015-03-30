@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HttpManager.h"
+#import "KSendable.h"
 
 @class AFHTTPRequestOperation;
 
@@ -17,8 +18,13 @@
 @property (nonatomic) NSString *endpoint;
 @property (nonatomic) NSDictionary *parameters;
 
-- (instancetype)initWithHttpMethod:(httpMethods)httpMethod endpoint:(NSString *)endpoint parameters:(NSDictionary *)parameters;
+- (instancetype)initWithHttpMethod:(httpMethods)httpMethod
+                          endpoint:(NSString *)endpoint
+                        parameters:(NSDictionary *)parameters;
 - (void)makeRequestWithSuccess:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
                        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
+- (NSString *)urlForEndpoint:(NSString *)endpoint;
+- (NSDictionary *)toDictionary:(id <KSendable>)object;
+- (NSDictionary *)base64DecodedDictionary:(NSDictionary *)dictionary;
 
 @end

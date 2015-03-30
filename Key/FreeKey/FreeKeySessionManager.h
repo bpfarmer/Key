@@ -71,6 +71,9 @@
                     theirPreKeyExchange:(PreKeyExchange *)theirPreKeyExchange;
 
 - (PreKey *)getPreKeyForUserId:(NSString *)userId;
+- (PreKeyExchange *)getPreKeyExchangeForUserId:(NSString *)userId;
+
+- (Session *)processNewKeyExchange:(id)keyExchange localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
 
 /**
  * Processes a newly received PreKey from a remote user retrieved by a local user. If a session already exists

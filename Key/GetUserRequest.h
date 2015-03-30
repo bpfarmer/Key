@@ -1,5 +1,5 @@
 //
-//  RegisterUsernameRequest.h
+//  GetUserRequest.h
 //  Key
 //
 //  Created by Brendan Farmer on 3/25/15.
@@ -10,11 +10,10 @@
 #import "UserRequest.h"
 
 @class TOCFuture;
-@class KUser;
 
-@interface RegisterUsernameRequest : HttpRequest
+@interface GetUserRequest : HttpRequest
 
-- (instancetype)initWithUser:(KUser *)user;
-+ (TOCFuture *)makeRequestWithUser:(KUser *)user;
+- (instancetype)initWithParameters:(NSDictionary *)parameters;
++ (TOCFuture *)makeRequestWithParameters:(NSDictionary *)parameters;
 
 @end

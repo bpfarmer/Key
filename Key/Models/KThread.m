@@ -76,7 +76,7 @@
     [userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         KUser *user = [[KStorageManager sharedManager] objectForKey:obj inCollection:[KUser collection]];
         if(!user) {
-            [KUser retrieveRemoteUserWithUserId:obj];
+            [KUser asyncRetrieveWithUniqueId:obj];
         }
     }];
     return [self initWithUniqueId:threadId

@@ -25,16 +25,10 @@
 @property (nonatomic) NSString *localStatus;
 @property (nonatomic) IdentityKey *identityKey;
 @property (nonatomic) NSData *publicKey;
-// KSendable Protocol
-@property (nonatomic) NSString *remoteStatus;
 
-+ (TOCFuture *)asyncCreateUserWithUsername:(NSString *)username;
 
 + (KUser *)fetchObjectWithUsername:(NSString *)username;
-+ (void)retrieveRemoteUserWithUsername:(NSString *)username;
-+ (void)retrieveRemoteUserWithUserId:(NSString *)userId;
 + (NSArray *)userIdsWithUsernames:(NSArray *)usernames;
-
 - (void)setPasswordCryptInKeychain:(NSString *)password;
 - (BOOL)authenticatePassword:(NSString *)password;
 
@@ -42,16 +36,24 @@
 - (instancetype)initWithUsername:(NSString *)username password:(NSString *)password;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         username:(NSString *)username
+                       publicKey:(NSData *)publicKey;
+- (instancetype)initWithUniqueId:(NSString *)uniqueId
+                        username:(NSString *)username
                    passwordCrypt:(NSData *)passwordCrypt
                     passwordSalt:(NSData *)passwordSalt
                      identityKey:(IdentityKey *)identityKey
                        publicKey:(NSData *)publicKey;
 
++ (TOCFuture *)asyncCreateWithUsername:(NSString *)username password:(NSString *)password;
++ (TOCFuture *)asyncRetrieveWithUsername:(NSString *)username;
++ (TOCFuture *)asyncRetrieveWithUniqueId:(NSString *)uniqueId;
+- (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser;
+- (TOCFuture *)asyncSetupPreKeys;
+- (TOCFuture *)asyncUpdate;
+- (TOCFuture *)asyncGetFeed;
+
 - (NSString *)displayName;
-- (void)registerUsername;
-- (void)finishUserRegistration;
+- (void)setupIdentityKey;
+- (void)setupPreKeys;
 
 @end
-
-//Notification Center
-#define kRegisterUsernameStatusNotification @"kRegisterUsernameStatusNotification"

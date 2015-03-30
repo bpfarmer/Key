@@ -41,31 +41,4 @@
     return [NSKeyedUnarchiver unarchiveObjectWithData:decryptedData];
 }
 
-+ (void)sendObject:(id <KEncryptable>)object fromLocalUser:(KUser *)localUser toRemoteUser:(KUser *)remoteUser {
-    Session *session = [self getOrCreateSessionWithLocalUser:localUser remoteUser:remoteUser];
-    if(session) {
-        EncryptedMessage *encryptedMessage = [self encryptObject:object session:session];
-        [encryptedMessage addMetadataFromLocalUserId:localUser.uniqueId toRemoteUserId:remoteUser.uniqueId];
-        [[HttpManager sharedManager] enqueueSendableObject:encryptedMessage];
-    }
-}
-
-+ (void)receiveEncryptedMessage:(EncryptedMessage *)encryptedMessage
-                      localUser:(KUser *)localUser
-                     remoteUser:(KUser *)remoteUser {
-    Session *session = [self getOrCreateSessionWithLocalUser:localUser remoteUser:remoteUser];
-    if(session) {
-        id <KEncryptable> object = [FreeKey decryptEncryptedMessage:encryptedMessage session:session];
-        NSObject *obj = (NSObject *)object;
-        NSLog(@"OBJECT TYPE: %@", [obj class]);
-        [object save];
-    }
-}
-
-+ (Session *)getOrCreateSessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
-    Session *session = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
-    if(session) return session;
-    return [[FreeKeySessionManager sharedManager] createSessionWithLocalUser:localUser remoteUser:remoteUser];
-}
-
 @end

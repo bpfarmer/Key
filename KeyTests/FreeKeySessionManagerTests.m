@@ -98,7 +98,11 @@
 - (void)testPreKeySending {
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
     NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:user];
-    [[FreeKeyNetworkManager sharedManager] sendPreKeysToServer:preKeys];
+    //[[FreeKeyNetworkManager sharedManager] sendPreKeysToServer:preKeys];
+}
+
+- (void)testPreKeyRetrieval {
+    
 }
 
 @end

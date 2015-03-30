@@ -94,6 +94,7 @@
     
     // TODO: some sort of verification of trust, signatures, etc
     if(![Ed25519 verifySignature:preKeyExchange.baseKeySignature publicKey:preKeyExchange.senderIdentityPublicKey data:preKeyExchange.sentSignedBaseKey]) {
+        NSLog(@"FAILED SIGNATURE VERIFICATION");
         // TODO: throw someething crazy!
     }
 
@@ -154,6 +155,7 @@
     }
     
     if (![Ed25519 verifySignature:theirPreKey.signedPreKeySignature publicKey:theirIdentityKey.publicKey data:theirPreKey.signedPreKeyPublic]) {
+        NSLog(@"FAILED SIGNATURE VERIFICATION");
         //@throw [NSException exceptionWithName:InvalidKeyException reason:@"KeyIsNotValidlySigned" userInfo:nil];
     }
 }
@@ -165,6 +167,8 @@
     
     NSData *senderRatchetKey   = senderRootChain.ourRatchetKeyPair.publicKey;
     NSData *encryptedText = [AES_CBC encryptCBCMode:message withKey:messageKey.cipherKey withIV:messageKey.iv];
+    
+    NSLog(@"ENCRYPTING WITH MESSAGE KEY: %@", messageKey.cipherKey);
     
     EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithMacKey:messageKey.macKey
                                                                 senderIdentityKey:self.senderIdentityKey.publicKey
@@ -187,8 +191,10 @@
         receiverIdentityKey:self.senderIdentityKey.publicKey
                      macKey:sessionState.messageKey.macKey
              serializedData:encryptedMessage.serializedData]) {
-        // TODO: throw an error
+        NSLog(@"FAILED HMAC VERIFICATION");
     }
+    
+    NSLog(@"DECRYPTING WITH MESSAGE KEY: %@", sessionState.messageKey.cipherKey);
     
     NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
                                             withKey:sessionState.messageKey.cipherKey

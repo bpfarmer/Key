@@ -26,26 +26,32 @@
 #import "FreeKeyNetworkManager.h"
 #import "FreeKeySessionManager.h"
 #import "PreKeyExchange.h"
-
-#define kRemoteCreateNotification @"KUserRemoteCreateNotification"
-#define kRemoteUpdateNotification @"KUserRemoteUpdateNotification"
+#import "RegisterUsernameRequest.h"
+#import "GetUserRequest.h"
+#import "UpdateUserRequest.h"
+#import "UserRequest.h"
+#import "GetKeyExchangeRequest.h"
+#import "SendPreKeysRequest.h"
+#import "GetMessagesRequest.h"
+#import "SendPreKeyExchangeRequest.h"
 
 @implementation KUser
 
 #pragma mark - Initializers
 - (instancetype)initWithUsername:(NSString *)username {
     self = [super initWithUniqueId:nil];
-    
-    if (self) {
-        _username = [username lowercaseString];
+    if(self) {
+        _username = username;
     }
     return self;
 }
 
 - (instancetype)initWithUsername:(NSString *)username password:(NSString *)password {
-    self = [self initWithUsername:username];
+    self = [super initWithUniqueId:nil];
+    
     if (self) {
-        _passwordCrypt = [password dataUsingEncoding:NSUTF8StringEncoding];
+        _username = [username lowercaseString];
+        [self setPasswordCryptInKeychain:password];
     }
     return self;
 }
@@ -65,7 +71,6 @@
         _identityKey = identityKey;
         _publicKey   = publicKey;
     }
-    
     return self;
 }
 
@@ -78,85 +83,44 @@
         _username = username;
         _publicKey = publicKey;
     }
-    
     return self;
 }
 
-+ (TOCFuture *)asyncCreateUserWithUsername:(NSString *)username {
-    
-    
-    // did we fail right away? Then return an already-failed future
-    if (creationError != nil) {
-        return [TOCFuture futureWithFailure:(__bridge_transfer id)creationError];
-    }
-    
-    // we need to make an asynchronous call, so we'll use a future source
-    // that way we can return its future right away and fill it in later
-    TOCFutureSource *resultSource = [FutureSource new];
-    
-    id arcAddressBook = (__bridge_transfer id)addressBookRef; // retain the address book in ARC land
-    ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef requestAccessError) {
-        // time to fill in the future we returned
-        if (granted) {
-            [resultSource trySetResult:arcAddressBook];
-        } else {
-            [resultSource trySetFailure:(__bridge id)requestAccessError];
-        }
-    });
-    
-    return resultSource.future;
++ (TOCFuture *)asyncCreateWithUsername:(NSString *)username password:(NSString *)password {
+    KUser *user = [[KUser alloc] initWithUsername:username password:password];
+    return [RegisterUsernameRequest makeRequestWithUser:user];
 }
 
-+ (void)createFromRemoteDictionary:(NSDictionary *)dictionary {
-    NSDictionary *userDictionary = dictionary[[self remoteAlias]];
-    KUser *user;
-    
-    if(userDictionary) {
-        user = [[KUser alloc] initWithUniqueId:userDictionary[@"uniqueId"]
-                                      username:userDictionary[@"username"]
-                                     publicKey:userDictionary[@"publicKey"]];
-        [user save];
-    }
-    
-    if(dictionary[kPreKeyExchangeRemoteAlias]) {
-        PreKeyExchange *preKeyExchange =
-        [[FreeKeyNetworkManager sharedManager] createPreKeyExchangeFromRemoteDictionary:dictionary[kPreKeyExchangeRemoteAlias]];
-        
-        [[KStorageManager sharedManager] setObject:preKeyExchange
-                                            forKey:preKeyExchange.senderId
-                                      inCollection:kPreKeyExchangeCollection];
-    }else if(dictionary[kPreKeyRemoteAlias]) {
-        PreKey *preKey =
-        [[FreeKeyNetworkManager sharedManager] createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
-        
-        [[KStorageManager sharedManager] setObject:preKey
-                                            forKey:preKey.userId
-                                      inCollection:kTheirPreKeyCollection];
-    }
++ (TOCFuture *)asyncRetrieveWithUsername:(NSString *)username {
+    return [GetUserRequest makeRequestWithParameters:@{kUserUsername : username}];
 }
 
-+ (NSString *)remoteAlias {
-    return kUserRemoteAlias;
++ (TOCFuture *)asyncRetrieveWithUniqueId:(NSString *)uniqueId {
+    return [GetUserRequest makeRequestWithParameters:@{kUserUniqueId : uniqueId}];
 }
 
-
-#pragma mark - User Registration
-- (void)registerUsername {
-    [[HttpManager sharedManager] put:self];
+- (TOCFuture *)asyncUpdate {
+    return [UpdateUserRequest makeRequestWithUser:self];
 }
 
-- (void)finishUserRegistration {
+- (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser {
+    return [GetKeyExchangeRequest makeRequestWithLocalUser:self remoteUser:remoteUser];
+}
+
+- (TOCFuture *)asyncSetupPreKeys {
+    NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:self];
+    return [SendPreKeysRequest makeRequestWithPreKeys:preKeys];
+}
+
+- (TOCFuture *)asyncGetFeed {
+    return [GetMessagesRequest makeRequestWithCurrentUserId:self.uniqueId];
+}
+
+- (void)setupIdentityKey {
     IdentityKey *identityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:self.uniqueId];
     [self setIdentityKey:identityKey];
     [self setPublicKey:identityKey.keyPair.publicKey];
     [self save];
-    [[HttpManager sharedManager] post:self];
-    [self setupPreKeys];
-}
-
-- (void)setupPreKeys {
-    NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:self];
-    [[FreeKeyNetworkManager sharedManager] sendPreKeysToServer:preKeys];
 }
 
 #pragma mark - Batch Query Methods
@@ -189,18 +153,6 @@
     }
 }
 
-+ (void)retrieveRemoteUserWithUsername:(NSString *)username {
-    NSString *currentUserId = [KAccountManager sharedManager].user.uniqueId;
-    [[HttpManager sharedManager] enqueueGetWithRemoteAlias:kUserRemoteAlias
-                                                parameters:@{@"username" : username, @"currentUserId" : currentUserId}];
-}
-
-+ (void)retrieveRemoteUserWithUserId:(NSString *)userId {
-    NSString *currentUserId = [KAccountManager sharedManager].user.uniqueId;
-    [[HttpManager sharedManager] enqueueGetWithRemoteAlias:kUserRemoteAlias
-                                                parameters:@{@"userId" : userId, @"currentUserId" : currentUserId}];
-}
-
 + (NSArray *)userIdsWithUsernames:(NSArray *)usernames {
     NSMutableArray *userIds = [[NSMutableArray alloc] init];
     for(NSString *username in usernames) {
@@ -227,11 +179,6 @@
     return edges;
 }
 
-#pragma mark - Convenience Methods
-+ (NSArray *)remoteKeys {
-    return @[@"uniqueId", @"passwordCrypt", @"publicKey", @"username"];
-}
-
 #pragma mark - Password Handling Methods
 - (NSData *)encryptPassword:(NSString *)password {
     NSData *passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
@@ -239,7 +186,7 @@
         [self setSalt];
     }
     unsigned char key[32];
-    CCKeyDerivationPBKDF(kCCPBKDF2, passwordData.bytes, passwordData.length, self.passwordSalt.bytes, self.passwordSalt.length, kCCPRFHmacAlgSHA256, 10000, key, 32);
+    CCKeyDerivationPBKDF(kCCPBKDF2, passwordData.bytes, passwordData.length, self.passwordSalt.bytes, self.passwordSalt.length, kCCPRFHmacAlgSHA256, 8000, key, 32);
     return [NSData dataWithBytes:key length:sizeof(key)];
 }
 
@@ -277,6 +224,10 @@
         passwordSalt = [passwordSaltString base64DecodedData];
     }
     return passwordSalt;
+}
+
++ (NSArray *)remoteKeys {
+    return @[@"uniqueId", @"passwordCrypt", @"publicKey", @"username"];
 }
 
 @end

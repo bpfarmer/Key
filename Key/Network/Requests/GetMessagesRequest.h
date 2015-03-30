@@ -6,8 +6,14 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import "HttpRequest.h"
+#import "MessageRequest.h"
 
-@interface GetMessagesRequest : HTTPRequest
+@class TOCFuture;
+
+@interface GetMessagesRequest : HttpRequest
+
+- (instancetype)initWIthCurrentUserId:(NSString *)currentUserId;
++ (TOCFuture *)makeRequestWithCurrentUserId:(NSString *)currentUserId;
 
 @end

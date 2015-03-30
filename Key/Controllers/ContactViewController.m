@@ -14,6 +14,7 @@
 #import "KYapDatabaseView.h"
 #import "KMessage.h"
 #import "FreeKeyNetworkManager.h"
+#import "CollapsingFutures.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
 
@@ -25,12 +26,15 @@ YapDatabaseConnection *databaseConnection;
 @property (nonatomic, strong) IBOutlet UITextField *contactTextField;
 @property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
 @property (nonatomic, strong) YapDatabaseViewMappings *contactMappings;
+@property (nonatomic) KUser *currentUser;
 @end
 
 @implementation ContactViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.currentUser = [KAccountManager sharedManager].user;
     
     self.contactsTableView.dataSource = self;
     self.contactsTableView.delegate = self;
@@ -166,10 +170,19 @@ YapDatabaseConnection *databaseConnection;
 }
 
 - (IBAction)addContact:(id)sender {
-    if(![self.contactTextField.text isEqualToString:@""]) {
+    if(![self.contactTextField.text isEqualToString:@""] &&
+       ![self.contactTextField.text isEqualToString:self.currentUser.username]) {
         KUser *targetUser = [KUser fetchObjectWithUsername:[self.contactTextField.text lowercaseString]];
         if(!targetUser) {
-            [KUser retrieveRemoteUserWithUsername:[self.contactTextField.text lowercaseString]];
+            TOCFuture *futureUser = [KUser asyncRetrieveWithUsername:[self.contactTextField.text lowercaseString]];
+            
+            [futureUser catchDo:^(id failure) {
+                NSLog(@"ERROR: %@", failure);
+            }];
+            
+            [futureUser thenDo:^(KUser *user) {
+                // TODO: create added contact notification and send?
+            }];
         }
         self.contactTextField.text = @"";
     }
