@@ -26,7 +26,6 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
 - (void)setupDatabase;
 - (YapDatabase *)database;
 - (YapDatabaseConnection *)newDatabaseConnection;
-- (NSString *)databasePassword;
 - (NSString *)dbPath;
 
 - (NSUInteger)numberOfKeysInCollection:(NSString *)collection;

@@ -58,7 +58,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
 - (void)refreshDatabaseAndConnection {
     YapDatabaseOptions *options = [[YapDatabaseOptions alloc] init];
     options.corruptAction = YapDatabaseCorruptAction_Fail;
-    options.passphraseBlock = ^{
+    options.cipherKeyBlock = ^{
         return [self databasePassword];
     };
     
@@ -69,13 +69,10 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
     
     if(![_databases objectForKey:username]) {
         YapDatabase *newDatabase = [[YapDatabase alloc] initWithPath:[self dbPath]
-                                                    objectSerializer:NULL
-                                                  objectDeserializer:NULL
-                                                  metadataSerializer:NULL
-                                                metadataDeserializer:NULL
-                                                     objectSanitizer:NULL
-                                                   metadataSanitizer:NULL
+                                                          serializer:NULL
+                                                        deserializer:NULL
                                                              options:options];
+
         [_databases setObject:newDatabase forKey:username];
     }
     
@@ -140,7 +137,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
     return [path stringByAppendingFormat:@"/%@", [KAccountManager sharedManager].user.username];
 }
 
-- (NSString *)databasePassword {
+- (NSData *)databasePassword {
     NSString *keychainDBPassKey = [NSString stringWithFormat:@"%@_%@", keychainDBPassAccount, [KAccountManager sharedManager].user.username];
     NSString *dbPassword = [SSKeychain passwordForService:keychainService account:keychainDBPassKey];
     
@@ -148,7 +145,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
         dbPassword = [[Util generateRandomData:32] base64EncodedString];
         [SSKeychain setPassword:dbPassword forService:keychainService account:keychainDBPassKey];
     }
-    return dbPassword;
+    return [dbPassword dataUsingEncoding:NSUTF8StringEncoding];
 }
 
 #pragma mark convenience methods
