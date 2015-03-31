@@ -15,14 +15,14 @@
 
 @implementation GetMessagesRequest
 
-- (instancetype)initWIthCurrentUserId:(NSString *)currentUserId {
+- (instancetype)initWithCurrentUserId:(NSString *)currentUserId {
     NSDictionary *parameters = @{kMessageCurrentUserId : currentUserId};
     return [super initWithHttpMethod:GET endpoint:[super urlForEndpoint:kFeedEndpoint] parameters:parameters];
 }
 
 + (TOCFuture *)makeRequestWithCurrentUserId:(NSString *)currentUserId {
     TOCFutureSource *resultSource = [TOCFutureSource new];
-    GetMessagesRequest *request = [[GetMessagesRequest alloc] initWIthCurrentUserId:currentUserId];
+    GetMessagesRequest *request = [[GetMessagesRequest alloc] initWithCurrentUserId:currentUserId];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
     ^(AFHTTPRequestOperation *operation, id responseObject){
         NSLog(@"RESPONSE OBJECT: %@", responseObject);

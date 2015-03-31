@@ -10,4 +10,8 @@
 
 @interface PushManager : NSObject
 
++ (instancetype)sharedManager;
+
+@property (nonatomic) NSData *pushToken;
+
 @end

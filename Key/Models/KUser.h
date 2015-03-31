@@ -54,6 +54,5 @@
 
 - (NSString *)displayName;
 - (void)setupIdentityKey;
-- (void)setupPreKeys;
 
 @end

@@ -55,6 +55,7 @@
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */; };
 		EF99E2771AC72F71002583E2 /* FreeKeyResponseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E2761AC72F71002583E2 /* FreeKeyResponseHandler.m */; };
+		EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E27E1ACB2BB9002583E2 /* SendPushTokenRequest.m */; };
 		EFC1819A1AC3412800BE8B0B /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181991AC3412800BE8B0B /* HttpRequest.m */; };
 		EFC1819E1AC3534F00BE8B0B /* RegisterUsernameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC1819D1AC3534F00BE8B0B /* RegisterUsernameRequest.m */; };
 		EFC181A11AC3715B00BE8B0B /* UpdateUserRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181A01AC3715B00BE8B0B /* UpdateUserRequest.m */; };
@@ -199,6 +200,9 @@
 		EF99E2751AC72F71002583E2 /* FreeKeyResponseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKeyResponseHandler.h; sourceTree = "<group>"; };
 		EF99E2761AC72F71002583E2 /* FreeKeyResponseHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeyResponseHandler.m; sourceTree = "<group>"; };
 		EF99E27B1AC9D5AC002583E2 /* MessageRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MessageRequest.h; path = Network/Requests/Message/MessageRequest.h; sourceTree = "<group>"; };
+		EF99E27D1ACB2BB9002583E2 /* SendPushTokenRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SendPushTokenRequest.h; path = Network/Requests/PushToken/SendPushTokenRequest.h; sourceTree = "<group>"; };
+		EF99E27E1ACB2BB9002583E2 /* SendPushTokenRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SendPushTokenRequest.m; path = Network/Requests/PushToken/SendPushTokenRequest.m; sourceTree = "<group>"; };
+		EF99E2811ACB2D1F002583E2 /* PushTokenRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushTokenRequest.h; sourceTree = "<group>"; };
 		EFC181981AC3412800BE8B0B /* HttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HttpRequest.h; path = Network/HttpRequest.h; sourceTree = "<group>"; };
 		EFC181991AC3412800BE8B0B /* HttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HttpRequest.m; path = Network/HttpRequest.m; sourceTree = "<group>"; };
 		EFC1819C1AC3534F00BE8B0B /* RegisterUsernameRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterUsernameRequest.h; sourceTree = "<group>"; };
@@ -455,9 +459,20 @@
 			name = PreKey;
 			sourceTree = "<group>";
 		};
+		EF99E27C1ACB2B91002583E2 /* PushToken */ = {
+			isa = PBXGroup;
+			children = (
+				EF99E27D1ACB2BB9002583E2 /* SendPushTokenRequest.h */,
+				EF99E27E1ACB2BB9002583E2 /* SendPushTokenRequest.m */,
+				EF99E2811ACB2D1F002583E2 /* PushTokenRequest.h */,
+			);
+			name = PushToken;
+			sourceTree = "<group>";
+		};
 		EFC1819B1AC3524F00BE8B0B /* Requests */ = {
 			isa = PBXGroup;
 			children = (
+				EF99E27C1ACB2B91002583E2 /* PushToken */,
 				EF99E26C1AC5E793002583E2 /* PreKey */,
 				EF99E26B1AC5E787002583E2 /* Message */,
 				EF99E26A1AC5E773002583E2 /* User */,
@@ -844,6 +859,7 @@
 				EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */,
 				EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */,
 				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
+				EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */,
 				EF2CDECF1AB5C20F001E2F20 /* RootChain+Serialize.m in Sources */,
 				EFC181A71AC3719800BE8B0B /* GetMessagesRequest.m in Sources */,
 				EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */,

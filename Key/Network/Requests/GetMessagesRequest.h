@@ -13,7 +13,7 @@
 
 @interface GetMessagesRequest : HttpRequest
 
-- (instancetype)initWIthCurrentUserId:(NSString *)currentUserId;
+- (instancetype)initWithCurrentUserId:(NSString *)currentUserId;
 + (TOCFuture *)makeRequestWithCurrentUserId:(NSString *)currentUserId;
 
 @end

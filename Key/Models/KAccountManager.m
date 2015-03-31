@@ -9,6 +9,8 @@
 #import "KAccountManager.h"
 #import "KUser.h"
 #import "KStorageManager.h"
+#import "SendPushTokenRequest.h"
+#import "PushManager.h"
 
 @implementation KAccountManager
 
@@ -19,6 +21,15 @@
         sharedMyManager = [[self alloc] init];
     });
     return sharedMyManager;
+}
+
+
+- (void)setUser:(KUser *)user {
+    if(self) {
+        _user = user;
+        if([PushManager sharedManager].pushToken)
+            [SendPushTokenRequest makeRequestWithDeviceToken:[PushManager sharedManager].pushToken uniqueId:user.uniqueId];
+    }
 }
 
 @end

@@ -21,7 +21,7 @@
     SendMessageRequest *request = [[SendMessageRequest alloc] initWithSendableMessage:message];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
     ^(AFHTTPRequestOperation *operation, id responseObject){
-        [resultSource trySetResult:responseObject];
+        [resultSource trySetResult:@YES];
     };
     void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
     ^(AFHTTPRequestOperation *operation, NSError *error){
