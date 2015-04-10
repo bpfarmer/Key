@@ -28,6 +28,6 @@
 - (instancetype)iterateChainKey;
 - (instancetype)iterateRootKeyWithTheirEphemeral:(NSData *)theirEphemeral ourEphemeral:(ECKeyPair *)ourEphemeral;
 
-- (void)setRatchetKeyPair:(ECKeyPair *)ratchetKeyPair;
+//- (void)setRatchetKeyPair:(ECKeyPair *)ratchetKeyPair;
 
 @end

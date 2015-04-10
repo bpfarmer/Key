@@ -20,7 +20,7 @@
 
 - (instancetype)initWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     NSDictionary *parameters = @{kPreKeyLocalUserId : localUser.uniqueId, kPreKeyRemoteUserId : remoteUser.uniqueId};
-    return [super initWithHttpMethod:GET endpoint:[super urlForEndpoint:kPreKeyEndpoint] parameters:parameters];
+    return [super initWithHttpMethod:GET endpoint:kPreKeyEndpoint parameters:parameters];
 }
 
 + (TOCFuture *)makeRequestWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {

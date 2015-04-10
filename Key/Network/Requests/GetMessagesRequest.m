@@ -17,7 +17,7 @@
 
 - (instancetype)initWithCurrentUserId:(NSString *)currentUserId {
     NSDictionary *parameters = @{kMessageCurrentUserId : currentUserId};
-    return [super initWithHttpMethod:GET endpoint:[super urlForEndpoint:kFeedEndpoint] parameters:parameters];
+    return [super initWithHttpMethod:GET endpoint:kFeedEndpoint parameters:parameters];
 }
 
 + (TOCFuture *)makeRequestWithCurrentUserId:(NSString *)currentUserId {

@@ -15,7 +15,7 @@
 - (instancetype)initWithUser:(KUser *)user {
     id <KSendable>sendableUser = (id <KSendable>)user;
     NSDictionary *parameters = @{kUserAlias : [super toDictionary:sendableUser]};
-    return [super initWithHttpMethod:POST endpoint:[super urlForEndpoint:kUserEndpoint] parameters:parameters];
+    return [super initWithHttpMethod:POST endpoint:kUserEndpoint parameters:[super base64EncodedDictionary:parameters]];
 }
 
 + (TOCFuture *)makeRequestWithUser:(KUser *)user {

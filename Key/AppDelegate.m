@@ -24,14 +24,19 @@
     UIUserNotificationSettings *mySettings =
     [UIUserNotificationSettings settingsForTypes:types categories:nil];
     
-    [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
-    [application registerForRemoteNotifications];
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
+        [application registerForRemoteNotifications];
+    } else {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+    }
     
     return YES;
 }
 
 // Delegation methods
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
+    NSLog(@"DEV TOKEN: %@", devToken);
     [[PushManager sharedManager] setPushToken:devToken];
 }
 

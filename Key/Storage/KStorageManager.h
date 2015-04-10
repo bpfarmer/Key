@@ -18,9 +18,7 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
 
 @property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
 
-
 + (instancetype)sharedManager;
-- (void)releaseDatabaseAndConnection;
 - (void)refreshDatabaseAndConnection;
 
 - (void)setupDatabase;

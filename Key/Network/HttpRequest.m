@@ -16,8 +16,8 @@
     self = [super init];
     if(self) {
         _httpMethod = httpMethod;
-        _endpoint   = endpoint;
-        _parameters = [self base64EncodedDictionary:parameters];
+        _endpoint   = [self urlForEndpoint:endpoint];
+        _parameters = parameters;
     }
     
     return self;

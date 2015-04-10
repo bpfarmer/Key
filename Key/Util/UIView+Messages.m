@@ -1,0 +1,33 @@
+//
+//  UIView+Messages.m
+//  Key
+//
+//  Created by Brendan Farmer on 4/9/15.
+//  Copyright (c) 2015 Brendan Farmer. All rights reserved.
+//
+
+#import "UIView+Messages.h"
+
+@implementation UIView (Messages)
+
+- (void)pinSubview:(UIView *)subview toEdge:(NSLayoutAttribute)attribute
+{
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self
+                                                     attribute:attribute
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:subview
+                                                     attribute:attribute
+                                                    multiplier:1.0f
+                                                      constant:0.0f]];
+}
+
+- (void)pinAllEdgesOfSubview:(UIView *)subview
+{
+    [self pinSubview:subview toEdge:NSLayoutAttributeBottom];
+    [self pinSubview:subview toEdge:NSLayoutAttributeTop];
+    [self pinSubview:subview toEdge:NSLayoutAttributeLeading];
+    [self pinSubview:subview toEdge:NSLayoutAttributeTrailing];
+}
+
+@end
+

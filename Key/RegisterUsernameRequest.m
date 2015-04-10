@@ -16,7 +16,7 @@
 - (instancetype)initWithUser:(KUser *)user {
     NSDictionary *parameters = @{kUserAlias : @{kUserUsername : user.username,
                                                 kUserPasswordCrypt: user.passwordCrypt}};
-    return [super initWithHttpMethod:PUT endpoint:[super urlForEndpoint:kUserEndpoint] parameters:parameters];
+    return [super initWithHttpMethod:PUT endpoint:kUserEndpoint parameters:[super base64EncodedDictionary:parameters]];
 }
 
 + (TOCFuture *)makeRequestWithUser:(KUser *)user {

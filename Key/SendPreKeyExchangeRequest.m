@@ -13,7 +13,9 @@
 
 - (instancetype)initWithPreKeyExchange:(PreKeyExchange *)preKeyExchange {
     NSDictionary *parameters = @{ kPreKeyExchangeAlias : [super toDictionary:(id <KSendable>)preKeyExchange] };
-    return [super initWithHttpMethod:PUT endpoint:[super urlForEndpoint:kPreKeyExchangeEndpoint] parameters:parameters];
+    return [super initWithHttpMethod:PUT
+                            endpoint:kPreKeyExchangeEndpoint
+                          parameters:[super base64EncodedDictionary:parameters]];
 }
 
 + (TOCFuture *)makeRequestWithPreKeyExchange:(PreKeyExchange *)preKeyExchange {

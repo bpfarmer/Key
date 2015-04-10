@@ -25,6 +25,7 @@
                        failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
 - (NSString *)urlForEndpoint:(NSString *)endpoint;
 - (NSDictionary *)toDictionary:(id <KSendable>)object;
+- (NSDictionary *)base64EncodedDictionary:(NSDictionary *)dictionary;
 - (NSDictionary *)base64DecodedDictionary:(NSDictionary *)dictionary;
 
 @end

@@ -26,8 +26,10 @@
     };
     void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
     ^(AFHTTPRequestOperation *operation, NSError *error){
+        NSLog(@"ERROR: %@", error);
         [resultSource trySetFailure:error];
     };
+    NSLog(@"PARAMETERS: %@", request.parameters);
     [request makeRequestWithSuccess:success failure:failure];
     return resultSource.future;
     

@@ -43,6 +43,10 @@ YapDatabaseConnection *databaseConnection;
     [self setupDatabaseView];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [[KAccountManager sharedManager].user asyncGetFeed];
+}
+
 - (void) setupDatabaseView {
     _databaseConnection = [[KStorageManager sharedManager] newDatabaseConnection];
     [self.databaseConnection beginLongLivedReadTransaction];

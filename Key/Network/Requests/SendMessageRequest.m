@@ -13,7 +13,7 @@
 
 - (instancetype)initWithSendableMessage:(id<KSendable>)message {
     NSDictionary *parameters = @{kMessageAlias : [super toDictionary:message]};
-    return [super initWithHttpMethod:PUT endpoint:[super urlForEndpoint:kMessageEndpoint] parameters:parameters];
+    return [super initWithHttpMethod:PUT endpoint:kMessageEndpoint parameters:[super base64EncodedDictionary:parameters]];
 }
 
 + (TOCFuture *)makeRequestWithSendableMessage:(id<KSendable>)message {

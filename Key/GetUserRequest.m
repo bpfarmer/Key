@@ -18,7 +18,7 @@
 @implementation GetUserRequest
 
 - (instancetype)initWithParameters:(NSDictionary *)parameters {
-    self = [super initWithHttpMethod:GET endpoint:[super urlForEndpoint:kUserEndpoint] parameters:parameters];
+    self = [super initWithHttpMethod:GET endpoint:kUserEndpoint parameters:parameters];
     return self;
 }
 
