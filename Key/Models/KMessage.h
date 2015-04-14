@@ -9,13 +9,14 @@
 #import <YapDatabase/YapDatabaseRelationshipNode.h>
 #import "KYapDatabaseObject.h"
 #import "KEncryptable.h"
+#import "JSQMessageData.h"
 
 @class KUser;
 @class KGroup;
 @class KMessageCrypt;
 @class KThread;
 
-@interface KMessage : KYapDatabaseObject <YapDatabaseRelationshipNode, KEncryptable>
+@interface KMessage : KYapDatabaseObject <YapDatabaseRelationshipNode, KEncryptable, JSQMessageData>
 
 @property (nonatomic) NSString *authorId;
 @property (nonatomic) NSString *threadId;

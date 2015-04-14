@@ -11,6 +11,7 @@
 #import "KAccountManager.h"
 #import "KStorageManager.h"
 #import "HomeViewController.h"
+#import "PushManager.h"
 
 @interface LoginViewController ()
 
@@ -56,8 +57,8 @@
 
 - (void)showHome {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    HomeViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
-    [self presentViewController:inboxView animated:YES completion:nil];
+    UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MainNavigationController"];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 /*

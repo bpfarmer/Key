@@ -122,7 +122,7 @@ NSString *KContactDatabaseViewName = @"KContactDatabaseViewExtension";
                 KThread *thread1 = (KThread *)object1;
                 KThread *thread2 = (KThread *)object2;
                 
-                return [thread2.lastMessageAt compare:thread1.lastMessageAt];
+                return [thread2.latestMessage.createdAt compare:thread1.latestMessage.createdAt];
             }
         }
         return NSOrderedSame;

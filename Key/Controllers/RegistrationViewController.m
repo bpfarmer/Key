@@ -12,6 +12,7 @@
 #import "KStorageManager.h"
 #import "HttpManager.h"
 #import "CollapsingFutures.h"
+#import "PushManager.h"
 
 @interface RegistrationViewController () <UITextFieldDelegate>
 
@@ -51,15 +52,15 @@
                 [user asyncUpdate];
                 [user asyncSetupPreKeys];
             });
-            [self showInbox];
+            [self showHome];
         }];
     }
 }
 
-- (void)showInbox {
+- (void)showHome {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    UIViewController *inboxView = [storyboard instantiateViewControllerWithIdentifier:@"HomeViewController"];
-    [self presentViewController:inboxView animated:YES completion:nil];
+    UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MainNavigationController"];
+    [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning {

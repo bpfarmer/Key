@@ -18,6 +18,7 @@
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSArray *userIds;
 @property (nonatomic) KMessage *latestMessage;
+@property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *lastMessageAt;
 @property (nonatomic) NSDate *archivedAt;
 
@@ -28,8 +29,10 @@
                             name:(NSString *)name
                    latestMessage:(KMessage *)latestMessage
                    lastMessageAt:(NSDate *)lastMessageAt
-                      archivedAt:(NSDate *)archivedAt;
+                      archivedAt:(NSDate *)archivedAt
+                            read:(BOOL)read;
 
 - (NSString *)displayName;
+- (void)processLatestMessage:(KMessage *)message;
 
 @end

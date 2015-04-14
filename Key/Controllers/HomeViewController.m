@@ -16,8 +16,10 @@
 #import "ThreadViewController.h"
 #import "LoginViewController.h"
 #import "FreeKeyNetworkManager.h"
+#import "PushManager.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
+static NSString *kThreadSegueModal       = @"threadSegueModal";
 
 YapDatabaseViewMappings *mappings;
 YapDatabaseConnection *databaseConnection;
@@ -26,6 +28,8 @@ YapDatabaseConnection *databaseConnection;
 @property (nonatomic, strong) IBOutlet UITableView *threadsTableView;
 @property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
 @property (nonatomic, strong) YapDatabaseViewMappings *threadMappings;
+@property (nonatomic, weak) KThread *selectedThread;
+@property (nonatomic, strong) UISwipeGestureRecognizer *swipeGestureRecognizer;
 @end
 
 
@@ -37,14 +41,17 @@ YapDatabaseConnection *databaseConnection;
     self.threadsTableView.dataSource = self;
     self.threadsTableView.delegate = self;
     [self.threadsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
-    
     [[KAccountManager sharedManager].user asyncGetFeed];
-    
     [self setupDatabaseView];
+    
+    self.swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
+    self.swipeGestureRecognizer.numberOfTouchesRequired = 1;
+    [self.view addGestureRecognizer:self.swipeGestureRecognizer];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [[KAccountManager sharedManager].user asyncGetFeed];
+- (void)viewWillAppear:(BOOL)animated {
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
 - (void) setupDatabaseView {
@@ -111,6 +118,14 @@ YapDatabaseConnection *databaseConnection;
                               withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
             }
+            case YapDatabaseViewChangeMove :
+            {
+                break;
+            }
+            case YapDatabaseViewChangeUpdate :
+            {
+                break;
+            }
         }
     }
     
@@ -172,7 +187,13 @@ YapDatabaseConnection *databaseConnection;
     
     UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
                                                                         forIndexPath:indexPath];
-    cell.textLabel.text = [thread displayName];
+    
+    NSString *read = @"";
+    if(!thread.read) {
+        read = @" - UNREAD";
+    }
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [thread displayName], read];
+    //[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
 
@@ -181,15 +202,36 @@ YapDatabaseConnection *databaseConnection;
     [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         thread = [[transaction extension:KThreadDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.threadMappings];
     }];
-    if(thread) [self goToThread:thread];
+    if(thread) {
+        self.selectedThread = thread;
+        [self performSegueWithIdentifier:kThreadSegueModal sender:self];
+    }
 }
 
-- (void) goToThread:(KThread *)thread {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
-    ThreadViewController *threadView = [storyboard instantiateViewControllerWithIdentifier:@"ThreadViewController"];
-    threadView.thread = thread;
-    [self presentViewController:threadView animated:YES completion:nil];
-    
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString:kThreadSegueModal]) {
+        if(self.selectedThread) {
+            UINavigationController *navigationController = (UINavigationController *)segue.destinationViewController;
+            ThreadViewController *threadViewController =
+                (ThreadViewController *)navigationController.topViewController;
+            threadViewController.thread = self.selectedThread;
+        }
+    }
+}
+
+- (void)handleSwipes:(UISwipeGestureRecognizer *)paramSender {
+    if(paramSender.direction & UISwipeGestureRecognizerDirectionDown) {
+        NSLog(@"SWIPED DOWN");
+    }
+    if(paramSender.direction & UISwipeGestureRecognizerDirectionLeft) {
+        NSLog(@"SWIPED LEFT");
+    }
+    if(paramSender.direction & UISwipeGestureRecognizerDirectionRight) {
+        NSLog(@"SWIPED RIGHT");
+    }
+    if(paramSender.direction & UISwipeGestureRecognizerDirectionUp) {
+        NSLog(@"SWIPED UP");
+    }
 }
 
 @end

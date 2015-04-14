@@ -25,7 +25,6 @@
     GetMessagesRequest *request = [[GetMessagesRequest alloc] initWithCurrentUserId:currentUserId];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
     ^(AFHTTPRequestOperation *operation, id responseObject){
-        NSLog(@"RESPONSE OBJECT: %@", responseObject);
         [request receiveMessages:[request base64DecodedDictionary:responseObject]];
     };
     void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
@@ -38,7 +37,7 @@
 }
 
 - (void)receiveMessages:(NSDictionary *)messages {
-    if(messages[kPreKeyExchangeRemoteAlias]) {
+    if([messages[kPreKeyExchangeRemoteAlias] count] > 0) {
         if([messages[kPreKeyExchangeRemoteAlias] isKindOfClass:[NSDictionary class]]) {
             [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:messages[kPreKeyExchangeRemoteAlias]];
         }else {
@@ -48,7 +47,7 @@
         }
     }
     KUser *localUser = [KAccountManager sharedManager].user;
-    if(messages[kEncryptedMessageRemoteAlias]) {
+    if([messages[kEncryptedMessageRemoteAlias] count] > 0) {
         if([messages[kEncryptedMessageRemoteAlias] isKindOfClass:[NSDictionary class]]) {
             EncryptedMessage *message =
             [FreeKeyResponseHandler createEncryptedMessageFromRemoteDictionary:messages[kEncryptedMessageRemoteAlias]];

@@ -17,6 +17,7 @@
 #define kCoderLatestMessage @"latestMessage"
 #define kCoderLastMessageAt @"lastMessageAt"
 #define kCoderArchivedAt @"archivedAt"
+#define kCoderRead @"read"
 
 + (BOOL)supportsSecureCoding {
     return YES;
@@ -29,7 +30,8 @@
                              name:[decoder decodeObjectOfClass:[NSString class] forKey:kCoderName]
                     latestMessage:[decoder decodeObjectOfClass:[KMessage class] forKey:kCoderLatestMessage]
                     lastMessageAt:[decoder decodeObjectOfClass:[NSDate class] forKey:kCoderLastMessageAt]
-                       archivedAt:[decoder decodeObjectOfClass:[NSDate class] forKey:kCoderArchivedAt]];
+                       archivedAt:[decoder decodeObjectOfClass:[NSDate class] forKey:kCoderArchivedAt]
+                             read:[decoder decodeBoolForKey:kCoderRead]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
@@ -39,6 +41,7 @@
     [encoder encodeObject:self.latestMessage forKey:kCoderLatestMessage];
     [encoder encodeObject:self.lastMessageAt forKey:kCoderLastMessageAt];
     [encoder encodeObject:self.archivedAt forKey:kCoderArchivedAt];
+    [encoder encodeBool:self.read forKey:kCoderRead];
 }
 
 

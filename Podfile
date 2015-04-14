@@ -9,3 +9,4 @@ pod 'TwistedOakCollapsingFutures', '~> 1.0'
 pod 'YapDatabase/SQLCipher', :inhibit_warnings => true
 pod 'AFNetworking', :inhibit_warnings => true
 pod 'SSKeychain', :inhibit_warnings => true
+pod 'JSQMessagesViewController'

@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JSQMessagesViewController.h"
+#import "JSQMessages.h"
 
 @class KThread;
 
-@interface ThreadViewController : UIViewController
+@interface ThreadViewController : JSQMessagesViewController
 
 @property (nonatomic, retain) KThread *thread;
+@property (strong, nonatomic) JSQMessagesBubbleImage *outgoingBubbleImageData;
+@property (strong, nonatomic) JSQMessagesBubbleImage *incomingBubbleImageData;
 
 @end

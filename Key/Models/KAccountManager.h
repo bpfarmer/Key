@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class KUser;
+@class TOCFuture;
 
 @interface KAccountManager : NSObject
 
@@ -16,5 +17,7 @@
 @property (nonatomic) KUser *user;
 
 + (instancetype)sharedManager;
+
+- (TOCFuture *)asyncGetFeed;
 
 @end

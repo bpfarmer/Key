@@ -12,6 +12,7 @@
 #import "KStorageManager.h"
 #import "FreeKey.h"
 #import "KAccountManager.h"
+#import "KMessage.h"
 
 #define KThreadRemoteEndpoint @"http://127.0.0.1:9393/user.json"
 #define KThreadRemoteAlias @"thread"
@@ -59,14 +60,16 @@
                             name:(NSString *)name
                    latestMessage:(KMessage *)latestMessage
                    lastMessageAt:(NSDate *)lastMessageAt
-                      archivedAt:(NSDate *)archivedAt {
+                      archivedAt:(NSDate *)archivedAt
+                            read:(BOOL)read{
     self = [super initWithUniqueId:uniqueId];
     if (self) {
         _name = name;
-        _userIds       = userIds;
-        _latestMessage = latestMessage;
-        _lastMessageAt = lastMessageAt;
-        _archivedAt    = archivedAt;
+        _userIds            = userIds;
+        _latestMessage      = latestMessage;
+        _lastMessageAt      = lastMessageAt;
+        _archivedAt         = archivedAt;
+        _read               = read;
     }
     return self;
 }
@@ -84,7 +87,8 @@
                              name:nil
                     latestMessage:nil
                     lastMessageAt:nil
-                       archivedAt:nil];
+                       archivedAt:nil
+                             read:NO];
 }
 
 - (NSString *)displayName {
@@ -108,6 +112,25 @@
 
 + (NSString *)remoteCreateNotification {
     return KThreadRemoteCreateNotification;
+}
+
+- (void)processLatestMessage:(KMessage *)message {
+    KUser *currentUser = [KAccountManager sharedManager].user;
+    if(![message.authorId isEqualToString:currentUser.uniqueId]) {
+        self.read = NO;
+    }
+    
+    if(self.latestMessage) {
+        NSComparisonResult dateComparison = [message.createdAt compare:self.latestMessage.createdAt];
+        switch (dateComparison) {
+            case NSOrderedDescending : self.latestMessage = message; break;
+            default : break;
+        }
+    }else {
+        self.latestMessage = message;
+    }
+    
+    [self save];
 }
 
 @end

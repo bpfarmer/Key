@@ -8,10 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+@class TOCFutureSource;
+@class TOCFuture;
+
 @interface PushManager : NSObject
 
-+ (instancetype)sharedManager;
+@property (nonatomic, weak) NSData *pushToken;
+@property TOCFutureSource *userNotificationFutureSource;
 
-@property (nonatomic) NSData *pushToken;
++ (instancetype)sharedManager;
+- (void)respondToRemoteNotification;
+- (TOCFuture *)registerForRemoteNotifications;
+- (void)sendPushToken:(NSData *)pushToken userId:(NSString *)userId;
+
 
 @end

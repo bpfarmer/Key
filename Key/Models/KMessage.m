@@ -48,6 +48,7 @@
         _authorId = authorId;
         _threadId = threadId;
         _body     = body;
+        _createdAt = [NSDate date];
         [self setUniqueId:[self generateUniqueId]];
     }
     
@@ -60,6 +61,44 @@
                           [Util insecureRandomString:10]];
     
     return uniqueId;
+}
+
+- (NSUInteger)messageHash {
+    return self.authorId.hash ^ (NSUInteger) [self.createdAt timeIntervalSince1970] ^ self.body.hash;
+}
+
+- (KUser *)author {
+    return (KUser *)[[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
+}
+
+- (void)save {
+    [super save];
+    [self.thread processLatestMessage:self];
+}
+
+- (KThread *)thread {
+    return [[KStorageManager sharedManager] objectForKey:self.threadId inCollection:[KThread collection]];
+}
+
+- (NSString *)text {
+    return self.body;
+}
+
+- (NSDate *)date {
+    return self.createdAt;
+}
+
+#pragma mark - JSQMessageData Protocol
+- (NSString *)senderId {
+    return self.authorId;
+}
+
+- (NSString *)senderDisplayName {
+    return [self author].username;
+}
+
+- (BOOL)isMediaMessage {
+    return NO;
 }
 
 @end

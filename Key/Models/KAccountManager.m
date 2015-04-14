@@ -11,6 +11,7 @@
 #import "KStorageManager.h"
 #import "SendPushTokenRequest.h"
 #import "PushManager.h"
+#import "CollapsingFutures.h"
 
 @implementation KAccountManager
 
@@ -27,9 +28,22 @@
 - (void)setUser:(KUser *)user {
     if(self) {
         _user = user;
-        if([PushManager sharedManager].pushToken)
-            [SendPushTokenRequest makeRequestWithDeviceToken:[PushManager sharedManager].pushToken uniqueId:user.uniqueId];
+        
+        if(user.uniqueId) {
+            TOCFuture *pushNotificationFuture = [[PushManager sharedManager] registerForRemoteNotifications];
+        
+            [pushNotificationFuture thenDo:^(id value) {
+                [[PushManager sharedManager] sendPushToken:value userId:self.user.uniqueId];
+            }];
+        }
     }
+}
+
+- (TOCFuture *)asyncGetFeed {
+    if(self.user) {
+        return self.user.asyncGetFeed;
+    }
+    return nil;
 }
 
 @end

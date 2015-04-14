@@ -42,8 +42,6 @@
                     receiverIdentityPublicKey:dictionary[remoteKeys[5]]
                              baseKeySignature:dictionary[remoteKeys[6]]];
     
-    NSLog(@"DICTIONARY: %@", dictionary);
-    NSLog(@"SENDER ID: %@", preKeyExchange.senderId);
     [[KStorageManager sharedManager] setObject:preKeyExchange
                                         forKey:preKeyExchange.senderId
                                   inCollection:kPreKeyExchangeCollection];

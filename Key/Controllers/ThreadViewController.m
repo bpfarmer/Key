@@ -15,18 +15,17 @@
 #import "KMessage.h"
 #import "FreeKey.h"
 #import "FreeKeyNetworkManager.h"
+#import "JSQMessagesAvatarImageFactory.h"
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
 YapDatabaseViewMappings *mappings;
 YapDatabaseConnection *databaseConnection;
 
-@interface ThreadViewController () <UITableViewDataSource, UITextFieldDelegate>
-@property (nonatomic, strong) IBOutlet UITableView *messagesTableView;
-@property (nonatomic, strong) IBOutlet UITextField *messageTextField;
-@property (nonatomic, strong) IBOutlet UITextField *recipientTextField;
-@property (nonatomic, strong) IBOutlet UIView *headerView;
-@property (nonatomic, strong) KUser *curentUser;
+@interface ThreadViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@property (nonatomic, strong) UITextField *recipientTextField;
+@property (nonatomic, strong) UIView *titleView;
+@property (nonatomic, strong) KUser *currentUser;
 @property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
 @property (nonatomic, strong) YapDatabaseViewMappings *messageMappings;
 @end
@@ -36,49 +35,52 @@ YapDatabaseConnection *databaseConnection;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.messagesTableView.dataSource = self;
-    [self.messagesTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
-    
-    self.messageTextField.delegate = self;
-    self.recipientTextField.delegate = self;
-    self.messageTextField.tag = 1;
+    self.currentUser = [KAccountManager sharedManager].user;
+    self.senderDisplayName = self.currentUser.username;
+    self.senderId = self.currentUser.uniqueId;
     
     if(self.thread) {
         [self setupDatabaseView];
+    }else {
+        self.recipientTextField =
+        [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width - 50.0, 30.0)];
+        self.recipientTextField.tag = 1;
+        self.recipientTextField.center = self.navigationItem.titleView.center;
+        self.recipientTextField.borderStyle = UITextBorderStyleRoundedRect;
+        self.recipientTextField.delegate = self;
+        self.titleView = self.navigationItem.titleView;
+        self.navigationItem.titleView = self.recipientTextField;
     }
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    if(textField.tag == 1)
-        [self animateTextField: textField up: YES];
-}
-
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    if(textField.tag == 1)
-        [self animateTextField: textField up: NO];
-}
-
-- (void) animateTextField: (UITextField*) textField up: (BOOL) up
-{
-    const int movementDistance = 220; // tweak as needed
-    const float movementDuration = 0.3f; // tweak as needed
     
-    int movement = (up ? -movementDistance : movementDistance);
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
-    [UIView commitAnimations];
+    self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+    
+    JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
+    self.incomingBubbleImageData =
+    [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
+    self.outgoingBubbleImageData =
+    [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleBlueColor]];
+    
+    self.showLoadEarlierMessagesHeader = NO;
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField*)aTextField
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    
+    if(self.thread) {
+        self.title = self.thread.displayName;
+        [self.thread setRead:YES];
+        [self.thread save];
+    }
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
+                                                                                          target:self
+                                                                                          action:@selector(closePressed:)];
+}
+
+- (void)closePressed:(UIBarButtonItem *)sender
 {
-    [aTextField resignFirstResponder];
-    return YES;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) setupDatabaseView {
@@ -119,114 +121,163 @@ YapDatabaseConnection *databaseConnection;
         return;
     }
     
-    [self.messagesTableView beginUpdates];
-    
-    for (YapDatabaseViewSectionChange *sectionChange in sectionChanges)
-    {
-        switch (sectionChange.type)
+    [self.collectionView performBatchUpdates:^{
+        for (YapDatabaseViewSectionChange *sectionChange in sectionChanges)
         {
-            case YapDatabaseViewChangeDelete :
+            switch (sectionChange.type)
             {
-                [self.messagesTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionChange.index]
-                              withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeInsert :
-            {
-                [self.messagesTableView insertSections:[NSIndexSet indexSetWithIndex:sectionChange.index]
-                              withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
+                case YapDatabaseViewChangeDelete :
+                {
+                    [self.collectionView deleteSections:[NSIndexSet indexSetWithIndex:sectionChange.index]];
+                    break;
+                }
+                case YapDatabaseViewChangeInsert :
+                {
+                    [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:sectionChange.index]];
+                    break;
+                }
+                case YapDatabaseViewChangeMove :
+                {
+                    break;
+                }
+                case YapDatabaseViewChangeUpdate :
+                {
+                    break;
+                }
             }
         }
-    }
-    
-    for (YapDatabaseViewRowChange *rowChange in rowChanges)
-    {
-        switch (rowChange.type)
+        
+        for (YapDatabaseViewRowChange *rowChange in rowChanges)
         {
-            case YapDatabaseViewChangeDelete :
+            switch (rowChange.type)
             {
-                [self.messagesTableView deleteRowsAtIndexPaths:@[ rowChange.indexPath ]
-                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeInsert :
-            {
-                [self.messagesTableView insertRowsAtIndexPaths:@[ rowChange.newIndexPath ]
-                                    withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeMove :
-            {
-                [self.messagesTableView deleteRowsAtIndexPaths:@[ rowChange.indexPath ]
-                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.messagesTableView insertRowsAtIndexPaths:@[ rowChange.newIndexPath ]
-                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeUpdate :
-            {
-                [self.messagesTableView reloadRowsAtIndexPaths:@[ rowChange.indexPath ]
-                                      withRowAnimation:UITableViewRowAnimationNone];
-                break;
+                case YapDatabaseViewChangeDelete :
+                {
+                    [self.collectionView deleteItemsAtIndexPaths:@[rowChange.indexPath]];
+                    break;
+                }
+                case YapDatabaseViewChangeInsert :
+                {
+                    [self.collectionView insertItemsAtIndexPaths:@[rowChange.newIndexPath]];
+                    break;
+                }
+                case YapDatabaseViewChangeMove :
+                {
+                    [self.collectionView deleteItemsAtIndexPaths:@[rowChange.indexPath]];
+                    [self.collectionView insertItemsAtIndexPaths:@[rowChange.newIndexPath]];
+                    break;
+                }
+                case YapDatabaseViewChangeUpdate :
+                {
+                    [self.collectionView reloadItemsAtIndexPaths:@[rowChange.indexPath]];
+                    break;
+                }
             }
         }
-    }
-    
-    [self.messagesTableView endUpdates];
+    } completion:^(BOOL success) {
+        if (!success) {
+            [self.collectionView.collectionViewLayout invalidateLayoutWithContext:[JSQMessagesCollectionViewFlowLayoutInvalidationContext context]];
+            [self.collectionView reloadData];
+        }
+        [self scrollToBottomAnimated:YES];
+    }];
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)sender
-{
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     if ([self.messageMappings numberOfItemsInAllGroups] == 0) return 1;
     else return [self.messageMappings numberOfSections];
 }
 
-- (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return [self.messageMappings numberOfItemsInSection:section];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (id <JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return [self messageAtIndexPath:indexPath];
+}
+
+- (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView
+             messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
+    id <JSQMessageData> message = [self messageAtIndexPath:indexPath];
+    
+    if ([message.senderId isEqualToString:self.senderId]) {
+        return self.outgoingBubbleImageData;
+    }
+    
+    return self.incomingBubbleImageData;
+}
+
+- (UICollectionViewCell *)collectionView:(JSQMessagesCollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    JSQMessagesCollectionViewCell *cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    
+    id <JSQMessageData> msg = [self messageAtIndexPath:indexPath];
+    
+    if ([msg.senderId isEqualToString:self.senderId]) {
+        cell.textView.textColor = [UIColor whiteColor];
+    }
+    
+    return cell;
+}
+
+
+- (id<JSQMessageData>)messageAtIndexPath:(NSIndexPath *)indexPath {
     __block KMessage *message;
     [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         message = (KMessage *)[[transaction extension:@"KMessageDatabaseViewExtension"] objectAtIndexPath:indexPath withMappings:self.messageMappings];
     }];
-    
-    UITableViewCell *cell = [self.messagesTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    cell.textLabel.text = message.body;
-    return cell;
+    return message;
 }
 
-- (IBAction)createMessage:(id)sender {
-    if(![self.messageTextField.text isEqualToString:@""]) {
+- (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView
+                    avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
+    KMessage *message = (KMessage *)[self messageAtIndexPath:indexPath];
+    if (![message.senderId isEqualToString:self.senderId]) {
+        return [JSQMessagesAvatarImageFactory
+                avatarImageWithUserInitials:[[message.senderDisplayName substringToIndex:1] uppercaseString]
+                backgroundColor:[UIColor jsq_messageBubbleLightGrayColor]
+                textColor:[UIColor whiteColor]
+                font:[UIFont boldSystemFontOfSize:14.0]
+                diameter:28];
+    }else {
+        return nil;
+    }
+}
+
+- (void)didPressSendButton:(UIButton *)button
+           withMessageText:(NSString *)text
+                  senderId:(NSString *)senderId
+         senderDisplayName:(NSString *)senderDisplayName
+                      date:(NSDate *)date {
+    if (text.length > 0) {
+        [JSQSystemSoundPlayer jsq_playMessageSentSound];
+        
         if (!self.thread) {
             [self setupThread];
         }
-
-        [self.messagesTableView reloadData];
-
-        KMessage *message = [[KMessage alloc] initWithAuthorId:[KAccountManager sharedManager].user.uniqueId
-                                                      threadId:self.thread.uniqueId
-                                                          body:self.messageTextField.text];
-        [message save];
-        KUser *currentUser = [[KAccountManager sharedManager] user];
-
-        [self.thread.userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if(![obj isEqual:currentUser.uniqueId]) {
-                dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-                dispatch_async(queue, ^{
-                    KUser *user = (KUser *)[[KStorageManager sharedManager] objectForKey:obj inCollection:[KUser collection]];
-                    if(user) {
-                        [[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:message localUser:currentUser remoteUser:user];
-                    }
-                });
-            }
-        }];
-        self.messageTextField.text = @"";
+        
+        if(self.thread) {
+            KMessage *message = [[KMessage alloc] initWithAuthorId:self.senderId threadId:self.thread.uniqueId body:text];
+            [message save];
+            [self.thread.userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                if(![obj isEqual:self.currentUser.uniqueId]) {
+                    dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+                    dispatch_async(queue, ^{
+                        KUser *user =
+                        (KUser *)[[KStorageManager sharedManager] objectForKey:obj inCollection:[KUser collection]];
+                        if(user) {
+                            [[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:message
+                                                                                  localUser:self.currentUser
+                                                                                 remoteUser:user];
+                        }
+                    });
+                }
+            }];
+            self.inputToolbar.contentView.textView.text = @"";
+            [self scrollToBottomAnimated:YES];
+        }
     }
 }
 
@@ -239,6 +290,7 @@ YapDatabaseConnection *databaseConnection;
             [users addObject:user];
         }
     }];
+    if([users count] != [usernames count]) return;
     [users addObject:[[KAccountManager sharedManager] user]];
     self.thread = [[KThread alloc] initWithUsers:users];
     [self.thread save];
@@ -250,6 +302,57 @@ YapDatabaseConnection *databaseConnection;
         }
     }];
     [self setupDatabaseView];
+    [self.recipientTextField setHidden:YES];
+    self.navigationItem.titleView = self.titleView;
+    self.navigationItem.title = self.thread.displayName;
+}
+
+- (void)didPressAccessoryButton:(UIButton *)sender
+{
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancel"
+                                         destructiveButtonTitle:nil
+                                              otherButtonTitles:@"Send photo", @"Send location", @"Send video", nil];
+    
+    [sheet showFromToolbar:self.inputToolbar];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == actionSheet.cancelButtonIndex) {
+        return;
+    }
+    
+    switch (buttonIndex) {
+        case 0:
+            //[self.demoData addPhotoMediaMessage];
+            break;
+            
+        case 1:
+        {
+            __weak UICollectionView *weakView = self.collectionView;
+            
+            /*[self.demoData addLocationMediaMessageCompletion:^{
+                [weakView reloadData];
+            }];*/
+        }
+            break;
+            
+        case 2:
+            //[self.demoData addVideoMediaMessage];
+            break;
+    }
+    
+    [JSQSystemSoundPlayer jsq_playMessageSentSound];
+    
+    [self finishSendingMessageAnimated:YES];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField*)aTextField
+{
+    [aTextField resignFirstResponder];
+    return YES;
 }
 
 @end

@@ -140,7 +140,7 @@
 + (KUser *)fetchObjectWithUsername:(NSString *)username {
     __block NSString *userId;
     [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:@"WHERE username = ?", username];
+        YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:@"WHERE username = ?", [username lowercaseString]];
         [[transaction ext:KUsernameSQLiteIndex] enumerateKeysMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, BOOL *stop) {
             userId = key;
             *stop = YES;

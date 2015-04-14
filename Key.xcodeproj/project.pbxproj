@@ -24,14 +24,11 @@
 		EF2CDED21AB5C22F001E2F20 /* MessageKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDED11AB5C22F001E2F20 /* MessageKey+Serialize.m */; };
 		EF2CDED51AB5C972001E2F20 /* RootKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDED41AB5C972001E2F20 /* RootKey+Serialize.m */; };
 		EF2CDED81AB5C988001E2F20 /* ChainKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDED71AB5C988001E2F20 /* ChainKey+Serialize.m */; };
-		EF4920851AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920831AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.m */; };
-		EF4920861AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF4920841AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.xib */; };
-		EF49208A1AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920881AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.m */; };
-		EF49208B1AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF4920891AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.xib */; };
-		EF49208E1AD6C52800A9FE89 /* MessageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF49208D1AD6C52800A9FE89 /* MessageCollectionViewCell.m */; };
-		EF4920921AD6F6A100A9FE89 /* MessageCollectionViewLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920911AD6F6A100A9FE89 /* MessageCollectionViewLayoutAttributes.m */; };
 		EF4920951AD6F82A00A9FE89 /* UIDevice+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920941AD6F82A00A9FE89 /* UIDevice+Messages.m */; };
 		EF4920981AD6F89000A9FE89 /* UIView+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920971AD6F89000A9FE89 /* UIView+Messages.m */; };
+		EF4920A11AD761F700A9FE89 /* UIImage+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920A01AD761F700A9FE89 /* UIImage+Messages.m */; };
+		EF4920A41AD762A400A9FE89 /* NSBundle+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920A31AD762A400A9FE89 /* NSBundle+Messages.m */; };
+		EF4920AB1AD7A28D00A9FE89 /* UIColor+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920AA1AD7A28D00A9FE89 /* UIColor+Messages.m */; };
 		EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD31AAE238600F3B9AF /* KStorageKeys.m */; };
 		EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD51AAE238600F3B9AF /* KStorageManager.m */; };
 		EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD71AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m */; };
@@ -151,20 +148,16 @@
 		EF2CDED41AB5C972001E2F20 /* RootKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RootKey+Serialize.m"; path = "Network/Serializers/RootKey+Serialize.m"; sourceTree = "<group>"; };
 		EF2CDED61AB5C988001E2F20 /* ChainKey+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ChainKey+Serialize.h"; path = "Network/Serializers/ChainKey+Serialize.h"; sourceTree = "<group>"; };
 		EF2CDED71AB5C988001E2F20 /* ChainKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ChainKey+Serialize.m"; path = "Network/Serializers/ChainKey+Serialize.m"; sourceTree = "<group>"; };
-		EF4920821AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutgoingMessageCollectionViewCell.h; path = Views/OutgoingMessageCollectionViewCell.h; sourceTree = "<group>"; };
-		EF4920831AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OutgoingMessageCollectionViewCell.m; path = Views/OutgoingMessageCollectionViewCell.m; sourceTree = "<group>"; };
-		EF4920841AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OutgoingMessageCollectionViewCell.xib; path = Views/OutgoingMessageCollectionViewCell.xib; sourceTree = "<group>"; };
-		EF4920871AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IncomingMessageCollectionViewCell.h; path = Views/IncomingMessageCollectionViewCell.h; sourceTree = "<group>"; };
-		EF4920881AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IncomingMessageCollectionViewCell.m; path = Views/IncomingMessageCollectionViewCell.m; sourceTree = "<group>"; };
-		EF4920891AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = IncomingMessageCollectionViewCell.xib; path = Views/IncomingMessageCollectionViewCell.xib; sourceTree = "<group>"; };
-		EF49208C1AD6C52800A9FE89 /* MessageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageCollectionViewCell.h; path = Views/MessageCollectionViewCell.h; sourceTree = "<group>"; };
-		EF49208D1AD6C52800A9FE89 /* MessageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageCollectionViewCell.m; path = Views/MessageCollectionViewCell.m; sourceTree = "<group>"; };
-		EF4920901AD6F6A100A9FE89 /* MessageCollectionViewLayoutAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageCollectionViewLayoutAttributes.h; path = Views/Layouts/MessageCollectionViewLayoutAttributes.h; sourceTree = "<group>"; };
-		EF4920911AD6F6A100A9FE89 /* MessageCollectionViewLayoutAttributes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MessageCollectionViewLayoutAttributes.m; path = Views/Layouts/MessageCollectionViewLayoutAttributes.m; sourceTree = "<group>"; };
 		EF4920931AD6F82A00A9FE89 /* UIDevice+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Messages.h"; sourceTree = "<group>"; };
 		EF4920941AD6F82A00A9FE89 /* UIDevice+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Messages.m"; sourceTree = "<group>"; };
 		EF4920961AD6F89000A9FE89 /* UIView+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Messages.h"; sourceTree = "<group>"; };
 		EF4920971AD6F89000A9FE89 /* UIView+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Messages.m"; sourceTree = "<group>"; };
+		EF49209F1AD761F700A9FE89 /* UIImage+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Messages.h"; sourceTree = "<group>"; };
+		EF4920A01AD761F700A9FE89 /* UIImage+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Messages.m"; sourceTree = "<group>"; };
+		EF4920A21AD762A400A9FE89 /* NSBundle+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Messages.h"; sourceTree = "<group>"; };
+		EF4920A31AD762A400A9FE89 /* NSBundle+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+Messages.m"; sourceTree = "<group>"; };
+		EF4920A91AD7A28D00A9FE89 /* UIColor+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Messages.h"; sourceTree = "<group>"; };
+		EF4920AA1AD7A28D00A9FE89 /* UIColor+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Messages.m"; sourceTree = "<group>"; };
 		EF524AD21AAE238600F3B9AF /* KStorageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageKeys.h; sourceTree = "<group>"; };
 		EF524AD31AAE238600F3B9AF /* KStorageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageKeys.m; sourceTree = "<group>"; };
 		EF524AD41AAE238600F3B9AF /* KStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageManager.h; sourceTree = "<group>"; };
@@ -387,26 +380,8 @@
 		EF4920701AD6973F00A9FE89 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				EF49208F1AD6F64E00A9FE89 /* Layouts */,
-				EF4920821AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.h */,
-				EF4920831AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.m */,
-				EF4920841AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.xib */,
-				EF4920871AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.h */,
-				EF4920881AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.m */,
-				EF4920891AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.xib */,
-				EF49208C1AD6C52800A9FE89 /* MessageCollectionViewCell.h */,
-				EF49208D1AD6C52800A9FE89 /* MessageCollectionViewCell.m */,
 			);
 			name = Views;
-			sourceTree = "<group>";
-		};
-		EF49208F1AD6F64E00A9FE89 /* Layouts */ = {
-			isa = PBXGroup;
-			children = (
-				EF4920901AD6F6A100A9FE89 /* MessageCollectionViewLayoutAttributes.h */,
-				EF4920911AD6F6A100A9FE89 /* MessageCollectionViewLayoutAttributes.m */,
-			);
-			name = Layouts;
 			sourceTree = "<group>";
 		};
 		EF524ACF1AAE238600F3B9AF /* Storage */ = {
@@ -443,6 +418,12 @@
 				EF4920941AD6F82A00A9FE89 /* UIDevice+Messages.m */,
 				EF4920961AD6F89000A9FE89 /* UIView+Messages.h */,
 				EF4920971AD6F89000A9FE89 /* UIView+Messages.m */,
+				EF49209F1AD761F700A9FE89 /* UIImage+Messages.h */,
+				EF4920A01AD761F700A9FE89 /* UIImage+Messages.m */,
+				EF4920A21AD762A400A9FE89 /* NSBundle+Messages.h */,
+				EF4920A31AD762A400A9FE89 /* NSBundle+Messages.m */,
+				EF4920A91AD7A28D00A9FE89 /* UIColor+Messages.h */,
+				EF4920AA1AD7A28D00A9FE89 /* UIColor+Messages.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -813,9 +794,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF49208B1AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.xib in Resources */,
 				EFC6BEAC1A6857D400B0EB8F /* Main.storyboard in Resources */,
-				EF4920861AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.xib in Resources */,
 				EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */,
 				EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */,
 				EFC6BEAE1A6857D500B0EB8F /* Images.xcassets in Resources */,
@@ -911,24 +890,21 @@
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */,
 				EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */,
-				EF49208E1AD6C52800A9FE89 /* MessageCollectionViewCell.m in Sources */,
 				EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */,
 				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
 				EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */,
 				EF2CDECF1AB5C20F001E2F20 /* RootChain+Serialize.m in Sources */,
+				EF4920AB1AD7A28D00A9FE89 /* UIColor+Messages.m in Sources */,
 				EFC181A71AC3719800BE8B0B /* GetMessagesRequest.m in Sources */,
 				EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */,
 				EF2CDED81AB5C988001E2F20 /* ChainKey+Serialize.m in Sources */,
-				EF49208A1AD6C3BD00A9FE89 /* IncomingMessageCollectionViewCell.m in Sources */,
 				EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */,
 				EF524AE91AAE247800F3B9AF /* NSData+Base64.m in Sources */,
 				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
-				EF4920921AD6F6A100A9FE89 /* MessageCollectionViewLayoutAttributes.m in Sources */,
 				EF2CDED51AB5C972001E2F20 /* RootKey+Serialize.m in Sources */,
 				EFF70AC61AAE1CBC006C10D2 /* RegistrationViewController.m in Sources */,
 				EF6B44BB1ABC944B00B88323 /* FreeKeySessionManager.m in Sources */,
 				EFF70A8B1AAE19C3006C10D2 /* MasterKey.m in Sources */,
-				EF4920851AD6C3A900A9FE89 /* OutgoingMessageCollectionViewCell.m in Sources */,
 				EF0F4DBB1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m in Sources */,
 				EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */,
 				EFF70A8A1AAE19C3006C10D2 /* IdentityKey.m in Sources */,
@@ -952,6 +928,7 @@
 				EFF70A8D1AAE19C3006C10D2 /* PreKey.m in Sources */,
 				EFC181AD1AC372F500BE8B0B /* GetUserRequest.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
+				EF4920A11AD761F700A9FE89 /* UIImage+Messages.m in Sources */,
 				EF99E2771AC72F71002583E2 /* FreeKeyResponseHandler.m in Sources */,
 				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,
 				EF6B44B81ABC943C00B88323 /* FreeKeyNetworkManager.m in Sources */,
@@ -964,6 +941,7 @@
 				EFC1819E1AC3534F00BE8B0B /* RegisterUsernameRequest.m in Sources */,
 				EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */,
 				EF0F4DC41ABA19DE00BB2AFC /* HomeViewController.m in Sources */,
+				EF4920A41AD762A400A9FE89 /* NSBundle+Messages.m in Sources */,
 				EFF70A941AAE19C3006C10D2 /* Session.m in Sources */,
 				EFF70AC81AAE1CBC006C10D2 /* WelcomeScreenViewController.m in Sources */,
 				EF2CDEAE1AB48C3F001E2F20 /* KUser+Serialize.m in Sources */,
