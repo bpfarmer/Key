@@ -19,7 +19,8 @@
 #import "PushManager.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
-static NSString *kThreadSegueModal       = @"threadSegueModal";
+static NSString *kThreadSeguePush        = @"threadSeguePush";
+static NSString *kShareViewSegue         = @"shareViewSegue";
 
 YapDatabaseViewMappings *mappings;
 YapDatabaseConnection *databaseConnection;
@@ -204,16 +205,14 @@ YapDatabaseConnection *databaseConnection;
     }];
     if(thread) {
         self.selectedThread = thread;
-        [self performSegueWithIdentifier:kThreadSegueModal sender:self];
+        [self performSegueWithIdentifier:kThreadSeguePush sender:self];
     }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if([segue.identifier isEqualToString:kThreadSegueModal]) {
+    if([segue.identifier isEqualToString:kThreadSeguePush]) {
         if(self.selectedThread) {
-            UINavigationController *navigationController = (UINavigationController *)segue.destinationViewController;
-            ThreadViewController *threadViewController =
-                (ThreadViewController *)navigationController.topViewController;
+            ThreadViewController *threadViewController = (ThreadViewController *)segue.destinationViewController;
             threadViewController.thread = self.selectedThread;
         }
     }
@@ -224,13 +223,7 @@ YapDatabaseConnection *databaseConnection;
         NSLog(@"SWIPED DOWN");
     }
     if(paramSender.direction & UISwipeGestureRecognizerDirectionLeft) {
-        NSLog(@"SWIPED LEFT");
-    }
-    if(paramSender.direction & UISwipeGestureRecognizerDirectionRight) {
-        NSLog(@"SWIPED RIGHT");
-    }
-    if(paramSender.direction & UISwipeGestureRecognizerDirectionUp) {
-        NSLog(@"SWIPED UP");
+        [self performSegueWithIdentifier:kShareViewSegue sender:self];
     }
 }
 

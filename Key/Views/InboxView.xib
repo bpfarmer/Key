@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+        </view>
+        <viewController storyboardIdentifier="HomeViewController" id="oyd-x2-Ebd" customClass="HomeViewController">
+            <layoutGuides>
+                <viewControllerLayoutGuide type="top" id="OdV-PY-ve9"/>
+                <viewControllerLayoutGuide type="bottom" id="rYG-Zo-9ME"/>
+            </layoutGuides>
+            <view key="view" contentMode="scaleToFill" id="P5h-yS-8KL">
+                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="etl-AU-ccA">
+                        <rect key="frame" x="16" y="20" width="120" height="30"/>
+                        <state key="normal" title="New Message">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GaH-hr-Kne">
+                        <rect key="frame" x="464" y="20" width="120" height="30"/>
+                        <state key="normal" title="Contacts">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                    <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="1TA-ZH-5Cl">
+                        <rect key="frame" x="16" y="64" width="568" height="313"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </tableView>
+                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bfo-NR-LUk">
+                        <rect key="frame" x="464" y="562" width="120" height="30"/>
+                        <state key="normal" title="Log Out">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                        <connections>
+                            <action selector="logout:" destination="oyd-x2-Ebd" eventType="touchUpInside" id="AOZ-bP-gWu"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                <constraints>
+                    <constraint firstItem="etl-AU-ccA" firstAttribute="top" secondItem="OdV-PY-ve9" secondAttribute="bottom" id="0Lf-g3-mAe"/>
+                    <constraint firstAttribute="centerX" secondItem="1TA-ZH-5Cl" secondAttribute="centerX" id="0TH-J3-4hL"/>
+                    <constraint firstItem="Bfo-NR-LUk" firstAttribute="trailing" secondItem="P5h-yS-8KL" secondAttribute="trailingMargin" id="6rS-2s-tSs"/>
+                    <constraint firstItem="1TA-ZH-5Cl" firstAttribute="leading" secondItem="P5h-yS-8KL" secondAttribute="leadingMargin" id="79U-Ug-Wzx"/>
+                    <constraint firstItem="rYG-Zo-9ME" firstAttribute="top" secondItem="Bfo-NR-LUk" secondAttribute="bottom" constant="8" id="B4z-tf-LrZ"/>
+                    <constraint firstItem="GaH-hr-Kne" firstAttribute="top" secondItem="OdV-PY-ve9" secondAttribute="bottom" id="Hw6-yh-yTV"/>
+                    <constraint firstItem="GaH-hr-Kne" firstAttribute="trailing" secondItem="P5h-yS-8KL" secondAttribute="trailingMargin" id="KoB-eC-n5p"/>
+                    <constraint firstItem="1TA-ZH-5Cl" firstAttribute="trailing" secondItem="P5h-yS-8KL" secondAttribute="trailingMargin" id="XOS-Yp-r7Q"/>
+                    <constraint firstItem="etl-AU-ccA" firstAttribute="leading" secondItem="P5h-yS-8KL" secondAttribute="leadingMargin" id="eQC-rw-4Tt"/>
+                </constraints>
+            </view>
+            <navigationItem key="navigationItem" id="E1q-ov-yiB"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <connections>
+                <outlet property="threadsTableView" destination="1TA-ZH-5Cl" id="F0R-2v-rhw"/>
+            </connections>
+            <point key="canvasLocation" x="1257" y="53"/>
+        </viewController>
+    </objects>
+</document>

@@ -73,14 +73,6 @@ YapDatabaseConnection *databaseConnection;
         [self.thread setRead:YES];
         [self.thread save];
     }
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
-                                                                                          target:self
-                                                                                          action:@selector(closePressed:)];
-}
-
-- (void)closePressed:(UIBarButtonItem *)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) setupDatabaseView {

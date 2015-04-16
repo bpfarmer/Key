@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		49324C749A49C0F4FB711A5D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
 		710028D1F762C6FE738F0D7A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65563319915893A686117F67 /* libPods.a */; };
+		EF01716B1ADD936C00AFCBA4 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF01716A1ADD936C00AFCBA4 /* ShareViewController.m */; };
+		EF01716E1ADD93B500AFCBA4 /* SocialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF01716D1ADD93B500AFCBA4 /* SocialViewController.m */; };
+		EF0171711ADF07BB00AFCBA4 /* KPost.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0171701ADF07BB00AFCBA4 /* KPost.m */; };
+		EF0171741ADF07D100AFCBA4 /* KAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0171731ADF07D100AFCBA4 /* KAttachment.m */; };
+		EF0171771ADF081F00AFCBA4 /* KAttachment+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0171761ADF081F00AFCBA4 /* KAttachment+Serialize.m */; };
+		EF01717A1ADF083700AFCBA4 /* KPost+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0171791ADF083700AFCBA4 /* KPost+Serialize.m */; };
 		EF0F4DBB1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F4DBA1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m */; };
 		EF0F4DBE1AB8D3BA00BB2AFC /* PushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F4DBD1AB8D3BA00BB2AFC /* PushManager.m */; };
 		EF0F4DC41ABA19DE00BB2AFC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F4DC31ABA19DE00BB2AFC /* HomeViewController.m */; };
@@ -57,6 +63,9 @@
 		EF6B44BF1ABC998B00B88323 /* FreeKeyPushManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44BE1ABC998B00B88323 /* FreeKeyPushManagerTests.m */; };
 		EF6B44C21ABCDD3600B88323 /* FreeKeyTestExample.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44C11ABCDD3600B88323 /* FreeKeyTestExample.m */; };
 		EF6B44C41ABDAE1D00B88323 /* HttpManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44C31ABDAE1D00B88323 /* HttpManagerTests.m */; };
+		EF8358241AE02AD800B631AB /* InboxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF8358231AE02AD800B631AB /* InboxView.xib */; };
+		EF8358261AE02AED00B631AB /* ShareView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF8358251AE02AED00B631AB /* ShareView.xib */; };
+		EF8358281AE02B0F00B631AB /* SocialView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF8358271AE02B0F00B631AB /* SocialView.xib */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */; };
 		EF99E2771AC72F71002583E2 /* FreeKeyResponseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E2761AC72F71002583E2 /* FreeKeyResponseHandler.m */; };
@@ -119,6 +128,18 @@
 		C461760CA51ABA0BE7C393EF /* Pods-Key.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Key.release.xcconfig"; path = "Pods/Target Support Files/Pods-Key/Pods-Key.release.xcconfig"; sourceTree = "<group>"; };
 		DB575E32381FD8118E62EE58 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		DF6091F2DF6E5A8AC8248FE8 /* Pods-KeyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KeyTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KeyTests/Pods-KeyTests.release.xcconfig"; sourceTree = "<group>"; };
+		EF0171691ADD936C00AFCBA4 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		EF01716A1ADD936C00AFCBA4 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		EF01716C1ADD93B500AFCBA4 /* SocialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialViewController.h; sourceTree = "<group>"; };
+		EF01716D1ADD93B500AFCBA4 /* SocialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialViewController.m; sourceTree = "<group>"; };
+		EF01716F1ADF07BB00AFCBA4 /* KPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPost.h; path = Models/KPost.h; sourceTree = "<group>"; };
+		EF0171701ADF07BB00AFCBA4 /* KPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPost.m; path = Models/KPost.m; sourceTree = "<group>"; };
+		EF0171721ADF07D100AFCBA4 /* KAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAttachment.h; path = Models/KAttachment.h; sourceTree = "<group>"; };
+		EF0171731ADF07D100AFCBA4 /* KAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAttachment.m; path = Models/KAttachment.m; sourceTree = "<group>"; };
+		EF0171751ADF081F00AFCBA4 /* KAttachment+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KAttachment+Serialize.h"; path = "Network/Serializers/KAttachment+Serialize.h"; sourceTree = "<group>"; };
+		EF0171761ADF081F00AFCBA4 /* KAttachment+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KAttachment+Serialize.m"; path = "Network/Serializers/KAttachment+Serialize.m"; sourceTree = "<group>"; };
+		EF0171781ADF083700AFCBA4 /* KPost+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KPost+Serialize.h"; path = "Network/Serializers/KPost+Serialize.h"; sourceTree = "<group>"; };
+		EF0171791ADF083700AFCBA4 /* KPost+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KPost+Serialize.m"; path = "Network/Serializers/KPost+Serialize.m"; sourceTree = "<group>"; };
 		EF0F4DB91AB76B0500BB2AFC /* EncryptedMessage+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "EncryptedMessage+Serialize.h"; path = "Network/Serializers/FreeKey/EncryptedMessage+Serialize.h"; sourceTree = "<group>"; };
 		EF0F4DBA1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "EncryptedMessage+Serialize.m"; path = "Network/Serializers/FreeKey/EncryptedMessage+Serialize.m"; sourceTree = "<group>"; };
 		EF0F4DBC1AB8D3BA00BB2AFC /* PushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PushManager.h; path = Network/PushManager.h; sourceTree = "<group>"; };
@@ -206,6 +227,9 @@
 		EF6B44C01ABCDD3600B88323 /* FreeKeyTestExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKeyTestExample.h; sourceTree = "<group>"; };
 		EF6B44C11ABCDD3600B88323 /* FreeKeyTestExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeyTestExample.m; sourceTree = "<group>"; };
 		EF6B44C31ABDAE1D00B88323 /* HttpManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpManagerTests.m; sourceTree = "<group>"; };
+		EF8358231AE02AD800B631AB /* InboxView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InboxView.xib; path = Views/InboxView.xib; sourceTree = "<group>"; };
+		EF8358251AE02AED00B631AB /* ShareView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShareView.xib; sourceTree = "<group>"; };
+		EF8358271AE02B0F00B631AB /* SocialView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SocialView.xib; path = Views/SocialView.xib; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
 		EF99E26D1AC5E7C9002583E2 /* UserRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserRequest.h; path = Network/Requests/User/UserRequest.h; sourceTree = "<group>"; };
@@ -345,6 +369,10 @@
 				EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */,
 				EF6B44B01ABA877F00B88323 /* KThread+Serialize.h */,
 				EF6B44B11ABA877F00B88323 /* KThread+Serialize.m */,
+				EF0171751ADF081F00AFCBA4 /* KAttachment+Serialize.h */,
+				EF0171761ADF081F00AFCBA4 /* KAttachment+Serialize.m */,
+				EF0171781ADF083700AFCBA4 /* KPost+Serialize.h */,
+				EF0171791ADF083700AFCBA4 /* KPost+Serialize.m */,
 			);
 			name = Serializers;
 			path = ..;
@@ -380,6 +408,9 @@
 		EF4920701AD6973F00A9FE89 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EF8358231AE02AD800B631AB /* InboxView.xib */,
+				EF8358251AE02AED00B631AB /* ShareView.xib */,
+				EF8358271AE02B0F00B631AB /* SocialView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -596,17 +627,21 @@
 		EFEBDD321A68673D00973E15 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				EF524B0B1AB0DE9000F3B9AF /* Protocols */,
 				EF973FA31A7E8F5200D92A9E /* KAccountManager.h */,
 				EF973FA41A7E8F5200D92A9E /* KAccountManager.m */,
+				EF0171721ADF07D100AFCBA4 /* KAttachment.h */,
+				EF0171731ADF07D100AFCBA4 /* KAttachment.m */,
 				EFEBDD421A6B5C1400973E15 /* KGroup.h */,
 				EFEBDD431A6B5C1400973E15 /* KGroup.m */,
 				EFEBDD391A6B2C7800973E15 /* KMessage.h */,
 				EFEBDD3A1A6B2C7800973E15 /* KMessage.m */,
+				EF01716F1ADF07BB00AFCBA4 /* KPost.h */,
+				EF0171701ADF07BB00AFCBA4 /* KPost.m */,
 				EFCD01D61A83E651005065B2 /* KThread.h */,
 				EFCD01D71A83E651005065B2 /* KThread.m */,
 				EFEBDD361A68CE9600973E15 /* KUser.h */,
 				EFEBDD371A68CE9600973E15 /* KUser.m */,
+				EF524B0B1AB0DE9000F3B9AF /* Protocols */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -701,6 +736,10 @@
 				EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */,
 				EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */,
 				EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */,
+				EF0171691ADD936C00AFCBA4 /* ShareViewController.h */,
+				EF01716A1ADD936C00AFCBA4 /* ShareViewController.m */,
+				EF01716C1ADD93B500AFCBA4 /* SocialViewController.h */,
+				EF01716D1ADD93B500AFCBA4 /* SocialViewController.m */,
 				EF6B44A91ABA399D00B88323 /* ThreadViewController.h */,
 				EF6B44AA1ABA399D00B88323 /* ThreadViewController.m */,
 				EFF70ABF1AAE1CBC006C10D2 /* WelcomeScreenViewController.h */,
@@ -795,9 +834,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFC6BEAC1A6857D400B0EB8F /* Main.storyboard in Resources */,
+				EF8358281AE02B0F00B631AB /* SocialView.xib in Resources */,
 				EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */,
+				EF8358261AE02AED00B631AB /* ShareView.xib in Resources */,
 				EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */,
 				EFC6BEAE1A6857D500B0EB8F /* Images.xcassets in Resources */,
+				EF8358241AE02AD800B631AB /* InboxView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -908,6 +950,7 @@
 				EF0F4DBB1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m in Sources */,
 				EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */,
 				EFF70A8A1AAE19C3006C10D2 /* IdentityKey.m in Sources */,
+				EF0171771ADF081F00AFCBA4 /* KAttachment+Serialize.m in Sources */,
 				EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */,
 				EFC181B01AC3739800BE8B0B /* SendPreKeyExchangeRequest.m in Sources */,
 				EF524AE61AAE239800F3B9AF /* Util.m in Sources */,
@@ -921,6 +964,7 @@
 				EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
 				EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */,
 				EFC1819A1AC3412800BE8B0B /* HttpRequest.m in Sources */,
+				EF01716E1ADD93B500AFCBA4 /* SocialViewController.m in Sources */,
 				EFF70A901AAE19C3006C10D2 /* SessionKeyBundle.m in Sources */,
 				EF6B44B21ABA877F00B88323 /* KThread+Serialize.m in Sources */,
 				EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */,
@@ -946,10 +990,14 @@
 				EFF70AC81AAE1CBC006C10D2 /* WelcomeScreenViewController.m in Sources */,
 				EF2CDEAE1AB48C3F001E2F20 /* KUser+Serialize.m in Sources */,
 				EF524AEF1AAE255200F3B9AF /* KYapDatabaseObject.m in Sources */,
+				EF0171711ADF07BB00AFCBA4 /* KPost.m in Sources */,
 				EFF70A8C1AAE19C3006C10D2 /* MessageKey.m in Sources */,
 				EF2CDEC01AB4AB42001E2F20 /* PreKey+Serialize.m in Sources */,
+				EF0171741ADF07D100AFCBA4 /* KAttachment.m in Sources */,
 				EFF70A8F1AAE19C3006C10D2 /* RootKey.m in Sources */,
 				EFC181A41AC3717400BE8B0B /* SendMessageRequest.m in Sources */,
+				EF01717A1ADF083700AFCBA4 /* KPost+Serialize.m in Sources */,
+				EF01716B1ADD936C00AFCBA4 /* ShareViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

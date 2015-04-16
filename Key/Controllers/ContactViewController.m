@@ -97,6 +97,14 @@ YapDatabaseConnection *databaseConnection;
                                      withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
             }
+            case YapDatabaseViewChangeUpdate :
+            {
+                break;
+            }
+            case YapDatabaseViewChangeMove :
+            {
+                break;
+            }
         }
     }
     

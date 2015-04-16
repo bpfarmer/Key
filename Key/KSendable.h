@@ -22,6 +22,4 @@
 
 + (NSArray *)remoteKeys;
 
-@property (nonatomic) NSString *remoteStatus;
-
 @end
