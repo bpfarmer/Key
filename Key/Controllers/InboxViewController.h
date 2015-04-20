@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface InboxViewController : NSObject
+@class KThread;
+
+@interface InboxViewController : UIViewController
+
+@property (nonatomic, weak) KThread *selectedThread;
 
 @end

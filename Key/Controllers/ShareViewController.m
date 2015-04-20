@@ -46,14 +46,10 @@
         controller.allowsEditing = YES;
         controller.delegate = self;
         
-        [self presentViewController:controller animated:YES completion:nil];
+        //[self presentViewController:controller animated:YES completion:nil];
     }else {
         NSLog(@"Camera is not available");
     }
-    
-    self.swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipes:)];
-    self.swipeGestureRecognizer.numberOfTouchesRequired = 1;
-    [self.view addGestureRecognizer:self.swipeGestureRecognizer];
 }
 
 - (BOOL)cameraSupportsMedia:(NSString *)mediaType sourceType:(UIImagePickerControllerSourceType)sourceType {

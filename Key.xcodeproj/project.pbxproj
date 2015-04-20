@@ -30,6 +30,7 @@
 		EF2CDED21AB5C22F001E2F20 /* MessageKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDED11AB5C22F001E2F20 /* MessageKey+Serialize.m */; };
 		EF2CDED51AB5C972001E2F20 /* RootKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDED41AB5C972001E2F20 /* RootKey+Serialize.m */; };
 		EF2CDED81AB5C988001E2F20 /* ChainKey+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDED71AB5C988001E2F20 /* ChainKey+Serialize.m */; };
+		EF3D09E31AE036EB0044E9F6 /* InboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3D09E21AE036EB0044E9F6 /* InboxViewController.m */; };
 		EF4920951AD6F82A00A9FE89 /* UIDevice+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920941AD6F82A00A9FE89 /* UIDevice+Messages.m */; };
 		EF4920981AD6F89000A9FE89 /* UIView+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920971AD6F89000A9FE89 /* UIView+Messages.m */; };
 		EF4920A11AD761F700A9FE89 /* UIImage+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920A01AD761F700A9FE89 /* UIImage+Messages.m */; };
@@ -169,6 +170,8 @@
 		EF2CDED41AB5C972001E2F20 /* RootKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RootKey+Serialize.m"; path = "Network/Serializers/RootKey+Serialize.m"; sourceTree = "<group>"; };
 		EF2CDED61AB5C988001E2F20 /* ChainKey+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ChainKey+Serialize.h"; path = "Network/Serializers/ChainKey+Serialize.h"; sourceTree = "<group>"; };
 		EF2CDED71AB5C988001E2F20 /* ChainKey+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ChainKey+Serialize.m"; path = "Network/Serializers/ChainKey+Serialize.m"; sourceTree = "<group>"; };
+		EF3D09E11AE036EB0044E9F6 /* InboxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InboxViewController.h; sourceTree = "<group>"; };
+		EF3D09E21AE036EB0044E9F6 /* InboxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InboxViewController.m; sourceTree = "<group>"; };
 		EF4920931AD6F82A00A9FE89 /* UIDevice+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Messages.h"; sourceTree = "<group>"; };
 		EF4920941AD6F82A00A9FE89 /* UIDevice+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Messages.m"; sourceTree = "<group>"; };
 		EF4920961AD6F89000A9FE89 /* UIView+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Messages.h"; sourceTree = "<group>"; };
@@ -732,6 +735,8 @@
 				EF6B44A71ABA2F8A00B88323 /* ContactViewController.m */,
 				EF0F4DC21ABA19DE00BB2AFC /* HomeViewController.h */,
 				EF0F4DC31ABA19DE00BB2AFC /* HomeViewController.m */,
+				EF3D09E11AE036EB0044E9F6 /* InboxViewController.h */,
+				EF3D09E21AE036EB0044E9F6 /* InboxViewController.m */,
 				EFF70AB71AAE1CBC006C10D2 /* LoginViewController.h */,
 				EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */,
 				EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */,
@@ -927,6 +932,7 @@
 				EF2CDED21AB5C22F001E2F20 /* MessageKey+Serialize.m in Sources */,
 				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
 				EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */,
+				EF3D09E31AE036EB0044E9F6 /* InboxViewController.m in Sources */,
 				EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */,
 				EF524AE51AAE239800F3B9AF /* NSData+keyVersionByte.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,

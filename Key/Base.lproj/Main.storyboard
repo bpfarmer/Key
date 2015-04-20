@@ -193,7 +193,7 @@
                         <viewControllerLayoutGuide type="bottom" id="JdZ-k4-HPJ"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="sF6-eM-e8e">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="kjL-6Z-LiY">
@@ -227,7 +227,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="O42-rU-w9I" kind="push" id="Ea2-z1-f7w"/>
+                                    <segue destination="7vg-Se-yPB" kind="push" id="ble-DM-eex"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -248,7 +248,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GXS-oQ-MyI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1251" y="-677"/>
+            <point key="canvasLocation" x="237" y="728"/>
         </scene>
         <!--Thread View Controller-->
         <scene sceneID="8kO-fg-L04">
@@ -283,25 +283,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GlA-PV-UAu">
-                                <rect key="frame" x="16" y="20" width="120" height="30"/>
-                                <state key="normal" title="New Message">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hBS-N1-Dtu">
                                 <rect key="frame" x="464" y="20" width="120" height="30"/>
                                 <state key="normal" title="Contacts">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="DsG-xX-ckQ" kind="push" id="qoo-rZ-8GX"/>
+                                    <segue destination="DsG-xX-ckQ" kind="push" identifier="contactSeguePush" id="qoo-rZ-8GX"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelectionDuringEditing="YES" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="yfF-wG-4BP">
-                                <rect key="frame" x="16" y="64" width="288" height="313"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </tableView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kqc-AI-e3M">
                                 <rect key="frame" x="464" y="530" width="120" height="30"/>
                                 <state key="normal" title="Log Out">
@@ -311,30 +301,22 @@
                                     <action selector="logout:" destination="7vg-Se-yPB" eventType="touchUpInside" id="ptE-MJ-9Jd"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Az-H5-Yzl">
-                                <rect key="frame" x="16" y="530" width="46" height="30"/>
-                                <state key="normal" title="Back">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AKU-8i-rjH">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Kqc-AI-e3M" firstAttribute="trailing" secondItem="bJT-vV-PLu" secondAttribute="trailingMargin" id="6A3-d7-nDU"/>
-                            <constraint firstAttribute="centerX" secondItem="yfF-wG-4BP" secondAttribute="centerX" id="B00-vq-kNf"/>
-                            <constraint firstItem="GlA-PV-UAu" firstAttribute="leading" secondItem="bJT-vV-PLu" secondAttribute="leadingMargin" id="Ipo-3O-p97"/>
-                            <constraint firstItem="yfF-wG-4BP" firstAttribute="trailing" secondItem="bJT-vV-PLu" secondAttribute="trailingMargin" id="QkO-cz-ghO"/>
                             <constraint firstItem="ppS-su-gc7" firstAttribute="top" secondItem="Kqc-AI-e3M" secondAttribute="bottom" constant="8" id="RY6-6C-MqX"/>
                             <constraint firstItem="hBS-N1-Dtu" firstAttribute="trailing" secondItem="bJT-vV-PLu" secondAttribute="trailingMargin" id="Xdz-JT-YWh"/>
-                            <constraint firstItem="yfF-wG-4BP" firstAttribute="leading" secondItem="bJT-vV-PLu" secondAttribute="leadingMargin" id="iCZ-Jj-OXO"/>
-                            <constraint firstItem="GlA-PV-UAu" firstAttribute="top" secondItem="Kpe-w8-VA3" secondAttribute="bottom" id="y1J-Hh-FOO"/>
                             <constraint firstItem="hBS-N1-Dtu" firstAttribute="top" secondItem="Kpe-w8-VA3" secondAttribute="bottom" id="ytq-yg-i3s"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rcF-YS-wTl"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="threadsTableView" destination="yfF-wG-4BP" id="9Tl-eZ-OWF"/>
+                        <outlet property="scrollView" destination="AKU-8i-rjH" id="ljA-R4-MWa"/>
                         <segue destination="TYp-lU-Cp9" kind="push" identifier="threadSeguePush" id="VtM-rD-aFL"/>
                     </connections>
                 </viewController>
@@ -359,7 +341,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EEH-i9-dd8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="237" y="45"/>
+            <point key="canvasLocation" x="237" y="37"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -367,4 +349,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="ble-DM-eex"/>
+    </inferredMetricsTieBreakers>
 </document>
