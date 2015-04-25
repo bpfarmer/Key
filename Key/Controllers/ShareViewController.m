@@ -36,16 +36,12 @@
     }
     
     if([self cameraAvailable] && [self cameraSupportsTakingPhotos]) {
-        
         UIImagePickerController *controller = [[UIImagePickerController alloc] init];
-        
         controller.sourceType = UIImagePickerControllerSourceTypeCamera;
-        
         NSString *requiredMediaType = (__bridge NSString *)kUTTypeImage;
         controller.mediaTypes = [[NSArray alloc] initWithObjects:requiredMediaType, nil];
         controller.allowsEditing = YES;
         controller.delegate = self;
-        
         //[self presentViewController:controller animated:YES completion:nil];
     }else {
         NSLog(@"Camera is not available");
