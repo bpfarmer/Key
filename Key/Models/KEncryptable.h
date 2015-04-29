@@ -8,12 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "KSendable.h"
+#import "KStorable.h"
 
-@protocol KEncryptable
-
-@property (nonatomic, readwrite) NSString *uniqueId;
-
-- (void) save;
-- (NSString *) collection;
+@protocol KEncryptable <KStorable>
 
 @end

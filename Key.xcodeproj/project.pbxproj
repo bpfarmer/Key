@@ -275,6 +275,7 @@
 		EFC6BEC61A6857E000B0EB8F /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		EFCD01D61A83E651005065B2 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThread.h; path = Models/KThread.h; sourceTree = "<group>"; };
 		EFCD01D71A83E651005065B2 /* KThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KThread.m; path = Models/KThread.m; sourceTree = "<group>"; };
+		EFE566791AF15D9E00FB1142 /* KStorable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KStorable.h; path = Models/Protocols/KStorable.h; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
 		EFEBDD371A68CE9600973E15 /* KUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KUser.m; path = Models/KUser.m; sourceTree = "<group>"; };
 		EFEBDD391A6B2C7800973E15 /* KMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMessage.h; path = Models/KMessage.h; sourceTree = "<group>"; };
@@ -481,6 +482,7 @@
 			children = (
 				EF524AFA1AAEA36300F3B9AF /* KEncryptable.h */,
 				EF524B0D1AB0DF0D00F3B9AF /* KSendable.h */,
+				EFE566791AF15D9E00FB1142 /* KStorable.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";

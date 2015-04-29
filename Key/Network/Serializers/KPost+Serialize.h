@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KPost.h"
 
-@interface KPost_Serialize : NSObject
+@interface KPost(Serialize) <NSSecureCoding>
 
 @end

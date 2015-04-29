@@ -7,7 +7,13 @@
 //
 
 #import "KPost.h"
+#import "KUser.h"
+#import "KStorageManager.h"
 
 @implementation KPost
+
+- (KUser *)author {
+    return [[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
+}
 
 @end

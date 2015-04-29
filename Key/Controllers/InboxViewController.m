@@ -22,9 +22,6 @@ static NSString *TableViewCellIdentifier = @"Threads";
 static NSString *kThreadSeguePush        = @"threadSeguePush";
 static NSString *kShareViewSegue         = @"shareViewSegue";
 
-YapDatabaseViewMappings *mappings;
-YapDatabaseConnection *databaseConnection;
-
 @interface InboxViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *threadsTableView;
 @property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;

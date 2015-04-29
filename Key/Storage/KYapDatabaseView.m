@@ -12,13 +12,16 @@
 #import "KUser.h"
 #import "KMessage.h"
 #import "KAccountManager.h"
+#import "KPost.h"
 
 NSString *KInboxGroup                       = @"KInboxGroup";
 NSString *KThreadGroup                      = @"KThreadGroup";
 NSString *KContactGroup                     = @"KContactGroup";
+NSString *KPostGroup                        = @"KPostGroup";
 NSString *KThreadDatabaseViewName  = @"KThreadDatabaseViewExtension";
 NSString *KMessageDatabaseViewName = @"KMessageDatabaseViewExtension";
 NSString *KContactDatabaseViewName = @"KContactDatabaseViewExtension";
+NSString *KPostDatabaseViewName    = @"KPostDatabaseViewExtension";
 
 @implementation KYapDatabaseView
 
@@ -81,7 +84,7 @@ NSString *KContactDatabaseViewName = @"KContactDatabaseViewExtension";
         return YES;
     }
     YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {
-        if ([object isKindOfClass:[KUser class]]){
+        if([object isKindOfClass:[KUser class]]){
             KUser *user = (KUser *)object;
             if(![user.username isEqual:[KAccountManager sharedManager].user.username])
                 return KContactGroup;
@@ -101,6 +104,29 @@ NSString *KContactDatabaseViewName = @"KContactDatabaseViewExtension";
     
     return [[[KStorageManager sharedManager] database] registerExtension:databaseView withName:KContactDatabaseViewName];
 
+}
+
++ (BOOL)registerPostDatabaseView {
+    if([[[KStorageManager sharedManager] database] registeredExtension:KPostDatabaseViewName]) {
+        return YES;
+    }
+    YapDatabaseViewGrouping *viewGrouping = [YapDatabaseViewGrouping withObjectBlock:^NSString *(NSString *collection, NSString *key, id object) {
+        if([object isKindOfClass:[KPost class]]) {
+            return KPostGroup;
+        }
+        return nil;
+    }];
+    YapDatabaseViewSorting *viewSorting = [self userSorting];
+    
+    YapDatabaseViewOptions *options = [[YapDatabaseViewOptions alloc] init];
+    options.isPersistent = YES;
+    options.allowedCollections = [[YapWhitelistBlacklist alloc] initWithWhitelist:[NSSet setWithObject:[KPost collection]]];
+    
+    YapDatabaseView *databaseView = [[YapDatabaseView alloc] initWithGrouping:viewGrouping
+                                                                      sorting:viewSorting
+                                                                   versionTag:@"1"
+                                                                      options:options];
+    return [[[KStorageManager sharedManager] database] registerExtension:databaseView withName:KPostDatabaseViewName];
 }
 
 + (YapDatabaseViewSorting *)messageSorting {

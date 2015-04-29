@@ -15,9 +15,11 @@ extern NSString *KInboxGroup;
 extern NSString *KThreadDatabaseViewName;
 extern NSString *KContactDatabaseViewName;
 extern NSString *KMessageDatabaseViewName;
+extern NSString *KPostDatabaseViewName;
 
 + (BOOL)registerThreadDatabaseView;
 + (BOOL)registerMessageDatabaseView;
 + (BOOL)registerContactDatabaseView;
++ (BOOL)registerPostDatabaseView;
 
 @end

@@ -1,15 +1,13 @@
 ##key : share freely##
 
+####About Key####
+Key is an end-to-end encrypted social utility that allows people to share freely with their friends. Key is built on top of the FreeKey encryption protocol, which borrows heavily from the axolotl protocol developed by Open Whisper Systems and Trevor Perrin. FreeKey is designed to offer perfect forward secrecy and replay protection, and relies on EC-25519 for Public/Private Key generation, ECDH for Shared-Key Agreement, ECDSA for signing and SHA-256 for MAC generation and verification.
+
 ####Running Locally####
 
 - Install CocoaPods
 - Run `$ pod install`
-- Open the Key.xcworkspace project in XCode
-- Get the Locke repository
-- In the Locke respository:
-	 + `$ gem install bundler`
-	 + `$ bundle install`
-	 + `$ bundle exec rake db:create db:migrate`
-	 + `$ shotgun app.rb`
+- CocoaPods will generate a new Key.xcworkspace file
+- Open the new Key.xcworkspace file
 - Build and run the Key project
 
