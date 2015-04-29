@@ -38,20 +38,27 @@
 }
 
 - (IBAction)login:(id)sender {
-    KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString] password:self.passwordText.text];
-    [[KAccountManager sharedManager] setUser:user];
-    if([user authenticatePassword:self.passwordText.text]) {
-        [[KStorageManager sharedManager] refreshDatabaseAndConnection];
-        [[KStorageManager sharedManager] setupDatabase];
-        KUser *retrievedUser = [KUser fetchObjectWithUsername:user.username];
-        if(retrievedUser) {
-            [[KAccountManager sharedManager] setUser:retrievedUser];
-            [self showHome];
+    // TODO: enforce passwords
+    if(![self.usernameText.text isEqualToString:@""] /*&& !
+                                                      [self.passwordText.text isEqualToString:@""]*/) {
+        KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString] password:self.passwordText.text];
+        [[KAccountManager sharedManager] setUser:user];
+        if([user authenticatePassword:self.passwordText.text]) {
+            [[KStorageManager sharedManager] refreshDatabaseAndConnection];
+            [[KStorageManager sharedManager] setupDatabase];
+            KUser *retrievedUser = [KUser fetchObjectWithUsername:user.username];
+            if(retrievedUser) {
+                [[KAccountManager sharedManager] setUser:retrievedUser];
+                [self showHome];
+            }else {
+                NSLog(@"PROBLEM RETRIEVING USER FROM DB");
+            }
+        
         }else {
-            NSLog(@"PROBLEM RETRIEVING USER FROM DB");
+          NSLog(@"ERROR LOGGING IN");
         }
     }else {
-      NSLog(@"ERROR LOGGING IN");
+        NSLog(@"Username and Password cannot be blank");
     }
 }
 

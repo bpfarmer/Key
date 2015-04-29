@@ -177,8 +177,12 @@ static NSString *KSelectRecipientSegueIdentifier = @"selectRecipientPushSegue";
 }
 
 - (IBAction)createNewPost:(id)sender {
-    self.currentPost = [[KPost alloc] initWithAuthorId:self.currentUser.uniqueId text:self.postTextView.text];
-    [self.parentViewController performSegueWithIdentifier:KSelectRecipientSegueIdentifier sender:self];
+    if(![self.postTextView.text isEqualToString:@""]) {
+        self.currentPost = [[KPost alloc] initWithAuthorId:self.currentUser.uniqueId text:self.postTextView.text];
+        [self.parentViewController performSegueWithIdentifier:KSelectRecipientSegueIdentifier sender:self];
+    }else {
+        NSLog(@"Post field cannot be empty");
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {

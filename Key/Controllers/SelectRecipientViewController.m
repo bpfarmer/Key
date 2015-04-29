@@ -12,14 +12,17 @@
 #import "KYapDatabaseView.h"
 #import "KUser.h"
 #import "KPost.h"
+#import "FreeKey.h"
+#import "FreeKeyNetworkManager.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
 
-@interface SelectRecipientViewController ()
+@interface SelectRecipientViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *contactsTableView;
 @property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
 @property (nonatomic, strong) YapDatabaseViewMappings *contactMappings;
+@property (nonatomic) NSArray *selectedRecipients;
 
 @end
 
@@ -27,6 +30,11 @@ static NSString *TableViewCellIdentifier = @"Threads";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.contactsTableView.dataSource = self;
+    self.contactsTableView.delegate = self;
+    [self.contactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    
     [self setupDatabaseView];
 }
 
@@ -161,7 +169,39 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
         user = [[transaction extension:KContactDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.contactMappings];
     }];
-    //if(thread) [self goToThread:thread];
+    
+    if(user) {
+        NSMutableArray *mutableSelected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
+        [mutableSelected addObject:user];
+        self.selectedRecipients = mutableSelected;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    __block KUser *user = nil;
+    [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        user = [[transaction extension:KContactDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.contactMappings];
+    }];
+    
+    if(user) {
+        NSMutableArray *mutableSelected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
+        [mutableSelected removeObject:user];
+        self.selectedRecipients = mutableSelected;
+    }
+}
+
+- (IBAction)sendToRecipients:(id)sender {
+    [self.selectedRecipients enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+        dispatch_async(queue, ^{
+            KUser *user = (KUser *)obj;
+            if(user) {
+                [[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:self.post
+                                                                      localUser:self.currentUser
+                                                                     remoteUser:user];
+            }
+        });
+    }];
 }
 
 @end
