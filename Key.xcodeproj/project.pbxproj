@@ -87,6 +87,8 @@
 		EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */; };
 		EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEC61A6857E000B0EB8F /* Podfile */; };
 		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
+		EFE5667C1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */; };
+		EFE5667D1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
 		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
 		EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD431A6B5C1400973E15 /* KGroup.m */; };
@@ -276,6 +278,8 @@
 		EFCD01D61A83E651005065B2 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThread.h; path = Models/KThread.h; sourceTree = "<group>"; };
 		EFCD01D71A83E651005065B2 /* KThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KThread.m; path = Models/KThread.m; sourceTree = "<group>"; };
 		EFE566791AF15D9E00FB1142 /* KStorable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KStorable.h; path = Models/Protocols/KStorable.h; sourceTree = "<group>"; };
+		EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRecipientViewController.h; sourceTree = "<group>"; };
+		EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRecipientViewController.m; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
 		EFEBDD371A68CE9600973E15 /* KUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KUser.m; path = Models/KUser.m; sourceTree = "<group>"; };
 		EFEBDD391A6B2C7800973E15 /* KMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMessage.h; path = Models/KMessage.h; sourceTree = "<group>"; };
@@ -751,6 +755,8 @@
 				EF6B44AA1ABA399D00B88323 /* ThreadViewController.m */,
 				EFF70ABF1AAE1CBC006C10D2 /* WelcomeScreenViewController.h */,
 				EFF70AC01AAE1CBC006C10D2 /* WelcomeScreenViewController.m */,
+				EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */,
+				EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -987,6 +993,7 @@
 				EF4920951AD6F82A00A9FE89 /* UIDevice+Messages.m in Sources */,
 				EF524AF51AAE2BAC00F3B9AF /* FreeKey.m in Sources */,
 				EF2CDEC61AB52FCA001E2F20 /* Session+Serialize.m in Sources */,
+				EFE5667C1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */,
 				EF0F4DBE1AB8D3BA00BB2AFC /* PushManager.m in Sources */,
 				EFF70A8E1AAE19C3006C10D2 /* RootChain.m in Sources */,
 				EF6B44A81ABA2F8A00B88323 /* ContactViewController.m in Sources */,
@@ -1023,6 +1030,7 @@
 				EF6B44C41ABDAE1D00B88323 /* HttpManagerTests.m in Sources */,
 				EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */,
 				EF2CDEBD1AB4A78E001E2F20 /* IdentityKeyTests.m in Sources */,
+				EFE5667D1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */,
 				EF524B041AAF330A00F3B9AF /* EncryptedMessageTests.m in Sources */,
 				EF524B0F1AB31FDF00F3B9AF /* KUserTests.m in Sources */,
 				EF524B071AAF330A00F3B9AF /* SessionTests.m in Sources */,

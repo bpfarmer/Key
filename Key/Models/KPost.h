@@ -14,7 +14,6 @@
 
 @interface KPost : KYapDatabaseObject <KEncryptable>
 
-@property (nonatomic) NSString *uniqueId;
 @property (nonatomic, readonly) NSString *authorId;
 @property (nonatomic, readonly) NSString *text;
 @property (nonatomic, readonly) NSData *commentKey;
@@ -31,6 +30,8 @@
                    attachmentKey:(NSData *)attachmentKey
                       attachments:(NSArray *)attachments
                             seen:(BOOL)seen;
+
+- (instancetype)initWithAuthorId:(NSString *)authorId text:(NSString *)text;
 
 - (KUser *)author;
 

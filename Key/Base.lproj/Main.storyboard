@@ -271,6 +271,40 @@
             </objects>
             <point key="canvasLocation" x="1251" y="37"/>
         </scene>
+        <!--Select Recipient View Controller-->
+        <scene sceneID="VpC-0f-5Tr">
+            <objects>
+                <viewController storyboardIdentifier="SelectRecipientViewController" id="2Po-RG-n4C" customClass="SelectRecipientViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Rsi-id-UEm"/>
+                        <viewControllerLayoutGuide type="bottom" id="z0c-HU-0lI"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Nnb-44-kqg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="FUt-zt-SiT">
+                                <rect key="frame" x="16" y="28" width="288" height="481"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gO9-bq-AmM">
+                                <rect key="frame" x="258" y="518" width="46" height="30"/>
+                                <state key="normal" title="Post">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="3mw-cb-Fu5"/>
+                    <connections>
+                        <outlet property="contactsTableView" destination="FUt-zt-SiT" id="zHW-jj-z0M"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="q64-6i-vk2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1251" y="728"/>
+        </scene>
         <!--Home View Controller-->
         <scene sceneID="c9T-PB-eHt">
             <objects>
@@ -318,6 +352,7 @@
                     <connections>
                         <outlet property="scrollView" destination="AKU-8i-rjH" id="ljA-R4-MWa"/>
                         <segue destination="TYp-lU-Cp9" kind="push" identifier="threadSeguePush" id="VtM-rD-aFL"/>
+                        <segue destination="2Po-RG-n4C" kind="push" identifier="selectRecipientPushSegue" id="RjF-z2-CV3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2t4-Q5-Wm8" userLabel="First Responder" sceneMemberID="firstResponder"/>

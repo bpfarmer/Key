@@ -10,8 +10,12 @@
 #import "KStorageManager.h"
 #import "KYapDatabaseView.h"
 #import "KPost.h"
+#import "KAccountManager.h"
+#import "KUser.h"
+#import "SelectRecipientViewController.h"
 
 static NSString *TableViewCellIdentifier = @"Posts";
+static NSString *KSelectRecipientSegueIdentifier = @"selectRecipientPushSegue";
 
 @interface SocialViewController () <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
@@ -19,6 +23,8 @@ static NSString *TableViewCellIdentifier = @"Posts";
 @property (nonatomic, strong) IBOutlet UITableView *postsTableView;
 @property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
 @property (nonatomic, strong) YapDatabaseViewMappings *postMappings;
+@property (nonatomic) KUser *currentUser;
+@property (nonatomic) KPost *currentPost;
 
 @end
 
@@ -36,6 +42,8 @@ static NSString *TableViewCellIdentifier = @"Posts";
     
     [self.postTextView sizeToFit];
     [self.postTextView layoutIfNeeded];
+    
+    self.currentUser = [KAccountManager sharedManager].user;
     
     [self setupDatabaseView];
 }
@@ -166,6 +174,19 @@ static NSString *TableViewCellIdentifier = @"Posts";
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", post.author, post.text];
     return cell;
+}
+
+- (IBAction)createNewPost:(id)sender {
+    self.currentPost = [[KPost alloc] initWithAuthorId:self.currentUser.uniqueId text:self.postTextView.text];
+    [self.parentViewController performSegueWithIdentifier:KSelectRecipientSegueIdentifier sender:self];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([[segue identifier] isEqual:KSelectRecipientSegueIdentifier]) {
+        SelectRecipientViewController *selectRecipientController = [segue destinationViewController];
+        selectRecipientController.currentUser = self.currentUser;
+        selectRecipientController.post        = self.currentPost;
+    }
 }
 
 

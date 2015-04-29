@@ -70,7 +70,6 @@ YapDatabaseConnection *databaseConnection;
     self.scrollView.contentSize = CGSizeMake(scrollWidth, scrollHeight);
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class KUser;
+
 @interface HomeViewController : UIViewController
+
+@property (nonatomic) KUser *currentUser;
 
 @end
