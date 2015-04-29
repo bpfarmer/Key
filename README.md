@@ -10,7 +10,8 @@ FreeKey is designed to offer perfect forward secrecy and replay protection, and 
 - EC-25519 for Public/Private Key generation 
 - ECDH for Shared-Key Agreement 
 - ECDSA for signing
-- SHA-256 for MAC generation and verification.
+- SHA-256 for MAC generation and verification
+- AES-128 for encryption
 
 ####Running Locally####
 
