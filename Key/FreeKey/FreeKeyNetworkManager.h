@@ -18,9 +18,8 @@
 
 + (instancetype)sharedManager;
 
-- (void)enqueueEncryptableObject:(id <KEncryptable>)object localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
 - (void)enqueueDecryptableMessage:(EncryptedMessage *)encryptedMessage toLocalUser:(KUser *)localUser;
-
+- (void)sendEncryptedMessage:(EncryptedMessage *)encryptedMessage;
 - (NSArray *)generatePreKeysForLocalUser:(KUser *)localUser;
 
 @end

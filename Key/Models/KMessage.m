@@ -50,15 +50,14 @@
         _body     = body;
         _createdAt = [NSDate date];
         [self setUniqueId:[self generateUniqueId]];
+        _read     = YES;
     }
     
     return self;
 }
 
 - (NSString *)generateUniqueId {
-    NSString *uniqueId = [NSString stringWithFormat:@"%@_%f_%@", self.authorId,
-                          [[NSDate date] timeIntervalSince1970],
-                          [Util insecureRandomString:10]];
+    NSString *uniqueId = [NSString stringWithFormat:@"%@_%u", [KMessage collection], [self messageHash]];
     
     return uniqueId;
 }

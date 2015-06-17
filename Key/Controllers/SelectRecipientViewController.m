@@ -191,17 +191,18 @@ static NSString *TableViewCellIdentifier = @"Threads";
 }
 
 - (IBAction)sendToRecipients:(id)sender {
+    NSLog(@"HERE");
     [self.selectedRecipients enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
         dispatch_async(queue, ^{
             KUser *user = (KUser *)obj;
-            if(user) {
-                [[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:self.post
-                                                                      localUser:self.currentUser
-                                                                     remoteUser:user];
-            }
+            //[[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:self.post
+            //                                                      localUser:self.currentUser
+            //                                                     remoteUser:user];
         });
     }];
+    
+    [self.post save];
 }
 
 @end

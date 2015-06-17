@@ -37,7 +37,8 @@
                         comments:(NSArray *)comments
                    attachmentKey:(NSData *)attachmentKey
                      attachments:(NSArray *)attachments
-                            seen:(BOOL)seen {
+                            seen:(BOOL)seen
+                       createdAt:(NSDate *)createdAt{
     self = [super init];
     
     if(self) {
@@ -49,9 +50,15 @@
         _attachmentKey = attachmentKey;
         _attachments   = attachments;
         _seen         = seen;
+        _createdAt    = createdAt;
     }
     
     return self;
+}
+
+- (NSString *)generateUniqueId {
+    NSUInteger uniqueHash = self.authorId.hash ^ (NSUInteger) [self.createdAt timeIntervalSince1970] ^ self.text.hash;
+    return [NSString stringWithFormat:@"%@_%u", [KPost collection], uniqueHash];
 }
 
 @end

@@ -21,6 +21,7 @@
 @property (nonatomic, readonly) NSData *attachmentKey;
 @property (nonatomic) NSArray *attachments;
 @property (nonatomic) BOOL seen;
+@property (nonatomic, readonly) NSDate *createdAt;
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         authorId:(NSString *)authorId
@@ -29,7 +30,8 @@
                         comments:(NSArray *)comments
                    attachmentKey:(NSData *)attachmentKey
                       attachments:(NSArray *)attachments
-                            seen:(BOOL)seen;
+                            seen:(BOOL)seen
+                       createdAt:(NSDate *)createdAt;
 
 - (instancetype)initWithAuthorId:(NSString *)authorId text:(NSString *)text;
 

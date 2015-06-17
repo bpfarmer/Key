@@ -118,6 +118,8 @@
     KUser *currentUser = [KAccountManager sharedManager].user;
     if(![message.authorId isEqualToString:currentUser.uniqueId]) {
         self.read = NO;
+    }else {
+        self.read = YES;
     }
     
     if(self.latestMessage) {
@@ -131,6 +133,13 @@
     }
     
     [self save];
+}
+
+- (NSArray *)recipientIds {
+    KUser *localUser = [KAccountManager sharedManager].user;
+    NSMutableArray *recipientIds = [NSMutableArray arrayWithArray:self.userIds];
+    [recipientIds removeObject:localUser.uniqueId];
+    return recipientIds;
 }
 
 @end

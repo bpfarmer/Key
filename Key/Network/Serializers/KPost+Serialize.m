@@ -17,6 +17,7 @@
 #define kCoderAttachmentKey @"attachmentKey"
 #define kCoderAttachments @"attachments"
 #define kCoderSeen @"seen"
+#define kCoderCreatedAt @"createdAt"
 
 @implementation KPost(Serialize)
 
@@ -32,7 +33,8 @@
                          comments:[aDecoder decodeObjectOfClass:[NSArray class] forKey:kCoderComments]
                     attachmentKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderAttachmentKey]
                       attachments:[aDecoder decodeObjectOfClass:[NSArray class] forKey:kCoderAttachments]
-                             seen:[aDecoder decodeBoolForKey:kCoderSeen]];
+                             seen:[aDecoder decodeBoolForKey:kCoderSeen]
+                        createdAt:[aDecoder decodeObjectOfClass:[NSDate class] forKey:kCoderCreatedAt]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
@@ -44,6 +46,7 @@
     [aCoder encodeObject:self.attachmentKey forKey:kCoderAttachmentKey];
     [aCoder encodeObject:self.attachments forKey:kCoderAttachments];
     [aCoder encodeBool:self.seen forKey:kCoderSeen];
+    [aCoder encodeObject:self.createdAt forKey:kCoderCreatedAt];
 }
 
 @end

@@ -21,6 +21,8 @@
 #import "PreKeyExchange.h"
 #import "FreeKeyNetworkManager.h"
 #import "CollapsingFutures.h"
+#import "KAccountManager.h"
+#import "SendPreKeyExchangeRequest.h"
 
 @implementation FreeKeySessionManager
 
@@ -35,8 +37,40 @@
     return sharedMyManager;
 }
 
-- (Session *)sessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
-    return (Session *)[[KStorageManager sharedManager] objectForKey:remoteUser.uniqueId inCollection:kSessionCollection];
+- (TOCFuture *)sessionForRemoteUserId:(NSString *)remoteUserId {
+    TOCFutureSource *resultSource = [TOCFutureSource new];
+    KUser *localUser  = [KAccountManager sharedManager].user;
+
+    KUser *remoteUser = (KUser *)[[KStorageManager sharedManager] objectForKey:remoteUserId inCollection:[KUser collection]];
+    if(remoteUser) {
+        [resultSource trySetResult:[self sessionWithLocalUser:localUser remoteUser:remoteUser]];
+    }else {
+        TOCFuture *futureUser = [KUser asyncRetrieveWithUniqueId:remoteUserId];
+        [futureUser thenDo:^(KUser *remoteUser) {
+            [resultSource trySetResult:[self sessionWithLocalUser:localUser remoteUser:remoteUser]];
+        }];
+    }
+    return resultSource.future;
+}
+
+- (TOCFuture *)sessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
+    TOCFutureSource *resultSource = [TOCFutureSource new];
+    Session *session = (Session *)[[KStorageManager sharedManager] objectForKey:remoteUser.uniqueId inCollection:kSessionCollection];
+    if(session) {
+        [resultSource trySetResult:session];
+    }else {
+        if(remoteUser.hasLocalPreKey) {
+            Session *session = [self createSessionWithLocalUser:localUser remoteUser:remoteUser];
+            if(session) [resultSource trySetResult:session];
+        }else {
+            TOCFuture *futureResponse = [localUser asyncRetrieveKeyExchangeWithRemoteUser:remoteUser];
+            [futureResponse thenDo:^(Session *session) {
+                [resultSource trySetResult:session];
+            }];
+        }
+    }
+    
+    return resultSource.future;
 }
 
 - (Session *)createSessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
@@ -63,7 +97,9 @@
                              ourBaseKey:(ECKeyPair *)ourBaseKey
                             theirPreKey:(PreKey *)theirPreKey {
     Session *session = [[Session alloc] initWithReceiverId:remoteUser.uniqueId identityKey:localUser.identityKey];
+    [session setSenderId:localUser.uniqueId];
     [session addPreKey:theirPreKey ourBaseKey:ourBaseKey];
+    [SendPreKeyExchangeRequest makeRequestWithPreKeyExchange:session.preKeyExchange];
     [[KStorageManager sharedManager] setObject:session forKey:remoteUser.uniqueId inCollection:kSessionCollection];
     return session;
 }
@@ -89,7 +125,7 @@
 }
 
 - (Session *)processNewPreKey:(PreKey *)preKey localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
-    Session *session  = [self sessionWithLocalUser:localUser remoteUser:remoteUser];
+    Session *session  = (Session *)[[KStorageManager sharedManager] objectForKey:remoteUser.uniqueId inCollection:kSessionCollection];
     
     if(!session) {
         PreKeyExchange *previousExchange = [self getPreKeyExchangeForUserId:remoteUser.uniqueId];
@@ -113,7 +149,7 @@
 - (Session *)processNewPreKeyExchange:(PreKeyExchange *)preKeyExchange
                             localUser:(KUser *)localUser
                            remoteUser:(KUser *)remoteUser {
-    Session *session  = [self sessionWithLocalUser:localUser remoteUser:remoteUser];
+    Session *session  = (Session *)[[KStorageManager sharedManager] objectForKey:remoteUser.uniqueId inCollection:kSessionCollection];
     
     if(!session) {
         PreKey *ourPreKey = [[KStorageManager sharedManager] objectForKey:preKeyExchange.signedTargetPreKeyId inCollection:kOurPreKeyCollection];

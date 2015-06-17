@@ -13,10 +13,20 @@
 @class PreKey;
 @class PreKeyExchange;
 @class ECKeyPair;
+@class TOCFuture;
 
 @interface FreeKeySessionManager : NSObject
 
 + (instancetype)sharedManager;
+
+/**
+ * Returns a TOCFuture token when the only information given is a remote user id
+ *
+ * @param remoteUserId The remote user
+ *
+ * @return TOCFuture futureSession
+ */
+- (TOCFuture *)sessionForRemoteUserId:(NSString *)remoteUserId;
 
 /**
  * Returns a previously-created Session with provided localUser and remoteUser
@@ -24,9 +34,9 @@
  * @param localUser The currently-logged-in user
  * @param remoteUser The remote user
  * 
- * @return session The previously-stored session
+ * @return TOCFuture futureSession
  */
-- (Session *)sessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
+- (TOCFuture *)sessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
 
 /**
  * Creates a session spontaneously, without a specific PreKey or PreKeyExchange. Using
@@ -87,6 +97,17 @@
  * @return session The created or retrieved session object
  */
 - (Session *)processNewPreKey:(PreKey *)preKey localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
+
+/**
+ * Processes a newly-received PreKeyExchange, when it's unclear whether the remote user exists locally.
+ * Checks whether Remote User exists, if not, retrieves from server.
+ *
+ * @param preKeyExchange The received PreKeyExchange
+ * @param localUser The logged-in local user
+ *
+ * @return session The created or retrieved session
+ */
+- (void)processReceivedPreKeyExchange:(PreKeyExchange *)preKeyExchange localUser:(KUser *)localUser;
 
 /**
  * Processes a newly-received PreKeyExchange from a remote user to the local user. If a session already

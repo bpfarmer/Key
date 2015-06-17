@@ -45,6 +45,12 @@ static NSString *KSelectRecipientSegueIdentifier = @"selectRecipientPushSegue";
     
     self.currentUser = [KAccountManager sharedManager].user;
     
+    [[KStorageManager sharedManager].dbConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        [transaction enumerateKeysInCollection:[KPost collection] usingBlock:^(NSString *key, BOOL *stop) {
+            NSLog(@"POST UNIQUE ID: %@", key);
+        }];
+    }];
+    
     [self setupDatabaseView];
 }
 

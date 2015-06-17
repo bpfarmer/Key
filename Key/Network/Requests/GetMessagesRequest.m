@@ -12,6 +12,10 @@
 #import "FreeKeyResponseHandler.h"
 #import "KAccountManager.h"
 #import "KUser.h"
+#import "FreeKeySessionManager.h"
+#import "PreKeyExchange.h"
+#import "KStorageManager.h"
+#import "FreeKey.h"
 
 @implementation GetMessagesRequest
 
@@ -37,25 +41,42 @@
 }
 
 - (void)receiveMessages:(NSDictionary *)messages {
+    KUser *localUser = [KAccountManager sharedManager].user;
     if([messages[kPreKeyExchangeRemoteAlias] count] > 0) {
         if([messages[kPreKeyExchangeRemoteAlias] isKindOfClass:[NSDictionary class]]) {
-            [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:messages[kPreKeyExchangeRemoteAlias]];
+            PreKeyExchange *preKeyExchange = [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:messages[kPreKeyExchangeRemoteAlias]];
+            KUser *remoteUser = (KUser *)[[KStorageManager sharedManager] objectForKey:preKeyExchange.senderId inCollection:[KUser collection]];
+            if(remoteUser) {
+                [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
+            }else {
+                TOCFuture *futureUser = [KUser asyncRetrieveWithUniqueId:preKeyExchange.senderId];
+                [futureUser thenDo:^(KUser *remoteUser) {
+                    [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
+                }];
+            }
         }else {
             for(NSDictionary *msg in messages[kPreKeyExchangeRemoteAlias]) {
-                [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:msg];
+                PreKeyExchange *preKeyExchange = [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:msg];
+                KUser *remoteUser = (KUser *)[[KStorageManager sharedManager] objectForKey:preKeyExchange.senderId inCollection:[KUser collection]];
+                if(remoteUser) {
+                    [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
+                }else {
+                    TOCFuture *futureUser = [KUser asyncRetrieveWithUniqueId:preKeyExchange.senderId];
+                    [futureUser thenDo:^(KUser *remoteUser) {
+                        [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
+                    }];
+                }
             }
         }
     }
-    KUser *localUser = [KAccountManager sharedManager].user;
     if([messages[kEncryptedMessageRemoteAlias] count] > 0) {
         if([messages[kEncryptedMessageRemoteAlias] isKindOfClass:[NSDictionary class]]) {
-            EncryptedMessage *message =
-            [FreeKeyResponseHandler createEncryptedMessageFromRemoteDictionary:messages[kEncryptedMessageRemoteAlias]];
+            EncryptedMessage *message = [FreeKeyResponseHandler createEncryptedMessageFromRemoteDictionary:messages[kEncryptedMessageRemoteAlias]];
             [[FreeKeyNetworkManager sharedManager] enqueueDecryptableMessage:message toLocalUser:localUser];
         }else {
             for(NSDictionary *msg in messages[kEncryptedMessageRemoteAlias]) {
-                EncryptedMessage *message = [FreeKeyResponseHandler createEncryptedMessageFromRemoteDictionary:msg];
-                [[FreeKeyNetworkManager sharedManager] enqueueDecryptableMessage:message toLocalUser:localUser];
+                EncryptedMessage *encryptedMessage = [FreeKeyResponseHandler createEncryptedMessageFromRemoteDictionary:msg];
+                [FreeKey decryptAndSaveEncryptedMessage:encryptedMessage];
             }
         }
     }
