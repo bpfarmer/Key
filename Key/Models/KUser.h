@@ -25,6 +25,7 @@
 @property (nonatomic) NSString *localStatus;
 @property (nonatomic) IdentityKey *identityKey;
 @property (nonatomic) NSData *publicKey;
+@property (nonatomic) BOOL hasLocalPreKey;
 
 
 + (KUser *)fetchObjectWithUsername:(NSString *)username;

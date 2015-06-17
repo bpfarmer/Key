@@ -34,5 +34,6 @@
 
 - (NSString *)displayName;
 - (void)processLatestMessage:(KMessage *)message;
+- (NSArray *)recipientIds;
 
 @end

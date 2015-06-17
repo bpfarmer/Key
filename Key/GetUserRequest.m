@@ -27,7 +27,6 @@
     GetUserRequest *request = [[GetUserRequest alloc] initWithParameters:parameters];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
     ^(AFHTTPRequestOperation *operation, id responseObject){
-        NSLog(@"RESPONSE OBJECT: %@", responseObject);
         if(responseObject[kUsersAlias]) {
             NSArray *usersResponseArray = (NSArray *) responseObject[kUsersAlias];
             NSMutableArray *usersArray  = [[NSMutableArray alloc] init];
@@ -56,6 +55,7 @@
         user = [[KUser alloc] initWithUniqueId:userDictionary[@"uniqueId"]
                                       username:userDictionary[@"username"]
                                      publicKey:userDictionary[@"publicKey"]];
+        [user setHasLocalPreKey:NO];
         [user save];
     }
 

@@ -145,7 +145,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Create an Account" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oc9-nC-mLB">
-                                <rect key="frame" x="31" y="90" width="258" height="20.5"/>
+                                <rect key="frame" x="31" y="90" width="258" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="258" id="kcs-bZ-g4o"/>
                                 </constraints>
@@ -388,6 +388,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ble-DM-eex"/>
+        <segue reference="M8A-s0-8IL"/>
     </inferredMetricsTieBreakers>
 </document>

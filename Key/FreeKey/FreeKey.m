@@ -26,13 +26,46 @@
 #import "RootChain.h"
 #import "ChainKey.h"
 #import "MessageKey.h"
+#import "KOutgoingObject.h"
+#import "CollapsingFutures.h"
 
 @implementation FreeKey
+
++ (void)sendEncryptableObject:(id<KEncryptable>)encryptableObject recipients:(NSArray *)recipients {
+    KOutgoingObject *outgoingObject = [[KOutgoingObject alloc] initWithObject:encryptableObject recipients:recipients];
+    [outgoingObject save];
+    
+    dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+
+    [outgoingObject.recipients enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        dispatch_async(queue, ^{
+            TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionForRemoteUserId:obj];
+            [futureSession thenDo:^(Session *session) {
+                EncryptedMessage *encryptedMessage = [self encryptObject:encryptableObject session:session];
+                [[FreeKeyNetworkManager sharedManager] sendEncryptedMessage:encryptedMessage];
+            }];
+        });
+    }];
+}
+
++ (void)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage {
+    dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+    
+    dispatch_async(queue, ^{
+        TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionForRemoteUserId:encryptedMessage.senderId];
+        [futureSession thenDo:^(Session *session) {
+            id <KEncryptable> decryptedObject = [self decryptEncryptedMessage:encryptedMessage session:session];
+            [decryptedObject save];
+        }];
+    });
+}
 
 #pragma mark - Encryption and Decryption Wrappers
 + (EncryptedMessage *)encryptObject:(id<KEncryptable>)object session:(Session *)session {
     NSData *serializedObject = [NSKeyedArchiver archivedDataWithRootObject:object];
     EncryptedMessage *encryptedMessage = [session encryptMessage:serializedObject];
+    KUser *localUser = [KAccountManager sharedManager].user;
+    [encryptedMessage addMetadataFromLocalUserId:localUser.uniqueId toRemoteUserId:session.receiverId];
     [[KStorageManager sharedManager] setObject:session forKey:session.receiverId inCollection:kSessionCollection];
     return encryptedMessage;
 }

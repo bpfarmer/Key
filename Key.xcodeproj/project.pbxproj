@@ -71,6 +71,7 @@
 		EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */; };
 		EF99E2771AC72F71002583E2 /* FreeKeyResponseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E2761AC72F71002583E2 /* FreeKeyResponseHandler.m */; };
 		EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E27E1ACB2BB9002583E2 /* SendPushTokenRequest.m */; };
+		EFAC97D11B2E171600B4FD0F /* KOutgoingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EFAC97D01B2E171600B4FD0F /* KOutgoingObject.m */; };
 		EFC1819A1AC3412800BE8B0B /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181991AC3412800BE8B0B /* HttpRequest.m */; };
 		EFC1819E1AC3534F00BE8B0B /* RegisterUsernameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC1819D1AC3534F00BE8B0B /* RegisterUsernameRequest.m */; };
 		EFC181A11AC3715B00BE8B0B /* UpdateUserRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181A01AC3715B00BE8B0B /* UpdateUserRequest.m */; };
@@ -247,6 +248,8 @@
 		EF99E27D1ACB2BB9002583E2 /* SendPushTokenRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SendPushTokenRequest.h; path = Network/Requests/PushToken/SendPushTokenRequest.h; sourceTree = "<group>"; };
 		EF99E27E1ACB2BB9002583E2 /* SendPushTokenRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SendPushTokenRequest.m; path = Network/Requests/PushToken/SendPushTokenRequest.m; sourceTree = "<group>"; };
 		EF99E2811ACB2D1F002583E2 /* PushTokenRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushTokenRequest.h; sourceTree = "<group>"; };
+		EFAC97CF1B2E171600B4FD0F /* KOutgoingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KOutgoingObject.h; sourceTree = "<group>"; };
+		EFAC97D01B2E171600B4FD0F /* KOutgoingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KOutgoingObject.m; sourceTree = "<group>"; };
 		EFC181981AC3412800BE8B0B /* HttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HttpRequest.h; path = Network/HttpRequest.h; sourceTree = "<group>"; };
 		EFC181991AC3412800BE8B0B /* HttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HttpRequest.m; path = Network/HttpRequest.m; sourceTree = "<group>"; };
 		EFC1819C1AC3534F00BE8B0B /* RegisterUsernameRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterUsernameRequest.h; sourceTree = "<group>"; };
@@ -644,6 +647,8 @@
 				EFEBDD431A6B5C1400973E15 /* KGroup.m */,
 				EFEBDD391A6B2C7800973E15 /* KMessage.h */,
 				EFEBDD3A1A6B2C7800973E15 /* KMessage.m */,
+				EFAC97CF1B2E171600B4FD0F /* KOutgoingObject.h */,
+				EFAC97D01B2E171600B4FD0F /* KOutgoingObject.m */,
 				EF01716F1ADF07BB00AFCBA4 /* KPost.h */,
 				EF0171701ADF07BB00AFCBA4 /* KPost.m */,
 				EFCD01D61A83E651005065B2 /* KThread.h */,
@@ -940,6 +945,7 @@
 				EF2CDED21AB5C22F001E2F20 /* MessageKey+Serialize.m in Sources */,
 				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
 				EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */,
+				EFAC97D11B2E171600B4FD0F /* KOutgoingObject.m in Sources */,
 				EF3D09E31AE036EB0044E9F6 /* InboxViewController.m in Sources */,
 				EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */,
 				EF524AE51AAE239800F3B9AF /* NSData+keyVersionByte.m in Sources */,

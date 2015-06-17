@@ -19,7 +19,7 @@
 
 @interface Session : NSObject
 
-@property (nonatomic, readonly) NSString *senderId;
+@property (nonatomic) NSString *senderId;
 @property (nonatomic, readonly) NSString *receiverId;
 @property (nonatomic, readonly) PreKey *preKey;
 @property (nonatomic, readonly) NSData *baseKeyPublic;

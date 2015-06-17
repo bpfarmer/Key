@@ -15,6 +15,8 @@
 #import "PreKeyExchange.h"
 #import "FreeKey.h"
 #import "FreeKeyResponseHandler.h"
+#import "FreeKeySessionManager.h"
+#import "Session.h"
 
 @implementation GetKeyExchangeRequest
 
@@ -26,14 +28,15 @@
 + (TOCFuture *)makeRequestWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     TOCFutureSource *resultSource = [TOCFutureSource new];
     GetKeyExchangeRequest *request = [[GetKeyExchangeRequest alloc] initWithLocalUser:localUser remoteUser:remoteUser];
-    void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
-    ^(AFHTTPRequestOperation *operation, id responseObject){
-        NSLog(@"KEY EXCHANGE RESPONSE OBJECT: %@", responseObject);
-        [resultSource trySetResult:[request createKeyExchangeFromDictionary:[request base64DecodedDictionary:responseObject]]];
+    void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
+        NSLog(@"-- PKE RESPONSE OBJECT: %@ --", responseObject);
+        NSObject *keyExchange = [request createKeyExchangeFromDictionary:[request base64DecodedDictionary:responseObject]];
+        [remoteUser setHasLocalPreKey:YES];
+        [remoteUser save];
+        Session *session = [[FreeKeySessionManager sharedManager] processNewKeyExchange:keyExchange localUser:localUser remoteUser:remoteUser];
+        [resultSource trySetResult:session];
     };
-    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
-    ^(AFHTTPRequestOperation *operation, NSError *error){
-        NSLog(@"KEY EXCHANGE ERROR: %@", error);
+    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) = ^(AFHTTPRequestOperation *operation, NSError *error){
         [resultSource trySetFailure:error];
     };
     [request makeRequestWithSuccess:success failure:failure];
@@ -43,12 +46,13 @@
 - (NSObject *)createKeyExchangeFromDictionary:(NSDictionary *)dictionary {
     NSObject *keyExchange;
     if(dictionary[kPreKeyExchangeRemoteAlias]) {
-        PreKeyExchange *preKeyExchange =
-        [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:dictionary[kPreKeyExchangeRemoteAlias]];
+        PreKeyExchange *preKeyExchange = [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:dictionary[kPreKeyExchangeRemoteAlias]];
         
         [[KStorageManager sharedManager] setObject:preKeyExchange
                                             forKey:preKeyExchange.senderId
                                       inCollection:kPreKeyExchangeCollection];
+        NSLog(@"-- PREKEY EXCHANGE BASE KEY: %@", preKeyExchange.sentSignedBaseKey);
+        NSLog(@"-- PREKEY EXCHANGE ID KEY: %@", preKeyExchange.senderIdentityPublicKey);
         keyExchange = preKeyExchange;
     }else if(dictionary[kPreKeyRemoteAlias]) {
         PreKey *preKey =

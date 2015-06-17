@@ -189,7 +189,7 @@ YapDatabaseConnection *databaseConnection;
             }];
             
             [futureUser thenDo:^(KUser *user) {
-                // TODO: create added contact notification and send?
+                [[KAccountManager sharedManager].user asyncRetrieveKeyExchangeWithRemoteUser:user];
             }];
         }
         self.contactTextField.text = @"";

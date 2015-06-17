@@ -187,6 +187,13 @@ static NSString *kShareViewSegue         = @"shareViewSegue";
     [self.parentViewController performSegueWithIdentifier:@"contactSeguePush" sender:self];
 }
 
+- (IBAction)logout:(id)sender {
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
+    LoginViewController *loginView = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    [self presentViewController:loginView animated:YES completion:nil];
+}
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     __block KThread *thread = nil;
     [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {

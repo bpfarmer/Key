@@ -253,20 +253,12 @@ YapDatabaseConnection *databaseConnection;
         if(self.thread) {
             KMessage *message = [[KMessage alloc] initWithAuthorId:self.senderId threadId:self.thread.uniqueId body:text];
             [message save];
-            [self.thread.userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                if(![obj isEqual:self.currentUser.uniqueId]) {
-                    dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-                    dispatch_async(queue, ^{
-                        KUser *user =
-                        (KUser *)[[KStorageManager sharedManager] objectForKey:obj inCollection:[KUser collection]];
-                        if(user) {
-                            [[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:message
-                                                                                  localUser:self.currentUser
-                                                                                 remoteUser:user];
-                        }
-                    });
-                }
-            }];
+            
+            dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+            dispatch_async(queue, ^{
+                [FreeKey sendEncryptableObject:message recipients:self.thread.recipientIds];
+            });
+            
             self.inputToolbar.contentView.textView.text = @"";
             [self scrollToBottomAnimated:YES];
         }
@@ -290,7 +282,7 @@ YapDatabaseConnection *databaseConnection;
     [users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         KUser *user = (KUser *)obj;
         if(![user.uniqueId isEqual:currentUser.uniqueId]) {
-            [[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:self.thread localUser:currentUser remoteUser:user];
+            [FreeKey sendEncryptableObject:self.thread recipients:self.thread.recipientIds];
         }
     }];
     [self setupDatabaseView];
