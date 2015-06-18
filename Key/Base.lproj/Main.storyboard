@@ -388,6 +388,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="M8A-s0-8IL"/>
+        <segue reference="ble-DM-eex"/>
     </inferredMetricsTieBreakers>
 </document>

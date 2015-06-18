@@ -16,7 +16,7 @@
 #import "FreeKeyNetworkManager.h"
 #import "CollapsingFutures.h"
 
-static NSString *TableViewCellIdentifier = @"Threads";
+static NSString *TableViewCellIdentifier = @"Contacts";
 
 YapDatabaseViewMappings *mappings;
 YapDatabaseConnection *databaseConnection;

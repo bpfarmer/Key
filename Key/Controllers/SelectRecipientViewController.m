@@ -171,9 +171,9 @@ static NSString *TableViewCellIdentifier = @"Threads";
     }];
     
     if(user) {
-        NSMutableArray *mutableSelected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
-        [mutableSelected addObject:user];
-        self.selectedRecipients = mutableSelected;
+        NSMutableArray *selected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
+        [selected addObject:user.uniqueId];
+        self.selectedRecipients = selected;
     }
 }
 
@@ -184,25 +184,19 @@ static NSString *TableViewCellIdentifier = @"Threads";
     }];
     
     if(user) {
-        NSMutableArray *mutableSelected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
-        [mutableSelected removeObject:user];
-        self.selectedRecipients = mutableSelected;
+        NSMutableArray *selected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
+        [selected removeObject:user.uniqueId];
+        self.selectedRecipients = selected;
     }
 }
 
 - (IBAction)sendToRecipients:(id)sender {
-    NSLog(@"HERE");
-    [self.selectedRecipients enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-        dispatch_async(queue, ^{
-            KUser *user = (KUser *)obj;
-            //[[FreeKeyNetworkManager sharedManager] enqueueEncryptableObject:self.post
-            //                                                      localUser:self.currentUser
-            //                                                     remoteUser:user];
-        });
-    }];
-    
+    [FreeKey sendEncryptableObject:self.post recipients:self.selectedRecipients];
+    NSLog(@"POST ABOUT TO BE SAVED: %@", self.post.text);
     [self.post save];
+    KPost *retrievedPost = (KPost *)[[KStorageManager sharedManager] objectForKey:self.post.uniqueId inCollection:[KPost collection]];
+    NSLog(@"RETRIEVED POST TEXT: %@", retrievedPost.text);
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

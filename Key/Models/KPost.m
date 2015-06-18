@@ -25,6 +25,8 @@
         _text     = text;
         _attachmentKey = [Util generateRandomData:128];
         _commentKey    = [Util generateRandomData:128];
+        _createdAt     = [NSDate date];
+        [self setUniqueId:[self generateUniqueId]];
     }
     
     return self;
@@ -39,10 +41,9 @@
                      attachments:(NSArray *)attachments
                             seen:(BOOL)seen
                        createdAt:(NSDate *)createdAt{
-    self = [super init];
+    self = [super initWithUniqueId:uniqueId];
     
     if(self) {
-        self.uniqueId = uniqueId;
         _authorId     = authorId;
         _text         = text;
         _commentKey   = commentKey;
@@ -52,7 +53,6 @@
         _seen         = seen;
         _createdAt    = createdAt;
     }
-    
     return self;
 }
 
