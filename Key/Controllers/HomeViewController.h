@@ -14,6 +14,8 @@ static NSString *KSelectRecipientSegueIdentifier = @"selectRecipientPushSegue";
 
 @interface HomeViewController : UIViewController
 
+@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
+
 @property (nonatomic) KUser *currentUser;
 
 @end

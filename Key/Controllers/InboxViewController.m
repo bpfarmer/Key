@@ -56,10 +56,7 @@ static NSString *kShareViewSegue         = @"shareViewSegue";
         [self.threadMappings updateWithTransaction:transaction];
     }];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(yapDatabaseModified:)
-                                                 name:YapDatabaseModifiedNotification
-                                               object:self.databaseConnection.database];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(yapDatabaseModified:) name:YapDatabaseModifiedNotification object:self.databaseConnection.database];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,10 +69,7 @@ static NSString *kShareViewSegue         = @"shareViewSegue";
     NSArray *sectionChanges = nil;
     NSArray *rowChanges = nil;
     
-    [[self.databaseConnection ext:KThreadDatabaseViewName] getSectionChanges:&sectionChanges
-                                                                  rowChanges:&rowChanges
-                                                            forNotifications:notifications
-                                                                withMappings:self.threadMappings];
+    [[self.databaseConnection ext:KThreadDatabaseViewName] getSectionChanges:&sectionChanges rowChanges:&rowChanges forNotifications:notifications withMappings:self.threadMappings];
     
     if ([sectionChanges count] == 0 & [rowChanges count] == 0)
     {
@@ -90,14 +84,12 @@ static NSString *kShareViewSegue         = @"shareViewSegue";
         {
             case YapDatabaseViewChangeDelete :
             {
-                [self.threadsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionChange.index]
-                                     withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.threadsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionChange.index] withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
             }
             case YapDatabaseViewChangeInsert :
             {
-                [self.threadsTableView insertSections:[NSIndexSet indexSetWithIndex:sectionChange.index]
-                                     withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.threadsTableView insertSections:[NSIndexSet indexSetWithIndex:sectionChange.index] withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
             }
             case YapDatabaseViewChangeMove :
@@ -117,28 +109,23 @@ static NSString *kShareViewSegue         = @"shareViewSegue";
         {
             case YapDatabaseViewChangeDelete :
             {
-                [self.threadsTableView deleteRowsAtIndexPaths:@[ rowChange.indexPath ]
-                                             withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.threadsTableView deleteRowsAtIndexPaths:@[rowChange.indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
             }
             case YapDatabaseViewChangeInsert :
             {
-                [self.threadsTableView insertRowsAtIndexPaths:@[ rowChange.newIndexPath ]
-                                             withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.threadsTableView insertRowsAtIndexPaths:@[rowChange.newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
             }
             case YapDatabaseViewChangeMove :
             {
-                [self.threadsTableView deleteRowsAtIndexPaths:@[ rowChange.indexPath ]
-                                             withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.threadsTableView insertRowsAtIndexPaths:@[ rowChange.newIndexPath ]
-                                             withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.threadsTableView deleteRowsAtIndexPaths:@[rowChange.indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.threadsTableView insertRowsAtIndexPaths:@[rowChange.newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                 break;
             }
             case YapDatabaseViewChangeUpdate :
             {
-                [self.threadsTableView reloadRowsAtIndexPaths:@[ rowChange.indexPath ]
-                                             withRowAnimation:UITableViewRowAnimationNone];
+                [self.threadsTableView reloadRowsAtIndexPaths:@[rowChange.indexPath] withRowAnimation:UITableViewRowAnimationNone];
                 break;
             }
         }
@@ -167,12 +154,10 @@ static NSString *kShareViewSegue         = @"shareViewSegue";
 {
     __block KThread *thread = nil;
     [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        thread = (KThread *)[[transaction extension:KThreadDatabaseViewName] objectAtIndexPath:indexPath
-                                                                                  withMappings:self.threadMappings];
+        thread = (KThread *)[[transaction extension:KThreadDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.threadMappings];
     }];
     
-    UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
-                                                                        forIndexPath:indexPath];
+    UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
     
     NSString *read = @"";
     if(!thread.read) {

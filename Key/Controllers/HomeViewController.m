@@ -32,8 +32,6 @@ YapDatabaseConnection *databaseConnection;
 
 @interface HomeViewController ()
 
-@property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
-
 @end
 
 
@@ -65,18 +63,33 @@ YapDatabaseConnection *databaseConnection;
     shareFrame.origin.x = 2*shareFrame.size.width;
     socialViewController.view.frame = shareFrame;
     
-    
     // 4) Finally set the size of the scroll view that contains the frames
     CGFloat scrollWidth  = 3 * self.view.frame.size.width;
     CGFloat scrollHeight  = self.view.frame.size.height;
     self.scrollView.contentSize = CGSizeMake(scrollWidth, scrollHeight);
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+}
+
+-(BOOL)shouldAutorotate
+{
+    return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+    return UIInterfaceOrientationPortrait;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -98,5 +111,10 @@ YapDatabaseConnection *databaseConnection;
         NSLog(@"POST IN DEST CONTROLLER: %@", selectRecipientController.post.uniqueId);
     }
 }
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 
 @end

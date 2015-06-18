@@ -99,17 +99,6 @@
 - (Session *)processNewPreKey:(PreKey *)preKey localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
 
 /**
- * Processes a newly-received PreKeyExchange, when it's unclear whether the remote user exists locally.
- * Checks whether Remote User exists, if not, retrieves from server.
- *
- * @param preKeyExchange The received PreKeyExchange
- * @param localUser The logged-in local user
- *
- * @return session The created or retrieved session
- */
-- (void)processReceivedPreKeyExchange:(PreKeyExchange *)preKeyExchange localUser:(KUser *)localUser;
-
-/**
  * Processes a newly-received PreKeyExchange from a remote user to the local user. If a session already
  * exists between the local and remote users, we ignore this PreKeyExchange, otherwise, we create the session
  *

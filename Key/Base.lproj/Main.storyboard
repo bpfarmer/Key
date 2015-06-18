@@ -362,10 +362,10 @@
             </objects>
             <point key="canvasLocation" x="769" y="37"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Home Navigation View Controller-->
         <scene sceneID="qxo-Rx-kCQ">
             <objects>
-                <navigationController storyboardIdentifier="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="O42-rU-w9I" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="O42-rU-w9I" customClass="HomeNavigationViewController" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="Uvy-KM-4ev"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="tW5-ab-nnZ">
@@ -388,6 +388,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ble-DM-eex"/>
+        <segue reference="M8A-s0-8IL"/>
     </inferredMetricsTieBreakers>
 </document>

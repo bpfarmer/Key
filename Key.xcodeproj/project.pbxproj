@@ -64,6 +64,7 @@
 		EF6B44BF1ABC998B00B88323 /* FreeKeyPushManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44BE1ABC998B00B88323 /* FreeKeyPushManagerTests.m */; };
 		EF6B44C21ABCDD3600B88323 /* FreeKeyTestExample.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44C11ABCDD3600B88323 /* FreeKeyTestExample.m */; };
 		EF6B44C41ABDAE1D00B88323 /* HttpManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF6B44C31ABDAE1D00B88323 /* HttpManagerTests.m */; };
+		EF78AA561B33622300A4627F /* HomeNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF78AA551B33622300A4627F /* HomeNavigationViewController.m */; };
 		EF8358241AE02AD800B631AB /* InboxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF8358231AE02AD800B631AB /* InboxView.xib */; };
 		EF8358261AE02AED00B631AB /* ShareView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF8358251AE02AED00B631AB /* ShareView.xib */; };
 		EF8358281AE02B0F00B631AB /* SocialView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF8358271AE02B0F00B631AB /* SocialView.xib */; };
@@ -233,6 +234,8 @@
 		EF6B44C01ABCDD3600B88323 /* FreeKeyTestExample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeKeyTestExample.h; sourceTree = "<group>"; };
 		EF6B44C11ABCDD3600B88323 /* FreeKeyTestExample.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeKeyTestExample.m; sourceTree = "<group>"; };
 		EF6B44C31ABDAE1D00B88323 /* HttpManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpManagerTests.m; sourceTree = "<group>"; };
+		EF78AA541B33622300A4627F /* HomeNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeNavigationViewController.h; sourceTree = "<group>"; };
+		EF78AA551B33622300A4627F /* HomeNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeNavigationViewController.m; sourceTree = "<group>"; };
 		EF8358231AE02AD800B631AB /* InboxView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InboxView.xib; path = Views/InboxView.xib; sourceTree = "<group>"; };
 		EF8358251AE02AED00B631AB /* ShareView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShareView.xib; sourceTree = "<group>"; };
 		EF8358271AE02B0F00B631AB /* SocialView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SocialView.xib; path = Views/SocialView.xib; sourceTree = "<group>"; };
@@ -762,6 +765,8 @@
 				EFF70AC01AAE1CBC006C10D2 /* WelcomeScreenViewController.m */,
 				EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */,
 				EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */,
+				EF78AA541B33622300A4627F /* HomeNavigationViewController.h */,
+				EF78AA551B33622300A4627F /* HomeNavigationViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -952,6 +957,7 @@
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */,
 				EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */,
+				EF78AA561B33622300A4627F /* HomeNavigationViewController.m in Sources */,
 				EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */,
 				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
 				EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */,
