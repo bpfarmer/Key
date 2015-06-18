@@ -39,8 +39,7 @@
 
 - (IBAction)login:(id)sender {
     // TODO: enforce passwords
-    if(![self.usernameText.text isEqualToString:@""] /*&& !
-                                                      [self.passwordText.text isEqualToString:@""]*/) {
+    if(![self.usernameText.text isEqualToString:@""] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
         KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString] password:self.passwordText.text];
         [[KAccountManager sharedManager] setUser:user];
         if([user authenticatePassword:self.passwordText.text]) {

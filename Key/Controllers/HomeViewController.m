@@ -13,6 +13,7 @@
 #import "KStorageManager.h"
 #import "KYapDatabaseView.h"
 #import "KMessage.h"
+#import "KPost.h"
 #import "ThreadViewController.h"
 #import "LoginViewController.h"
 #import "FreeKeyNetworkManager.h"
@@ -20,6 +21,7 @@
 #import "InboxViewController.h"
 #import "SocialViewController.h"
 #import "ShareViewController.h"
+#import "SelectRecipientViewController.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
 static NSString *kThreadSeguePush        = @"threadSeguePush";
@@ -88,6 +90,12 @@ YapDatabaseConnection *databaseConnection;
             ThreadViewController *threadViewController = (ThreadViewController *)segue.destinationViewController;
             threadViewController.thread = inboxViewController.selectedThread;
         }
+    }else if([[segue identifier] isEqual:KSelectRecipientSegueIdentifier]) {
+        SelectRecipientViewController *selectRecipientController = (SelectRecipientViewController *)segue.destinationViewController;
+        SocialViewController *socialViewController = (SocialViewController *)sender;
+        selectRecipientController.currentUser = socialViewController.currentUser;
+        selectRecipientController.post        = socialViewController.currentPost;
+        NSLog(@"POST IN DEST CONTROLLER: %@", selectRecipientController.post.uniqueId);
     }
 }
 

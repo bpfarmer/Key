@@ -116,7 +116,7 @@ NSString *KPostDatabaseViewName    = @"KPostDatabaseViewExtension";
         }
         return nil;
     }];
-    YapDatabaseViewSorting *viewSorting = [self userSorting];
+    YapDatabaseViewSorting *viewSorting = [self postSorting];
     
     YapDatabaseViewOptions *options = [[YapDatabaseViewOptions alloc] init];
     options.isPersistent = YES;
@@ -165,7 +165,21 @@ NSString *KPostDatabaseViewName    = @"KPostDatabaseViewExtension";
                 return [[user1 displayName] compare:[user2 displayName]];
             }
         }
-                                                        return NSOrderedSame;
+        return NSOrderedSame;
+    }];
+}
+
++ (YapDatabaseViewSorting *)postSorting {
+    return [YapDatabaseViewSorting withObjectBlock:^NSComparisonResult(NSString *group, NSString *collection1, NSString *key1, id object1, NSString *collection2, NSString *key2, id object2) {
+        if([group isEqualToString:KPostGroup]) {
+            if([object1 isKindOfClass:[KPost class]] && [object2 isKindOfClass:[KPost class]]){
+                KPost *post1 = (KPost *)object1;
+                KPost *post2 = (KPost *)object2;
+                
+                return [post2.createdAt compare:post1.createdAt];
+            }
+        }
+        return NSOrderedSame;
     }];
 }
 

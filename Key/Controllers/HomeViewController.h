@@ -10,6 +10,8 @@
 
 @class KUser;
 
+static NSString *KSelectRecipientSegueIdentifier = @"selectRecipientPushSegue";
+
 @interface HomeViewController : UIViewController
 
 @property (nonatomic) KUser *currentUser;

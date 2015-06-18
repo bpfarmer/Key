@@ -87,6 +87,7 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
     [KYapDatabaseView registerThreadDatabaseView];
     [KYapDatabaseView registerMessageDatabaseView];
     [KYapDatabaseView registerContactDatabaseView];
+    [KYapDatabaseView registerPostDatabaseView];
     [KYapDatabaseSecondaryIndex registerUsernameIndex];
 }
 

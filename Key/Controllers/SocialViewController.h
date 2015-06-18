@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class KUser;
+@class KPost;
+
 @interface SocialViewController : UIViewController
+
+@property (nonatomic) KUser *currentUser;
+@property (nonatomic) KPost *currentPost;
 
 @end
