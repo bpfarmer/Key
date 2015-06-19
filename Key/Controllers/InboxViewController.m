@@ -20,7 +20,6 @@
 
 static NSString *TableViewCellIdentifier = @"Threads";
 static NSString *kThreadSeguePush        = @"threadSeguePush";
-static NSString *kShareViewSegue         = @"shareViewSegue";
 
 @interface InboxViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *threadsTableView;
@@ -169,7 +168,7 @@ static NSString *kShareViewSegue         = @"shareViewSegue";
 }
 
 - (IBAction)pushContacts:(id)sender {
-    [self.parentViewController performSegueWithIdentifier:@"contactSeguePush" sender:self];
+    [self.parentViewController.navigationController performSegueWithIdentifier:@"contactSeguePush" sender:self];
 }
 
 - (IBAction)logout:(id)sender {

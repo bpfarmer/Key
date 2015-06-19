@@ -215,21 +215,18 @@
                                     <action selector="addContact:" destination="DsG-xX-ckQ" eventType="touchUpInside" id="gEk-jW-jPx"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Contacts" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xLe-xd-KGn">
-                                <rect key="frame" x="240" y="20" width="120" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GBx-or-HxB">
                                 <rect key="frame" x="16" y="16" width="46" height="30"/>
                                 <state key="normal" title="Back">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <segue destination="7vg-Se-yPB" kind="push" id="ble-DM-eex"/>
-                                </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Contacts" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xLe-xd-KGn">
+                                <rect key="frame" x="100" y="20" width="120" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -241,6 +238,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rFJ-xT-CD5"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="contactTextField" destination="QXu-Sx-Zau" id="7cg-Gm-o3g"/>
                         <outlet property="contactsTableView" destination="kjL-6Z-LiY" id="O1O-1c-9Wg"/>
@@ -248,7 +248,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GXS-oQ-MyI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="237" y="728"/>
+            <point key="canvasLocation" x="229" y="685"/>
         </scene>
         <!--Thread View Controller-->
         <scene sceneID="8kO-fg-L04">
@@ -266,10 +266,13 @@
                     <navigationItem key="navigationItem" id="3dE-bG-Ao5">
                         <nil key="title"/>
                     </navigationItem>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QXN-wo-Ohh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1251" y="37"/>
+            <point key="canvasLocation" x="1265" y="-6"/>
         </scene>
         <!--Select Recipient View Controller-->
         <scene sceneID="VpC-0f-5Tr">
@@ -300,86 +303,65 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="3mw-cb-Fu5"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="contactsTableView" destination="FUt-zt-SiT" id="zHW-jj-z0M"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q64-6i-vk2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1251" y="728"/>
+            <point key="canvasLocation" x="733" y="685"/>
         </scene>
         <!--Home View Controller-->
-        <scene sceneID="c9T-PB-eHt">
+        <scene sceneID="1NY-li-ffi">
             <objects>
-                <viewController storyboardIdentifier="HomeViewController" id="7vg-Se-yPB" customClass="HomeViewController" sceneMemberID="viewController">
+                <viewController id="Kqw-Sh-fTZ" customClass="HomeViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Kpe-w8-VA3"/>
-                        <viewControllerLayoutGuide type="bottom" id="ppS-su-gc7"/>
+                        <viewControllerLayoutGuide type="top" id="OxX-8G-sVN"/>
+                        <viewControllerLayoutGuide type="bottom" id="iUh-cC-7fW"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="bJT-vV-PLu">
+                    <view key="view" contentMode="scaleToFill" id="C4y-Ca-atB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hBS-N1-Dtu">
-                                <rect key="frame" x="464" y="20" width="120" height="30"/>
-                                <state key="normal" title="Contacts">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="DsG-xX-ckQ" kind="push" identifier="contactSeguePush" id="qoo-rZ-8GX"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kqc-AI-e3M">
-                                <rect key="frame" x="464" y="530" width="120" height="30"/>
-                                <state key="normal" title="Log Out">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="logout:" destination="7vg-Se-yPB" eventType="touchUpInside" id="ptE-MJ-9Jd"/>
-                                </connections>
-                            </button>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AKU-8i-rjH">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gA6-BN-5tx">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Kqc-AI-e3M" firstAttribute="trailing" secondItem="bJT-vV-PLu" secondAttribute="trailingMargin" id="6A3-d7-nDU"/>
-                            <constraint firstItem="ppS-su-gc7" firstAttribute="top" secondItem="Kqc-AI-e3M" secondAttribute="bottom" constant="8" id="RY6-6C-MqX"/>
-                            <constraint firstItem="hBS-N1-Dtu" firstAttribute="trailing" secondItem="bJT-vV-PLu" secondAttribute="trailingMargin" id="Xdz-JT-YWh"/>
-                            <constraint firstItem="hBS-N1-Dtu" firstAttribute="top" secondItem="Kpe-w8-VA3" secondAttribute="bottom" id="ytq-yg-i3s"/>
-                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="rcF-YS-wTl"/>
+                    <navigationItem key="navigationItem" id="Rmg-cc-BfW"/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="scrollView" destination="AKU-8i-rjH" id="ljA-R4-MWa"/>
-                        <segue destination="TYp-lU-Cp9" kind="push" identifier="threadSeguePush" id="VtM-rD-aFL"/>
-                        <segue destination="2Po-RG-n4C" kind="push" identifier="selectRecipientPushSegue" id="RjF-z2-CV3"/>
+                        <outlet property="scrollView" destination="gA6-BN-5tx" id="aGo-5b-BIg"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2t4-Q5-Wm8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E2R-a3-co8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="769" y="37"/>
+            <point key="canvasLocation" x="747" y="-6"/>
         </scene>
         <!--Home Navigation View Controller-->
-        <scene sceneID="qxo-Rx-kCQ">
+        <scene sceneID="dAq-sW-I7Y">
             <objects>
-                <navigationController storyboardIdentifier="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="O42-rU-w9I" customClass="HomeNavigationViewController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="iVT-Xi-DZY" customClass="HomeNavigationViewController" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="Uvy-KM-4ev"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="tW5-ab-nnZ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7w7-c0-shX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="7vg-Se-yPB" kind="relationship" relationship="rootViewController" id="M8A-s0-8IL"/>
+                        <segue destination="Kqw-Sh-fTZ" kind="relationship" relationship="rootViewController" id="pLA-TC-MwG"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="EEH-i9-dd8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gGh-aM-9pX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="237" y="37"/>
+            <point key="canvasLocation" x="229" y="-6"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -387,7 +369,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="M8A-s0-8IL"/>
-    </inferredMetricsTieBreakers>
 </document>

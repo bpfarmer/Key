@@ -226,13 +226,9 @@ YapDatabaseConnection *databaseConnection;
 - (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView
                     avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
     KMessage *message = (KMessage *)[self messageAtIndexPath:indexPath];
+    NSString *userInitial = [[message.senderDisplayName substringToIndex:1] uppercaseString];
     if (![message.senderId isEqualToString:self.senderId]) {
-        return [JSQMessagesAvatarImageFactory
-                avatarImageWithUserInitials:[[message.senderDisplayName substringToIndex:1] uppercaseString]
-                backgroundColor:[UIColor jsq_messageBubbleLightGrayColor]
-                textColor:[UIColor whiteColor]
-                font:[UIFont boldSystemFontOfSize:14.0]
-                diameter:28];
+        return [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:userInitial backgroundColor:[UIColor jsq_messageBubbleLightGrayColor] textColor:[UIColor whiteColor] font:[UIFont boldSystemFontOfSize:14.0]diameter:28];
     }else {
         return nil;
     }
@@ -293,11 +289,7 @@ YapDatabaseConnection *databaseConnection;
 
 - (void)didPressAccessoryButton:(UIButton *)sender
 {
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages"
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Send photo", @"Send location", @"Send video", nil];
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Send photo", @"Send location", @"Send video", nil];
     
     [sheet showFromToolbar:self.inputToolbar];
 }
