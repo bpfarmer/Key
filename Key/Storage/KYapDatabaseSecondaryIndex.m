@@ -10,6 +10,7 @@
 #import "KStorageManager.h"
 #import "KUser.h"
 #import "KMessage.h"
+#import "KAttachment.h"
 
 @implementation KYapDatabaseSecondaryIndex
 
@@ -48,5 +49,23 @@
     YapDatabaseSecondaryIndex *secondaryIndex = [[YapDatabaseSecondaryIndex alloc] initWithSetup:setup handler:handler];
     return [[[KStorageManager sharedManager] database] registerExtension:secondaryIndex withName:KMessageStatusSQLiteIndex];
 }
+
++ (BOOL)registerAttachmentParentUniqueId {
+    YapDatabaseSecondaryIndexSetup *setup = [[YapDatabaseSecondaryIndexSetup alloc] init];
+    [setup addColumn:@"parentUniqueId" withType:YapDatabaseSecondaryIndexTypeText];
+    YapDatabaseSecondaryIndexWithObjectBlock block = ^(NSMutableDictionary *dict, NSString *collection, NSString *key, id object){
+        
+        if ([object isKindOfClass:[KAttachment class]])
+        {
+            KAttachment *attachment = (KAttachment *)object;
+            [dict setObject:attachment.parentUniqueId forKey:@"parentUniqueId"];
+        }
+    };
+    
+    YapDatabaseSecondaryIndexHandler *handler = [YapDatabaseSecondaryIndexHandler withObjectBlock:block];
+    YapDatabaseSecondaryIndex *secondaryIndex = [[YapDatabaseSecondaryIndex alloc] initWithSetup:setup handler:handler];
+    return [[[KStorageManager sharedManager] database] registerExtension:secondaryIndex withName:KAttachmentParentUniqueIdSQLiteIndex];
+}
+
 
 @end

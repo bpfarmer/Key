@@ -10,4 +10,16 @@
 
 @implementation KAttachment
 
+- (instancetype)initWithUniqueId:(NSString *)uniqueId media:(NSData *)media type:(NSString *)type hmac:(NSData *)hmac parentUniqueId:(NSString *)parentUniqueId {
+    self = [super initWithUniqueId:uniqueId];
+    
+    if(self) {
+        _media = media;
+        _type = type;
+        _hmac = hmac;
+        _parentUniqueId = parentUniqueId;
+    }
+    return self;
+}
+
 @end

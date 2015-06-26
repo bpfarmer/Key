@@ -177,6 +177,10 @@ YapDatabaseConnection *databaseConnection;
     //if(thread) [self goToThread:thread];
 }
 
+- (IBAction)pushBackButton:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (IBAction)addContact:(id)sender {
     if(![self.contactTextField.text isEqualToString:@""] &&
        ![self.contactTextField.text isEqualToString:self.currentUser.username]) {
@@ -194,6 +198,10 @@ YapDatabaseConnection *databaseConnection;
         }
         self.contactTextField.text = @"";
     }
+}
+
+-(BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 @end

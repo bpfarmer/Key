@@ -24,13 +24,13 @@
 #import "SelectRecipientViewController.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
-static NSString *kThreadSeguePush        = @"threadSeguePush";
-static NSString *kShareViewSegue         = @"shareViewSegue";
 
 YapDatabaseViewMappings *mappings;
 YapDatabaseConnection *databaseConnection;
 
-@interface HomeViewController ()
+@interface HomeViewController () <CLLocationManagerDelegate>
+
+@property (strong, nonatomic) CLLocationManager *locationManager;
 
 @end
 
@@ -69,6 +69,15 @@ YapDatabaseConnection *databaseConnection;
     self.scrollView.contentSize = CGSizeMake(scrollWidth, scrollHeight);
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    
+    if([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestAlwaysAuthorization];
+    }
+    
+    [self.locationManager startUpdatingLocation];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -102,12 +111,11 @@ YapDatabaseConnection *databaseConnection;
             ThreadViewController *threadViewController = (ThreadViewController *)segue.destinationViewController;
             threadViewController.thread = inboxViewController.selectedThread;
         }
-    }else if([[segue identifier] isEqual:KSelectRecipientSegueIdentifier]) {
+    }else if([[segue identifier] isEqual:kSelectRecipientSegueIdentifier]) {
         SelectRecipientViewController *selectRecipientController = (SelectRecipientViewController *)segue.destinationViewController;
         SocialViewController *socialViewController = (SocialViewController *)sender;
         selectRecipientController.currentUser = socialViewController.currentUser;
         selectRecipientController.post        = socialViewController.currentPost;
-        NSLog(@"POST IN DEST CONTROLLER: %@", selectRecipientController.post.uniqueId);
     }
 }
 

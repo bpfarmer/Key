@@ -28,7 +28,7 @@
                         threadId:(NSString *)threadId
                             body:(NSString *)body
                           status:(NSString *)status
-                       createdAt:(NSDate *)createdAt{
+                       createdAt:(NSDate *)createdAt {
     self = [super initWithUniqueId:uniqueId];
     
     if(self) {
@@ -55,6 +55,8 @@
     
     return self;
 }
+
+
 
 - (NSString *)generateUniqueId {
     NSString *uniqueId = [NSString stringWithFormat:@"%@_%u", [KMessage collection], [self messageHash]];

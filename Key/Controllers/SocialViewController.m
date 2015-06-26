@@ -168,8 +168,7 @@ static NSString *TableViewCellIdentifier = @"Posts";
 - (IBAction)createNewPost:(id)sender {
     if(![self.postTextView.text isEqualToString:@""]) {
         self.currentPost = [[KPost alloc] initWithAuthorId:self.currentUser.uniqueId text:self.postTextView.text];
-        [self.currentPost save];
-        [self.parentViewController performSegueWithIdentifier:KSelectRecipientSegueIdentifier sender:self];
+        [self.parentViewController performSegueWithIdentifier:kSelectRecipientSegueIdentifier sender:self];
     }else {
         NSLog(@"Post field cannot be empty");
     }

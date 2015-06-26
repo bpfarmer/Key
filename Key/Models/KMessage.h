@@ -15,6 +15,7 @@
 @class KGroup;
 @class KMessageCrypt;
 @class KThread;
+@class KAttachment;
 
 @interface KMessage : KYapDatabaseObject <YapDatabaseRelationshipNode, KEncryptable, JSQMessageData>
 
