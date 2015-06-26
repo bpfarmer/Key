@@ -10,4 +10,11 @@
 
 @interface KAttachment : KYapDatabaseObject
 
+@property (nonatomic, readonly) NSData *media;
+@property (nonatomic, readonly) NSString *type;
+@property (nonatomic, readonly) NSData *hmac;
+@property (nonatomic, readonly) NSString *parentUniqueId;
+
+- (instancetype)initWithUniqueId:(NSString *)uniqueId media:(NSData *)media type:(NSString *)type hmac:(NSData *)hmac parentUniqueId:(NSString *)parentUniqueId;
+
 @end

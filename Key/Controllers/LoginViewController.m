@@ -67,6 +67,11 @@
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
 /*
 #pragma mark - Navigation
 

@@ -10,7 +10,10 @@
 
 @class KUser;
 
-static NSString *KSelectRecipientSegueIdentifier = @"selectRecipientPushSegue";
+static NSString *kSelectRecipientSegueIdentifier = @"selectRecipientsPushSegue";
+static NSString *kThreadSeguePush        = @"threadSeguePush";
+static NSString *kContactsSeguePush      = @"contactsSeguePush";
+static NSString *kShareViewSegue         = @"shareViewSegue";
 
 @interface HomeViewController : UIViewController
 

@@ -17,9 +17,9 @@
 #import "LoginViewController.h"
 #import "FreeKeyNetworkManager.h"
 #import "PushManager.h"
+#import "HomeViewController.h"
 
-static NSString *TableViewCellIdentifier = @"Threads";
-static NSString *kThreadSeguePush        = @"threadSeguePush";
+static NSString *TableViewCellIdentifier = @"Messages";
 
 @interface InboxViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *threadsTableView;
@@ -168,7 +168,7 @@ static NSString *kThreadSeguePush        = @"threadSeguePush";
 }
 
 - (IBAction)pushContacts:(id)sender {
-    [self.parentViewController.navigationController performSegueWithIdentifier:@"contactSeguePush" sender:self];
+    [self.parentViewController performSegueWithIdentifier:kContactsSeguePush sender:self];
 }
 
 - (IBAction)logout:(id)sender {

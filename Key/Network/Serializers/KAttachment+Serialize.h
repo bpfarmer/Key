@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "KAttachment.h"
 
-@interface KAttachment_Serialize : NSObject
+@interface KAttachment (Serialize) <NSSecureCoding>
 
 @end

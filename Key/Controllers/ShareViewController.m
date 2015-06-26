@@ -15,10 +15,13 @@
 
 @interface ShareViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
+@property (nonatomic, strong) IBOutlet UIView *cameraOverlayView;
+
 @property (nonatomic) AVCaptureSession *captureSession;
 @property (nonatomic) UIView *cameraPreviewFeedView;
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
 @property (nonatomic) AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
+@property (nonatomic) BOOL flashOn;
 
 @property (nonatomic) UILabel *noCameraInSimulatorMessage;
 
@@ -50,9 +53,9 @@
         _noCameraInSimulatorMessage = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x - labelWidth/2.0f, self.view.bounds.size.height - 75 - labelHeight, labelWidth, labelHeight)];
         _noCameraInSimulatorMessage.numberOfLines = 0; // wrap
         _noCameraInSimulatorMessage.text = @"No camera in the simulator...";
+        _noCameraInSimulatorMessage.textColor = [UIColor whiteColor];
         _noCameraInSimulatorMessage.backgroundColor = [UIColor clearColor];
         _noCameraInSimulatorMessage.hidden = YES;
-        _noCameraInSimulatorMessage.textColor = [UIColor blackColor];
         _noCameraInSimulatorMessage.shadowOffset = CGSizeMake(1, 1);
         _noCameraInSimulatorMessage.textAlignment = NSTextAlignmentCenter;
         [self.view addSubview:_noCameraInSimulatorMessage];
@@ -62,6 +65,7 @@
 }
 
 - (void)startCamera
+;
 {
     if (TARGET_IPHONE_SIMULATOR) {
         _simulatorIsCameraRunning = YES;
@@ -79,7 +83,8 @@
         self.cameraPreviewFeedView.backgroundColor = [UIColor blackColor];
 
         if (![homeViewController.scrollView.subviews containsObject:self.cameraPreviewFeedView]) {
-            [homeViewController.scrollView.subviews[1] addSubview:self.cameraPreviewFeedView];
+            UIView *view = (UIView *)homeViewController.scrollView.subviews[1];
+            [view addSubview:self.cameraPreviewFeedView];
         }
     }
     
@@ -197,16 +202,16 @@
          {
              NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
              
-             [self didTakePhoto: [UIImage imageWithData: imageData]];
+             [self didTakePhoto:imageData];
          }];
     });
 }
 
 //The event handling method
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+    //CGPoint location = [recognizer locationInView:[recognizer.view superview]];
     
-    [self takePhoto];
+    //[self takePhoto];
     
 }
 
@@ -219,6 +224,14 @@
     [super viewDidAppear:animated];
     
     [self startCamera];
+    HomeViewController *homeViewController = (HomeViewController *)self.parentViewController;
+    if (![homeViewController.scrollView.subviews containsObject:self.cameraOverlayView]) {
+        UIView *view = (UIView *)homeViewController.scrollView.subviews[1];
+        [view addSubview:self.cameraOverlayView];
+        [self.cameraOverlayView setBackgroundColor:[UIColor clearColor]];
+        [view bringSubviewToFront:self.cameraOverlayView];
+    }
+
 }
 
 - (BOOL)cameraSupportsMedia:(NSString *)mediaType sourceType:(UIImagePickerControllerSourceType)sourceType {
@@ -240,7 +253,17 @@
     return result;
 }
 
-- (void)didTakePhoto:(UIImage *)photo {
+- (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition) position
+{
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices)
+    {
+        if ([device position] == position) return device;
+    }
+    return nil;
+}
+
+- (void)didTakePhoto:(NSData *)photoData {
     NSLog(@"TOOK THAT PHOTO!");
 }
 
@@ -252,13 +275,77 @@
     return [self cameraSupportsMedia:(__bridge NSString *)kUTTypeImage sourceType:UIImagePickerControllerSourceTypeCamera];
 }
 
-- (void)handleSwipes:(UISwipeGestureRecognizer *)paramSender {
-    if(paramSender.direction & UISwipeGestureRecognizerDirectionRight) {
-        [self performSegueWithIdentifier:kSocialViewPushSegue sender:self];
+- (IBAction)toggleFlash:(id)sender {
+    if(self.captureSession) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            AVCaptureInput *currentCameraInput = [self.captureSession.inputs objectAtIndex:0];
+            AVCaptureDevice *currentDevice = ((AVCaptureDeviceInput *)currentCameraInput).device;
+            
+            if(currentDevice.flashAvailable) {
+                [self.captureSession beginConfiguration];
+                [self.captureSession removeInput:currentCameraInput];
+                
+                [currentDevice lockForConfiguration:nil];
+                if(currentDevice.flashMode == AVCaptureFlashModeOn) {
+                    [currentDevice setFlashMode:AVCaptureFlashModeOff];
+                }else {
+                    if([currentDevice isFlashModeSupported:AVCaptureFlashModeOn]) {
+                        [currentDevice setFlashMode:AVCaptureFlashModeOn];
+                    }
+                }
+                [currentDevice unlockForConfiguration];
+                NSError *error = nil;
+                AVCaptureDeviceInput *newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:currentDevice error:&error];
+                if(!newVideoInput || error) {
+                    NSLog(@"ERROR CAPTURING DEVICE INPUT: %@", error.localizedDescription);
+                }else {
+                    [self.captureSession addInput:newVideoInput];
+                }
+                
+                [self.captureSession commitConfiguration];
+            }
+        });
     }
-    if(paramSender.direction & UISwipeGestureRecognizerDirectionLeft) {
-        [self performSegueWithIdentifier:kHomeViewPushSegue sender:self];
+}
+
+- (IBAction)toggleOrientation:(id)sender {
+    if(self.captureSession) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self.captureSession beginConfiguration];
+            
+            AVCaptureInput *currentCameraInput = [self.captureSession.inputs objectAtIndex:0];
+            [self.captureSession removeInput:currentCameraInput];
+            
+            AVCaptureDevice *newCamera = nil;
+            if(((AVCaptureDeviceInput *)currentCameraInput).device.position == AVCaptureDevicePositionBack) {
+                newCamera = [self cameraWithPosition:AVCaptureDevicePositionFront];
+            }else {
+                newCamera = [self cameraWithPosition:AVCaptureDevicePositionBack];
+            }
+            
+            NSError *error = nil;
+            AVCaptureDeviceInput *newVideoInput = [[AVCaptureDeviceInput alloc] initWithDevice:newCamera error:&error];
+            if(!newVideoInput || error) {
+                NSLog(@"ERROR CAPTURING DEVICE INPUT: %@", error.localizedDescription);
+            }else {
+                [self.captureSession addInput:newVideoInput];
+            }
+            
+            [self.captureSession commitConfiguration];
+        });
     }
+}
+
+- (IBAction)shareLocation:(id)sender {
+    NSLog(@"SHARING LOCATION");
+}
+
+- (IBAction)captureImage:(id)sender {
+    [self takePhoto];
+}
+
+- (IBAction)postText:(id)sender {
+    NSLog(@"POSTING TEXT");
 }
 
 

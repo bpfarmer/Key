@@ -14,8 +14,10 @@
 
 + (BOOL)registerUsernameIndex;
 + (BOOL)registerMessageSentIndex;
++ (BOOL)registerAttachmentParentUniqueId;
 
 @end
 
 #define KUsernameSQLiteIndex @"KUsernameIndex"
 #define KMessageStatusSQLiteIndex @"KMessageStatusIndex"
+#define KAttachmentParentUniqueIdSQLiteIndex @"KAttachemntParentUniqueIdIndex"

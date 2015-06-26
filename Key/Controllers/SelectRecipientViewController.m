@@ -15,7 +15,7 @@
 #import "FreeKey.h"
 #import "FreeKeyNetworkManager.h"
 
-static NSString *TableViewCellIdentifier = @"Threads";
+static NSString *TableViewCellIdentifier = @"Recipients";
 
 @interface SelectRecipientViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -192,11 +192,13 @@ static NSString *TableViewCellIdentifier = @"Threads";
 
 - (IBAction)sendToRecipients:(id)sender {
     [FreeKey sendEncryptableObject:self.post recipients:self.selectedRecipients];
-    NSLog(@"POST ABOUT TO BE SAVED: %@", self.post.text);
     [self.post save];
-    KPost *retrievedPost = (KPost *)[[KStorageManager sharedManager] objectForKey:self.post.uniqueId inCollection:[KPost collection]];
-    NSLog(@"RETRIEVED POST TEXT: %@", retrievedPost.text);
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+
+-(BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 @end

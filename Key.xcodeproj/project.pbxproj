@@ -72,6 +72,8 @@
 		EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */; };
 		EF99E2771AC72F71002583E2 /* FreeKeyResponseHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E2761AC72F71002583E2 /* FreeKeyResponseHandler.m */; };
 		EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E27E1ACB2BB9002583E2 /* SendPushTokenRequest.m */; };
+		EFABC0281B39BEA50062B807 /* MediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFABC0271B39BEA50062B807 /* MediaView.xib */; };
+		EFABC0311B39EA6B0062B807 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFABC0301B39EA6B0062B807 /* CameraViewController.m */; };
 		EFAC97D11B2E171600B4FD0F /* KOutgoingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EFAC97D01B2E171600B4FD0F /* KOutgoingObject.m */; };
 		EFC1819A1AC3412800BE8B0B /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC181991AC3412800BE8B0B /* HttpRequest.m */; };
 		EFC1819E1AC3534F00BE8B0B /* RegisterUsernameRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC1819D1AC3534F00BE8B0B /* RegisterUsernameRequest.m */; };
@@ -251,6 +253,9 @@
 		EF99E27D1ACB2BB9002583E2 /* SendPushTokenRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SendPushTokenRequest.h; path = Network/Requests/PushToken/SendPushTokenRequest.h; sourceTree = "<group>"; };
 		EF99E27E1ACB2BB9002583E2 /* SendPushTokenRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SendPushTokenRequest.m; path = Network/Requests/PushToken/SendPushTokenRequest.m; sourceTree = "<group>"; };
 		EF99E2811ACB2D1F002583E2 /* PushTokenRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushTokenRequest.h; sourceTree = "<group>"; };
+		EFABC0271B39BEA50062B807 /* MediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediaView.xib; sourceTree = "<group>"; };
+		EFABC02F1B39EA6B0062B807 /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		EFABC0301B39EA6B0062B807 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		EFAC97CF1B2E171600B4FD0F /* KOutgoingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KOutgoingObject.h; sourceTree = "<group>"; };
 		EFAC97D01B2E171600B4FD0F /* KOutgoingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KOutgoingObject.m; sourceTree = "<group>"; };
 		EFC181981AC3412800BE8B0B /* HttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HttpRequest.h; path = Network/HttpRequest.h; sourceTree = "<group>"; };
@@ -425,6 +430,7 @@
 				EF8358231AE02AD800B631AB /* InboxView.xib */,
 				EF8358251AE02AED00B631AB /* ShareView.xib */,
 				EF8358271AE02B0F00B631AB /* SocialView.xib */,
+				EFABC0271B39BEA50062B807 /* MediaView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -767,6 +773,8 @@
 				EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */,
 				EF78AA541B33622300A4627F /* HomeNavigationViewController.h */,
 				EF78AA551B33622300A4627F /* HomeNavigationViewController.m */,
+				EFABC02F1B39EA6B0062B807 /* CameraViewController.h */,
+				EFABC0301B39EA6B0062B807 /* CameraViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -859,6 +867,7 @@
 				EFC6BEAC1A6857D400B0EB8F /* Main.storyboard in Resources */,
 				EF8358281AE02B0F00B631AB /* SocialView.xib in Resources */,
 				EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */,
+				EFABC0281B39BEA50062B807 /* MediaView.xib in Resources */,
 				EF8358261AE02AED00B631AB /* ShareView.xib in Resources */,
 				EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */,
 				EFC6BEAE1A6857D500B0EB8F /* Images.xcassets in Resources */,
@@ -1016,6 +1025,7 @@
 				EFF70A941AAE19C3006C10D2 /* Session.m in Sources */,
 				EFF70AC81AAE1CBC006C10D2 /* WelcomeScreenViewController.m in Sources */,
 				EF2CDEAE1AB48C3F001E2F20 /* KUser+Serialize.m in Sources */,
+				EFABC0311B39EA6B0062B807 /* CameraViewController.m in Sources */,
 				EF524AEF1AAE255200F3B9AF /* KYapDatabaseObject.m in Sources */,
 				EF0171711ADF07BB00AFCBA4 /* KPost.m in Sources */,
 				EFF70A8C1AAE19C3006C10D2 /* MessageKey.m in Sources */,
