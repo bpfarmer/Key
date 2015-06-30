@@ -9,6 +9,9 @@
 #import "ShareViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "HomeViewController.h"
+#import "KAttachment.h"
+#import "EditMediaViewController.h"
+#import "EditLocationViewController.h"
 
 #define kHomeViewPushSegue @"homeViewPush"
 #define kSocialViewPushSegue @"socialViewPush"
@@ -25,7 +28,6 @@
 
 @property (nonatomic) UILabel *noCameraInSimulatorMessage;
 
-@property (nonatomic, strong) UISwipeGestureRecognizer *swipeGestureRecognizer;
 
 @end
 
@@ -38,8 +40,6 @@
     [super viewDidLoad];
     
     self.noCameraInSimulatorMessage.hidden = !TARGET_IPHONE_SIMULATOR;
-    UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-    [self.view addGestureRecognizer:singleFingerTap];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -207,14 +207,6 @@
     });
 }
 
-//The event handling method
-- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
-    //CGPoint location = [recognizer locationInView:[recognizer.view superview]];
-    
-    //[self takePhoto];
-    
-}
-
 - (void)cameraStartedRunning {
     _cameraRunning = YES;
     NSLog(@"CAMERA IS RUNNING");
@@ -231,7 +223,6 @@
         [self.cameraOverlayView setBackgroundColor:[UIColor clearColor]];
         [view bringSubviewToFront:self.cameraOverlayView];
     }
-
 }
 
 - (BOOL)cameraSupportsMedia:(NSString *)mediaType sourceType:(UIImagePickerControllerSourceType)sourceType {
@@ -261,10 +252,6 @@
         if ([device position] == position) return device;
     }
     return nil;
-}
-
-- (void)didTakePhoto:(NSData *)photoData {
-    NSLog(@"TOOK THAT PHOTO!");
 }
 
 - (BOOL)cameraAvailable {
@@ -336,8 +323,17 @@
     }
 }
 
+- (void)didTakePhoto:(NSData *)photoData {
+    [self stopCamera];
+    EditMediaViewController *editMediaView = [[EditMediaViewController alloc] initWithNibName:@"EditMediaView" bundle:nil];
+    editMediaView.imageData = photoData;
+    [self.parentViewController presentViewController:editMediaView animated:NO completion:nil];
+}
+
 - (IBAction)shareLocation:(id)sender {
-    NSLog(@"SHARING LOCATION");
+    [self stopCamera];
+    EditLocationViewController *editLocationView = [[EditLocationViewController alloc] initWithNibName:@"EditLocationView" bundle:nil];
+    [self.parentViewController presentViewController:editLocationView animated:NO completion:nil];
 }
 
 - (IBAction)captureImage:(id)sender {

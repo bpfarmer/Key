@@ -7,8 +7,9 @@
 //
 
 #import "KYapDatabaseObject.h"
+#import "KEncryptable.h"
 
-@interface KAttachment : KYapDatabaseObject
+@interface KAttachment : KYapDatabaseObject <KEncryptable>
 
 @property (nonatomic, readonly) NSData *media;
 @property (nonatomic, readonly) NSString *type;
