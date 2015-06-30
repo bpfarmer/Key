@@ -67,8 +67,7 @@
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
-- (BOOL)prefersStatusBarHidden
-{
+- (BOOL)prefersStatusBarHidden {
     return YES;
 }
 
