@@ -12,12 +12,11 @@
 @class TOCFuture;
 
 @interface KAccountManager : NSObject
-
-@property (nonatomic) NSString *uniqueId;
 @property (nonatomic) KUser *user;
 
 + (instancetype)sharedManager;
 
 - (TOCFuture *)asyncGetFeed;
+- (NSString *)uniqueId;
 
 @end

@@ -46,4 +46,11 @@
     return nil;
 }
 
+- (NSString *)uniqueId {
+    if(self.user) {
+        return self.user.uniqueId;
+    }
+    return nil;
+}
+
 @end

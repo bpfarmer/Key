@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KSendable.h"
 
 @class KPost;
 @class KUser;
 
 @interface SelectRecipientViewController : UIViewController
 
+@property (nonatomic) id <KSendable> sendableObject;
 @property (nonatomic) KPost *post;
 @property (nonatomic) KUser *currentUser;
 

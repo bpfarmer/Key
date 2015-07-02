@@ -20,6 +20,7 @@
 @property (nonatomic, readwrite) NSString *senderId;
 @property (nonatomic, readwrite) NSString *receiverId;
 @property (nonatomic, readwrite) NSString *remoteStatus;
+@property (nonatomic, readwrite) NSArray  *attachments;
 
 - (instancetype)initWithMacKey:(NSData *)macKey
              senderIdentityKey:(NSData *)senderIdentityKey

@@ -12,6 +12,7 @@
 #import "KAttachment.h"
 #import "EditMediaViewController.h"
 #import "EditLocationViewController.h"
+#import "EditPostViewController.h"
 
 #define kHomeViewPushSegue @"homeViewPush"
 #define kSocialViewPushSegue @"socialViewPush"
@@ -341,7 +342,9 @@
 }
 
 - (IBAction)postText:(id)sender {
-    NSLog(@"POSTING TEXT");
+    [self stopCamera];
+    EditPostViewController *editPostView = [[EditPostViewController alloc] initWithNibName:@"EditPostView" bundle:nil];
+    [self.parentViewController presentViewController:editPostView animated:NO completion:nil];
 }
 
 

@@ -7,19 +7,28 @@
 //
 
 #import "KAttachment.h"
+#import "FreeKey.h"
 
 @implementation KAttachment
 
-- (instancetype)initWithUniqueId:(NSString *)uniqueId media:(NSData *)media type:(NSString *)type hmac:(NSData *)hmac parentUniqueId:(NSString *)parentUniqueId {
-    self = [super initWithUniqueId:uniqueId];
+- (instancetype)initWithCipherText:(NSData *)cipherText hmac:(NSData *)hmac messageUniqueId:(NSString *)messageUniqueId {
+    self = [super init];
     
     if(self) {
-        _media = media;
-        _type = type;
-        _hmac = hmac;
-        _parentUniqueId = parentUniqueId;
+        _cipherText = cipherText;
+        _hmac       = hmac;
+        _messageUniqueId = messageUniqueId;
     }
+    
     return self;
+}
+
++ (NSArray *)remoteKeys {
+    return @[@"cipherText", @"hmac", @"messageUniqueId"];
+}
+
++ (NSString *)remoteAlias {
+    return kAttachmentRemoteAlias;
 }
 
 @end

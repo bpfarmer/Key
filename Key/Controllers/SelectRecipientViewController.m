@@ -34,8 +34,9 @@ static NSString *TableViewCellIdentifier = @"Recipients";
     self.contactsTableView.dataSource = self;
     self.contactsTableView.delegate = self;
     [self.contactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
-    
     [self setupDatabaseView];
+    
+    NSLog(@"POST: %@", self.post.text);
 }
 
 - (void) setupDatabaseView {
@@ -194,6 +195,10 @@ static NSString *TableViewCellIdentifier = @"Recipients";
     [FreeKey sendEncryptableObject:self.post recipients:self.selectedRecipients];
     [self.post save];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)didPressCancel:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
