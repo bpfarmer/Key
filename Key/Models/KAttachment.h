@@ -7,15 +7,14 @@
 //
 
 #import "KYapDatabaseObject.h"
-#import "KEncryptable.h"
+#import "KSendable.h"
 
-@interface KAttachment : KYapDatabaseObject <KEncryptable>
+@interface KAttachment : NSObject <KSendable>
 
-@property (nonatomic, readonly) NSData *media;
-@property (nonatomic, readonly) NSString *type;
+@property (nonatomic, readonly) NSData *cipherText;
 @property (nonatomic, readonly) NSData *hmac;
-@property (nonatomic, readonly) NSString *parentUniqueId;
+@property (nonatomic, readonly) NSString *messageUniqueId;
 
-- (instancetype)initWithUniqueId:(NSString *)uniqueId media:(NSData *)media type:(NSString *)type hmac:(NSData *)hmac parentUniqueId:(NSString *)parentUniqueId;
+- (instancetype)initWithCipherText:(NSData *)cipherText hmac:(NSData *)hmac messageUniqueId:(NSString *)messageUniqueId;
 
 @end

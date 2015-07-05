@@ -47,11 +47,10 @@
         _authorId     = authorId;
         _text         = text;
         _commentKey   = commentKey;
-        _comments     = comments;
         _attachmentKey = attachmentKey;
-        _attachments   = attachments;
         _seen         = seen;
         _createdAt    = createdAt;
+        _attachments  = attachments;
     }
     return self;
 }

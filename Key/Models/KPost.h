@@ -17,8 +17,8 @@
 @property (nonatomic, readonly) NSString *authorId;
 @property (nonatomic, readonly) NSString *text;
 @property (nonatomic, readonly) NSData *commentKey;
-@property (nonatomic) NSArray *comments;
 @property (nonatomic, readonly) NSData *attachmentKey;
+@property (nonatomic) NSArray *comments;
 @property (nonatomic) NSArray *attachments;
 @property (nonatomic) BOOL seen;
 @property (nonatomic, readonly) NSDate *createdAt;

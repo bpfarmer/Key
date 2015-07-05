@@ -7,7 +7,6 @@
 //
 
 #import "KPost+Serialize.h"
-#import "KAttachment.h"
 
 #define kCoderUniqueId @"uniqueId"
 #define kCoderAuthorId @"authorId"

@@ -7,12 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KSendable.h"
 
 @class KPost;
 @class KUser;
+@class KPhoto;
+@class KLocation;
 
 @interface SelectRecipientViewController : UIViewController
 
+@property (nonatomic) NSArray *sendableObjects;
 @property (nonatomic) KPost *post;
 @property (nonatomic) KUser *currentUser;
 

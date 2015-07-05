@@ -12,6 +12,8 @@
 #import "KYapDatabaseView.h"
 #import "KUser.h"
 #import "KPost.h"
+#import "KPhoto.h"
+#import "KLocation.h"
 #import "FreeKey.h"
 #import "FreeKeyNetworkManager.h"
 
@@ -34,8 +36,15 @@ static NSString *TableViewCellIdentifier = @"Recipients";
     self.contactsTableView.dataSource = self;
     self.contactsTableView.delegate = self;
     [self.contactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
-    
     [self setupDatabaseView];
+    
+    if(!self.post) {
+        self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:nil];
+    }
+    
+    self.contactsTableView.allowsMultipleSelection = YES;
+    
+    self.post.attachments = self.sendableObjects;
 }
 
 - (void) setupDatabaseView {
@@ -193,7 +202,11 @@ static NSString *TableViewCellIdentifier = @"Recipients";
 - (IBAction)sendToRecipients:(id)sender {
     [FreeKey sendEncryptableObject:self.post recipients:self.selectedRecipients];
     [self.post save];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+- (IBAction)didPressCancel:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 

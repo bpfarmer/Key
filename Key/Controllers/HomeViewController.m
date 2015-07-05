@@ -70,14 +70,10 @@ YapDatabaseConnection *databaseConnection;
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
+    CGFloat newContentOffsetX = (self.scrollView.contentSize.width/2) - (self.scrollView.bounds.size.width/2);
+    self.scrollView.contentOffset = CGPointMake(newContentOffsetX, 0);
     
-    if([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestAlwaysAuthorization];
-    }
-    
-    [self.locationManager startUpdatingLocation];
+    [[KAccountManager sharedManager] initLocationManager];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

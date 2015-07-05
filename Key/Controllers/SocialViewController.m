@@ -14,6 +14,7 @@
 #import "KUser.h"
 #import "SelectRecipientViewController.h"
 #import "HomeViewController.h"
+#import "MediaViewController.h"
 
 static NSString *TableViewCellIdentifier = @"Posts";
 
@@ -45,7 +46,6 @@ static NSString *TableViewCellIdentifier = @"Posts";
     self.postsTableView.dataSource = self;
     
     [self.postsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
-
     
     self.currentUser = [KAccountManager sharedManager].user;
     
@@ -161,16 +161,22 @@ static NSString *TableViewCellIdentifier = @"Posts";
     
     UITableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", post.text];
+    NSString *text = post.text;
+    if(text == nil) text = @"Tap to View";
+    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", post.author.username, text];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
-- (IBAction)createNewPost:(id)sender {
-    if(![self.postTextView.text isEqualToString:@""]) {
-        self.currentPost = [[KPost alloc] initWithAuthorId:self.currentUser.uniqueId text:self.postTextView.text];
-        [self.parentViewController performSegueWithIdentifier:kSelectRecipientSegueIdentifier sender:self];
-    }else {
-        NSLog(@"Post field cannot be empty");
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+    __block KPost *post = nil;
+    [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
+        post = (KPost *)[[transaction extension:KPostDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.postMappings];
+    }];
+    if(post) {
+        MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
+        mediaViewController.post = post;
+        [self.parentViewController presentViewController:mediaViewController animated:NO completion:nil];
     }
 }
 

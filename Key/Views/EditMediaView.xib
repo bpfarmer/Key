@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditMediaViewController">
             <connections>
+                <outlet property="locationButton" destination="rUL-pV-58l" id="vqN-6n-ZU0"/>
                 <outlet property="mediaView" destination="mQa-im-KYz" id="bxq-Ix-DZE"/>
                 <outlet property="overlayView" destination="UU9-b6-HId" id="Vvn-ya-WoJ"/>
                 <outlet property="view" destination="iN0-l3-epB" id="aNM-py-efD"/>
@@ -34,8 +35,8 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rUL-pV-58l">
-                    <rect key="frame" x="8" y="530" width="92" height="30"/>
-                    <state key="normal" title="Add Location">
+                    <rect key="frame" x="8" y="530" width="84" height="30"/>
+                    <state key="normal" title="Location On">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>

@@ -46,4 +46,37 @@
     return nil;
 }
 
+- (NSString *)uniqueId {
+    if(self.user) {
+        return self.user.uniqueId;
+    }
+    return nil;
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    self.authorizationStatus = status;
+    
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    self.currentCoordinate = locations.lastObject;
+    if(!self.streamLocation) {
+        [self.locationManager stopUpdatingLocation];
+    }
+}
+
+- (void)initLocationManager {
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    
+    if([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestAlwaysAuthorization];
+    }
+}
+
+- (void)refreshCurrentCoordinate {
+    self.streamLocation = NO;
+    [self.locationManager startUpdatingLocation];
+}
+
 @end

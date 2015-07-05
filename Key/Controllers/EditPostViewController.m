@@ -1,41 +1,35 @@
 //
-//  EditLocationViewController.m
+//  EditPostViewController.m
 //  Key
 //
-//  Created by Brendan Farmer on 6/29/15.
+//  Created by Brendan Farmer on 6/30/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "EditLocationViewController.h"
+#import "EditPostViewController.h"
 #import "SelectRecipientViewController.h"
+#import "KPost.h"
 #import "KAccountManager.h"
 #import "KLocation.h"
 
-@interface EditLocationViewController ()
+@interface EditPostViewController ()
 
-@property (nonatomic, strong) IBOutlet MKMapView *mapView;
+@property (nonatomic) IBOutlet UITextView *postText;
+@property (nonatomic) IBOutlet UIButton *locationButton;
+@property (nonatomic) BOOL locationEnabled;
+@property (nonatomic) BOOL toDismiss;
 
 @end
 
-@implementation EditLocationViewController
+@implementation EditPostViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.mapView.delegate = self;
-    self.mapView.showsUserLocation = YES;
-    self.mapView.zoomEnabled = YES;
-    self.mapView.scrollEnabled = YES;
-    self.mapView.rotateEnabled = YES;
-    self.mapView.showsPointsOfInterest = NO;
-    self.mapView.showsBuildings = NO;
-    self.mapView.clearsContextBeforeDrawing = YES;
+    self.postText.layer.borderWidth = 1.0f;
+    self.postText.layer.borderColor = [[UIColor grayColor] CGColor];
+    self.locationEnabled = YES;
     [[KAccountManager sharedManager] refreshCurrentCoordinate];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    if(!self.mapView) {
-        [self dismissViewControllerAnimated:NO completion:nil];
-    }
+    // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,26 +37,8 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    self.mapView.centerCoordinate = userLocation.location.coordinate;
-}
-
 - (IBAction)didPressCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self applyMapViewMemoryFix];
-}
-
-- (void)applyMapViewMemoryFix{
-    self.mapView.mapType = MKMapTypeStandard;
-    self.mapView.mapType = MKMapTypeHybrid;
-    self.mapView.showsUserLocation = NO;
-    self.mapView.delegate = nil;
-    [self.mapView removeFromSuperview];
-    self.mapView = nil;
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -82,13 +58,33 @@
 }
 
 - (IBAction)didPressPost:(id)sender {
+    KPost *post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:self.postText.text];
     SelectRecipientViewController *selectRecipientView = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
+    selectRecipientView.post = post;
     NSMutableArray *sendableObjects = [[NSMutableArray alloc] init];
-    [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
+    if(self.locationEnabled) {
+        [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
+    }
     [selectRecipientView setSendableObjects:sendableObjects];
+    self.toDismiss = YES;
     [self presentViewController:selectRecipientView animated:NO completion:nil];
 }
 
+- (IBAction)didPressLocation:(id)sender {
+    if(!self.locationEnabled) {
+        self.locationEnabled = YES;
+        [self.locationButton setTitle:@"Location On" forState:UIControlStateNormal];
+    }else {
+        self.locationEnabled = NO;
+        [self.locationButton setTitle:@"Location Off" forState:UIControlStateNormal];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    if(self.toDismiss) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
 
 /*
 #pragma mark - Navigation

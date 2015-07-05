@@ -20,6 +20,7 @@
     return YES;
 }
 
+/*
 - (id)initWithCoder:(NSCoder *)decoder {
     
     return [self initWithUniqueId:[decoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]
@@ -36,5 +37,5 @@
     [encoder encodeObject:self.type forKey:kCoderType];
     [encoder encodeObject:self.parentUniqueId forKey:kCoderParentUniqueId];
 }
-
+*/
 @end

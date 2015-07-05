@@ -57,8 +57,8 @@
         
         if ([object isKindOfClass:[KAttachment class]])
         {
-            KAttachment *attachment = (KAttachment *)object;
-            [dict setObject:attachment.parentUniqueId forKey:@"parentUniqueId"];
+            //KAttachment *attachment = (KAttachment *)object;
+            //[dict setObject:attachment.parentUniqueId forKey:@"parentUniqueId"];
         }
     };
     

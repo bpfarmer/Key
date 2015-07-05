@@ -28,6 +28,7 @@
 #define kPreKeyRemoteAlias           @"pre_key"
 #define kPreKeyExchangeRemoteAlias   @"pre_key_exchange"
 #define kEncryptedMessageRemoteAlias @"message"
+#define kAttachmentRemoteAlias       @"attachment"
 #define kFeedRemoteAlias             @"feed"
 #define kOurEncryptedMessageCollection    @"OurEncryptedMessage"
 #define kTheirEncryptedMessageCollection  @"TheirEncryptedMessage"
