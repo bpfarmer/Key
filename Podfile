@@ -10,3 +10,5 @@ pod 'YapDatabase/SQLCipher', :inhibit_warnings => true
 pod 'AFNetworking', :inhibit_warnings => true
 pod 'SSKeychain', :inhibit_warnings => true
 pod 'JSQMessagesViewController'
+pod 'FMDB/SQLCipher'
+pod 'Mantle'

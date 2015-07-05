@@ -14,6 +14,6 @@
 @property (nonatomic, readonly) NSData   *media;
 @property (nonatomic, readonly) BOOL ephemeral;
 
-- (instancetype)initWithFilename:(NSString *)filename media:(NSData *)media ephemeral:(BOOL)ephemeral;
+- (instancetype)initWithMedia:(NSData *)media ephemeral:(BOOL)ephemeral;
 
 @end

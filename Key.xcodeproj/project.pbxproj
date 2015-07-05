@@ -36,7 +36,6 @@
 		EF4920A11AD761F700A9FE89 /* UIImage+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920A01AD761F700A9FE89 /* UIImage+Messages.m */; };
 		EF4920A41AD762A400A9FE89 /* NSBundle+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920A31AD762A400A9FE89 /* NSBundle+Messages.m */; };
 		EF4920AB1AD7A28D00A9FE89 /* UIColor+Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = EF4920AA1AD7A28D00A9FE89 /* UIColor+Messages.m */; };
-		EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD31AAE238600F3B9AF /* KStorageKeys.m */; };
 		EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD51AAE238600F3B9AF /* KStorageManager.m */; };
 		EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD71AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m */; };
 		EF524ADE1AAE238600F3B9AF /* KYapDatabaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = EF524AD91AAE238600F3B9AF /* KYapDatabaseView.m */; };
@@ -75,6 +74,10 @@
 		EFABC0281B39BEA50062B807 /* MediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFABC0271B39BEA50062B807 /* MediaView.xib */; };
 		EFABC0311B39EA6B0062B807 /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFABC0301B39EA6B0062B807 /* CameraViewController.m */; };
 		EFAC97D11B2E171600B4FD0F /* KOutgoingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EFAC97D01B2E171600B4FD0F /* KOutgoingObject.m */; };
+		EFB225EF1B48853800D7E44B /* SelectRecipientViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */; };
+		EFB225F21B48C4EF00D7E44B /* MediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225F11B48C4EF00D7E44B /* MediaViewController.m */; };
+		EFB225F51B4984F200D7E44B /* KPhoto+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225F41B4984F200D7E44B /* KPhoto+Serialize.m */; };
+		EFB225F81B49851000D7E44B /* KLocation+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225F71B49851000D7E44B /* KLocation+Serialize.m */; };
 		EFB722711B41A25700E6DF7A /* EditMediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB722701B41A25700E6DF7A /* EditMediaViewController.m */; };
 		EFB722731B42360300E6DF7A /* EditMediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFB722721B42360300E6DF7A /* EditMediaView.xib */; };
 		EFB722751B423DB000E6DF7A /* EditLocationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFB722741B423DB000E6DF7A /* EditLocationView.xib */; };
@@ -197,8 +200,6 @@
 		EF4920A31AD762A400A9FE89 /* NSBundle+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+Messages.m"; sourceTree = "<group>"; };
 		EF4920A91AD7A28D00A9FE89 /* UIColor+Messages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Messages.h"; sourceTree = "<group>"; };
 		EF4920AA1AD7A28D00A9FE89 /* UIColor+Messages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Messages.m"; sourceTree = "<group>"; };
-		EF524AD21AAE238600F3B9AF /* KStorageKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageKeys.h; sourceTree = "<group>"; };
-		EF524AD31AAE238600F3B9AF /* KStorageKeys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageKeys.m; sourceTree = "<group>"; };
 		EF524AD41AAE238600F3B9AF /* KStorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageManager.h; sourceTree = "<group>"; };
 		EF524AD51AAE238600F3B9AF /* KStorageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageManager.m; sourceTree = "<group>"; };
 		EF524AD61AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYapDatabaseSecondaryIndex.h; sourceTree = "<group>"; };
@@ -267,6 +268,12 @@
 		EFABC0301B39EA6B0062B807 /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 		EFAC97CF1B2E171600B4FD0F /* KOutgoingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KOutgoingObject.h; sourceTree = "<group>"; };
 		EFAC97D01B2E171600B4FD0F /* KOutgoingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KOutgoingObject.m; sourceTree = "<group>"; };
+		EFB225F01B48C4EF00D7E44B /* MediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaViewController.h; sourceTree = "<group>"; };
+		EFB225F11B48C4EF00D7E44B /* MediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaViewController.m; sourceTree = "<group>"; };
+		EFB225F31B4984F200D7E44B /* KPhoto+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KPhoto+Serialize.h"; path = "Network/Serializers/KPhoto+Serialize.h"; sourceTree = "<group>"; };
+		EFB225F41B4984F200D7E44B /* KPhoto+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KPhoto+Serialize.m"; path = "Network/Serializers/KPhoto+Serialize.m"; sourceTree = "<group>"; };
+		EFB225F61B49851000D7E44B /* KLocation+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KLocation+Serialize.h"; path = "Network/Serializers/KLocation+Serialize.h"; sourceTree = "<group>"; };
+		EFB225F71B49851000D7E44B /* KLocation+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KLocation+Serialize.m"; path = "Network/Serializers/KLocation+Serialize.m"; sourceTree = "<group>"; };
 		EFB7226F1B41A25700E6DF7A /* EditMediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditMediaViewController.h; sourceTree = "<group>"; };
 		EFB722701B41A25700E6DF7A /* EditMediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditMediaViewController.m; sourceTree = "<group>"; };
 		EFB722721B42360300E6DF7A /* EditMediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditMediaView.xib; path = Views/EditMediaView.xib; sourceTree = "<group>"; };
@@ -415,6 +422,10 @@
 				EF0171761ADF081F00AFCBA4 /* KAttachment+Serialize.m */,
 				EF0171781ADF083700AFCBA4 /* KPost+Serialize.h */,
 				EF0171791ADF083700AFCBA4 /* KPost+Serialize.m */,
+				EFB225F31B4984F200D7E44B /* KPhoto+Serialize.h */,
+				EFB225F41B4984F200D7E44B /* KPhoto+Serialize.m */,
+				EFB225F61B49851000D7E44B /* KLocation+Serialize.h */,
+				EFB225F71B49851000D7E44B /* KLocation+Serialize.m */,
 			);
 			name = Serializers;
 			path = ..;
@@ -468,8 +479,6 @@
 				EF2CDEAB1AB48BFD001E2F20 /* Serializers */,
 				EF524AED1AAE255200F3B9AF /* KYapDatabaseObject.h */,
 				EF524AEE1AAE255200F3B9AF /* KYapDatabaseObject.m */,
-				EF524AD21AAE238600F3B9AF /* KStorageKeys.h */,
-				EF524AD31AAE238600F3B9AF /* KStorageKeys.m */,
 				EF524AD41AAE238600F3B9AF /* KStorageManager.h */,
 				EF524AD51AAE238600F3B9AF /* KStorageManager.m */,
 				EF524AD61AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.h */,
@@ -782,16 +791,30 @@
 		EFF70AB01AAE1CBC006C10D2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				EFABC02F1B39EA6B0062B807 /* CameraViewController.h */,
+				EFABC0301B39EA6B0062B807 /* CameraViewController.m */,
 				EF6B44A61ABA2F8A00B88323 /* ContactViewController.h */,
 				EF6B44A71ABA2F8A00B88323 /* ContactViewController.m */,
+				EFB722761B4240B200E6DF7A /* EditLocationViewController.h */,
+				EFB722771B4240B200E6DF7A /* EditLocationViewController.m */,
+				EFB7226F1B41A25700E6DF7A /* EditMediaViewController.h */,
+				EFB722701B41A25700E6DF7A /* EditMediaViewController.m */,
+				EFB722791B432BFE00E6DF7A /* EditPostViewController.h */,
+				EFB7227A1B432BFE00E6DF7A /* EditPostViewController.m */,
+				EF78AA541B33622300A4627F /* HomeNavigationViewController.h */,
+				EF78AA551B33622300A4627F /* HomeNavigationViewController.m */,
 				EF0F4DC21ABA19DE00BB2AFC /* HomeViewController.h */,
 				EF0F4DC31ABA19DE00BB2AFC /* HomeViewController.m */,
 				EF3D09E11AE036EB0044E9F6 /* InboxViewController.h */,
 				EF3D09E21AE036EB0044E9F6 /* InboxViewController.m */,
 				EFF70AB71AAE1CBC006C10D2 /* LoginViewController.h */,
 				EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */,
+				EFB225F01B48C4EF00D7E44B /* MediaViewController.h */,
+				EFB225F11B48C4EF00D7E44B /* MediaViewController.m */,
 				EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */,
 				EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */,
+				EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */,
+				EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */,
 				EF0171691ADD936C00AFCBA4 /* ShareViewController.h */,
 				EF01716A1ADD936C00AFCBA4 /* ShareViewController.m */,
 				EF01716C1ADD93B500AFCBA4 /* SocialViewController.h */,
@@ -800,18 +823,6 @@
 				EF6B44AA1ABA399D00B88323 /* ThreadViewController.m */,
 				EFF70ABF1AAE1CBC006C10D2 /* WelcomeScreenViewController.h */,
 				EFF70AC01AAE1CBC006C10D2 /* WelcomeScreenViewController.m */,
-				EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */,
-				EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */,
-				EF78AA541B33622300A4627F /* HomeNavigationViewController.h */,
-				EF78AA551B33622300A4627F /* HomeNavigationViewController.m */,
-				EFABC02F1B39EA6B0062B807 /* CameraViewController.h */,
-				EFABC0301B39EA6B0062B807 /* CameraViewController.m */,
-				EFB7226F1B41A25700E6DF7A /* EditMediaViewController.h */,
-				EFB722701B41A25700E6DF7A /* EditMediaViewController.m */,
-				EFB722761B4240B200E6DF7A /* EditLocationViewController.h */,
-				EFB722771B4240B200E6DF7A /* EditLocationViewController.m */,
-				EFB722791B432BFE00E6DF7A /* EditPostViewController.h */,
-				EFB7227A1B432BFE00E6DF7A /* EditPostViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -993,8 +1004,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFB225EF1B48853800D7E44B /* SelectRecipientViewController.h in Sources */,
 				EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */,
 				EFC181AA1AC371C300BE8B0B /* SendPreKeysRequest.m in Sources */,
+				EFB225F21B48C4EF00D7E44B /* MediaViewController.m in Sources */,
 				EF2CDEB81AB49A6F001E2F20 /* IdentityKey+Serialize.m in Sources */,
 				EFF70A891AAE19C3006C10D2 /* ChainKey.m in Sources */,
 				EF2CDED21AB5C22F001E2F20 /* MessageKey+Serialize.m in Sources */,
@@ -1005,7 +1018,6 @@
 				EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */,
 				EF524AE51AAE239800F3B9AF /* NSData+keyVersionByte.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
-				EF524ADB1AAE238600F3B9AF /* KStorageKeys.m in Sources */,
 				EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */,
 				EF78AA561B33622300A4627F /* HomeNavigationViewController.m in Sources */,
 				EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */,
@@ -1045,6 +1057,7 @@
 				EFC1819A1AC3412800BE8B0B /* HttpRequest.m in Sources */,
 				EF01716E1ADD93B500AFCBA4 /* SocialViewController.m in Sources */,
 				EFF70A901AAE19C3006C10D2 /* SessionKeyBundle.m in Sources */,
+				EFB225F51B4984F200D7E44B /* KPhoto+Serialize.m in Sources */,
 				EF6B44B21ABA877F00B88323 /* KThread+Serialize.m in Sources */,
 				EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */,
 				EF524ADE1AAE238600F3B9AF /* KYapDatabaseView.m in Sources */,
@@ -1065,6 +1078,7 @@
 				EF6B44A81ABA2F8A00B88323 /* ContactViewController.m in Sources */,
 				EFC1819E1AC3534F00BE8B0B /* RegisterUsernameRequest.m in Sources */,
 				EF524ADD1AAE238600F3B9AF /* KYapDatabaseSecondaryIndex.m in Sources */,
+				EFB225F81B49851000D7E44B /* KLocation+Serialize.m in Sources */,
 				EF0F4DC41ABA19DE00BB2AFC /* HomeViewController.m in Sources */,
 				EF4920A41AD762A400A9FE89 /* NSBundle+Messages.m in Sources */,
 				EFF70A941AAE19C3006C10D2 /* Session.m in Sources */,

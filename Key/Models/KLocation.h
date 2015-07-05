@@ -13,6 +13,7 @@
 
 @property (nonatomic, readonly) NSString *userUniqueId;
 @property (nonatomic, readonly) CLLocation *location;
+@property (nonatomic, readonly) NSDate *timestamp;
 
 - (instancetype)initWithUserUniqueId:(NSString *)userUniqueId location:(CLLocation *)location;
 

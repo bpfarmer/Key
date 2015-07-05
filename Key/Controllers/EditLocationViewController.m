@@ -7,6 +7,9 @@
 //
 
 #import "EditLocationViewController.h"
+#import "SelectRecipientViewController.h"
+#import "KAccountManager.h"
+#import "KLocation.h"
 
 @interface EditLocationViewController ()
 
@@ -26,6 +29,13 @@
     self.mapView.showsPointsOfInterest = NO;
     self.mapView.showsBuildings = NO;
     self.mapView.clearsContextBeforeDrawing = YES;
+    [[KAccountManager sharedManager] refreshCurrentCoordinate];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    if(!self.mapView) {
+        [self dismissViewControllerAnimated:NO completion:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,7 +48,7 @@
 }
 
 - (IBAction)didPressCancel:(id)sender {
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -53,7 +63,6 @@
     self.mapView.delegate = nil;
     [self.mapView removeFromSuperview];
     self.mapView = nil;
-    NSLog(@"Applying memory fix");
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -71,6 +80,15 @@
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
     return UIInterfaceOrientationPortrait;
 }
+
+- (IBAction)didPressPost:(id)sender {
+    SelectRecipientViewController *selectRecipientView = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
+    NSMutableArray *sendableObjects = [[NSMutableArray alloc] init];
+    [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
+    [selectRecipientView setSendableObjects:sendableObjects];
+    [self presentViewController:selectRecipientView animated:NO completion:nil];
+}
+
 
 /*
 #pragma mark - Navigation

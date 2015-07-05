@@ -10,11 +10,11 @@
 
 @implementation KPhoto
 
-- (instancetype)initWithFilename:(NSString *)filename ephemeral:(BOOL)ephemeral {
+- (instancetype)initWithMedia:(NSData *)media ephemeral:(BOOL)ephemeral {
     self = [super init];
     
     if(self) {
-        _filename = filename;
+        _media     = media;
         _ephemeral = ephemeral;
     }
     

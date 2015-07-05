@@ -210,7 +210,6 @@
 
 - (void)cameraStartedRunning {
     _cameraRunning = YES;
-    NSLog(@"CAMERA IS RUNNING");
 }
 
 - (void)viewDidAppear:(BOOL)animated {

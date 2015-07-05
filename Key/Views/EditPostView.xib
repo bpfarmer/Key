@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditPostViewController">
             <connections>
+                <outlet property="locationButton" destination="F5f-G5-Igq" id="LkP-Qp-QZh"/>
                 <outlet property="postText" destination="tsS-Iq-hl6" id="fhS-Da-xsE"/>
                 <outlet property="view" destination="iN0-l3-epB" id="pUL-TZ-etp"/>
             </connections>
@@ -17,13 +18,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tsS-Iq-hl6">
-                    <rect key="frame" x="8" y="8" width="304" height="125"/>
+                    <rect key="frame" x="8" y="46" width="304" height="125"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ACB-uz-0Tk">
-                    <rect key="frame" x="8" y="141" width="48" height="30"/>
+                    <rect key="frame" x="8" y="8" width="48" height="30"/>
                     <state key="normal" title="Cancel">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -31,8 +32,17 @@
                         <action selector="didPressCancel:" destination="-1" eventType="touchUpInside" id="jSd-X9-6tn"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5f-G5-Igq">
+                    <rect key="frame" x="8" y="179" width="84" height="30"/>
+                    <state key="normal" title="Location On">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="didPressLocation:" destination="-1" eventType="touchUpInside" id="n8z-Pe-JkB"/>
+                    </connections>
+                </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hJO-hg-JdA">
-                    <rect key="frame" x="280" y="141" width="32" height="30"/>
+                    <rect key="frame" x="280" y="179" width="32" height="30"/>
                     <state key="normal" title="Post">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>

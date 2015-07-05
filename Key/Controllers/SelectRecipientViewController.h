@@ -11,10 +11,12 @@
 
 @class KPost;
 @class KUser;
+@class KPhoto;
+@class KLocation;
 
 @interface SelectRecipientViewController : UIViewController
 
-@property (nonatomic) id <KSendable> sendableObject;
+@property (nonatomic) NSArray *sendableObjects;
 @property (nonatomic) KPost *post;
 @property (nonatomic) KUser *currentUser;
 
