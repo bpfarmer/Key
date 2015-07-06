@@ -7,13 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <YapDatabase/YapDatabaseRelationshipNode.h>
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 #import "KEncryptable.h"
 
 @class KMessage;
 
-@interface KThread : KYapDatabaseObject <YapDatabaseRelationshipNode, KEncryptable>
+@interface KThread : KDatabaseObject <KEncryptable>
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSArray *userIds;

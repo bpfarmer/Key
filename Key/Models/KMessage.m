@@ -7,7 +7,6 @@
 //
 #import "KMessage.h"
 #import "KGroup.h"
-#import <AFNetworking/AFHTTPRequestOperationManager.h>
 #import "KUser.h"
 #import "KThread.h"
 #import "KStorageManager.h"
@@ -16,12 +15,8 @@
 #import "Util.h"
 
 #define kStatusUnsent @"UNSENT"
-@implementation KMessage
 
-- (NSArray *)yapDatabaseRelationshipEdges {
-    NSArray *edges = nil;
-    return edges;
-}
+@implementation KMessage
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         authorId:(NSString *)authorId

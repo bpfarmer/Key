@@ -6,8 +6,7 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 #import <Foundation/Foundation.h>
-#import <YapDatabase/YapDatabaseRelationshipNode.h>
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 #import "KSendable.h"
 
 @class IdentityKey;
@@ -15,7 +14,7 @@
 @class PreKey;
 @class TOCFuture;
 
-@interface KUser : KYapDatabaseObject <YapDatabaseRelationshipNode, KSendable>
+@interface KUser : KDatabaseObject <KSendable>
 
 @property (nonatomic) NSString *firstName;
 @property (nonatomic) NSString *lastName;

@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "KSendable.h"
+#import "KDatabaseObject.h"
 
-@interface EncryptedMessage : NSObject <KSendable>
+@interface EncryptedMessage : KDatabaseObject <KSendable>
 
 @property (nonatomic, readonly) NSData *senderRatchetKey;
 @property (nonatomic, readonly) int index;

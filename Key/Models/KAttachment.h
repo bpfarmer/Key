@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 #import "KSendable.h"
 
-@interface KAttachment : NSObject <KSendable>
+@interface KAttachment : KDatabaseObject <KSendable>
 
 @property (nonatomic, readonly) NSData *cipherText;
 @property (nonatomic, readonly) NSData *hmac;

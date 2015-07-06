@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 #import <MapKit/MapKit.h>
 
-@interface KLocation : KYapDatabaseObject
+@interface KLocation : KDatabaseObject
 
 @property (nonatomic, readonly) NSString *userUniqueId;
 @property (nonatomic, readonly) CLLocation *location;

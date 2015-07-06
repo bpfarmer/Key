@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 
 @class ECKeyPair;
 

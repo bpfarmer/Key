@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 
 @class PreKey;
 @class RootChain;
@@ -17,7 +17,7 @@
 @class PreKeyExchangeReceipt;
 @class ECKeyPair;
 
-@interface Session : NSObject
+@interface Session : KDatabaseObject
 
 @property (nonatomic) NSString *senderId;
 @property (nonatomic, readonly) NSString *receiverId;

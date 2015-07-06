@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KDatabaseObject.h"
 
 @class MessageKey;
 
-@interface SessionState : NSObject
+@interface SessionState : KDatabaseObject
 
 @property (nonatomic, readonly) MessageKey *messageKey;
 @property (nonatomic, readonly) NSData *senderRatchetKey;

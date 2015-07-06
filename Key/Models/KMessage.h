@@ -6,8 +6,7 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 #import <Foundation/Foundation.h>
-#import <YapDatabase/YapDatabaseRelationshipNode.h>
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 #import "KEncryptable.h"
 #import "JSQMessageData.h"
 
@@ -17,7 +16,7 @@
 @class KThread;
 @class KAttachment;
 
-@interface KMessage : KYapDatabaseObject <YapDatabaseRelationshipNode, KEncryptable, JSQMessageData>
+@interface KMessage : KDatabaseObject <KEncryptable, JSQMessageData>
 
 @property (nonatomic) NSString *authorId;
 @property (nonatomic) NSString *threadId;

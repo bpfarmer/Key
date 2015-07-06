@@ -9,9 +9,4 @@
 
 @implementation KGroup
 
-- (NSArray *)yapDatabaseRelationshipEdges {
-    NSArray *edges = nil;
-    return edges;
-}
-
 @end
