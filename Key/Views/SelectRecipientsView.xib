@@ -25,6 +25,10 @@
                         <action selector="didPressCancel:" destination="-1" eventType="touchUpInside" id="fxU-dc-s1W"/>
                     </connections>
                 </button>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4AS-nt-7Pg">
+                    <rect key="frame" x="0.0" y="8" width="320" height="514"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="blw-Z2-tsk">
                     <rect key="frame" x="280" y="530" width="32" height="30"/>
                     <state key="normal" title="Post">
@@ -34,10 +38,6 @@
                         <action selector="sendToRecipients:" destination="-1" eventType="touchUpInside" id="PeH-7t-Kuz"/>
                     </connections>
                 </button>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4AS-nt-7Pg">
-                    <rect key="frame" x="0.0" y="8" width="320" height="514"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>
@@ -45,7 +45,7 @@
             <nil key="simulatedBottomBarMetrics"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-            <point key="canvasLocation" x="1138" y="630"/>
+            <point key="canvasLocation" x="395" y="418"/>
         </view>
     </objects>
 </document>
