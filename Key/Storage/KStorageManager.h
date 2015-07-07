@@ -11,10 +11,11 @@
 
 @class TOCFuture;
 
-extern NSString *const KUIDatabaseConnectionDidUpdateNotification;
-
 static NSString *keychainService          = @"KKeyChainService";
 static NSString *keychainDBPassAccount    = @"KDatabasePass";
+
+typedef void (^KDatabaseUpdateBlock)(FMDatabase *database);
+typedef FMResultSet* (^KDatabaseSelectBlock)(FMDatabase *database);
 
 @interface KStorageManager : NSObject
 
@@ -22,7 +23,7 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
 
 + (instancetype)sharedManager;
 - (void)setDatabaseWithName:(NSString *)databaseName;
-- (TOCFuture *)queryUpdate:(NSString *)sql parameters:(NSDictionary *)parameters;
-- (TOCFuture *)querySelect:(NSString *)sql parameters:(NSDictionary *)parameters;
+- (TOCFuture *)queryUpdate:(KDatabaseUpdateBlock)databaseBlock;
+- (TOCFuture *)querySelect:(KDatabaseSelectBlock)databaseBlock;
 
 @end

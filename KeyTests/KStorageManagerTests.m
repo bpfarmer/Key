@@ -28,7 +28,7 @@
     [super tearDown];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *databasePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@/%@", databasePath, testDB] error:nil];
+    [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@", [KStorageManager sharedManager].database.databasePath] error:nil];
 }
 
 - (void)testDatabaseCreation {

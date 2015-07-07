@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Mantle/Mantle.h>
 
 @class FMResultSet;
 @class TOCFuture;
 
-@interface KDatabaseObject : NSObject
+@interface KDatabaseObject : MTLModel
 
 @property (nonatomic, readwrite) NSString *uniqueId;
 

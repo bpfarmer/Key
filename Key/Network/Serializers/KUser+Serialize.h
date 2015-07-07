@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "KUser.h"
 
-@interface KUser(Serialize) <NSSecureCoding>
+@interface KUser(Serialize)
 
 @end

@@ -35,10 +35,10 @@ NSString *const kDatabaseReadQueue  = @"dbReadQueue";
 
 - (void)setDatabaseWithName:(NSString *)databaseName {
     NSString *databasePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    self.database = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@", databasePath, databaseName]];
+    self.database = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/localdb/%@", databasePath, databaseName]];
 }
 
-- (TOCFuture *)queryUpdate:(NSString *)sql parameters:(NSDictionary *)parameters {
+- (TOCFuture *)queryUpdate:(KDatabaseUpdateBlock)databaseBlock {
     TOCFutureSource *resultSource = [TOCFutureSource new];
     
     if(self.database && self.database.open) {
@@ -47,8 +47,7 @@ NSString *const kDatabaseReadQueue  = @"dbReadQueue";
         dispatch_async(queue, ^{
             FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:databasePath];
             [queue inDatabase:^(FMDatabase *db) {
-                [db executeUpdate:sql withParameterDictionary:parameters];
-                [resultSource trySetResult:@"SUCCESS"];
+                databaseBlock(db);
             }];
         });
     }
@@ -56,7 +55,7 @@ NSString *const kDatabaseReadQueue  = @"dbReadQueue";
     return resultSource.future;
 }
 
-- (TOCFuture *)querySelect:(NSString *)sql parameters:(NSDictionary *)parameters {
+- (TOCFuture *)querySelect:(KDatabaseSelectBlock)databaseBlock {
     TOCFutureSource *resultSource = [TOCFutureSource new];
     
     if(self.database && self.database.open) {
@@ -65,16 +64,7 @@ NSString *const kDatabaseReadQueue  = @"dbReadQueue";
         dispatch_async(queue, ^{
             FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:databasePath];
             [queue inDatabase:^(FMDatabase *db) {
-                FMResultSet *resultSet = [db executeQuery:sql withParameterDictionary:parameters];
-                NSMutableArray *objects = [[NSMutableArray alloc] init];
-                if(resultSet) {
-                    while(resultSet.next) {
-                        [objects addObject:[[KDatabaseObject alloc] initWithResultSetRow:resultSet.resultDictionary]];
-                    }
-                    [resultSource trySetResult:objects];
-                }else {
-                    [resultSource trySetFailure:nil];
-                }
+                [resultSource trySetResult:databaseBlock(db)];
             }];
         });
     }
