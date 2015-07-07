@@ -16,7 +16,7 @@
 @class KThread;
 @class KAttachment;
 
-@interface KMessage : KDatabaseObject <KEncryptable, JSQMessageData>
+@interface KMessage : KDatabaseObject <JSQMessageData>
 
 @property (nonatomic) NSString *authorId;
 @property (nonatomic) NSString *threadId;

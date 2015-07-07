@@ -8,20 +8,17 @@
 
 #import "KStorageManager.h"
 #import "KAccountManager.h"
-#import <YapDatabase/YapDatabase.h>
-#import <YapDatabase/YapDatabaseRelationship.h>
 #import <SSKeychain/SSKeychain.h>
 #import "NSData+Base64.h"
-#import "KYapDatabaseView.h"
-#import "KYapDatabaseSecondaryIndex.h"
 #import "KUser.h"
 #import "Util.h"
+#import "CollapsingFutures.h"
 
 NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnectionDidUpdateNotification";
+NSString *const kDatabaseWriteQueue = @"dbWriteQueue";
+NSString *const kDatabaseReadQueue  = @"dbReadQueue";
 
 @interface KStorageManager ()
-
-@property (nonatomic, retain) NSMutableDictionary *databases;
 
 @end
 
@@ -32,15 +29,56 @@ NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnec
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedMyManager = [[self alloc] init];
-        //[sharedMyManager protectDatabaseFile];
     });
     return sharedMyManager;
 }
 
-- (instancetype)init {
-    self = [super init];
+- (void)setDatabaseWithName:(NSString *)databaseName {
+    NSString *databasePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    self.database = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@", databasePath, databaseName]];
+}
+
+- (TOCFuture *)queryUpdate:(NSString *)sql parameters:(NSDictionary *)parameters {
+    TOCFutureSource *resultSource = [TOCFutureSource new];
     
-    return self;
+    if(self.database && self.database.open) {
+        NSString *databasePath = self.database.databasePath;
+        dispatch_queue_t queue = dispatch_queue_create([kDatabaseWriteQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+        dispatch_async(queue, ^{
+            FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:databasePath];
+            [queue inDatabase:^(FMDatabase *db) {
+                [db executeUpdate:sql withParameterDictionary:parameters];
+                [resultSource trySetResult:@"SUCCESS"];
+            }];
+        });
+    }
+    
+    return resultSource.future;
+}
+
+- (TOCFuture *)querySelect:(NSString *)sql parameters:(NSDictionary *)parameters {
+    TOCFutureSource *resultSource = [TOCFutureSource new];
+    
+    if(self.database && self.database.open) {
+        NSString *databasePath = self.database.databasePath;
+        dispatch_queue_t queue = dispatch_queue_create([kDatabaseReadQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+        dispatch_async(queue, ^{
+            FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:databasePath];
+            [queue inDatabase:^(FMDatabase *db) {
+                FMResultSet *resultSet = [db executeQuery:sql withParameterDictionary:parameters];
+                NSMutableArray *objects = [[NSMutableArray alloc] init];
+                if(resultSet) {
+                    while(resultSet.next) {
+                        [objects addObject:[[KDatabaseObject alloc] initWithResultSetRow:resultSet.resultDictionary]];
+                    }
+                    [resultSource trySetResult:objects];
+                }else {
+                    [resultSource trySetFailure:nil];
+                }
+            }];
+        });
+    }
+    return resultSource.future;
 }
 
 - (NSData *)databasePassword {

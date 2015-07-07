@@ -45,7 +45,7 @@
     if([messages[kPreKeyExchangeRemoteAlias] count] > 0) {
         if([messages[kPreKeyExchangeRemoteAlias] isKindOfClass:[NSDictionary class]]) {
             PreKeyExchange *preKeyExchange = [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:messages[kPreKeyExchangeRemoteAlias]];
-            KUser *remoteUser = (KUser *)[[KStorageManager sharedManager] objectForKey:preKeyExchange.senderId inCollection:[KUser collection]];
+            KUser *remoteUser = nil;//(KUser *)[[KStorageManager sharedManager] objectForKey:preKeyExchange.senderId inCollection:[KUser collection]];
             if(remoteUser) {
                 [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
             }else {
@@ -57,7 +57,7 @@
         }else {
             for(NSDictionary *msg in messages[kPreKeyExchangeRemoteAlias]) {
                 PreKeyExchange *preKeyExchange = [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:msg];
-                KUser *remoteUser = (KUser *)[[KStorageManager sharedManager] objectForKey:preKeyExchange.senderId inCollection:[KUser collection]];
+                KUser *remoteUser = nil;//(KUser *)[[KStorageManager sharedManager] objectForKey:preKeyExchange.senderId inCollection:[KUser collection]];
                 if(remoteUser) {
                     [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
                 }else {

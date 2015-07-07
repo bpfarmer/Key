@@ -8,16 +8,17 @@
 
 #import "KUser+Serialize.h"
 #import "IdentityKey.h"
-#import "PreKey.h"
+#import "KStorageManager.h"
+#import "CollapsingFutures.h"
 
-#define kCoderUniqueId @"uniqueId"
+#define kCoderUniqueId @"unique_id"
 #define kCoderUsername @"username"
-#define kCoderPasswordCrypt @"passwordCrypt"
-#define kCoderPasswordSalt @"passwordSalt"
-#define kCoderPublicKey @"publicKey"
-#define kCoderIdentityKey @"identityKey"
-#define kCoderPreKey @"preKey"
-#define kCoderLocalUser @"localUser"
+#define kCoderPasswordCrypt @"password_crypt"
+#define kCoderPasswordSalt @"password_salt"
+#define kCoderPublicKey @"public_key"
+#define kCoderIdentityKey @"identity_key"
+#define kCoderPreKey @"pre_key"
+#define kCoderLocalUser @"local_user"
 
 @implementation KUser(Serialize)
 
@@ -41,6 +42,41 @@
     [aCoder encodeObject:self.passwordSalt forKey:kCoderPasswordSalt];
     [aCoder encodeObject:self.identityKey forKey:kCoderIdentityKey];
     [aCoder encodeObject:self.publicKey forKey:kCoderPublicKey];
+}
+
++ (void)createTable {
+    NSString *createTableSQL = [NSString stringWithFormat:@"create table %@ (unique_id text primary key not null, username text, password_crypt blob, password_salt blob, identity_key blob, public_key blob);", [self tableName]];
+    [[KStorageManager sharedManager] queryUpdate:createTableSQL parameters:nil];
+}
+
+- (void)save {
+    if(self.uniqueId) {
+        NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (unique_id, username, password_crypt, password_salt, identity_key, public_key) values(:unique_id, :username, :password_crypt, :password_salt, :identity_key, :public_key)", [self.class tableName]];
+        
+        NSMutableDictionary *userDictionary = [[NSMutableDictionary alloc] init];
+        [userDictionary setObject:self.uniqueId forKey:@"unique_id"];
+        [userDictionary setObject:self.username forKey:@"username"];
+        [userDictionary setObject:self.passwordCrypt forKey:@"password_crypt"];
+        [userDictionary setObject:]
+        
+        [NSDictionary dictionaryWithObjectsAndKeys:self.uniqueId, @"unique_id", self.username, @"username", self.passwordCrypt, @"password_crypt", self.passwordSalt, @"password_salt", self.identityKey, @"identity_key", self.publicKey, @"public_key", nil];
+        [[KStorageManager sharedManager] queryUpdate:insertOrReplaceSQL parameters:userDictionary];
+    }
+}
+
++ (TOCFuture *)all {
+    TOCFutureSource *resultSource = [TOCFutureSource new];
+    NSString *findAllSQL = [NSString stringWithFormat:@"select * from %@", [self.class tableName]];
+    [resultSource trySetResult:[[KStorageManager sharedManager] querySelect:findAllSQL parameters:nil]];
+    return resultSource.future;
+}
+
+- (void)remove {
+    if(self.uniqueId) {
+        NSString *deleteSQL = [NSString stringWithFormat:@"delete from %@ where unique_id = :unique_id", [self.class tableName]];
+        NSDictionary *userDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.uniqueId, @"unique_id", nil];
+        [[KStorageManager sharedManager] queryUpdate:deleteSQL parameters:userDictionary];
+    }
 }
 
 @end

@@ -1,0 +1,46 @@
+//
+//  KStorageManagerTests.m
+//  Key
+//
+//  Created by Brendan Farmer on 7/6/15.
+//  Copyright (c) 2015 Brendan Farmer. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
+#import "KStorageManager.h"
+
+@interface KStorageManagerTests : XCTestCase
+
+@end
+
+@implementation KStorageManagerTests
+
+- (void)setUp {
+    NSString *testDB = @"testDB";
+    [super setUp];
+    KStorageManager *manager = [KStorageManager sharedManager];
+    [manager setDatabaseWithName:testDB];
+}
+
+- (void)tearDown {
+    NSString *testDB = @"testDB";
+    [super tearDown];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *databasePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@/%@", databasePath, testDB] error:nil];
+}
+
+- (void)testDatabaseCreation {
+    KStorageManager *manager = [KStorageManager sharedManager];
+    XCTAssert(manager.database.open);
+    XCTAssert(manager.database.close);
+}
+
+- (void)testUpdateQuery {
+    NSString *sql = @"create table testing";
+    KStorageManager *manager = [KStorageManager sharedManager];
+    [manager queryUpdate:sql parameters:nil];
+}
+
+@end

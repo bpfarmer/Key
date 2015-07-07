@@ -51,10 +51,8 @@
     return self;
 }
 
-
-
 - (NSString *)generateUniqueId {
-    NSString *uniqueId = [NSString stringWithFormat:@"%@_%u", [KMessage collection], [self messageHash]];
+    NSString *uniqueId = [NSString stringWithFormat:@"%@_%u", [KMessage tableName], [self messageHash]];
     
     return uniqueId;
 }
@@ -64,7 +62,7 @@
 }
 
 - (KUser *)author {
-    return (KUser *)[[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
+    return nil;//(KUser *)[[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
 }
 
 - (void)save {
@@ -73,7 +71,7 @@
 }
 
 - (KThread *)thread {
-    return [[KStorageManager sharedManager] objectForKey:self.threadId inCollection:[KThread collection]];
+    return nil;//[[KStorageManager sharedManager] objectForKey:self.threadId inCollection:[KThread collection]];
 }
 
 - (NSString *)text {

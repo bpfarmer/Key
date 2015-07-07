@@ -8,14 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+@class FMResultSet;
+@class TOCFuture;
+
 @interface KDatabaseObject : NSObject
 
 @property (nonatomic, readwrite) NSString *uniqueId;
 
++ (NSString *)tableName;
 - (void)save;
 - (void)remove;
-- (void)createTable;
-- (void)dropTable;
-- (NSString *)tableName;
++ (void)createTable;
++ (void)dropTable;
+- (instancetype)initWithUniqueId:(NSString *)uniqueId;
+- (instancetype)initWithResultSetRow:(NSDictionary *)row;
++ (TOCFuture *)all;
 
 @end

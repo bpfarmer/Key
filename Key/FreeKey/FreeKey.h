@@ -19,6 +19,7 @@
 @class PreKeyReceipt;
 @class PreKey;
 @class Session;
+@class KDatabaseObject;
 
 #define kOurPreKeyCollection         @"OurPreKey"
 #define kTheirPreKeyCollection       @"TheirPreKey"
@@ -39,11 +40,11 @@
 
 @interface FreeKey : NSObject
 
-+ (void)sendEncryptableObject:(id<KEncryptable>)object recipients:(NSArray *)recipients;
++ (void)sendEncryptableObject:(KDatabaseObject *)object recipients:(NSArray *)recipients;
 
 + (void)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage;
 
-+ (EncryptedMessage *)encryptObject:(id <KEncryptable>)object session:(Session *)session;
-+ (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session;
++ (EncryptedMessage *)encryptObject:(KDatabaseObject *)object session:(Session *)session;
++ (KDatabaseObject *)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session;
 
 @end

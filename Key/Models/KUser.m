@@ -11,7 +11,6 @@
 #import "KStorageManager.h"
 #import "KAccountManager.h"
 #import "KThread.h"
-#import "KYapDatabaseSecondaryIndex.h"
 #import "FreeKey.h"
 #import "IdentityKey.h"
 #import <25519/Curve25519.h>
@@ -86,6 +85,20 @@
     return self;
 }
 
+- (instancetype)initWithResultSetRow:(NSDictionary *)row {
+    self = [super initWithUniqueId:row[@"unique_id"]];
+    
+    if(self) {
+        _username      = row[@"username"];
+        _passwordCrypt = row[@"password_crypt"];
+        _passwordSalt  = row[@"password_salt"];
+        _identityKey   = row[@"identity_key"];
+        _publicKey     = row[@"public_key"];
+    }
+    
+    return self;
+}
+
 + (TOCFuture *)asyncCreateWithUsername:(NSString *)username password:(NSString *)password {
     KUser *user = [[KUser alloc] initWithUsername:username password:password];
     return [RegisterUsernameRequest makeRequestWithUser:user];
@@ -128,26 +141,15 @@
 + (NSArray *)fullNamesForUserIds:(NSArray *)userIds {
     NSMutableArray *fullNames = [[NSMutableArray alloc] init];
     
-    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        [transaction enumerateRowsForKeys:userIds inCollection:[self collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, id metadata, BOOL *stop) {
-            [fullNames addObject:[object fullName]];
-        }];
-    }];
-    return fullNames;
+    return nil;//fullNames;
 }
 
 #pragma mark - Query Methods
 + (KUser *)fetchObjectWithUsername:(NSString *)username {
     __block NSString *userId;
-    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:@"WHERE username = ?", [username lowercaseString]];
-        [[transaction ext:KUsernameSQLiteIndex] enumerateKeysMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, BOOL *stop) {
-            userId = key;
-            *stop = YES;
-        }];
-    }];
+
     if(userId) {
-        return (KUser *)[[KStorageManager sharedManager] objectForKey:userId inCollection:[KUser collection]];
+        return nil; //(KUser *)[[KStorageManager sharedManager] objectForKey:userId inCollection:[KUser collection]];
     }else {
         return nil;
     }
@@ -170,13 +172,6 @@
 
 - (NSString *)displayName {
     return [self username];
-}
-
-#pragma mark - YapDatabase Methods
-
-- (NSArray *)yapDatabaseRelationshipEdges {
-    NSArray *edges = nil;
-    return edges;
 }
 
 #pragma mark - Password Handling Methods

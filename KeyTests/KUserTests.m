@@ -11,6 +11,7 @@
 #import "KUser.h"
 #import "KStorageManager.h"
 #import "KAccountManager.h"
+#import "CollapsingFutures.h"
 
 @interface KUserTests : XCTestCase
 
@@ -19,42 +20,47 @@
 @implementation KUserTests
 
 - (void)setUp {
+    NSString *testDB = @"testDB";
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    KStorageManager *manager = [KStorageManager sharedManager];
+    [manager setDatabaseWithName:testDB];
+    [KUser createTable];
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    NSString *testDB = @"testDB";
     [super tearDown];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *databasePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@/%@", databasePath, testDB] error:nil];
 }
 
-- (void)testFetchingObjects {
-    [[KStorageManager sharedManager] setupDatabase];
-    NSString *username = @"tester";
-    KUser *savingUser = [[KUser alloc] initWithUsername:username];
-    [savingUser setUniqueId:@"12345"];
-    [[KAccountManager sharedManager] setUser:savingUser];
-    [savingUser save];
-    [[KStorageManager sharedManager] setupDatabase];
-    KUser *retrievingUser = [KUser fetchObjectWithUsername:username];
-    XCTAssert([retrievingUser.username isEqual:savingUser.username]);
+- (void)testCreateTable {
+    [KUser createTable];
 }
 
-- (void)testPasswordEncryptionAndLogin {
-    NSString *username = @"TESTER";
-    KUser *user = [[KUser alloc] initWithUsername:username];
-    [user setUniqueId:@"12345"];
-    [user setPasswordCryptInKeychain:@"12345"];
-    [[KAccountManager sharedManager] setUser:user];
-    [[KStorageManager sharedManager] setupDatabase];
+- (void)testSaveUser {
+    KUser *user = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
     [user save];
-    KUser *authenticatingUser = [[KUser alloc] initWithUsername:username];
-    XCTAssert(![authenticatingUser authenticatePassword:@"123456"]);
-    XCTAssert([authenticatingUser authenticatePassword:@"12345"]);
 }
 
-- (void)testRemoteQuerying {
+- (void)testFindAll {
+    XCTestExpectation *queryExpectation = [self expectationWithDescription:@"retrieving users"];
+    KUser *user = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
+    [user save];
+    TOCFuture *futureUsers = [KUser all];
+    [futureUsers thenDo:^(NSArray *value) {
+        XCTAssert(value.count == 1);
+        [queryExpectation fulfill];
+    }];
     
+    [self waitForExpectationsWithTimeout:1 handler:^(NSError *error) {
+        
+    }];
+}
+
+- (void)testDropTable {
+    [KUser dropTable];
 }
 
 @end

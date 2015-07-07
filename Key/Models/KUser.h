@@ -26,9 +26,6 @@
 @property (nonatomic) NSData *publicKey;
 @property (nonatomic) BOOL hasLocalPreKey;
 
-
-+ (KUser *)fetchObjectWithUsername:(NSString *)username;
-+ (NSArray *)userIdsWithUsernames:(NSArray *)usernames;
 - (void)setPasswordCryptInKeychain:(NSString *)password;
 - (BOOL)authenticatePassword:(NSString *)password;
 

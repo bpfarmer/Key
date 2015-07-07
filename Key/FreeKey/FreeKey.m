@@ -54,7 +54,7 @@
     dispatch_async(queue, ^{
         TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionForRemoteUserId:encryptedMessage.senderId];
         [futureSession thenDo:^(Session *session) {
-            id <KEncryptable> decryptedObject = [self decryptEncryptedMessage:encryptedMessage session:session];
+            KDatabaseObject *decryptedObject = (KDatabaseObject *)[self decryptEncryptedMessage:encryptedMessage session:session];
             [decryptedObject save];
         }];
     });
@@ -66,13 +66,13 @@
     EncryptedMessage *encryptedMessage = [session encryptMessage:serializedObject];
     KUser *localUser = [KAccountManager sharedManager].user;
     [encryptedMessage addMetadataFromLocalUserId:localUser.uniqueId toRemoteUserId:session.receiverId];
-    [[KStorageManager sharedManager] setObject:session forKey:session.receiverId inCollection:kSessionCollection];
+    //[[KStorageManager sharedManager] setObject:session forKey:session.receiverId inCollection:kSessionCollection];
     return encryptedMessage;
 }
 
-+ (id <KEncryptable>)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session {
++ (KDatabaseObject *)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session {
     NSData *decryptedData = [session decryptMessage:encryptedMessage];
-    [[KStorageManager sharedManager] setObject:session forKey:session.receiverId inCollection:kSessionCollection];
+    //[[KStorageManager sharedManager] setObject:session forKey:session.receiverId inCollection:kSessionCollection];
     return [NSKeyedUnarchiver unarchiveObjectWithData:decryptedData];
 }
 

@@ -8,7 +8,6 @@
 
 #import "SocialViewController.h"
 #import "KStorageManager.h"
-#import "KYapDatabaseView.h"
 #import "KPost.h"
 #import "KAccountManager.h"
 #import "KUser.h"
@@ -22,8 +21,6 @@ static NSString *TableViewCellIdentifier = @"Posts";
 
 @property (nonatomic, strong) IBOutlet UITextView *postTextView;
 @property (nonatomic, strong) IBOutlet UITableView *postsTableView;
-@property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
-@property (nonatomic, strong) YapDatabaseViewMappings *postMappings;
 
 @end
 
@@ -48,136 +45,27 @@ static NSString *TableViewCellIdentifier = @"Posts";
     [self.postsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
     self.currentUser = [KAccountManager sharedManager].user;
-    
-    [self setupDatabaseView];
-}
-
-- (void) setupDatabaseView {
-    _databaseConnection = [[KStorageManager sharedManager] newDatabaseConnection];
-    [self.databaseConnection beginLongLivedReadTransaction];
-    _postMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[@"KPostGroup"] view:KPostDatabaseViewName];
-    
-    [self.databaseConnection beginLongLivedReadTransaction];
-    [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
-        [self.postMappings updateWithTransaction:transaction];
-    }];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(yapDatabaseModified:) name:YapDatabaseModifiedNotification object:self.databaseConnection.database];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
-- (void)yapDatabaseModified:(NSNotification *)notification {
-    NSArray *notifications = [self.databaseConnection beginLongLivedReadTransaction];
-    
-    NSArray *sectionChanges = nil;
-    NSArray *rowChanges = nil;
-    
-    [[self.databaseConnection ext:KThreadDatabaseViewName] getSectionChanges:&sectionChanges rowChanges:&rowChanges forNotifications:notifications withMappings:self.postMappings];
-    
-    if ([sectionChanges count] == 0 & [rowChanges count] == 0)
-    {
-        return;
-    }
-    
-    [self.postsTableView beginUpdates];
-    
-    for (YapDatabaseViewSectionChange *sectionChange in sectionChanges)
-    {
-        switch (sectionChange.type)
-        {
-            case YapDatabaseViewChangeDelete :
-            {
-                [self.postsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionChange.index] withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeInsert :
-            {
-                [self.postsTableView insertSections:[NSIndexSet indexSetWithIndex:sectionChange.index] withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeMove :
-            {
-                break;
-            }
-            case YapDatabaseViewChangeUpdate :
-            {
-                break;
-            }
-        }
-    }
-    
-    for (YapDatabaseViewRowChange *rowChange in rowChanges)
-    {
-        switch (rowChange.type)
-        {
-            case YapDatabaseViewChangeDelete :
-            {
-                [self.postsTableView deleteRowsAtIndexPaths:@[rowChange.indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeInsert :
-            {
-                [self.postsTableView insertRowsAtIndexPaths:@[rowChange.newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeMove :
-            {
-                [self.postsTableView deleteRowsAtIndexPaths:@[rowChange.indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.postsTableView insertRowsAtIndexPaths:@[rowChange.newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeUpdate :
-            {
-                [self.postsTableView reloadRowsAtIndexPaths:@[rowChange.indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                break;
-            }
-        }
-    }
-    
-    [self.postsTableView endUpdates];
-}
-
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)sender
-{
-    return [self.postMappings numberOfSections];
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)sender {
+    return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section
-{
-    return [self.postMappings numberOfItemsInSection:section];
+- (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section {
+    return 0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    __block KPost *post = nil;
-    [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        post = (KPost *)[[transaction extension:KPostDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.postMappings];
-    }];
-    
-    UITableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    
-    NSString *text = post.text;
-    if(text == nil) text = @"Tap to View";
-    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", post.author.username, text];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    return cell;
+- (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    __block KPost *post = nil;
-    [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        post = (KPost *)[[transaction extension:KPostDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.postMappings];
-    }];
-    if(post) {
-        MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
-        mediaViewController.post = post;
-        [self.parentViewController presentViewController:mediaViewController animated:NO completion:nil];
-    }
 }
 
 

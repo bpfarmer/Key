@@ -43,8 +43,8 @@
         }];
         [futureUser thenDo:^(KUser *user) {
             [[KAccountManager sharedManager] setUser:user];
-            [[KStorageManager sharedManager] refreshDatabaseAndConnection];
-            [[KStorageManager sharedManager] setupDatabase];
+            //[[KStorageManager sharedManager] refreshDatabaseAndConnection];
+            //[[KStorageManager sharedManager] setupDatabase];
             [user save];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [user setupIdentityKey];

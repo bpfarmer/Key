@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "KSendable.h"
-#import "KStorable.h"
 
-@protocol KEncryptable <KStorable>
+@protocol KEncryptable
+
+@property (nonatomic) NSString *uniqueId;
+
+- (instancetype)initWithUniqueId:(NSString *)uniqueId;
 
 @end

@@ -8,10 +8,11 @@
 
 #import "KOutgoingObject.h"
 #import "KStorageManager.h"
+#import "KDatabaseObject.h"
 
 @implementation KOutgoingObject
 
-- (instancetype)initWithObject:(id<KEncryptable>)object recipients:(NSArray *)recipients {
+- (instancetype)initWithObject:(KDatabaseObject *)object recipients:(NSArray *)recipients {
     self = [super initWithUniqueId:object.uniqueId];
     
     if(self) {
@@ -21,8 +22,8 @@
     return self;
 }
 
-+ (void)confirmDeliveryOfObject:(id<KEncryptable>)object toRecipient:(NSString *)recipientId {
-    KOutgoingObject *outgoingObject = [[KStorageManager sharedManager] objectForKey:object.uniqueId inCollection:[KOutgoingObject collection]];
++ (void)confirmDeliveryOfObject:(KDatabaseObject *)object toRecipient:(NSString *)recipientId {
+    /*KOutgoingObject *outgoingObject = [[KStorageManager sharedManager] objectForKey:object.uniqueId inCollection:[KOutgoingObject collection]];
     NSMutableArray *mutableRecipients = [NSMutableArray arrayWithArray:outgoingObject.recipients];
     [mutableRecipients removeObject:recipientId];
     outgoingObject.recipients = [NSArray arrayWithArray:mutableRecipients];
@@ -30,6 +31,7 @@
         [outgoingObject save];
     else
         [[KStorageManager sharedManager]removeObjectForKey:outgoingObject.uniqueId inCollection:[self collection]];
+     */
 }
 
 @end

@@ -41,7 +41,7 @@
 - (void)enqueueDecryptableMessage:(EncryptedMessage *)encryptedMessage toLocalUser:(KUser *)localUser {
     dispatch_queue_t queue = dispatch_queue_create([kDecryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     dispatch_async(queue, ^{
-        KUser *remoteUser = (KUser *)[[KStorageManager sharedManager] objectForKey:encryptedMessage.senderId inCollection:[KUser collection]];
+        KUser *remoteUser = nil;//(KUser *)[[KStorageManager sharedManager] objectForKey:encryptedMessage.senderId inCollection:[KUser collection]];
         if(remoteUser) {
             [self decryptAndSaveMessage:encryptedMessage localUser:localUser remoteUser:remoteUser];
         }else {
@@ -85,7 +85,7 @@
                                   signedPreKeySignature:preKeySignature
                                             identityKey:localUser.publicKey
                                             baseKeyPair:baseKeyPair];
-        [[KStorageManager sharedManager] setObject:preKey forKey:preKey.signedPreKeyId inCollection:kOurPreKeyCollection];
+        //[[KStorageManager sharedManager] setObject:preKey forKey:preKey.signedPreKeyId inCollection:kOurPreKeyCollection];
         [preKeys addObject:[self base64EncodedPreKeyDictionary:preKey]];
         index++;
     }
