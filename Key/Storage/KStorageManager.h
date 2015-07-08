@@ -23,7 +23,7 @@ typedef FMResultSet* (^KDatabaseSelectBlock)(FMDatabase *database);
 
 + (instancetype)sharedManager;
 - (void)setDatabaseWithName:(NSString *)databaseName;
-- (TOCFuture *)queryUpdate:(KDatabaseUpdateBlock)databaseBlock;
-- (TOCFuture *)querySelect:(KDatabaseSelectBlock)databaseBlock;
+- (void)queryUpdate:(KDatabaseUpdateBlock)databaseBlock;
+- (FMResultSet *)querySelect:(KDatabaseSelectBlock)databaseBlock;
 
 @end

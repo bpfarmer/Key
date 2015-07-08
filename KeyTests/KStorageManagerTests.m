@@ -24,10 +24,8 @@
 }
 
 - (void)tearDown {
-    NSString *testDB = @"testDB";
     [super tearDown];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *databasePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
     [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@", [KStorageManager sharedManager].database.databasePath] error:nil];
 }
 
@@ -39,8 +37,9 @@
 
 - (void)testUpdateQuery {
     NSString *sql = @"create table testing";
-    KStorageManager *manager = [KStorageManager sharedManager];
-    [manager queryUpdate:sql parameters:nil];
+    [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
+        [database executeUpdate:sql];
+    }];
 }
 
 @end

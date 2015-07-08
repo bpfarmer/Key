@@ -28,11 +28,14 @@
 }
 
 - (void)tearDown {
-    NSString *testDB = @"testDB";
     [super tearDown];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *databasePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    [fileManager removeItemAtPath:[NSString stringWithFormat:@"%@", [KStorageManager sharedManager].database.databasePath] error:nil];
+}
+
+- (void)testPropertyNames {
+    NSLog(@"PROPERTIES: %@", [KUser storedPropertyList]);
+    NSLog(@"PROPERTY MAPPING: %@", [KUser propertyMapping]);
+    KUser *user = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
+    NSLog(@"INSTANCE MAPPING: %@", [user instanceMapping]);
 }
 
 - (void)testCreateTable {
@@ -42,23 +45,38 @@
 - (void)testSaveUser {
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
     [user save];
+    FMResultSet *resultSet = [[KStorageManager sharedManager].database executeQuery:[NSString stringWithFormat:@"select * from %@ where unique_id = ?", [KUser tableName]], @"12345"];
+    while(resultSet.next) {
+        XCTAssert([resultSet.resultDictionary[@"unique_id"] isEqualToString:@"12345"]);
+    }
+    [resultSet close];
+}
+
+- (void)testRetrieveUser {
+    KUser *newUser = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
+    [newUser save];
+    KUser *user = [KUser findByUniqueId:@"12345"];
+    XCTAssert(user.uniqueId = @"12345");
+    XCTAssert(user.username = @"brendan");
+}
+
+- (void)testRemoveUser {
+    KUser *newUser = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
+    [newUser save];
+    [newUser remove];
+    KUser *user = [KUser findByUniqueId:@"12345"];
+    XCTAssert(!user);
 }
 
 - (void)testFindAll {
-    XCTestExpectation *queryExpectation = [self expectationWithDescription:@"retrieving users"];
+    [KUser createTable];
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
     [user save];
-    NSLog(@"DB PATH: %@", [KStorageManager sharedManager].database.databasePath);
-    TOCFuture *futureUsers = [KUser all];
-    [futureUsers thenDo:^(NSArray *value) {
-        NSLog(@"WHAT WE WORKIN WITH: %@", value);
-        //XCTAssert(value.count == 1);
-        [queryExpectation fulfill];
-    }];
-    
-    [self waitForExpectationsWithTimeout:1 handler:^(NSError *error) {
-        
-    }];
+    FMResultSet *allUsers = [KUser all];
+    while(allUsers.next) {
+        XCTAssert([allUsers.resultDictionary[@"unique_id"] isEqualToString:@"12345"]);
+    }
+    [allUsers close];
 }
 
 - (void)testDropTable {

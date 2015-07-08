@@ -11,12 +11,14 @@
 #import <SSKeychain/SSKeychain.h>
 #import "NSData+Base64.h"
 #import "KUser.h"
+#import "KMessage.h"
 #import "Util.h"
 #import "CollapsingFutures.h"
 
 NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnectionDidUpdateNotification";
+//TODO: Note that these are a single queue right now
 NSString *const kDatabaseWriteQueue = @"dbWriteQueue";
-NSString *const kDatabaseReadQueue  = @"dbReadQueue";
+NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
 
 @interface KStorageManager ()
 
@@ -35,40 +37,33 @@ NSString *const kDatabaseReadQueue  = @"dbReadQueue";
 
 - (void)setDatabaseWithName:(NSString *)databaseName {
     NSString *databasePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    self.database = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/localdb/%@", databasePath, databaseName]];
+    self.database = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@", databasePath, databaseName]];
 }
 
-- (TOCFuture *)queryUpdate:(KDatabaseUpdateBlock)databaseBlock {
-    TOCFutureSource *resultSource = [TOCFutureSource new];
-    
-    if(self.database && self.database.open) {
-        NSString *databasePath = self.database.databasePath;
-        dispatch_queue_t queue = dispatch_queue_create([kDatabaseWriteQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-        dispatch_async(queue, ^{
-            FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:databasePath];
-            [queue inDatabase:^(FMDatabase *db) {
-                databaseBlock(db);
-            }];
-        });
+- (void)addTablesToDatabase {
+    if(self.database) {
+        [KUser createTable];
     }
-    
-    return resultSource.future;
 }
 
-- (TOCFuture *)querySelect:(KDatabaseSelectBlock)databaseBlock {
-    TOCFutureSource *resultSource = [TOCFutureSource new];
-    
+- (void)queryUpdate:(KDatabaseUpdateBlock)databaseBlock {
     if(self.database && self.database.open) {
-        NSString *databasePath = self.database.databasePath;
-        dispatch_queue_t queue = dispatch_queue_create([kDatabaseReadQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-        dispatch_async(queue, ^{
-            FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:databasePath];
-            [queue inDatabase:^(FMDatabase *db) {
-                [resultSource trySetResult:databaseBlock(db)];
-            }];
-        });
+        FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:self.database.databasePath];
+        [queue inDatabase:^(FMDatabase *db) {
+            databaseBlock(db);
+        }];
     }
-    return resultSource.future;
+}
+
+- (FMResultSet *)querySelect:(KDatabaseSelectBlock)databaseBlock {
+    __block FMResultSet *resultSet;
+    if(self.database && self.database.open) {
+        FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:self.database.databasePath];
+        [queue inDatabase:^(FMDatabase *db) {
+            resultSet = databaseBlock(db);
+        }];
+    }
+    return resultSet;
 }
 
 - (NSData *)databasePassword {
