@@ -11,10 +11,26 @@
 #import <objc/runtime.h>
 
 #define kMappingUniqueId @"uniqueId"
+#define kMappingPrimaryKeyId @"primaryKeyId"
 
 @implementation KDatabaseObject
 
 + (void)createTable {
+    NSMutableArray *createdColumns = [[NSMutableArray alloc] init];
+    if([self hasUniqueId]) [createdColumns addObject:@"unique_id text primary key not null"];
+    else [createdColumns addObject:@"primary_key_id integer primary key autoincrement not null"];
+    NSMutableArray *propertyList = [[NSMutableArray alloc] initWithArray:[self storedPropertyList]];
+    [propertyList removeObjectsInArray:@[@"uniqueId", @"primary_key_id"]];
+    for(NSString *property in propertyList) {
+        NSString *propertyType = [self typeOfPropertyNamed:property];
+        NSString *columnType   = [self propertyTypeToColumnTypeMapping][propertyType];
+        if(!columnType) columnType = @"blob";
+        [createdColumns addObject:[NSString stringWithFormat:@"%@ %@", [self propertyToColumnMapping][property], columnType]];
+    }
+    NSString *createTableSQL = [NSString stringWithFormat:@"create table %@ values(%@)", [self tableName], [createdColumns componentsJoinedByString:@", "]];
+    [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
+        [database executeUpdate:createTableSQL];
+    }];
 }
 
 + (void)dropTable {
@@ -24,17 +40,15 @@
     }];
 }
 
++(NSDictionary *)propertyTypeToColumnTypeMapping {
+    return @{@"NSString" : @"text", @"bool" : @"integer", @"float" : @"real", @"int" : @"integer"};
+}
+
 + (NSArray *)storedPropertyList {
-    NSMutableArray *propertyNames = [[NSMutableArray alloc] init];
-    [propertyNames addObject:kMappingUniqueId];
-    unsigned int propertyCount = 0;
-    objc_property_t *properties = class_copyPropertyList([self class], &propertyCount);
-    for (unsigned int i = 0; i < propertyCount; ++i)
-    {
-        objc_property_t property = properties[i];
-        [propertyNames addObject:[NSString stringWithUTF8String:property_getName(property)]];
-    }
-    [propertyNames removeObjectsInRange:NSMakeRange([propertyNames count] - 4, 4)];
+    NSMutableArray *propertyNames = [[NSMutableArray alloc] initWithArray:[self propertyNames]];
+    if([self hasUniqueId]) [propertyNames addObject:kMappingUniqueId];
+    else [propertyNames addObject:kMappingPrimaryKeyId];
+    [propertyNames removeObjectsInArray:@[@"hash", @"superclass", @"description", @"debugDescription"]];
     [propertyNames removeObjectsInArray:[[self class] unsavedPropertyList]];
     return propertyNames;
 }
@@ -43,28 +57,45 @@
     return @[];
 }
 
-+ (NSDictionary *)propertyMapping {
++ (BOOL)hasUniqueId {
+    return YES;
+}
+
++ (NSDictionary *)columnToPropertyMapping {
     NSMutableDictionary *mappingDictionary = [[NSMutableDictionary alloc] init];
     NSArray *storedProperties = [[self class] storedPropertyList];
     for(NSString *storedProperty in storedProperties) {
-        NSMutableString *output = [NSMutableString string];
-        NSCharacterSet *uppercase = [NSCharacterSet uppercaseLetterCharacterSet];
-        for (NSInteger idx = 0; idx < [storedProperty length]; idx += 1) {
-            unichar c = [storedProperty characterAtIndex:idx];
-            if ([uppercase characterIsMember:c]) {
-                [output appendFormat:@"_%@", [[NSString stringWithCharacters:&c length:1] lowercaseString]];
-            } else {
-                [output appendFormat:@"%C", c];
-            }
-        }
-        [mappingDictionary setObject:storedProperty forKey:output];
+        [mappingDictionary setObject:storedProperty forKey:[self columnNameFromProperty:storedProperty]];
     }
     return [NSDictionary dictionaryWithDictionary:mappingDictionary];
 }
 
++ (NSDictionary *)propertyToColumnMapping {
+    NSMutableDictionary *mappingDictionary = [[NSMutableDictionary alloc] init];
+    NSArray *storedProperties = [[self class] storedPropertyList];
+    for(NSString *storedProperty in storedProperties) {
+        [mappingDictionary setObject:[self columnNameFromProperty:storedProperty] forKey:storedProperty];
+    }
+    return [NSDictionary dictionaryWithDictionary:mappingDictionary];
+}
+
++ (NSString *)columnNameFromProperty:(NSString *)name {
+    NSMutableString *output = [NSMutableString string];
+    NSCharacterSet *uppercase = [NSCharacterSet uppercaseLetterCharacterSet];
+    for (NSInteger idx = 0; idx < [name length]; idx += 1) {
+        unichar c = [name characterAtIndex:idx];
+        if ([uppercase characterIsMember:c]) {
+            [output appendFormat:@"_%@", [[NSString stringWithCharacters:&c length:1] lowercaseString]];
+        } else {
+            [output appendFormat:@"%C", c];
+        }
+    }
+    return output;
+}
+
 - (NSDictionary *)instanceMapping {
     __block NSMutableDictionary *instanceMap = [[NSMutableDictionary alloc] init];
-    NSDictionary *mappingDictionary = [[self class] propertyMapping];
+    NSDictionary *mappingDictionary = [[self class] columnToPropertyMapping];
     [mappingDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if([self valueForKey:(NSString *)obj]) [instanceMap setObject:[self valueForKey:(NSString *)obj] forKey:key];
     }];
@@ -82,9 +113,8 @@
 - (void)save {
     if(self.uniqueId) {
         NSString *columnKeys = [[self instanceMapping].allKeys componentsJoinedByString:@", "];
-        NSString *hashKeys   = [@":" stringByAppendingString:[[self instanceMapping].allKeys componentsJoinedByString:@", :"]];
-        NSLog(@"COLUMN KEYS: %@, HASH KEYS: %@", columnKeys, hashKeys);
-        NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (%@) values(%@)", [self.class tableName], columnKeys, hashKeys];
+        NSString *valueKeys   = [@":" stringByAppendingString:[[self instanceMapping].allKeys componentsJoinedByString:@", :"]];
+        NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (%@) values(%@)", [self.class tableName], columnKeys, valueKeys];
         
         [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
             [database executeUpdate:insertOrReplaceSQL withParameterDictionary:[self instanceMapping]];
@@ -92,20 +122,42 @@
     }
 }
 
-+ (FMResultSet *)all {
++ (NSArray *)all {
     NSString *findAllSQL = [NSString stringWithFormat:@"select * from %@", [self.class tableName]];
-    return [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
+    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
         return [database executeQuery:findAllSQL];
     }];
+    NSMutableArray *objects = [[NSMutableArray alloc] init];
+    while(resultSet.next) [objects addObject:[[self alloc] initWithResultSetRow:resultSet.resultDictionary]];
+    [resultSet close];
+    return objects;
 }
 
 + (instancetype)findByUniqueId:(NSString *)uniqueId {
-    NSString *findByUniqueIdSQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE unique_id=:unique_id", [[self class] tableName]];
-    NSDictionary *parameterDictionary = @{@"unique_id" : uniqueId};
-    FMResultSet *result = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:findByUniqueIdSQL withParameterDictionary:parameterDictionary];
-    }];
-    return [[self alloc] initWithResultSet:result];
+    if([self hasUniqueId]) {
+        NSString *findByUniqueIdSQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE unique_id=:unique_id", [[self class] tableName]];
+        NSDictionary *parameterDictionary = @{@"unique_id" : uniqueId};
+        FMResultSet *result = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
+            return [database executeQuery:findByUniqueIdSQL withParameterDictionary:parameterDictionary];
+        }];
+        if(result.next) return [[self alloc] initWithResultSetRow:result.resultDictionary];
+    }
+    return nil;
+}
+
++ (instancetype)findByDictionary:(NSDictionary *)dictionary {
+    NSMutableArray *conditions = [[NSMutableArray alloc] init];
+    for(NSString *key in [dictionary allKeys]) {
+        if(![[self storedPropertyList] containsObject:key]) return nil;
+        [conditions addObject:[NSString stringWithFormat:@"%@ = :%@", [self propertyToColumnMapping][key], [self propertyToColumnMapping][key]]];
+    }
+    NSString *selectSQL = [NSString stringWithFormat:@"select * from %@ where %@", [self tableName], [conditions componentsJoinedByString:@" AND "]];
+    //NSMutableDictionary *
+    return nil;
+}
+
++ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary {
+    return nil;
 }
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId {
@@ -114,17 +166,12 @@
     return self;
 }
 
-- (instancetype)initWithResultSet:(FMResultSet *)resultSet {
+- (instancetype)initWithResultSetRow:(NSDictionary *)resultSetRow {
     self = [super init];
-    if(resultSet.next) {
-        [[[self class] propertyMapping] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            if(resultSet.resultDictionary[key]) [self setValue:resultSet.resultDictionary[key] forKey:obj];
-        }];
-        [resultSet close];
-        return self;
-    }else {
-        return nil;
-    }
+    [[[self class] columnToPropertyMapping] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if(resultSetRow[key]) [self setValue:resultSetRow[key] forKey:obj];
+    }];
+    return self;
 }
 
 + (NSString *)tableName {

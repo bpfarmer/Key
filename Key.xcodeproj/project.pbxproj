@@ -77,6 +77,8 @@
 		EFB225FB1B4ACC3100D7E44B /* KDatabaseObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225FA1B4ACC3100D7E44B /* KDatabaseObject.m */; };
 		EFB226001B4AD20A00D7E44B /* KStorageManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225FF1B4AD20A00D7E44B /* KStorageManagerTests.m */; };
 		EFB226031B4CCC5500D7E44B /* KDatabaseObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB226021B4CCC5500D7E44B /* KDatabaseObjectTests.m */; };
+		EFB226061B4D6BD700D7E44B /* NSObject+Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB226051B4D6BD700D7E44B /* NSObject+Properties.m */; };
+		EFB226091B4D6E2E00D7E44B /* NSString+PropertyKVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB226081B4D6E2E00D7E44B /* NSString+PropertyKVC.m */; };
 		EFB722711B41A25700E6DF7A /* EditMediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB722701B41A25700E6DF7A /* EditMediaViewController.m */; };
 		EFB722731B42360300E6DF7A /* EditMediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFB722721B42360300E6DF7A /* EditMediaView.xib */; };
 		EFB722751B423DB000E6DF7A /* EditLocationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFB722741B423DB000E6DF7A /* EditLocationView.xib */; };
@@ -270,6 +272,10 @@
 		EFB225FA1B4ACC3100D7E44B /* KDatabaseObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KDatabaseObject.m; sourceTree = "<group>"; };
 		EFB225FF1B4AD20A00D7E44B /* KStorageManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageManagerTests.m; sourceTree = "<group>"; };
 		EFB226021B4CCC5500D7E44B /* KDatabaseObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KDatabaseObjectTests.m; sourceTree = "<group>"; };
+		EFB226041B4D6BD700D7E44B /* NSObject+Properties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Properties.h"; sourceTree = "<group>"; };
+		EFB226051B4D6BD700D7E44B /* NSObject+Properties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Properties.m"; sourceTree = "<group>"; };
+		EFB226071B4D6E2E00D7E44B /* NSString+PropertyKVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PropertyKVC.h"; sourceTree = "<group>"; };
+		EFB226081B4D6E2E00D7E44B /* NSString+PropertyKVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PropertyKVC.m"; sourceTree = "<group>"; };
 		EFB7226F1B41A25700E6DF7A /* EditMediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditMediaViewController.h; sourceTree = "<group>"; };
 		EFB722701B41A25700E6DF7A /* EditMediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditMediaViewController.m; sourceTree = "<group>"; };
 		EFB722721B42360300E6DF7A /* EditMediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditMediaView.xib; path = Views/EditMediaView.xib; sourceTree = "<group>"; };
@@ -503,6 +509,10 @@
 				EF4920A31AD762A400A9FE89 /* NSBundle+Messages.m */,
 				EF4920A91AD7A28D00A9FE89 /* UIColor+Messages.h */,
 				EF4920AA1AD7A28D00A9FE89 /* UIColor+Messages.m */,
+				EFB226041B4D6BD700D7E44B /* NSObject+Properties.h */,
+				EFB226051B4D6BD700D7E44B /* NSObject+Properties.m */,
+				EFB226071B4D6E2E00D7E44B /* NSString+PropertyKVC.h */,
+				EFB226081B4D6E2E00D7E44B /* NSString+PropertyKVC.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1051,6 +1061,7 @@
 				EFF70AC61AAE1CBC006C10D2 /* RegistrationViewController.m in Sources */,
 				EF6B44BB1ABC944B00B88323 /* FreeKeySessionManager.m in Sources */,
 				EFF70A8B1AAE19C3006C10D2 /* MasterKey.m in Sources */,
+				EFB226061B4D6BD700D7E44B /* NSObject+Properties.m in Sources */,
 				EF0F4DBB1AB76B0500BB2AFC /* EncryptedMessage+Serialize.m in Sources */,
 				EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */,
 				EFF70A8A1AAE19C3006C10D2 /* IdentityKey.m in Sources */,
@@ -1079,6 +1090,7 @@
 				EFC181AD1AC372F500BE8B0B /* GetUserRequest.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
 				EF4920A11AD761F700A9FE89 /* UIImage+Messages.m in Sources */,
+				EFB226091B4D6E2E00D7E44B /* NSString+PropertyKVC.m in Sources */,
 				EF99E2771AC72F71002583E2 /* FreeKeyResponseHandler.m in Sources */,
 				EFB722781B4240B200E6DF7A /* EditLocationViewController.m in Sources */,
 				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,

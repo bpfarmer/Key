@@ -32,10 +32,15 @@
 }
 
 - (void)testPropertyNames {
+    NSLog(@"NEW PROPERTY NAME LIST: %@", [KUser propertyNames]);
     NSLog(@"PROPERTIES: %@", [KUser storedPropertyList]);
-    NSLog(@"PROPERTY MAPPING: %@", [KUser propertyMapping]);
+    NSLog(@"PROPERTY MAPPING: %@", [KUser columnToPropertyMapping]);
+    NSLog(@"PROPERTY MAPPING: %@", [KUser propertyToColumnMapping]);
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
     NSLog(@"INSTANCE MAPPING: %@", [user instanceMapping]);
+    NSLog(@"UNIQUE ID TYPE: %@", [KUser typeOfPropertyNamed:@"uniqueId"]);
+    NSLog(@"HAS_KEY TYPE: %@", [KUser typeOfPropertyNamed:@"hasLocalPreKey"]);
+    [KUser createTable];
 }
 
 - (void)testCreateTable {
@@ -72,11 +77,9 @@
     [KUser createTable];
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
     [user save];
-    FMResultSet *allUsers = [KUser all];
-    while(allUsers.next) {
-        XCTAssert([allUsers.resultDictionary[@"unique_id"] isEqualToString:@"12345"]);
-    }
-    [allUsers close];
+    NSArray *allUsers = [KUser all];
+    //NSLog(@"UNIQUE ID: %@", ((KUser *)allUsers.lastObject).uniqueId);
+    //XCTAssert([((KUser *)allUsers.lastObject).uniqueId isEqualToString:@"12345"]);
 }
 
 - (void)testDropTable {

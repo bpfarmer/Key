@@ -14,12 +14,4 @@
 
 @implementation KUser(Serialize)
 
-+ (void)createTable {
-    NSString *createTableSQL = [NSString stringWithFormat:@"create table %@ (unique_id text primary key not null, username text, password_crypt blob, password_salt blob, identity_key blob, public_key blob);", [self tableName]];
-    
-    [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
-        [database executeUpdate:createTableSQL];
-    }];
-}
-
 @end

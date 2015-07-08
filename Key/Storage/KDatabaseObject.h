@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <Mantle/Mantle.h>
+#import "NSObject+Properties.h"
 
 @class FMResultSet;
 @class TOCFuture;
@@ -15,6 +16,7 @@
 @interface KDatabaseObject : MTLModel
 
 @property (nonatomic, copy) NSString *uniqueId;
+@property (nonatomic) int primaryKeyId;
 
 + (NSString *)tableName;
 - (void)save;
@@ -22,16 +24,18 @@
 + (void)createTable;
 + (void)dropTable;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId;
-- (instancetype)initWithResultSet:(FMResultSet *)resultSet;
+- (instancetype)initWithResultSetRow:(NSDictionary *)resultSetRow;
 + (instancetype)findByUniqueId:(NSString *)uniqueId;
 + (instancetype)findByDictionary:(NSDictionary *)dictionary;
 + (NSArray *)findAllByDictionary:(NSDictionary *)dictionary;
-+ (FMResultSet *)all;
++ (NSArray *)all;
 + (NSArray *)storedPropertyList;
 + (NSArray *)unsavedPropertyList;
 - (NSDictionary *)instanceMapping;
-+ (NSDictionary *)propertyMapping;
-
++ (NSDictionary *)propertyToColumnMapping;
++ (NSDictionary *)columnToPropertyMapping;
++ (NSDictionary *)propertyTypeToColumnTypeMapping;
++ (BOOL)hasUniqueId;
 
 
 @end
