@@ -73,13 +73,13 @@
     XCTAssert(!user);
 }
 
-- (void)testFindAll {
+- (void)testFindByDictionary {
     [KUser createTable];
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
     [user save];
-    NSArray *allUsers = [KUser all];
-    //NSLog(@"UNIQUE ID: %@", ((KUser *)allUsers.lastObject).uniqueId);
-    //XCTAssert([((KUser *)allUsers.lastObject).uniqueId isEqualToString:@"12345"]);
+    XCTAssert([((KUser *)[KUser findByDictionary:@{@"uniqueId" : @"12345", @"username" : @"brendan"}]).uniqueId isEqualToString:@"12345"]);
+    XCTAssert([((KUser *)[KUser findByDictionary:@{@"uniqueId" : @"12345"}]).uniqueId isEqualToString:@"12345"]);
+    XCTAssert([((KUser *)[KUser findByDictionary:@{@"username" : @"brendan"}]).username isEqualToString:@"brendan"]);
 }
 
 - (void)testDropTable {

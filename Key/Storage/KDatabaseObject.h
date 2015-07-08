@@ -27,7 +27,7 @@
 - (instancetype)initWithResultSetRow:(NSDictionary *)resultSetRow;
 + (instancetype)findByUniqueId:(NSString *)uniqueId;
 + (instancetype)findByDictionary:(NSDictionary *)dictionary;
-+ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary;
+//+ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary;
 + (NSArray *)all;
 + (NSArray *)storedPropertyList;
 + (NSArray *)unsavedPropertyList;
@@ -36,6 +36,7 @@
 + (NSDictionary *)columnToPropertyMapping;
 + (NSDictionary *)propertyTypeToColumnTypeMapping;
 + (BOOL)hasUniqueId;
++ (NSString *)notificationChannel;
 
 
 @end
