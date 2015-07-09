@@ -59,7 +59,6 @@
                         username:(NSString *)username
                    passwordCrypt:(NSData *)passwordCrypt
                     passwordSalt:(NSData *)passwordSalt
-                     identityKey:(IdentityKey *)identityKey
                        publicKey:(NSData *)publicKey{
     self = [super initWithUniqueId:uniqueId];
     
@@ -67,7 +66,6 @@
         _username      = [username lowercaseString];
         _passwordCrypt = passwordCrypt;
         _passwordSalt  = passwordSalt;
-        _identityKey = identityKey;
         _publicKey   = publicKey;
     }
     return self;
@@ -92,7 +90,6 @@
         _username      = row[@"username"];
         _passwordCrypt = row[@"password_crypt"];
         _passwordSalt  = row[@"password_salt"];
-        _identityKey   = row[@"identity_key"];
         _publicKey     = row[@"public_key"];
     }
     
@@ -131,37 +128,13 @@
 
 - (void)setupIdentityKey {
     IdentityKey *identityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:self.uniqueId];
-    [self setIdentityKey:identityKey];
+    [identityKey save];
     [self setPublicKey:identityKey.keyPair.publicKey];
     [self save];
 }
 
-#pragma mark - Batch Query Methods
-
-+ (NSArray *)fullNamesForUserIds:(NSArray *)userIds {
-    NSMutableArray *fullNames = [[NSMutableArray alloc] init];
-    
-    return nil;//fullNames;
-}
-
-#pragma mark - Query Methods
-+ (KUser *)fetchObjectWithUsername:(NSString *)username {
-    __block NSString *userId;
-
-    if(userId) {
-        return nil; //(KUser *)[[KStorageManager sharedManager] objectForKey:userId inCollection:[KUser collection]];
-    }else {
-        return nil;
-    }
-}
-
-+ (NSArray *)userIdsWithUsernames:(NSArray *)usernames {
-    NSMutableArray *userIds = [[NSMutableArray alloc] init];
-    for(NSString *username in usernames) {
-        KUser *user = [self fetchObjectWithUsername:username];
-        if(user) [userIds addObject:user.uniqueId];
-    }
-    return userIds;
+- (IdentityKey *)identityKey {
+    return [IdentityKey findByDictionary:@{@"userId" : self.uniqueId}];
 }
 
 #pragma mark - User Custom Attributes

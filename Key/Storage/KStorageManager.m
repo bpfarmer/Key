@@ -42,7 +42,6 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
 
 - (void)addTablesToDatabase {
     if(self.database) {
-        [KUser createTable];
     }
 }
 

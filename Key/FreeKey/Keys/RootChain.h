@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KDatabaseObject.h"
 
 @class RootKey;
 @class ChainKey;
 @class ECKeyPair;
 @class SessionState;
 
-@interface RootChain : NSObject
+@interface RootChain : KDatabaseObject
 
 @property (nonatomic, strong) RootKey   *rootKey;
 @property (nonatomic, strong) ChainKey  *chainKey;

@@ -79,6 +79,7 @@
 		EFB226031B4CCC5500D7E44B /* KDatabaseObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB226021B4CCC5500D7E44B /* KDatabaseObjectTests.m */; };
 		EFB226061B4D6BD700D7E44B /* NSObject+Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB226051B4D6BD700D7E44B /* NSObject+Properties.m */; };
 		EFB226091B4D6E2E00D7E44B /* NSString+PropertyKVC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB226081B4D6E2E00D7E44B /* NSString+PropertyKVC.m */; };
+		EFB2260C1B4F125B00D7E44B /* KStorageSchema.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB2260B1B4F125B00D7E44B /* KStorageSchema.m */; };
 		EFB722711B41A25700E6DF7A /* EditMediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB722701B41A25700E6DF7A /* EditMediaViewController.m */; };
 		EFB722731B42360300E6DF7A /* EditMediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFB722721B42360300E6DF7A /* EditMediaView.xib */; };
 		EFB722751B423DB000E6DF7A /* EditLocationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFB722741B423DB000E6DF7A /* EditLocationView.xib */; };
@@ -276,6 +277,8 @@
 		EFB226051B4D6BD700D7E44B /* NSObject+Properties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Properties.m"; sourceTree = "<group>"; };
 		EFB226071B4D6E2E00D7E44B /* NSString+PropertyKVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PropertyKVC.h"; sourceTree = "<group>"; };
 		EFB226081B4D6E2E00D7E44B /* NSString+PropertyKVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PropertyKVC.m"; sourceTree = "<group>"; };
+		EFB2260A1B4F125B00D7E44B /* KStorageSchema.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KStorageSchema.h; sourceTree = "<group>"; };
+		EFB2260B1B4F125B00D7E44B /* KStorageSchema.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KStorageSchema.m; sourceTree = "<group>"; };
 		EFB7226F1B41A25700E6DF7A /* EditMediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditMediaViewController.h; sourceTree = "<group>"; };
 		EFB722701B41A25700E6DF7A /* EditMediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditMediaViewController.m; sourceTree = "<group>"; };
 		EFB722721B42360300E6DF7A /* EditMediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditMediaView.xib; path = Views/EditMediaView.xib; sourceTree = "<group>"; };
@@ -419,8 +422,6 @@
 				EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */,
 				EF6B44B01ABA877F00B88323 /* KThread+Serialize.h */,
 				EF6B44B11ABA877F00B88323 /* KThread+Serialize.m */,
-				EF0171751ADF081F00AFCBA4 /* KAttachment+Serialize.h */,
-				EF0171761ADF081F00AFCBA4 /* KAttachment+Serialize.m */,
 				EF0171781ADF083700AFCBA4 /* KPost+Serialize.h */,
 				EF0171791ADF083700AFCBA4 /* KPost+Serialize.m */,
 				EFB225F31B4984F200D7E44B /* KPhoto+Serialize.h */,
@@ -435,6 +436,8 @@
 		EF2CDED91AB5C998001E2F20 /* FreeKey */ = {
 			isa = PBXGroup;
 			children = (
+				EF0171751ADF081F00AFCBA4 /* KAttachment+Serialize.h */,
+				EF0171761ADF081F00AFCBA4 /* KAttachment+Serialize.m */,
 				EF2CDEB61AB49A6F001E2F20 /* IdentityKey+Serialize.h */,
 				EF2CDEB71AB49A6F001E2F20 /* IdentityKey+Serialize.m */,
 				EF2CDEB91AB4A354001E2F20 /* PreKeyExchange+Serialize.h */,
@@ -483,6 +486,8 @@
 				EF524AD51AAE238600F3B9AF /* KStorageManager.m */,
 				EFB225F91B4ACC3100D7E44B /* KDatabaseObject.h */,
 				EFB225FA1B4ACC3100D7E44B /* KDatabaseObject.m */,
+				EFB2260A1B4F125B00D7E44B /* KStorageSchema.h */,
+				EFB2260B1B4F125B00D7E44B /* KStorageSchema.m */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -1093,6 +1098,7 @@
 				EFB226091B4D6E2E00D7E44B /* NSString+PropertyKVC.m in Sources */,
 				EF99E2771AC72F71002583E2 /* FreeKeyResponseHandler.m in Sources */,
 				EFB722781B4240B200E6DF7A /* EditLocationViewController.m in Sources */,
+				EFB2260C1B4F125B00D7E44B /* KStorageSchema.m in Sources */,
 				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,
 				EF6B44B81ABC943C00B88323 /* FreeKeyNetworkManager.m in Sources */,
 				EF4920951AD6F82A00A9FE89 /* UIDevice+Messages.m in Sources */,

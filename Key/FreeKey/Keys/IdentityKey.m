@@ -13,8 +13,17 @@
 
 @implementation IdentityKey
 
-- (instancetype)initWithPublicKey:(NSData *)publicKey userId:(NSString *)userId {
+- (instancetype)init {
     self = [super init];
+    
+    if(self) {
+        _active = YES;
+    }
+    
+    return self;
+}
+- (instancetype)initWithPublicKey:(NSData *)publicKey userId:(NSString *)userId {
+    self = [self init];
     
     if(self) {
         _publicKey = publicKey;
@@ -24,7 +33,7 @@
 }
 
 - (instancetype)initWithKeyPair:(ECKeyPair *)keyPair userId:(NSString *)userId{
-    self = [super init];
+    self = [self init];
     
     if(self) {
         _publicKey = keyPair.publicKey;
@@ -37,14 +46,15 @@
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                           userId:(NSString *)userId
                        publicKey:(NSData *)publicKey
-                         keyPair:(ECKeyPair *)keyPair {
-    self = [super init];
+                         keyPair:(ECKeyPair *)keyPair
+                          active:(BOOL)active{
+    self = [self initWithUniqueId:uniqueId];
     
     if(self) {
-        _uniqueId = uniqueId;
-        _userId   = userId;
+        _userId    = userId;
         _publicKey = publicKey;
-        _keyPair  = keyPair;
+        _keyPair   = keyPair;
+        _active    = active;
     }
     
     return self;

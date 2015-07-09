@@ -11,12 +11,12 @@
 
 @class ECKeyPair;
 
-@interface IdentityKey : NSObject
+@interface IdentityKey : KDatabaseObject
 
-@property (nonatomic, readonly) NSString *uniqueId;
 @property (nonatomic, readonly) NSString *userId;
 @property (nonatomic, readonly) NSData *publicKey;
 @property (nonatomic, readonly) ECKeyPair *keyPair;
+@property (nonatomic, readonly) BOOL active;
 
 - (instancetype)initWithPublicKey:(NSData *)publicKey userId:(NSString *)userId;
 - (instancetype)initWithKeyPair:(ECKeyPair *)keyPair userId:(NSString *)userId;
@@ -24,7 +24,8 @@
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                           userId:(NSString *)userId
                        publicKey:(NSData *)publicKey
-                         keyPair:(ECKeyPair *)keyPair;
+                         keyPair:(ECKeyPair *)keyPair
+                          active:(BOOL)active;
 
 - (BOOL)isTrustedIdentityKey;
 

@@ -22,7 +22,6 @@
 @property (nonatomic, copy) NSData *passwordSalt;
 @property (nonatomic, copy) NSData *passwordCrypt;
 @property (nonatomic, copy) NSString *localStatus;
-@property (nonatomic, weak) IdentityKey *identityKey;
 @property (nonatomic, weak) NSData *publicKey;
 @property (nonatomic) BOOL hasLocalPreKey;
 
@@ -38,7 +37,6 @@
                         username:(NSString *)username
                    passwordCrypt:(NSData *)passwordCrypt
                     passwordSalt:(NSData *)passwordSalt
-                     identityKey:(IdentityKey *)identityKey
                        publicKey:(NSData *)publicKey;
 
 + (TOCFuture *)asyncCreateWithUsername:(NSString *)username password:(NSString *)password;
@@ -51,5 +49,6 @@
 
 - (NSString *)displayName;
 - (void)setupIdentityKey;
+- (IdentityKey *)identityKey;
 
 @end

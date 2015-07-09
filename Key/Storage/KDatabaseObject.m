@@ -27,7 +27,7 @@
         if(!columnType) columnType = @"blob";
         [createdColumns addObject:[NSString stringWithFormat:@"%@ %@", [self propertyToColumnMapping][property], columnType]];
     }
-    NSString *createTableSQL = [NSString stringWithFormat:@"create table %@ (%@)", [self tableName], [createdColumns componentsJoinedByString:@", "]];
+    NSString *createTableSQL = [NSString stringWithFormat:@"create table if not exists %@ (%@)", [self tableName], [createdColumns componentsJoinedByString:@", "]];
     [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
         [database executeUpdate:createTableSQL];
     }];
@@ -111,17 +111,16 @@
 }
 
 - (void)save {
-    if(self.uniqueId) {
-        NSString *columnKeys = [[self instanceMapping].allKeys componentsJoinedByString:@", "];
-        NSString *valueKeys   = [@":" stringByAppendingString:[[self instanceMapping].allKeys componentsJoinedByString:@", :"]];
-        NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (%@) values(%@)", [self.class tableName], columnKeys, valueKeys];
-        
-        [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
-            [database executeUpdate:insertOrReplaceSQL withParameterDictionary:[self instanceMapping]];
-        }];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] notificationChannel] object:self userInfo:nil];
-    }
+    if(self.class.hasUniqueId && !self.uniqueId) self.uniqueId = [[NSUUID UUID] UUIDString];
+    NSString *columnKeys = [[self instanceMapping].allKeys componentsJoinedByString:@", "];
+    NSString *valueKeys   = [@":" stringByAppendingString:[[self instanceMapping].allKeys componentsJoinedByString:@", :"]];
+    NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (%@) values(%@)", [self.class tableName], columnKeys, valueKeys];
+    
+    [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
+        [database executeUpdate:insertOrReplaceSQL withParameterDictionary:[self instanceMapping]];
+    }];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] notificationChannel] object:self userInfo:nil];
 }
 
 + (NSString *)notificationChannel {
@@ -176,40 +175,6 @@
         return nil;
     }
 }
-
-//TODO: not sure if this is worth the performance hit to index columns for IN
-/*
-+ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary {
-    NSMutableArray *conditions = [[NSMutableArray alloc] init];
-    for(NSString *key in [dictionary allKeys]) {
-        if(![[self storedPropertyList] containsObject:key]) return nil;
-        if([dictionary[key] isKindOfClass:[NSArray class]]) {
-            NSMutableArray *inConditions = [[NSMutableArray alloc] init];
-            for(int i = 0; i < ((NSArray *)dictionary[key]).count; i++) {
-                [inConditions addObject:@"?"];
-            }
-            [conditions addObject:[NSString stringWithFormat:@"%@ IN (%@)", [self propertyToColumnMapping][key], [inConditions componentsJoinedByString:@", "]]];
-        }else {
-            [conditions addObject:[NSString stringWithFormat:@"%@ = :%@", [self propertyToColumnMapping][key], [self propertyToColumnMapping][key]]];
-        }
-    }
-    NSString *selectSQL = [NSString stringWithFormat:@"select * from %@ where %@", [self tableName], [conditions componentsJoinedByString:@" AND "]];
-    
-    NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] init];
-    [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        [parameterDictionary setObject:obj forKey:[self columnNameFromProperty:key]];
-    }];
-    
-    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:selectSQL withParameterDictionary:parameterDictionary];
-    }];
-    
-    NSMutableArray *objects = [[NSMutableArray alloc] init];
-    while(resultSet.next) [objects addObject:[[self alloc] initWithResultSetRow:resultSet.resultDictionary]];
-    [resultSet close];
-    return objects;
-}
-*/
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId {
     self = [super init];

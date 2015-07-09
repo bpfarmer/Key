@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KDatabaseObject.h"
 
 @interface MessageKey : NSObject
 

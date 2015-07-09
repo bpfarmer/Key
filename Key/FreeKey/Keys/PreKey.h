@@ -12,7 +12,7 @@
 
 @class ECKeyPair;
 
-@interface PreKey : NSObject <KSendable>
+@interface PreKey : KDatabaseObject <KSendable>
 
 @property (nonatomic, readonly) NSString *userId;
 @property (nonatomic, readonly) NSString *deviceId;

@@ -25,7 +25,8 @@
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
     ^(AFHTTPRequestOperation *operation, id responseObject){
         [user setUniqueId:responseObject[kUserAlias][kUserUniqueId]];
-        [resultSource trySetResult:user];
+        if(user.uniqueId) [resultSource trySetResult:user];
+        else [resultSource trySetFailure:nil];
     };
     void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
     ^(AFHTTPRequestOperation *operation, NSError *error){

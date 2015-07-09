@@ -7,12 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KDatabaseObject.h"
 
 @class ECKeyPair;
 @class RootChainPair;
 @class ChainKey;
 
-@interface RootKey : NSObject
+@interface RootKey : KDatabaseObject
 
 @property (nonatomic, readonly) NSData *keyData;
 
