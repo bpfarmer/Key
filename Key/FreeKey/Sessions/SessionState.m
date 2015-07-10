@@ -12,13 +12,13 @@
 
 @implementation SessionState
 
-- (instancetype)initWithMessageKey:(MessageKey *)messageKey senderRatchetKey:(NSData *)senderRatchetKey index:(int)index sessionId:(int)sessionId{
+- (instancetype)initWithMessageKey:(MessageKey *)messageKey senderRatchetKey:(NSData *)senderRatchetKey messageIndex:(int)messageIndex sessionId:(int)sessionId{
     self = [super init];
     
     if(self) {
         _messageKey       = messageKey;
         _senderRatchetKey = senderRatchetKey;
-        _index            = index;
+        _messageIndex     = messageIndex;
         _sessionId        = sessionId;
     }
     

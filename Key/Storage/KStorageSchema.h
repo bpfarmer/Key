@@ -11,5 +11,6 @@
 @interface KStorageSchema : NSObject
 
 + (void)createTables;
++ (void)dropTables;
 
 @end

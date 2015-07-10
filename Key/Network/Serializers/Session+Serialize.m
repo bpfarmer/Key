@@ -54,4 +54,8 @@
     [aCoder encodeObject:self.previousSessionStates forKey:kCoderPreviousSessionStates];
 }
 
++ (BOOL)hasUniqueId {
+    return NO;
+}
+
 @end

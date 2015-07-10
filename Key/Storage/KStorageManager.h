@@ -20,6 +20,7 @@ typedef FMResultSet* (^KDatabaseSelectBlock)(FMDatabase *database);
 @interface KStorageManager : NSObject
 
 @property (nonatomic, strong) FMDatabase *database;
+@property (nonatomic, strong) FMDatabaseQueue *queue;
 
 + (instancetype)sharedManager;
 - (void)setDatabaseWithName:(NSString *)databaseName;

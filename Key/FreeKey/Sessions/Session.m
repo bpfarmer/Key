@@ -219,7 +219,7 @@
     while(index >= self.receiverRootChain.chainKey.index) {
         SessionState *sessionState = [[SessionState alloc] initWithMessageKey:self.receiverRootChain.chainKey.messageKey
                                                              senderRatchetKey:senderRatchetKey
-                                                                        index:self.receiverRootChain.chainKey.index
+                                                                 messageIndex:self.receiverRootChain.chainKey.index
                                                                     sessionId:self.primaryKeyId];
         
         NSString *stateIndex = [NSString stringWithFormat:@"%d", self.receiverRootChain.chainKey.index];

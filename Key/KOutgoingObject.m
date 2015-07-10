@@ -23,15 +23,12 @@
 }
 
 + (void)confirmDeliveryOfObject:(KDatabaseObject *)object toRecipient:(NSString *)recipientId {
-    /*KOutgoingObject *outgoingObject = [[KStorageManager sharedManager] objectForKey:object.uniqueId inCollection:[KOutgoingObject collection]];
+    KOutgoingObject *outgoingObject = [KOutgoingObject findById:object.uniqueId];
     NSMutableArray *mutableRecipients = [NSMutableArray arrayWithArray:outgoingObject.recipients];
     [mutableRecipients removeObject:recipientId];
     outgoingObject.recipients = [NSArray arrayWithArray:mutableRecipients];
-    if([outgoingObject.recipients count] > 0)
-        [outgoingObject save];
-    else
-        [[KStorageManager sharedManager]removeObjectForKey:outgoingObject.uniqueId inCollection:[self collection]];
-     */
+    if([outgoingObject.recipients count] > 0) [outgoingObject save];
+    else [outgoingObject remove];
 }
 
 @end

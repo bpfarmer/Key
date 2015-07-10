@@ -41,7 +41,7 @@
 - (void)enqueueDecryptableMessage:(EncryptedMessage *)encryptedMessage toLocalUser:(KUser *)localUser {
     dispatch_queue_t queue = dispatch_queue_create([kDecryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     dispatch_async(queue, ^{
-        KUser *remoteUser = nil;//(KUser *)[[KStorageManager sharedManager] objectForKey:encryptedMessage.senderId inCollection:[KUser collection]];
+        KUser *remoteUser = [KUser findById:encryptedMessage.senderId];
         if(remoteUser) {
             [self decryptAndSaveMessage:encryptedMessage localUser:localUser remoteUser:remoteUser];
         }else {
@@ -77,7 +77,7 @@
     while(index < 100) {
         ECKeyPair *baseKeyPair = [Curve25519 generateKeyPair];
         NSString *uniquePreKeyId = [NSString stringWithFormat:@"%@_%f_%d", localUser.uniqueId, [[NSDate date] timeIntervalSince1970], index];
-        NSData *preKeySignature = [Ed25519 sign:baseKeyPair.publicKey withKeyPair:localUser.identityKey.keyPair];
+        NSData *preKeySignature = [Ed25519 sign:baseKeyPair.publicKey withKeyPair:[localUser identityKey].keyPair];
         PreKey *preKey = [[PreKey alloc] initWithUserId:localUser.uniqueId
                                                deviceId:@"1"
                                          signedPreKeyId:uniquePreKeyId
@@ -85,7 +85,7 @@
                                   signedPreKeySignature:preKeySignature
                                             identityKey:localUser.publicKey
                                             baseKeyPair:baseKeyPair];
-        //[[KStorageManager sharedManager] setObject:preKey forKey:preKey.signedPreKeyId inCollection:kOurPreKeyCollection];
+        [preKey save];
         [preKeys addObject:[self base64EncodedPreKeyDictionary:preKey]];
         index++;
     }

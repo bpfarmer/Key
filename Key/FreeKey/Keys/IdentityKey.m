@@ -43,12 +43,8 @@
     return self;
 }
 
-- (instancetype)initWithUniqueId:(NSString *)uniqueId
-                          userId:(NSString *)userId
-                       publicKey:(NSData *)publicKey
-                         keyPair:(ECKeyPair *)keyPair
-                          active:(BOOL)active{
-    self = [self initWithUniqueId:uniqueId];
+- (instancetype)initWithUserId:(NSString *)userId publicKey:(NSData *)publicKey keyPair:(ECKeyPair *)keyPair active:(BOOL)active{
+    self = [self init];
     
     if(self) {
         _userId    = userId;

@@ -27,7 +27,7 @@
                                         identityKey:dictionary[remoteKeys[5]]
                                         baseKeyPair:nil];
     
-    //[[KStorageManager sharedManager] setObject:preKey forKey:preKey.userId inCollection:kTheirPreKeyCollection];
+    [preKey save];
     return preKey;
 }
 
@@ -42,7 +42,7 @@
                     receiverIdentityPublicKey:dictionary[remoteKeys[5]]
                              baseKeySignature:dictionary[remoteKeys[6]]];
     
-    //[[KStorageManager sharedManager] setObject:preKeyExchange forKey:preKeyExchange.senderId inCollection:kPreKeyExchangeCollection];
+    [preKeyExchange save];
     return preKeyExchange;
 }
 
@@ -58,9 +58,7 @@
                                                  index:[index intValue]
                                          previousIndex:[previousIndex intValue]];
     
-    NSString *uniqueMessageId = [NSString stringWithFormat:@"%@_%f_%@", dictionary[encryptedMessage], [[NSDate date] timeIntervalSince1970], index];
-    
-    //[[KStorageManager sharedManager]setObject:encryptedMessage forKey:uniqueMessageId inCollection:kEncryptedMessageCollection];
+    [encryptedMessage save];
     return encryptedMessage;
 }
 

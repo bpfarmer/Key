@@ -48,9 +48,7 @@
     if(dictionary[kPreKeyExchangeRemoteAlias]) {
         PreKeyExchange *preKeyExchange = [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:dictionary[kPreKeyExchangeRemoteAlias]];
         
-        [[KStorageManager sharedManager] setObject:preKeyExchange
-                                            forKey:preKeyExchange.senderId
-                                      inCollection:kPreKeyExchangeCollection];
+        [preKeyExchange save];
         NSLog(@"-- PREKEY EXCHANGE BASE KEY: %@", preKeyExchange.sentSignedBaseKey);
         NSLog(@"-- PREKEY EXCHANGE ID KEY: %@", preKeyExchange.senderIdentityPublicKey);
         keyExchange = preKeyExchange;
@@ -58,9 +56,7 @@
         PreKey *preKey =
         [FreeKeyResponseHandler createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
         
-        [[KStorageManager sharedManager] setObject:preKey
-                                            forKey:preKey.userId
-                                      inCollection:kTheirPreKeyCollection];
+        [preKey save];
         keyExchange = preKey;
     }
     return keyExchange;

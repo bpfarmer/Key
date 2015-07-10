@@ -12,6 +12,7 @@
 
 #define kMappingUniqueId @"uniqueId"
 #define kMappingPrimaryKeyId @"primaryKeyId"
+#define kColumnTypeBlob @"blob"
 
 @implementation KDatabaseObject
 
@@ -22,10 +23,7 @@
     NSMutableArray *propertyList = [[NSMutableArray alloc] initWithArray:[self storedPropertyList]];
     [propertyList removeObjectsInArray:@[@"uniqueId", @"primary_key_id"]];
     for(NSString *property in propertyList) {
-        NSString *propertyType = [self typeOfPropertyNamed:property];
-        NSString *columnType   = [self propertyTypeToColumnTypeMapping][propertyType];
-        if(!columnType) columnType = @"blob";
-        [createdColumns addObject:[NSString stringWithFormat:@"%@ %@", [self propertyToColumnMapping][property], columnType]];
+        [createdColumns addObject:[NSString stringWithFormat:@"%@ %@", [self propertyToColumnMapping][property], [self columnTypeForProperty:property]]];
     }
     NSString *createTableSQL = [NSString stringWithFormat:@"create table if not exists %@ (%@)", [self tableName], [createdColumns componentsJoinedByString:@", "]];
     [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
@@ -34,10 +32,17 @@
 }
 
 + (void)dropTable {
-    NSString *dropTableSQL = [NSString stringWithFormat:@"drop table %@;", [self class]];
+    NSString *dropTableSQL = [NSString stringWithFormat:@"drop table %@;", [self tableName]];
     [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
         [database executeUpdate:dropTableSQL];
     }];
+}
+
++ (NSString *)columnTypeForProperty:(NSString *)property {
+    NSString *propertyType = [self typeOfPropertyNamed:property];
+    NSString *columnType   = [self propertyTypeToColumnTypeMapping][propertyType];
+    if(!columnType) columnType = kColumnTypeBlob;
+    return columnType;
 }
 
 +(NSDictionary *)propertyTypeToColumnTypeMapping {
@@ -47,7 +52,6 @@
 + (NSArray *)storedPropertyList {
     NSMutableArray *propertyNames = [[NSMutableArray alloc] initWithArray:[self propertyNames]];
     if([self hasUniqueId]) [propertyNames addObject:kMappingUniqueId];
-    else [propertyNames addObject:kMappingPrimaryKeyId];
     [propertyNames removeObjectsInArray:@[@"hash", @"superclass", @"description", @"debugDescription"]];
     [propertyNames removeObjectsInArray:[[self class] unsavedPropertyList]];
     return propertyNames;
@@ -85,7 +89,8 @@
     for (NSInteger idx = 0; idx < [name length]; idx += 1) {
         unichar c = [name characterAtIndex:idx];
         if ([uppercase characterIsMember:c]) {
-            [output appendFormat:@"_%@", [[NSString stringWithCharacters:&c length:1] lowercaseString]];
+            if(idx == 0) [output appendFormat:@"%@", [[NSString stringWithCharacters:&c length:1] lowercaseString]];
+            else [output appendFormat:@"_%@", [[NSString stringWithCharacters:&c length:1] lowercaseString]];
         } else {
             [output appendFormat:@"%C", c];
         }
@@ -97,7 +102,11 @@
     __block NSMutableDictionary *instanceMap = [[NSMutableDictionary alloc] init];
     NSDictionary *mappingDictionary = [[self class] columnToPropertyMapping];
     [mappingDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        if([self valueForKey:(NSString *)obj]) [instanceMap setObject:[self valueForKey:(NSString *)obj] forKey:key];
+        if([self valueForKey:(NSString *)obj]) {
+            /*if([[[self class] columnTypeForProperty:obj] isEqualToString:kColumnTypeBlob] && [[self valueForKey:obj] isKindOfClass:[NSData class]])
+                [instanceMap setObject:[NSKeyedArchiver archivedDataWithRootObject:[self valueForKey:obj]] forKey:key];
+            else*/ [instanceMap setObject:[self valueForKey:obj] forKey:key];
+        }
     }];
     return instanceMap;
 }
@@ -138,14 +147,25 @@
     return objects;
 }
 
-+ (instancetype)findByUniqueId:(NSString *)uniqueId {
++ (instancetype)findById:(NSString *)uniqueId {
+    if(!uniqueId) return nil;
+    NSString *findByUniqueIdSQL;
+    NSDictionary *parameterDictionary;
     if([self hasUniqueId]) {
-        NSString *findByUniqueIdSQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE unique_id=:unique_id", [[self class] tableName]];
-        NSDictionary *parameterDictionary = @{@"unique_id" : uniqueId};
-        FMResultSet *result = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-            return [database executeQuery:findByUniqueIdSQL withParameterDictionary:parameterDictionary];
-        }];
-        if(result.next) return [[self alloc] initWithResultSetRow:result.resultDictionary];
+        findByUniqueIdSQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE unique_id=:unique_id", [[self class] tableName]];
+        parameterDictionary = @{@"unique_id" : uniqueId};
+    }else if(![self hasUniqueId]) {
+        findByUniqueIdSQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE primary_key_id=:primary_key_id", [[self class] tableName]];
+        parameterDictionary = @{@"primary_key_id" : uniqueId};
+    }
+    FMResultSet *result = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
+        return [database executeQuery:findByUniqueIdSQL withParameterDictionary:parameterDictionary];
+    }];
+    if(result.next) {
+        KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
+        [result close];
+        return object;
+
     }
     return nil;
 }
@@ -162,6 +182,9 @@
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [parameterDictionary setObject:obj forKey:[self columnNameFromProperty:key]];
     }];
+    
+    NSLog(@"SQL FOR SELECT: %@", selectSQL);
+    NSLog(@"PARAMETERS: %@", parameterDictionary);
     
     FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
         return [database executeQuery:selectSQL withParameterDictionary:parameterDictionary];
@@ -191,7 +214,7 @@
 }
 
 + (NSString *)tableName {
-    return NSStringFromClass([self class]);
+    return [self columnNameFromProperty:NSStringFromClass([self class])];
 }
 
 @end

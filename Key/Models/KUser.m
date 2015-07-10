@@ -83,19 +83,6 @@
     return self;
 }
 
-- (instancetype)initWithResultSetRow:(NSDictionary *)row {
-    self = [super initWithUniqueId:row[@"unique_id"]];
-    
-    if(self) {
-        _username      = row[@"username"];
-        _passwordCrypt = row[@"password_crypt"];
-        _passwordSalt  = row[@"password_salt"];
-        _publicKey     = row[@"public_key"];
-    }
-    
-    return self;
-}
-
 + (TOCFuture *)asyncCreateWithUsername:(NSString *)username password:(NSString *)password {
     KUser *user = [[KUser alloc] initWithUsername:username password:password];
     return [RegisterUsernameRequest makeRequestWithUser:user];
@@ -130,11 +117,13 @@
     IdentityKey *identityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:self.uniqueId];
     [identityKey save];
     [self setPublicKey:identityKey.keyPair.publicKey];
+    self.identityKey = identityKey;
     [self save];
 }
 
 - (IdentityKey *)identityKey {
-    return [IdentityKey findByDictionary:@{@"userId" : self.uniqueId}];
+    if(!_identityKey) _identityKey = [IdentityKey findByDictionary:@{@"userId" : self.uniqueId}];
+    return _identityKey;
 }
 
 #pragma mark - User Custom Attributes

@@ -21,8 +21,7 @@
 - (instancetype)initWithPublicKey:(NSData *)publicKey userId:(NSString *)userId;
 - (instancetype)initWithKeyPair:(ECKeyPair *)keyPair userId:(NSString *)userId;
 
-- (instancetype)initWithUniqueId:(NSString *)uniqueId
-                          userId:(NSString *)userId
+- (instancetype)initWithUserId:(NSString *)userId
                        publicKey:(NSData *)publicKey
                          keyPair:(ECKeyPair *)keyPair
                           active:(BOOL)active;

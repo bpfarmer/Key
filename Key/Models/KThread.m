@@ -77,7 +77,7 @@
 - (instancetype)initWithRemoteId:(NSString *)threadId {
     NSArray *userIds = [threadId componentsSeparatedByString:@"_"];
     [userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        KUser *user = nil;//[[KStorageManager sharedManager] objectForKey:obj inCollection:[KUser collection]];
+        KUser *user = [KUser findById:obj];
         if(!user) {
             [KUser asyncRetrieveWithUniqueId:obj];
         }

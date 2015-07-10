@@ -66,13 +66,13 @@
     EncryptedMessage *encryptedMessage = [session encryptMessage:serializedObject];
     KUser *localUser = [KAccountManager sharedManager].user;
     [encryptedMessage addMetadataFromLocalUserId:localUser.uniqueId toRemoteUserId:session.receiverId];
-    //[[KStorageManager sharedManager] setObject:session forKey:session.receiverId inCollection:kSessionCollection];
+    [session save];
     return encryptedMessage;
 }
 
 + (KDatabaseObject *)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session {
     NSData *decryptedData = [session decryptMessage:encryptedMessage];
-    //[[KStorageManager sharedManager] setObject:session forKey:session.receiverId inCollection:kSessionCollection];
+    [session save];
     return [NSKeyedUnarchiver unarchiveObjectWithData:decryptedData];
 }
 

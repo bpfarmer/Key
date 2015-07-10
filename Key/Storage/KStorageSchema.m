@@ -18,6 +18,8 @@
 #import "KOutgoingObject.h"
 #import "KPhoto.h"
 #import "KLocation.h"
+#import "PreKey.h"
+#import "PreKeyExchange.h"
 
 @implementation KStorageSchema
 
@@ -33,6 +35,25 @@
     [KOutgoingObject createTable];
     [KPhoto createTable];
     [KLocation createTable];
+    [PreKey createTable];
+    [PreKeyExchange createTable];
 }
+
++ (void)dropTables {
+    [KUser dropTable];
+    [IdentityKey dropTable];
+    [KMessage dropTable];
+    [KThread dropTable];
+    [KGroup dropTable];
+    [Session dropTable];
+    [SessionState dropTable];
+    [RootChain dropTable];
+    [KOutgoingObject dropTable];
+    [KPhoto dropTable];
+    [KLocation dropTable];
+    [PreKeyExchange dropTable];
+    [PreKey dropTable];
+}
+
 
 @end

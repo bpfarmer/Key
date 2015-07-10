@@ -14,6 +14,7 @@
 #import "KMessage.h"
 #import "Util.h"
 #import "CollapsingFutures.h"
+#import "KStorageSchema.h"
 
 NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnectionDidUpdateNotification";
 //TODO: Note that these are a single queue right now
@@ -38,17 +39,13 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
 - (void)setDatabaseWithName:(NSString *)databaseName {
     NSString *databasePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
     self.database = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@", databasePath, databaseName]];
-}
-
-- (void)addTablesToDatabase {
-    if(self.database) {
-    }
+    self.queue    = [FMDatabaseQueue databaseQueueWithPath:self.database.databasePath];
+    [KStorageSchema createTables];
 }
 
 - (void)queryUpdate:(KDatabaseUpdateBlock)databaseBlock {
     if(self.database && self.database.open) {
-        FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:self.database.databasePath];
-        [queue inDatabase:^(FMDatabase *db) {
+        [self.queue inDatabase:^(FMDatabase *db) {
             databaseBlock(db);
         }];
     }
@@ -57,8 +54,7 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
 - (FMResultSet *)querySelect:(KDatabaseSelectBlock)databaseBlock {
     __block FMResultSet *resultSet;
     if(self.database && self.database.open) {
-        FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:self.database.databasePath];
-        [queue inDatabase:^(FMDatabase *db) {
+        [self.queue inDatabase:^(FMDatabase *db) {
             resultSet = databaseBlock(db);
         }];
     }

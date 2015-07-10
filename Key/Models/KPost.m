@@ -14,7 +14,7 @@
 @implementation KPost
 
 - (KUser *)author {
-    return nil;//[[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
+    return [KUser findById:self.authorId];//[[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
 }
 
 - (instancetype)initWithAuthorId:(NSString *)authorId text:(NSString *)text {

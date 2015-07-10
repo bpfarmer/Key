@@ -62,7 +62,7 @@
 }
 
 - (KUser *)author {
-    return nil;//(KUser *)[[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
+    return [KUser findById:self.authorId];
 }
 
 - (void)save {
@@ -71,7 +71,7 @@
 }
 
 - (KThread *)thread {
-    return nil;//[[KStorageManager sharedManager] objectForKey:self.threadId inCollection:[KThread collection]];
+    return [KThread findById:self.threadId];
 }
 
 - (NSString *)text {

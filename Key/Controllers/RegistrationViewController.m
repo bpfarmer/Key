@@ -33,9 +33,9 @@
     self.usernameText.delegate = self;
 }
 
+// TODO: show 'waiting' spinner animation
 - (IBAction)createNewUser:(id)sender {
     if(![self.usernameText.text isEqualToString:@""]) {
-        // TODO: show 'waiting' spinner animation
         TOCFuture *futureUser = [KUser asyncCreateWithUsername:self.usernameText.text password:self.passwordText.text];
         
         [futureUser catchDo:^(id error) {
@@ -43,7 +43,7 @@
         }];
         [futureUser thenDo:^(KUser *user) {
             [[KAccountManager sharedManager] setUser:user];
-            [[KStorageManager sharedManager] setDatabaseWithName:user.uniqueId];
+            [[KStorageManager sharedManager] setDatabaseWithName:user.username];
             [user save];
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

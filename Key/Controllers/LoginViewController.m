@@ -42,8 +42,8 @@
     if(![self.usernameText.text isEqualToString:@""] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
         KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString] password:self.passwordText.text];
         [[KAccountManager sharedManager] setUser:user];
-        [[KStorageManager sharedManager] setDatabaseWithName:user.uniqueId];
         if([user authenticatePassword:self.passwordText.text]) {
+            [[KStorageManager sharedManager] setDatabaseWithName:user.username];
             KUser *retrievedUser = [KUser findByDictionary:@{@"username" : user.username}];
             if(retrievedUser) {
                 [[KAccountManager sharedManager] setUser:retrievedUser];

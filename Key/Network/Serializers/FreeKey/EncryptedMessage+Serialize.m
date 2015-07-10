@@ -44,4 +44,8 @@
     [aCoder encodeObject:previousIndex forKey:kCoderPreviousIndex];
 }
 
++ (BOOL)hasUniqueId {
+    return NO;
+}
+
 @end

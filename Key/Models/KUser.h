@@ -22,7 +22,8 @@
 @property (nonatomic, copy) NSData *passwordSalt;
 @property (nonatomic, copy) NSData *passwordCrypt;
 @property (nonatomic, copy) NSString *localStatus;
-@property (nonatomic, weak) NSData *publicKey;
+@property (nonatomic, copy) NSData *publicKey;
+@property (nonatomic, copy) IdentityKey *identityKey;
 @property (nonatomic) BOOL hasLocalPreKey;
 
 - (void)setPasswordCryptInKeychain:(NSString *)password;

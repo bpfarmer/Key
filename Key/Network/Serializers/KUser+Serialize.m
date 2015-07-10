@@ -14,4 +14,8 @@
 
 @implementation KUser(Serialize)
 
++ (NSArray *)unsavedPropertyList {
+    return @[@"identityKey"];
+}
+
 @end
