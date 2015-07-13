@@ -48,6 +48,7 @@
                           signedPreKeySignature:preKeySignature
                                     identityKey:_bob.identityKey.publicKey
                                     baseKeyPair:_bobBaseKeyPair];
+    [_bobPreKey setUniqueId:@"1"];
     [_bobPreKey save];
     
     NSData *preKeyExchangeSignature = [Ed25519 sign:_aliceBaseKeyPair.publicKey withKeyPair:_alice.identityKey.keyPair];
@@ -68,17 +69,11 @@
 }
 
 - (Session *)aliceSession {
-    return [[FreeKeySessionManager sharedManager] createSessionWithLocalUser:_alice
-                                                           remoteUser:_bob
-                                                           ourBaseKey:_aliceBaseKeyPair
-                                                          theirPreKey:_bobPreKey];
+    return [[FreeKeySessionManager sharedManager] processNewKeyExchange:_bobPreKey localUser:_alice remoteUser:_bob];
 }
 
 - (Session *)bobSession {
-    return [[FreeKeySessionManager sharedManager] createSessionWithLocalUser:_bob
-                                                                  remoteUser:_alice
-                                                                   ourPreKey:_bobPreKey
-                                                         theirPreKeyExchange:_alicePreKeyExchange];
+    return [[FreeKeySessionManager sharedManager] processNewKeyExchange:[self aliceSession].preKeyExchange localUser:_bob remoteUser:_alice];
 }
 
 @end

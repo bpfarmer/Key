@@ -10,7 +10,7 @@
 
 @implementation MessageKey
 
-- (instancetype)initWithCipherKey:(NSData *)cipherKey macKey:(NSData *)macKey iv:(NSData *)iv index:(int)index {
+- (instancetype)initWithCipherKey:(NSData *)cipherKey macKey:(NSData *)macKey iv:(NSData *)iv index:(NSNumber *)index {
     self = [super init];
     
     if(self) {

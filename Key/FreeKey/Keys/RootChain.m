@@ -9,8 +9,8 @@
 #import "KeyDerivation.h"
 #import <25519/Curve25519.h>
 #import <25519/Ed25519.h>
-#import "RootChain+Serialize.h"
 #import "MessageKey.h"
+#import "RootChain.h"
 #import <CommonCrypto/CommonCrypto.h>
 
 #define kTSKeySeedLength 1
@@ -25,9 +25,8 @@ static uint8_t kChainKeySeed[kTSKeySeedLength]      = {02};
     if(self) {
         _rootKey  = rootKey;
         _chainKey = chainKey;
-        _index    = [[NSNumber alloc] initWithInt:0];
+        _index    = 0;
     }
-    
     return self;
 }
 
@@ -45,7 +44,6 @@ static uint8_t kChainKeySeed[kTSKeySeedLength]      = {02};
     KeyDerivation *keyMaterial = [[KeyDerivation alloc] fromSharedSecret:sharedSecret rootKey:self.rootKey];
     self.rootKey  = keyMaterial.cipherKey;
     self.chainKey = keyMaterial.macKey;
-    self.ourRatchetKeyPair = ourEphemeral;
     [self save];
 }
 
@@ -56,7 +54,7 @@ static uint8_t kChainKeySeed[kTSKeySeedLength]      = {02};
 }
 
 - (void)incrementIndex {
-    self.index    = [[NSNumber alloc] initWithInt:self.index.intValue + 1];
+    self.index    = [[NSNumber alloc] initWithInt:[self.index intValue] + 1];
 }
 
 - (NSData*)baseMaterial:(NSData*)seed forKey:(NSData *)key{

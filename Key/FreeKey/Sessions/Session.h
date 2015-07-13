@@ -25,6 +25,7 @@
 @property (nonatomic, readwrite) NSString *senderChainId;
 @property (nonatomic, readwrite) NSString *receiverChainId;
 @property (nonatomic, readwrite) NSNumber *previousIndex;
+@property (nonatomic, readwrite) NSArray  *receivedRatchetKeys;
 
 - (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId;
 

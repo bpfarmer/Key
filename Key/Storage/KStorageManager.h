@@ -16,6 +16,7 @@ static NSString *keychainDBPassAccount    = @"KDatabasePass";
 
 typedef void (^KDatabaseUpdateBlock)(FMDatabase *database);
 typedef FMResultSet* (^KDatabaseSelectBlock)(FMDatabase *database);
+typedef NSUInteger (^KDatabaseCountBlock)(FMDatabase *database);
 
 @interface KStorageManager : NSObject
 
@@ -26,5 +27,6 @@ typedef FMResultSet* (^KDatabaseSelectBlock)(FMDatabase *database);
 - (void)setDatabaseWithName:(NSString *)databaseName;
 - (void)queryUpdate:(KDatabaseUpdateBlock)databaseBlock;
 - (FMResultSet *)querySelect:(KDatabaseSelectBlock)databaseBlock;
+- (NSUInteger)queryCount:(KDatabaseCountBlock)databaseBlock;
 
 @end

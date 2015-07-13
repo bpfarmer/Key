@@ -13,11 +13,15 @@
 
 @interface SessionState : KDatabaseObject
 
-@property (nonatomic, readonly) MessageKey *messageKey;
+@property (nonatomic, readonly) NSData *cipherKey;
+@property (nonatomic, readonly) NSData *iv;
+@property (nonatomic, readonly) NSData *macKey;
 @property (nonatomic, readonly) NSData *senderRatchetKey;
 @property (nonatomic, readonly) NSNumber *messageIndex;
 @property (nonatomic, readonly) NSString *sessionId;
 
 - (instancetype)initWithMessageKey:(MessageKey *)messageKey senderRatchetKey:(NSData *)senderRatchetKey messageIndex:(NSNumber *)messageIndex sessionId:(NSString *)sessionId;
+
+- (MessageKey *)messageKey;
 
 @end

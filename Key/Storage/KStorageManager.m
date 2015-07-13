@@ -61,6 +61,17 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
     return resultSet;
 }
 
+- (NSUInteger)queryCount:(KDatabaseCountBlock)databaseBlock {
+    __block NSUInteger count;
+    if(self.database && self.database.open) {
+        [self.queue inDatabase:^(FMDatabase *db) {
+            count = databaseBlock(db);
+        }];
+    }
+    
+    return count;
+}
+
 - (NSData *)databasePassword {
     NSString *keychainDBPassKey = [NSString stringWithFormat:@"%@_%@", keychainDBPassAccount, [KAccountManager sharedManager].user.username];
     NSString *dbPassword = [SSKeychain passwordForService:keychainService account:keychainDBPassKey];

@@ -9,7 +9,6 @@
 #import "EncryptedMessage.h"
 #import <CommonCrypto/CommonCrypto.h>
 #import "HMAC.h"
-#import "EncryptedMessage+Serialize.h"
 #import "FreeKey.h"
 
 @implementation EncryptedMessage
@@ -30,7 +29,6 @@
         _cipherText       = cipherText;
         
         NSMutableData *messageAndMac = [[NSMutableData alloc] init];
-        NSLog(@"GENERATING MAC WITH: SENDER: %@, RECEIVER: %@", senderIdentityKey, receiverIdentityKey);
         NSData *mac = [HMAC generateMacWithMacKey:macKey
                                 senderIdentityKey:senderIdentityKey
                               receiverIdentityKey:receiverIdentityKey

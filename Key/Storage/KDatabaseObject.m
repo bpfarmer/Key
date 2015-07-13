@@ -46,7 +46,7 @@
 }
 
 +(NSDictionary *)propertyTypeToColumnTypeMapping {
-    return @{@"NSString" : @"text", @"bool" : @"integer", @"float" : @"real", @"int" : @"integer", @"NSNumber" : @"integer"};
+    return @{@"NSString" : @"text", @"bool" : @"integer", @"float" : @"real", @"int" : @"integer", @"NSUInteger" : @"integer"};
 }
 
 + (NSArray *)storedPropertyList {

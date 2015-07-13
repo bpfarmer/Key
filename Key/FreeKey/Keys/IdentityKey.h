@@ -18,6 +18,7 @@
 @property (nonatomic, readonly) ECKeyPair *keyPair;
 @property (nonatomic, readonly) BOOL active;
 
+
 - (instancetype)initWithPublicKey:(NSData *)publicKey userId:(NSString *)userId;
 - (instancetype)initWithKeyPair:(ECKeyPair *)keyPair userId:(NSString *)userId;
 

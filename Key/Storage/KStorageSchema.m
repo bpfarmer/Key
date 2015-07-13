@@ -57,7 +57,6 @@
     [KLocation dropTable];
     [PreKeyExchange dropTable];
     [PreKey dropTable];
-    [RootChain dropTable];
     [EncryptedMessage createTable];
 }
 
