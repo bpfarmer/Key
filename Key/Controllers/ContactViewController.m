@@ -21,6 +21,7 @@ static NSString *TableViewCellIdentifier = @"Contacts";
 @property (nonatomic, strong) IBOutlet UITableView *contactsTableView;
 @property (nonatomic, strong) IBOutlet UITextField *contactTextField;
 @property (nonatomic) KUser *currentUser;
+@property (nonatomic, strong) NSArray *contacts;
 @end
 
 @implementation ContactViewController
@@ -29,14 +30,29 @@ static NSString *TableViewCellIdentifier = @"Contacts";
     [super viewDidLoad];
     
     self.currentUser = [KAccountManager sharedManager].user;
-    
+    self.contacts    = self.currentUser.contacts;
     self.contactsTableView.dataSource = self;
     self.contactsTableView.delegate = self;
     [self.contactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(databaseModified:)
+                                                 name:[KUser notificationChannel]
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void)databaseModified:(NSNotification *)notification {
+    if([[notification object] isKindOfClass:[KUser class]]) {
+        for(KUser *contact in self.contacts) if([contact.uniqueId isEqualToString:((KUser *)notification.object).uniqueId] || [((KUser *)notification.object).uniqueId isEqualToString:self.currentUser.uniqueId]) return;
+        NSMutableArray *contacts = [[NSMutableArray alloc] initWithArray:self.contacts];
+        [contacts addObject:[notification object]];
+        self.contacts = [[NSArray alloc] initWithArray:contacts];
+        [self.contactsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.contacts.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 #pragma mark - Table view data source
@@ -46,15 +62,14 @@ static NSString *TableViewCellIdentifier = @"Contacts";
 }
 
 - (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    return self.contacts.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return nil;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    __block KUser *user = nil;
+    UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
+    
+    cell.textLabel.text = ((KUser *)self.contacts[indexPath.row]).displayName;
+    return cell;
 }
 
 - (IBAction)pushBackButton:(id)sender {
@@ -64,7 +79,7 @@ static NSString *TableViewCellIdentifier = @"Contacts";
 - (IBAction)addContact:(id)sender {
     if(![self.contactTextField.text isEqualToString:@""] &&
        ![self.contactTextField.text isEqualToString:self.currentUser.username]) {
-        KUser *targetUser = [KUser fetchObjectWithUsername:[self.contactTextField.text lowercaseString]];
+        KUser *targetUser = [KUser findByDictionary:@{@"username" : [self.contactTextField.text lowercaseString]}];
         if(!targetUser) {
             TOCFuture *futureUser = [KUser asyncRetrieveWithUsername:[self.contactTextField.text lowercaseString]];
             

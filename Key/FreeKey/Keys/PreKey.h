@@ -14,6 +14,8 @@
 
 @interface PreKey : KDatabaseObject <KSendable>
 
+// TODO: if we're going to provide ID keys, probably need to sign them
+
 @property (nonatomic, readonly) NSString *userId;
 @property (nonatomic, readonly) NSString *deviceId;
 @property (nonatomic, readonly) NSString *signedPreKeyId;

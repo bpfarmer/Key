@@ -22,6 +22,7 @@
         _rootKey  = rootKey;
         _chainKey = chainKey;
     }
+    
     return self;
 }
 
@@ -29,10 +30,8 @@
                        chainKey:(ChainKey *)chainKey
               ourRatchetKeyPair:(ECKeyPair *)ourRatchetKeyPair
                 theirRatchetKey:(NSData *)theirRatchetKey {
-    self = [super init];
+    self = [self initWithRootKey:rootKey chainKey:chainKey];
     if(self) {
-        _rootKey = rootKey;
-        _chainKey = chainKey;
         _ourRatchetKeyPair = ourRatchetKeyPair;
         _theirRatchetKey = theirRatchetKey;
     }
@@ -57,6 +56,10 @@
     [nextRootChain setOurRatchetKeyPair:self.ourRatchetKeyPair];
     [nextRootChain setTheirRatchetKey:self.theirRatchetKey];
     return nextRootChain;
+}
+
++ (BOOL)hasUniqueId {
+    return NO;
 }
 
 @end

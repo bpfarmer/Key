@@ -13,7 +13,7 @@
 
 @interface IdentityKey : KDatabaseObject
 
-@property (nonatomic, readonly) NSString *userId;
+@property (nonatomic) NSString *userId;
 @property (nonatomic, readonly) NSData *publicKey;
 @property (nonatomic, readonly) ECKeyPair *keyPair;
 @property (nonatomic, readonly) BOOL active;

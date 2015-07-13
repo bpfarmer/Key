@@ -16,7 +16,6 @@
 @interface KDatabaseObject : MTLModel
 
 @property (nonatomic) NSString *uniqueId;
-@property (nonatomic) int primaryKeyId;
 
 + (NSString *)tableName;
 - (void)save;
@@ -25,7 +24,7 @@
 + (void)dropTable;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId;
 - (instancetype)initWithResultSetRow:(NSDictionary *)resultSetRow;
-+ (instancetype)findById:(NSString *)uniqueId;
++ (instancetype)findById:(id)uniqueId;
 + (instancetype)findByDictionary:(NSDictionary *)dictionary;
 //+ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary;
 + (NSArray *)all;
@@ -35,7 +34,6 @@
 + (NSDictionary *)propertyToColumnMapping;
 + (NSDictionary *)columnToPropertyMapping;
 + (NSDictionary *)propertyTypeToColumnTypeMapping;
-+ (BOOL)hasUniqueId;
 + (NSString *)notificationChannel;
 
 

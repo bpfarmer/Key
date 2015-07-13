@@ -16,8 +16,8 @@
 @property (nonatomic, readonly) MessageKey *messageKey;
 @property (nonatomic, readonly) NSData *senderRatchetKey;
 @property (nonatomic, readonly) int messageIndex;
-@property (nonatomic, readonly) int sessionId;
+@property (nonatomic, readonly) NSString *sessionId;
 
-- (instancetype)initWithMessageKey:(MessageKey *)messageKey senderRatchetKey:(NSData *)senderRatchetKey messageIndex:(int)messageIndex sessionId:(int)sessionId;
+- (instancetype)initWithMessageKey:(MessageKey *)messageKey senderRatchetKey:(NSData *)senderRatchetKey messageIndex:(int)messageIndex sessionId:(NSString *)sessionId;
 
 @end

@@ -20,6 +20,7 @@
 #import "KLocation.h"
 #import "PreKey.h"
 #import "PreKeyExchange.h"
+#import "RootChain.h"
 
 @implementation KStorageSchema
 
@@ -37,6 +38,7 @@
     [KLocation createTable];
     [PreKey createTable];
     [PreKeyExchange createTable];
+    [RootChain createTable];
 }
 
 + (void)dropTables {
@@ -53,6 +55,7 @@
     [KLocation dropTable];
     [PreKeyExchange dropTable];
     [PreKey dropTable];
+    [RootChain dropTable];
 }
 
 

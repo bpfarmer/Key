@@ -232,30 +232,6 @@
             </objects>
             <point key="canvasLocation" x="229" y="685"/>
         </scene>
-        <!--Thread View Controller-->
-        <scene sceneID="8kO-fg-L04">
-            <objects>
-                <viewController storyboardIdentifier="ThreadViewController" id="TYp-lU-Cp9" customClass="ThreadViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="RVc-6T-cJ5"/>
-                        <viewControllerLayoutGuide type="bottom" id="q20-A0-psp"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Tju-co-gfq">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="3dE-bG-Ao5">
-                        <nil key="title"/>
-                    </navigationItem>
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="QXN-wo-Ohh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1265" y="-6"/>
-        </scene>
         <!--Home View Controller-->
         <scene sceneID="1NY-li-ffi">
             <objects>
@@ -287,7 +263,6 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="scrollView" destination="gA6-BN-5tx" id="aGo-5b-BIg"/>
-                        <segue destination="TYp-lU-Cp9" kind="push" identifier="threadSeguePush" id="3wD-BO-6II"/>
                         <segue destination="DsG-xX-ckQ" kind="push" identifier="contactsSeguePush" id="2Hs-bf-p7X"/>
                     </connections>
                 </viewController>

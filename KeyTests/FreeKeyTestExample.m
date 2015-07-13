@@ -15,11 +15,14 @@
 #import "PreKey.h"
 #import "Session.h"
 #import "FreeKeySessionManager.h"
+#import "KStorageManager.h"
 
 @implementation FreeKeyTestExample
 
 - (instancetype)init {
     self = [super init];
+    [[KStorageManager sharedManager] setDatabaseWithName:@"testDB"];
+    
     NSString *bobId = @"bobUniqueId";
     NSString *aliceId = @"aliceUniqueId";
     
@@ -48,6 +51,7 @@
                           signedPreKeySignature:preKeySignature
                                     identityKey:_bobIdentityKey.publicKey
                                     baseKeyPair:_bobBaseKeyPair];
+    [_bobPreKey save];
     
     NSData *preKeyExchangeSignature = [Ed25519 sign:_aliceBaseKeyPair.publicKey withKeyPair:_aliceIdentityKey.keyPair];
     _alicePreKeyExchange = [[PreKeyExchange alloc] initWithSenderId:_alice.uniqueId
@@ -57,6 +61,11 @@
                                             senderIdentityPublicKey:_aliceIdentityKey.publicKey
                                           receiverIdentityPublicKey:_bobIdentityKey.publicKey
                                                    baseKeySignature:preKeyExchangeSignature];
+    
+    [_alicePreKeyExchange save];
+    
+    [_alice save];
+    [_bob save];
     
     return self;
 }

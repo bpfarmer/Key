@@ -22,6 +22,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 @property (nonatomic, strong) UITextField *recipientTextField;
 @property (nonatomic, strong) UIView *titleView;
 @property (nonatomic, strong) KUser *currentUser;
+@property (nonatomic, strong) NSArray *messages;
 @end
 
 @implementation ThreadViewController
@@ -33,19 +34,11 @@ static NSString *TableViewCellIdentifier = @"Messages";
     self.senderDisplayName = self.currentUser.username;
     self.senderId = self.currentUser.uniqueId;
     
-    if(self.thread) {
-    }else {
-        self.recipientTextField =
-        [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width - 50.0, 30.0)];
-        self.recipientTextField.tag = 1;
-        self.recipientTextField.center = self.navigationItem.titleView.center;
-        self.recipientTextField.borderStyle = UITextBorderStyleRoundedRect;
-        self.recipientTextField.delegate = self;
-        self.titleView = self.navigationItem.titleView;
-        self.navigationItem.titleView = self.recipientTextField;
-    }
+    self.messages = @[];
     
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    if(self.thread && self.thread.saved) {
+        self.messages = self.thread.messages;
+    }
     
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
@@ -56,13 +49,29 @@ static NSString *TableViewCellIdentifier = @"Messages";
     [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleBlueColor]];
     
     self.showLoadEarlierMessagesHeader = NO;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(databaseModified:)
+                                                 name:[KMessage notificationChannel]
+                                               object:nil];
 }
+
+- (void)databaseModified:(NSNotification *)notification {
+    if([notification.object isKindOfClass:[KMessage class]]) {
+        if([((KMessage *)notification.object).threadId isEqualToString:self.thread.uniqueId]) return;
+        NSMutableArray *messages = [[NSMutableArray alloc] initWithArray:self.messages];
+        [messages addObject:[notification object]];
+        self.messages = [[NSArray alloc] initWithArray:messages];
+        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
+    }
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
     if(self.thread) {
-        self.title = self.thread.displayName;
+        self.title = self.thread.name;
         [self.thread setRead:YES];
         [self.thread save];
     }
@@ -79,7 +88,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 0;//[self.messageMappings numberOfItemsInSection:section];
+    return self.messages.count;
 }
 
 - (id <JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -110,7 +119,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 
 - (id<JSQMessageData>)messageAtIndexPath:(NSIndexPath *)indexPath {
-    return nil;//message;
+    return self.messages[indexPath.row];
 }
 
 - (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -131,11 +140,13 @@ static NSString *TableViewCellIdentifier = @"Messages";
     if (text.length > 0) {
         [JSQSystemSoundPlayer jsq_playMessageSentSound];
         
-        if (!self.thread) {
-            [self setupThread];
+        if(!self.thread.saved) {
+            [self.thread save];
+            [FreeKey sendEncryptableObject:self.thread recipients:self.thread.recipientIds];
         }
         
-        if(self.thread) {
+        if(self.thread.uniqueId) {
+            NSLog(@"GETTING READY TO SEND MESSAGE");
             KMessage *message = [[KMessage alloc] initWithAuthorId:self.senderId threadId:self.thread.uniqueId body:text];
             [message save];
             
@@ -150,30 +161,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
     }
 }
 
-- (void)setupThread {
-    NSArray *usernames = [self.recipientTextField.text componentsSeparatedByString:@", "];
-    NSMutableArray *users = [[NSMutableArray alloc] init];
-    [usernames enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        KUser *user = [KUser fetchObjectWithUsername:obj];
-        if(user) {
-            [users addObject:user];
-        }
-    }];
-    if([users count] != [usernames count]) return;
-    [users addObject:[[KAccountManager sharedManager] user]];
-    self.thread = [[KThread alloc] initWithUsers:users];
-    [self.thread save];
-    KUser *currentUser = [[KAccountManager sharedManager] user];
-    [users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        KUser *user = (KUser *)obj;
-        if(![user.uniqueId isEqual:currentUser.uniqueId]) {
-            [FreeKey sendEncryptableObject:self.thread recipients:self.thread.recipientIds];
-        }
-    }];
-    [self.recipientTextField setHidden:YES];
-    self.navigationItem.titleView = self.titleView;
-    self.navigationItem.title = self.thread.displayName;
-}
+
 
 - (void)didPressAccessoryButton:(UIButton *)sender
 {
@@ -216,6 +204,10 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (BOOL)textFieldShouldReturn:(UITextField*)aTextField
 {
     [aTextField resignFirstResponder];
+    return YES;
+}
+
+-(BOOL)prefersStatusBarHidden {
     return YES;
 }
 

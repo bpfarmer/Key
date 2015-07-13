@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DismissAndPresentProtocol.h"
 
 @interface EditPostViewController : UIViewController
+
+@property (nonatomic,weak) id <DismissAndPresentProtocol> delegate;
 
 @end

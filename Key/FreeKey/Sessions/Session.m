@@ -27,91 +27,82 @@
 #import "PreKeyExchangeReceipt.h"
 #import "HMAC.h"
 #import "Session+Serialize.h"
+#import "KUser.h"
 
 #define kReceivedSenderRatchets @"previousRatchets"
 
 @implementation Session
 
-- (instancetype)initWithReceiverId:(NSString *)receiverId identityKey:(IdentityKey *)identityKey{
+- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId {
     self = [super init];
     if(self) {
+        _senderId   = senderId;
         _receiverId = receiverId;
-        _senderIdentityKey = identityKey;
-    }
-    return self;
-}
-
-- (instancetype)initWithSenderId:(NSString *)senderId
-                      receiverId:(NSString *)receiverId
-                          preKey:(PreKey *)preKey
-                   baseKeyPublic:(NSData *)baseKeyPublic
-               senderIdentityKey:(IdentityKey *)senderIdentityKey
-       receiverIdentityPublicKey:(NSData *)receiverIdentityPublicKey
-                 senderRootChain:(RootChain *)senderRootChain
-               receiverRootChain:(RootChain *)receiverRootChain
-                   previousIndex:(int)previousIndex
-           previousSessionStates:(NSDictionary *)previousSessionStates {
-    self = [super init];
-    if(self) {
-        _senderId = senderId;
-        _receiverId = receiverId;
-        _preKey = preKey;
-        _baseKeyPublic = baseKeyPublic;
-        _senderIdentityKey = senderIdentityKey;
-        _receiverIdentityPublicKey = receiverIdentityPublicKey;
-        _senderRootChain = senderRootChain;
-        _receiverRootChain = receiverRootChain;
-        _previousIndex = previousIndex;
-        _previousSessionStates = previousSessionStates;
     }
     return self;
 }
 
 - (void)addPreKey:(PreKey *)preKey ourBaseKey:(ECKeyPair *)ourBaseKey {
-    _receiverIdentityPublicKey  = preKey.identityKey;
-    _preKey = preKey;
+    _preKeyId = preKey.signedPreKeyId;
     _baseKeyPublic = ourBaseKey.publicKey;
-    
+
     SessionKeyBundle *keyBundle = [[SessionKeyBundle alloc] initWithTheirBaseKey:preKey.signedPreKeyPublic
-                                                                theirIdentityKey:self.receiverIdentityPublicKey
-                                                              ourIdentityKeyPair:self.senderIdentityKey.keyPair
+                                                                theirIdentityKey:preKey.identityKey
+                                                              ourIdentityKeyPair:self.sender.identityKey.keyPair
                                                                       ourBaseKey:ourBaseKey
                                                                          isAlice:NO];
     
     [keyBundle setRolesWithFirstKey:ourBaseKey.publicKey secondKey:preKey.signedPreKeyPublic];
     [self setupRootChainsFromKeyBundle:keyBundle];
     
+    RootChain *senderRootChain = [RootChain findById:self.senderChainId];
+    senderRootChain.theirRatchetKey = preKey.signedPreKeyPublic;
+    senderRootChain.ourRatchetKeyPair = ourBaseKey;
+    [senderRootChain save];
     
-    self.senderRootChain.theirRatchetKey = preKey.signedPreKeyPublic;
-    self.senderRootChain.ourRatchetKeyPair = ourBaseKey;
-    self.receiverRootChain.theirRatchetKey = preKey.signedPreKeyPublic;
-    self.receiverRootChain.ourRatchetKeyPair = ourBaseKey;
+    RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
+    receiverRootChain.theirRatchetKey = preKey.signedPreKeyPublic;
+    receiverRootChain.ourRatchetKeyPair = ourBaseKey;
+    [receiverRootChain save];
+    
+    NSLog(@"USER ID: %@", self.senderId);
+    NSLog(@"SENDER ROOT CHAIN: %@", senderRootChain.rootKey.keyData);
+    NSLog(@"RECEIVER ROOT CHAIN: %@", receiverRootChain.rootKey.keyData);
 }
 
-- (void)addOurPreKey:(PreKey *)ourPreKey preKeyExchange:(PreKeyExchange *)preKeyExchange  {
-    _receiverIdentityPublicKey  = preKeyExchange.senderIdentityPublicKey;
-    NSData *theirBaseKey = preKeyExchange.sentSignedBaseKey;
-    
+- (void)addOurPreKey:(PreKey *)ourPreKey preKeyExchange:(PreKeyExchange *)preKeyExchange {
     // TODO: some sort of verification of trust, signatures, etc
     if(![Ed25519 verifySignature:preKeyExchange.baseKeySignature publicKey:preKeyExchange.senderIdentityPublicKey data:preKeyExchange.sentSignedBaseKey]) {
         NSLog(@"FAILED SIGNATURE VERIFICATION");
         // TODO: throw someething crazy!
     }
-
+    
+    NSData *theirBaseKey = preKeyExchange.sentSignedBaseKey;
+    _preKeyId = ourPreKey.signedPreKeyId;
+    
     SessionKeyBundle *keyBundle = [[SessionKeyBundle alloc] initWithTheirBaseKey:theirBaseKey
                                                                 theirIdentityKey:preKeyExchange.senderIdentityPublicKey
-                                                              ourIdentityKeyPair:self.senderIdentityKey.keyPair
+                                                              ourIdentityKeyPair:self.sender.identityKey.keyPair
                                                                       ourBaseKey:ourPreKey.baseKeyPair
                                                                          isAlice:YES];
     
     [keyBundle setRolesWithFirstKey:theirBaseKey secondKey:ourPreKey.baseKeyPair.publicKey];
     [self setupRootChainsFromKeyBundle:keyBundle];
-    self.previousSessionStates = @{kReceivedSenderRatchets : @[theirBaseKey]};
     
-    self.receiverRootChain.theirRatchetKey = theirBaseKey;
-    self.receiverRootChain.ourRatchetKeyPair = ourPreKey.baseKeyPair;
-    self.senderRootChain.theirRatchetKey = theirBaseKey;
-    self.senderRootChain.ourRatchetKeyPair = ourPreKey.baseKeyPair;
+    RootChain *senderRootChain = [RootChain findById:self.senderChainId];
+    senderRootChain.theirRatchetKey = theirBaseKey;
+    senderRootChain.ourRatchetKeyPair = ourPreKey.baseKeyPair;
+    [senderRootChain save];
+    
+    RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
+    receiverRootChain.theirRatchetKey = theirBaseKey;
+    receiverRootChain.ourRatchetKeyPair = ourPreKey.baseKeyPair;
+    [receiverRootChain save];
+    
+    NSLog(@"USER ID: %@", self.senderId);
+    NSLog(@"SENDER ROOT CHAIN: %@", senderRootChain.rootKey.keyData);
+    NSLog(@"RECEIVER ROOT CHAIN: %@", receiverRootChain.rootKey.keyData);
+    
     [self ratchetSenderRootChain];
 }
 
@@ -128,22 +119,28 @@
     RootKey *sendRootKey = [[RootKey alloc] initWithData:[derivedSenderMaterial subdataWithRange:NSMakeRange(0, 32)]];
     ChainKey *sendChainKey =
     [[ChainKey alloc] initWithData:[derivedSenderMaterial subdataWithRange:NSMakeRange(32, 32)] index:0];
-    _senderRootChain = [[RootChain alloc] initWithRootKey:sendRootKey chainKey:sendChainKey];
+    RootChain *senderRootChain = [[RootChain alloc] initWithRootKey:sendRootKey chainKey:sendChainKey];
+    [senderRootChain save];
+    _senderChainId = senderRootChain.uniqueId;
     
     NSData *derivedReceiverMaterial = [HKDFKit deriveKey:masterReceiverKey.keyData info:info salt:salt outputSize:64];
     RootKey *receiveRootKey = [[RootKey alloc] initWithData:[derivedReceiverMaterial subdataWithRange:NSMakeRange(0, 32)]];
     ChainKey *receiveChainKey = [[ChainKey alloc] initWithData:[derivedReceiverMaterial subdataWithRange:NSMakeRange(32, 32)] index:0];
-    _receiverRootChain = [[RootChain alloc] initWithRootKey:receiveRootKey chainKey:receiveChainKey];
+    RootChain *receiverRootChain = [[RootChain alloc] initWithRootKey:receiveRootKey chainKey:receiveChainKey];
+    [receiverRootChain save];
+    _receiverChainId = receiverRootChain.uniqueId;
+    
+    [self save];
 }
 
 - (PreKeyExchange *)preKeyExchange {
-    NSData *signature = [Ed25519 sign:self.baseKeyPublic withKeyPair:self.senderIdentityKey.keyPair];
+    NSData *signature = [Ed25519 sign:self.baseKeyPublic withKeyPair:self.sender.identityKey.keyPair];
     PreKeyExchange *preKeyExchange = [[PreKeyExchange alloc] initWithSenderId:self.senderId
                                                                    receiverId:self.receiverId
-                                                         signedTargetPreKeyId:self.preKey.signedPreKeyId
+                                                         signedTargetPreKeyId:self.preKeyId
                                                             sentSignedBaseKey:self.baseKeyPublic
-                                                      senderIdentityPublicKey:self.senderIdentityKey.publicKey
-                                                    receiverIdentityPublicKey:self.receiverIdentityPublicKey
+                                                      senderIdentityPublicKey:self.sender.identityKey.publicKey
+                                                    receiverIdentityPublicKey:self.receiver.publicKey
                                                              baseKeySignature:signature];
     return preKeyExchange;
 }
@@ -161,40 +158,42 @@
 }
 
 - (EncryptedMessage *)encryptMessage:(NSData *)message {
-    RootChain *senderRootChain = self.senderRootChain;
+    RootChain *senderRootChain = [RootChain findById:self.senderChainId];
     ChainKey  *senderChainKey  = senderRootChain.chainKey;
     MessageKey *messageKey     = senderChainKey.messageKey;
     
     NSData *senderRatchetKey   = senderRootChain.ourRatchetKeyPair.publicKey;
     NSData *encryptedText = [AES_CBC encryptCBCMode:message withKey:messageKey.cipherKey withIV:messageKey.iv];
     
-    NSLog(@"ENCRYPTING WITH MESSAGE KEY: %@", messageKey.cipherKey);
-    
     EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithMacKey:messageKey.macKey
-                                                                senderIdentityKey:self.senderIdentityKey.publicKey
-                                                              receiverIdentityKey:self.receiverIdentityPublicKey
+                                                                senderIdentityKey:self.sender.identityKey.publicKey
+                                                              receiverIdentityKey:self.receiver.publicKey
                                                                  senderRatchetKey:senderRatchetKey
                                                                        cipherText:encryptedText
                                                                             index:senderChainKey.index
                                                                     previousIndex:self.previousIndex];
-    [self setSenderRootChain:[senderRootChain iterateChainKey]];
+    
+    RootChain *nextSenderRootChain = [senderRootChain iterateChainKey];
+    [senderRootChain remove];
+    [nextSenderRootChain save];
+    self.senderChainId = nextSenderRootChain.uniqueId;
+    [self save];
+    
     return encryptedMessage;
 }
 
 - (NSData *)decryptMessage:(EncryptedMessage *)encryptedMessage {
     [self processReceiverChain:encryptedMessage];
     NSString *messageIndex = [NSString stringWithFormat:@"%d", encryptedMessage.index];
-    SessionState *sessionState = self.previousSessionStates[encryptedMessage.senderRatchetKey][messageIndex];
+    SessionState *sessionState = [SessionState findByDictionary:@{@"senderRatchetKey" : encryptedMessage.senderRatchetKey, @"messageIndex" : messageIndex}];
 
     if(![HMAC verifyWithMac:[encryptedMessage mac]
-          senderIdentityKey:self.receiverIdentityPublicKey
-        receiverIdentityKey:self.senderIdentityKey.publicKey
+          senderIdentityKey:self.receiver.publicKey
+        receiverIdentityKey:self.sender.identityKey.publicKey
                      macKey:sessionState.messageKey.macKey
              serializedData:encryptedMessage.serializedData]) {
         NSLog(@"FAILED HMAC VERIFICATION");
     }
-    
-    NSLog(@"DECRYPTING WITH MESSAGE KEY: %@", sessionState.messageKey.cipherKey);
     
     NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
                                             withKey:sessionState.messageKey.cipherKey
@@ -204,31 +203,28 @@
 
 - (void)processReceiverChain:(EncryptedMessage *)encryptedMessage {
     NSData *senderRatchetKey = encryptedMessage.senderRatchetKey;
-    if(!self.previousSessionStates[senderRatchetKey]) {
-        if(encryptedMessage.previousIndex > self.receiverRootChain.chainKey.index) {
-            [self sessionStatesForDesiredIndex:encryptedMessage.previousIndex
-                              senderRatchetKey:self.receiverRootChain.theirRatchetKey];
+    RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
+    SessionState *previousState = [SessionState findByDictionary:@{@"senderRatchetKey" : senderRatchetKey}];
+    if(!previousState) {
+        if(encryptedMessage.previousIndex > receiverRootChain.chainKey.index) {
+            [self sessionStatesForDesiredIndex:encryptedMessage.previousIndex senderRatchetKey:receiverRootChain.theirRatchetKey];
         }
     }
     [self ratchetRootChains:encryptedMessage.senderRatchetKey];
-    [self sessionStatesForDesiredIndex:encryptedMessage.index
-                      senderRatchetKey:self.receiverRootChain.theirRatchetKey];
+    [self sessionStatesForDesiredIndex:encryptedMessage.index senderRatchetKey:receiverRootChain.theirRatchetKey];
 }
 
 - (void)sessionStatesForDesiredIndex:(int)index senderRatchetKey:(NSData *)senderRatchetKey {
-    while(index >= self.receiverRootChain.chainKey.index) {
-        SessionState *sessionState = [[SessionState alloc] initWithMessageKey:self.receiverRootChain.chainKey.messageKey
-                                                             senderRatchetKey:senderRatchetKey
-                                                                 messageIndex:self.receiverRootChain.chainKey.index
-                                                                    sessionId:self.primaryKeyId];
+    RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
+    while(index >= receiverRootChain.chainKey.index) {
+        SessionState *sessionState = [[SessionState alloc] initWithMessageKey:receiverRootChain.chainKey.messageKey senderRatchetKey:senderRatchetKey messageIndex:receiverRootChain.chainKey.index sessionId:self.uniqueId];
+        [sessionState save];
         
-        NSString *stateIndex = [NSString stringWithFormat:@"%d", self.receiverRootChain.chainKey.index];
-        NSMutableDictionary *previousStates = [[NSMutableDictionary alloc] initWithDictionary:self.previousSessionStates];
-        NSMutableDictionary *ratchetStates = [[NSMutableDictionary alloc] initWithDictionary:[previousStates objectForKey:senderRatchetKey]];
-        [ratchetStates setObject:sessionState forKey:stateIndex];
-        [previousStates setObject:ratchetStates forKey:senderRatchetKey];
-        self.previousSessionStates = [previousStates copy];
-        [self setReceiverRootChain:[self.receiverRootChain iterateChainKey]];
+        RootChain *nextReceiverChain = [receiverRootChain iterateChainKey];
+        [nextReceiverChain save];
+        [receiverRootChain remove];
+        [self setReceiverChainId:nextReceiverChain.uniqueId];
+        receiverRootChain = nextReceiverChain;
     }
 }
 
@@ -236,36 +232,44 @@
     if(![self alreadyReceivedEphemeral:theirEphemeral]) {
         [self ratchetReceiverRootChain:theirEphemeral];
         [self ratchetSenderRootChain];
-        
     }
 }
 
 - (void)ratchetReceiverRootChain:(NSData *)theirEphemeral {
-    ECKeyPair *ourEphemeral = self.receiverRootChain.ourRatchetKeyPair;
-    self.receiverRootChain = [[RootChain alloc] iterateRootKeyWithTheirEphemeral:theirEphemeral
-                                                                        ourEphemeral:ourEphemeral];
+    RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
+    ECKeyPair *ourEphemeral = receiverRootChain.ourRatchetKeyPair;
+    RootChain *nextReceiverRootChain = [[RootChain alloc] iterateRootKeyWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
+    [nextReceiverRootChain save];
+    self.receiverChainId = nextReceiverRootChain.uniqueId;
+    [self save];
 }
 
 - (void)ratchetSenderRootChain {
-    NSData *theirEphemeral = self.receiverRootChain.theirRatchetKey;
+    RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
+    NSData *theirEphemeral = receiverRootChain.theirRatchetKey;
     ECKeyPair *ourEphemeral = [Curve25519 generateKeyPair];
-    self.senderRootChain = [[RootChain alloc] iterateRootKeyWithTheirEphemeral:theirEphemeral
-                                                                      ourEphemeral:ourEphemeral];
-    self.receiverRootChain.ourRatchetKeyPair = ourEphemeral;
+    RootChain *senderRootChain = [[RootChain alloc] iterateRootKeyWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
+    [senderRootChain save];
+    self.senderChainId = senderRootChain.uniqueId;
     
-    NSMutableDictionary *previousStates = [[NSMutableDictionary alloc] initWithDictionary:self.previousSessionStates];
-    NSMutableArray *previousRatchets = [[NSMutableArray alloc] initWithArray:previousStates[kReceivedSenderRatchets]];
-    [previousRatchets addObject:theirEphemeral];
-    [previousStates setObject:previousRatchets forKey:kReceivedSenderRatchets];
-    self.previousSessionStates = previousStates;
+    receiverRootChain.ourRatchetKeyPair = ourEphemeral;
+    [receiverRootChain save];
 }
 
 - (BOOL)alreadyReceivedEphemeral:(NSData *)theirEphemeral {
-    return([self.previousSessionStates[kReceivedSenderRatchets] containsObject:theirEphemeral]);
+    return !([[SessionState findByDictionary:@{@"senderRatchetKey" : theirEphemeral}] isEqual:nil]);
 }
 
 - (void)cleanupSessionState:(SessionState *)sessionState {
-    //[self.previousSessionStates[sessionState.senderRatchetKey] removeObject:sessionState];
+    [sessionState remove];
+}
+
+- (KUser *)sender {
+    return [KUser findById:self.senderId];
+}
+
+- (KUser *)receiver {
+    return [KUser findById:self.receiverId];
 }
 
 @end

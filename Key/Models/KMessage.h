@@ -25,7 +25,6 @@
 @property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *createdAt;
 @property (nonatomic) NSData *attachmentKey;
-@property (nonatomic) NSArray *attachments;
 
 - (instancetype)initWithAuthorId:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId

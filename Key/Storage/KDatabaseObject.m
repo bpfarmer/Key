@@ -18,14 +18,14 @@
 
 + (void)createTable {
     NSMutableArray *createdColumns = [[NSMutableArray alloc] init];
-    if([self hasUniqueId]) [createdColumns addObject:@"unique_id text primary key not null"];
-    else [createdColumns addObject:@"primary_key_id integer primary key autoincrement not null"];
+    [createdColumns addObject:@"unique_id text primary key not null"];
     NSMutableArray *propertyList = [[NSMutableArray alloc] initWithArray:[self storedPropertyList]];
-    [propertyList removeObjectsInArray:@[@"uniqueId", @"primary_key_id"]];
+    [propertyList removeObjectsInArray:@[@"uniqueId"]];
     for(NSString *property in propertyList) {
         [createdColumns addObject:[NSString stringWithFormat:@"%@ %@", [self propertyToColumnMapping][property], [self columnTypeForProperty:property]]];
     }
     NSString *createTableSQL = [NSString stringWithFormat:@"create table if not exists %@ (%@)", [self tableName], [createdColumns componentsJoinedByString:@", "]];
+
     [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
         [database executeUpdate:createTableSQL];
     }];
@@ -51,7 +51,7 @@
 
 + (NSArray *)storedPropertyList {
     NSMutableArray *propertyNames = [[NSMutableArray alloc] initWithArray:[self propertyNames]];
-    if([self hasUniqueId]) [propertyNames addObject:kMappingUniqueId];
+    [propertyNames addObject:kMappingUniqueId];
     [propertyNames removeObjectsInArray:@[@"hash", @"superclass", @"description", @"debugDescription"]];
     [propertyNames removeObjectsInArray:[[self class] unsavedPropertyList]];
     return propertyNames;
@@ -59,10 +59,6 @@
 
 + (NSArray *)unsavedPropertyList {
     return @[];
-}
-
-+ (BOOL)hasUniqueId {
-    return YES;
 }
 
 + (NSDictionary *)columnToPropertyMapping {
@@ -95,20 +91,8 @@
             [output appendFormat:@"%C", c];
         }
     }
+    if([output isEqualToString:@"index"]) output = @"kIndex";
     return output;
-}
-
-- (NSDictionary *)instanceMapping {
-    __block NSMutableDictionary *instanceMap = [[NSMutableDictionary alloc] init];
-    NSDictionary *mappingDictionary = [[self class] columnToPropertyMapping];
-    [mappingDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        if([self valueForKey:(NSString *)obj]) {
-            /*if([[[self class] columnTypeForProperty:obj] isEqualToString:kColumnTypeBlob] && [[self valueForKey:obj] isKindOfClass:[NSData class]])
-                [instanceMap setObject:[NSKeyedArchiver archivedDataWithRootObject:[self valueForKey:obj]] forKey:key];
-            else*/ [instanceMap setObject:[self valueForKey:obj] forKey:key];
-        }
-    }];
-    return instanceMap;
 }
 
 - (void)remove {
@@ -120,7 +104,7 @@
 }
 
 - (void)save {
-    if(self.class.hasUniqueId && !self.uniqueId) self.uniqueId = [[NSUUID UUID] UUIDString];
+    if(!self.uniqueId) self.uniqueId = [[NSUUID UUID] UUIDString];
     NSString *columnKeys = [[self instanceMapping].allKeys componentsJoinedByString:@", "];
     NSString *valueKeys   = [@":" stringByAppendingString:[[self instanceMapping].allKeys componentsJoinedByString:@", :"]];
     NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (%@) values(%@)", [self.class tableName], columnKeys, valueKeys];
@@ -151,13 +135,8 @@
     if(!uniqueId) return nil;
     NSString *findByUniqueIdSQL;
     NSDictionary *parameterDictionary;
-    if([self hasUniqueId]) {
-        findByUniqueIdSQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE unique_id=:unique_id", [[self class] tableName]];
-        parameterDictionary = @{@"unique_id" : uniqueId};
-    }else if(![self hasUniqueId]) {
-        findByUniqueIdSQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE primary_key_id=:primary_key_id", [[self class] tableName]];
-        parameterDictionary = @{@"primary_key_id" : uniqueId};
-    }
+    findByUniqueIdSQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE unique_id=:unique_id", [[self class] tableName]];
+    parameterDictionary = @{@"unique_id" : uniqueId};
     FMResultSet *result = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
         return [database executeQuery:findByUniqueIdSQL withParameterDictionary:parameterDictionary];
     }];
@@ -183,9 +162,6 @@
         [parameterDictionary setObject:obj forKey:[self columnNameFromProperty:key]];
     }];
     
-    NSLog(@"SQL FOR SELECT: %@", selectSQL);
-    NSLog(@"PARAMETERS: %@", parameterDictionary);
-    
     FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
         return [database executeQuery:selectSQL withParameterDictionary:parameterDictionary];
     }];
@@ -205,10 +181,27 @@
     return self;
 }
 
+- (NSDictionary *)instanceMapping {
+    __block NSMutableDictionary *instanceMap = [[NSMutableDictionary alloc] init];
+    NSDictionary *mappingDictionary = [[self class] columnToPropertyMapping];
+    [mappingDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if([self valueForKey:(NSString *)obj]) {
+            if([[[self class] columnTypeForProperty:obj] isEqualToString:kColumnTypeBlob] && ![[self valueForKey:obj] isKindOfClass:[NSData class]])
+                [instanceMap setObject:[NSKeyedArchiver archivedDataWithRootObject:[self valueForKey:obj]] forKey:key];
+            else [instanceMap setObject:[self valueForKey:obj] forKey:key];
+        }
+    }];
+    return instanceMap;
+}
+
 - (instancetype)initWithResultSetRow:(NSDictionary *)resultSetRow {
     self = [super init];
     [[[self class] columnToPropertyMapping] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        if(resultSetRow[key]) [self setValue:resultSetRow[key] forKey:obj];
+        if(![resultSetRow[key] isKindOfClass:[NSNull class]]) {
+            if([[[self class] columnTypeForProperty:obj] isEqualToString:kColumnTypeBlob] && ![[[self class] typeOfPropertyNamed:obj] isEqualToString:@"NSData"])
+                [self setValue:[NSKeyedUnarchiver unarchiveObjectWithData:resultSetRow[key]] forKey:obj];
+            else [self setValue:resultSetRow[key] forKey:obj];
+        }
     }];
     return self;
 }

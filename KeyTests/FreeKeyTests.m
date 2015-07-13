@@ -29,6 +29,7 @@
 #import "KThread.h"
 #import "HttpManager.h"
 #import "FreeKeyResponseHandler.h"
+#import "Session.h"
 
 @interface FreeKeyTests : XCTestCase
 
@@ -100,6 +101,15 @@
     EncryptedMessage *receivedEncryptedMessage = [FreeKeyResponseHandler createEncryptedMessageFromRemoteDictionary:decodedMessageDictionary];
     KMessage *receivedMessage = (KMessage *)[FreeKey decryptEncryptedMessage:receivedEncryptedMessage session:_bobSession];
     XCTAssert([sentMessage.body isEqualToString:receivedMessage.body]);
+}
+
+- (void)testSessionCreationFromPreKey {
+    ECKeyPair *keyPair   = [Curve25519 generateKeyPair];
+    NSData *signature    = [Ed25519 sign:keyPair.publicKey withKeyPair:keyPair];
+    ECKeyPair *idKeyPair = [Curve25519 generateKeyPair];
+    PreKey *preKey = [[PreKey alloc] initWithUserId:@"1" deviceId:@"1" signedPreKeyId:@"1" signedPreKeyPublic:keyPair.publicKey signedPreKeySignature:signature identityKey:idKeyPair.publicKey baseKeyPair:nil];
+    KUser *remoteUser = [[KUser alloc] initWithUniqueId:@"1" username:@"1" publicKey:idKeyPair.publicKey];
+    [[FreeKeySessionManager sharedManager] processNewKeyExchange:preKey localUser:self.alice remoteUser:remoteUser];
 }
 
 

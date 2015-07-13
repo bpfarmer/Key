@@ -15,7 +15,9 @@
 @implementation KUser(Serialize)
 
 + (NSArray *)unsavedPropertyList {
-    return @[@"identityKey"];
+    NSMutableArray *unstoredProperties = [[NSMutableArray alloc] initWithArray:[super unsavedPropertyList]];
+    [unstoredProperties addObject:@"identityKey"];
+    return unstoredProperties;
 }
 
 @end

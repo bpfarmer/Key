@@ -13,11 +13,12 @@
 #import "EditMediaViewController.h"
 #import "EditLocationViewController.h"
 #import "EditPostViewController.h"
+#import "DismissAndPresentProtocol.h"
 
 #define kHomeViewPushSegue @"homeViewPush"
 #define kSocialViewPushSegue @"socialViewPush"
 
-@interface ShareViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ShareViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, DismissAndPresentProtocol>
 
 @property (nonatomic, strong) IBOutlet UIView *cameraOverlayView;
 
@@ -327,6 +328,7 @@
     [self stopCamera];
     EditMediaViewController *editMediaView = [[EditMediaViewController alloc] initWithNibName:@"EditMediaView" bundle:nil];
     editMediaView.imageData = photoData;
+    editMediaView.delegate = self;
     [self.parentViewController presentViewController:editMediaView animated:NO completion:nil];
 }
 
@@ -336,6 +338,12 @@
     [self.parentViewController presentViewController:editLocationView animated:NO completion:nil];
 }
 
+- (void)dismissAndPresentViewController:(UIViewController *)viewController {
+    [self dismissViewControllerAnimated:NO completion:^{
+        [self presentViewController:viewController animated:NO completion:nil];
+    }];
+}
+
 - (IBAction)captureImage:(id)sender {
     [self takePhoto];
 }
@@ -343,8 +351,8 @@
 - (IBAction)postText:(id)sender {
     [self stopCamera];
     EditPostViewController *editPostView = [[EditPostViewController alloc] initWithNibName:@"EditPostView" bundle:nil];
+    editPostView.delegate = self;
     [self.parentViewController presentViewController:editPostView animated:NO completion:nil];
 }
-
 
 @end

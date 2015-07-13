@@ -24,7 +24,7 @@
     return [self initWithMessageKey:[aDecoder decodeObjectOfClass:[MessageKey class] forKey:kCoderMessageKey]
                    senderRatchetKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderSenderRatchetKey]
                        messageIndex:[aDecoder decodeIntForKey:kCoderIndex]
-                          sessionId:[aDecoder decodeIntForKey:kCoderSessionId]];
+                          sessionId:[aDecoder decodeObjectOfClass:[NSNumber class] forKey:kCoderSessionId]];
     
 }
 

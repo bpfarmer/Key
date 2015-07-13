@@ -26,6 +26,8 @@
 }
 
 + (TOCFuture *)makeRequestWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
+    NSLog(@"LOCAL USER: %@", localUser.uniqueId);
+    NSLog(@"REMOTE USER: %@", remoteUser.uniqueId);
     TOCFutureSource *resultSource = [TOCFutureSource new];
     GetKeyExchangeRequest *request = [[GetKeyExchangeRequest alloc] initWithLocalUser:localUser remoteUser:remoteUser];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){

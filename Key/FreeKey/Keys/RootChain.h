@@ -16,10 +16,10 @@
 
 @interface RootChain : KDatabaseObject
 
-@property (nonatomic, strong) RootKey   *rootKey;
-@property (nonatomic, strong) ChainKey  *chainKey;
-@property (nonatomic, strong) ECKeyPair *ourRatchetKeyPair;
-@property (nonatomic, strong) NSData    *theirRatchetKey;
+@property (nonatomic) RootKey   *rootKey;
+@property (nonatomic) ChainKey  *chainKey;
+@property (nonatomic) ECKeyPair *ourRatchetKeyPair;
+@property (nonatomic) NSData    *theirRatchetKey;
 
 - (instancetype)initWithRootKey:(RootKey *)rootKey chainKey:(ChainKey *)chainKey;
 - (instancetype)initWithRootKey:(RootKey *)rootKey

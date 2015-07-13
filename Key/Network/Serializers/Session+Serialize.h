@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "Session.h"
 
-@interface Session(Serialize) <NSSecureCoding>
+@interface Session(Serialize)
 
 @end

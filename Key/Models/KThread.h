@@ -16,23 +16,24 @@
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSArray *userIds;
-@property (nonatomic) KMessage *latestMessage;
+@property (nonatomic) NSString *latestMessageId;
 @property (nonatomic) BOOL read;
-@property (nonatomic) NSDate *lastMessageAt;
-@property (nonatomic) NSDate *archivedAt;
+//@property (nonatomic) NSDate *lastMessageAt;
+//@property (nonatomic) NSDate *archivedAt;
 
 - (instancetype)initWithUsers:(NSArray *)user;
-- (instancetype)initFromRemote:(NSDictionary *)threadDictionary;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                          userIds:(NSArray *)userIds
                             name:(NSString *)name
-                   latestMessage:(KMessage *)latestMessage
+                 latestMessageId:(NSString *)latestMessageId
                    lastMessageAt:(NSDate *)lastMessageAt
                       archivedAt:(NSDate *)archivedAt
                             read:(BOOL)read;
 
-- (NSString *)displayName;
 - (void)processLatestMessage:(KMessage *)message;
 - (NSArray *)recipientIds;
+- (NSArray *)messages;
+- (NSString *)displayName;
+- (BOOL)saved;
 
 @end

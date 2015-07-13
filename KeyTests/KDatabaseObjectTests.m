@@ -88,4 +88,22 @@
     XCTAssert([((KUser *)[KUser findByDictionary:@{@"username" : @"brendan"}]).username isEqualToString:@"brendan"]);
 }
 
+- (void)testAll {
+    KUser *user1 = [[KUser alloc] initWithUniqueId:@"1" username:@"1" publicKey:nil];
+    [user1 save];
+    KUser *user2 = [[KUser alloc] initWithUniqueId:@"2" username:@"2" publicKey:nil];
+    [user2 save];
+    KUser *user3 = [[KUser alloc] initWithUniqueId:@"3" username:@"3" publicKey:nil];
+    [user3 save];
+    
+    NSArray *users = [KUser all];
+    NSMutableArray *userIds = [[NSMutableArray alloc] init];
+    for(KUser *user in users) {
+        [userIds addObject:user.uniqueId];
+    }
+    XCTAssert([userIds containsObject:@"1"]);
+    XCTAssert([userIds containsObject:@"2"]);
+    XCTAssert([userIds containsObject:@"3"]);
+}
+
 @end

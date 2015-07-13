@@ -57,22 +57,6 @@
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         username:(NSString *)username
-                   passwordCrypt:(NSData *)passwordCrypt
-                    passwordSalt:(NSData *)passwordSalt
-                       publicKey:(NSData *)publicKey{
-    self = [super initWithUniqueId:uniqueId];
-    
-    if (self) {
-        _username      = [username lowercaseString];
-        _passwordCrypt = passwordCrypt;
-        _passwordSalt  = passwordSalt;
-        _publicKey   = publicKey;
-    }
-    return self;
-}
-
-- (instancetype)initWithUniqueId:(NSString *)uniqueId
-                        username:(NSString *)username
                        publicKey:(NSData *)publicKey {
     self = [super initWithUniqueId:uniqueId];
     
@@ -122,8 +106,7 @@
 }
 
 - (IdentityKey *)identityKey {
-    if(!_identityKey) _identityKey = [IdentityKey findByDictionary:@{@"userId" : self.uniqueId}];
-    return _identityKey;
+    return [IdentityKey findByDictionary:@{@"userId" : self.uniqueId}];
 }
 
 #pragma mark - User Custom Attributes
@@ -134,6 +117,20 @@
 
 - (NSString *)displayName {
     return [self username];
+}
+
+- (NSArray *)contacts {
+    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
+        return [database executeQuery:[NSString stringWithFormat:@"select * from %@ where unique_id <> :unique_id", [self.class tableName]] withParameterDictionary:@{@"unique_id" : self.uniqueId}];
+    }];
+    
+    NSMutableArray *contacts = [[NSMutableArray alloc] init];
+    while(resultSet.next) {
+        KUser *contact = [[self.class alloc] initWithResultSetRow:resultSet.resultDictionary];
+        [contacts addObject:contact];
+    }
+    [resultSet close];
+    return contacts;
 }
 
 #pragma mark - Password Handling Methods
@@ -181,6 +178,11 @@
         passwordSalt = [passwordSaltString base64DecodedData];
     }
     return passwordSalt;
+}
+
+- (void)setIdentityKey:(IdentityKey *)identityKey {
+    identityKey.userId = self.uniqueId;
+    [identityKey save];
 }
 
 + (NSArray *)remoteKeys {

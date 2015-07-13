@@ -8,16 +8,22 @@
 
 #import <UIKit/UIKit.h>
 #import "KSendable.h"
+#import "DismissAndPresentProtocol.h"
 
 @class KPost;
 @class KUser;
 @class KPhoto;
 @class KLocation;
 
+#define kSelectRecipientsForMessage @"message"
+#define kSelectRecipientsForPost    @"post"
+
 @interface SelectRecipientViewController : UIViewController
 
+@property (nonatomic,weak) id <DismissAndPresentProtocol> delegate;
 @property (nonatomic) NSArray *sendableObjects;
 @property (nonatomic) KPost *post;
 @property (nonatomic) KUser *currentUser;
+@property (nonatomic) NSString *desiredObject;
 
 @end

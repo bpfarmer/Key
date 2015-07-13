@@ -87,8 +87,7 @@
 }
 
 - (Session *)createSessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser ourBaseKey:(ECKeyPair *)ourBaseKey theirPreKey:(PreKey *)theirPreKey {
-    Session *session = [[Session alloc] initWithReceiverId:remoteUser.uniqueId identityKey:localUser.identityKey];
-    [session setSenderId:localUser.uniqueId];
+    Session *session = [[Session alloc] initWithSenderId:localUser.uniqueId receiverId:remoteUser.uniqueId];
     [session addPreKey:theirPreKey ourBaseKey:ourBaseKey];
     [SendPreKeyExchangeRequest makeRequestWithPreKeyExchange:session.preKeyExchange];
     [session save];
@@ -96,7 +95,7 @@
 }
 
 - (Session *)createSessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser ourPreKey:(PreKey *)ourPreKey theirPreKeyExchange:(PreKeyExchange *)theirPreKeyExchange {
-    Session *session = [[Session alloc] initWithReceiverId:remoteUser.uniqueId identityKey:localUser.identityKey];
+    Session *session = [[Session alloc] initWithSenderId:localUser.uniqueId receiverId:remoteUser.uniqueId];
     [session addOurPreKey:ourPreKey preKeyExchange:theirPreKeyExchange];
     [session save];
     return session;

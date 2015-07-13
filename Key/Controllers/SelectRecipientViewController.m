@@ -15,13 +15,16 @@
 #import "KLocation.h"
 #import "FreeKey.h"
 #import "FreeKeyNetworkManager.h"
+#import "ThreadViewController.h"
+#import "KThread.h"
 
 static NSString *TableViewCellIdentifier = @"Recipients";
 
 @interface SelectRecipientViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) IBOutlet UITableView *contactsTableView;
+@property (nonatomic) IBOutlet UITableView *contactsTableView;
 @property (nonatomic) NSArray *selectedRecipients;
+@property (nonatomic) NSArray *contacts;
 
 @end
 
@@ -29,18 +32,21 @@ static NSString *TableViewCellIdentifier = @"Recipients";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSLog(@"HERE");
+    
+    self.contacts = [[KAccountManager sharedManager].user contacts];
     
     self.contactsTableView.dataSource = self;
     self.contactsTableView.delegate = self;
     [self.contactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
-    if(!self.post) {
-        self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:nil];
-    }
+    //if(!self.post) {
+    //    self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:nil];
+    //}
     
     self.contactsTableView.allowsMultipleSelection = YES;
     
-    self.post.attachments = self.sendableObjects;
+    //self.post.attachments = self.sendableObjects;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,29 +60,53 @@ static NSString *TableViewCellIdentifier = @"Recipients";
 }
 
 - (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    return self.contacts.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return nil;
+    KUser *user = self.contacts[indexPath.row];
+    UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
+    cell.textLabel.text = [user displayName];
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    __block KUser *user = nil;
+    KUser *user = self.contacts[indexPath.row];
+    NSMutableArray *selected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
+    [selected addObject:user];
+    self.selectedRecipients = selected;
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    __block KUser *user = nil;
+    KUser *user = self.contacts[indexPath.row];
+    NSMutableArray *selected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
+    [selected removeObject:user];
+    self.selectedRecipients = selected;
 }
 
 - (IBAction)sendToRecipients:(id)sender {
-    [FreeKey sendEncryptableObject:self.post recipients:self.selectedRecipients];
-    [self.post save];
-    [self dismissViewControllerAnimated:NO completion:nil];
+    if([self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
+        KThread *thread = [self setupThread];
+        ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
+        threadViewController.thread = thread;
+        [self.delegate dismissAndPresentViewController:threadViewController];
+    }else {
+        [FreeKey sendEncryptableObject:self.post recipients:self.selectedRecipients];
+        [self.post save];
+        [self dismissViewControllerAnimated:NO completion:nil];
+    }
 }
 
 - (IBAction)didPressCancel:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (KThread *)setupThread {
+    if(self.selectedRecipients.count == 0) return nil;
+    NSMutableArray *users = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
+    [users addObject:[KAccountManager sharedManager].user];
+    KThread *thread = [[KThread alloc] initWithUsers:users];
+    return thread;
 }
 
 

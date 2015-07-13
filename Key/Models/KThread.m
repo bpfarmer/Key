@@ -14,61 +14,38 @@
 #import "KAccountManager.h"
 #import "KMessage.h"
 
-#define KThreadRemoteEndpoint @"http://127.0.0.1:9393/user.json"
-#define KThreadRemoteAlias @"thread"
-#define KThreadRemoteCreateNotification @"KThreadRemoteCreateNotification"
-#define KThreadRemoteUpdateNotification @"KThreadRemoteUpdateNotification"
-
 @implementation KThread
-
-- (NSArray *)yapDatabaseRelationshipEdges {
-    NSArray *edges = nil;
-    return edges;
-}
-
-- (instancetype)initFromRemote:(NSDictionary *)threadDictionary {
-    self = [super initWithUniqueId:threadDictionary[@"uniqueId"]];
-    return self;
-}
 
 - (instancetype)initWithUsers:(NSArray *)users {
     NSMutableArray *userIds = [[NSMutableArray alloc] init];
-    [users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        KUser *user = (KUser *)obj;
+    NSMutableArray *usernames = [[NSMutableArray alloc] init];
+    for(KUser *user in users) {
         [userIds addObject:user.uniqueId];
-    }];
-    NSArray *sortedUserIds = [userIds sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return obj1 > obj2;
-    }];
-    self = [super initWithUniqueId:[sortedUserIds componentsJoinedByString:@"_"]];
+        [usernames addObject:user.username];
+    }
+    self = [super init];
     if (self) {
-        _userIds = sortedUserIds;
-        NSMutableArray *usernames = [[NSMutableArray alloc] init];
-        [users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            KUser *user = (KUser *)obj;
-            [usernames addObject:user.username];
-        }];
+        _userIds = userIds;
         _name = [usernames componentsJoinedByString:@", "];
     }
     return self;
 }
 
-
-
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                          userIds:(NSArray *)userIds
                             name:(NSString *)name
-                   latestMessage:(KMessage *)latestMessage
+                 latestMessageId:(NSString *)latestMessageId
                    lastMessageAt:(NSDate *)lastMessageAt
                       archivedAt:(NSDate *)archivedAt
-                            read:(BOOL)read{
+                            read:(BOOL)read {
+    
     self = [super initWithUniqueId:uniqueId];
     if (self) {
         _name = name;
         _userIds            = userIds;
-        _latestMessage      = latestMessage;
-        _lastMessageAt      = lastMessageAt;
-        _archivedAt         = archivedAt;
+        _latestMessageId    = latestMessageId;
+        //_lastMessageAt      = lastMessageAt;
+        //_archivedAt         = archivedAt;
         _read               = read;
     }
     return self;
@@ -85,33 +62,10 @@
     return [self initWithUniqueId:threadId
                           userIds:userIds
                              name:nil
-                    latestMessage:nil
+                  latestMessageId:nil
                     lastMessageAt:nil
                        archivedAt:nil
                              read:NO];
-}
-
-- (NSString *)displayName {
-    NSMutableArray *usernames = [[NSMutableArray alloc] initWithArray:[self.name componentsSeparatedByString:@", "]];
-    [usernames removeObject:[KAccountManager sharedManager].user.username];
-    return [usernames componentsJoinedByString:@", "];
-}
-
-- (NSDictionary *)toDictionary {
-    return @{@"uniqueId" : self.uniqueId,
-             @"userIds"  : self.userIds};
-}
-
-+ (NSString *)remoteEndpoint {
-    return KThreadRemoteEndpoint;
-}
-
-+ (NSString *)remoteAlias {
-    return KThreadRemoteAlias;
-}
-
-+ (NSString *)remoteCreateNotification {
-    return KThreadRemoteCreateNotification;
 }
 
 - (void)processLatestMessage:(KMessage *)message {
@@ -122,17 +76,24 @@
         self.read = YES;
     }
     
-    if(self.latestMessage) {
-        NSComparisonResult dateComparison = [message.createdAt compare:self.latestMessage.createdAt];
+    if(self.latestMessageId) {
+        KMessage *latestMessage = [KMessage findById:self.latestMessageId];
+        NSComparisonResult dateComparison = [message.createdAt compare:latestMessage.createdAt];
         switch (dateComparison) {
-            case NSOrderedDescending : self.latestMessage = message; break;
+            case NSOrderedDescending : latestMessage = message; break;
             default : break;
         }
     }else {
-        self.latestMessage = message;
+        self.latestMessageId = message.uniqueId;
     }
     
     [self save];
+}
+
+- (NSString *)displayName {
+    NSMutableArray *names = [[NSMutableArray alloc] initWithArray:[self.name componentsSeparatedByString:@", "]];
+    [names removeObject:[KAccountManager sharedManager].user.username];
+    return [names componentsJoinedByString:@", "];
 }
 
 - (NSArray *)recipientIds {
@@ -142,4 +103,21 @@
     return recipientIds;
 }
 
+- (NSArray *)messages {
+    NSString *messagesInThreadSQL = [NSString stringWithFormat:@"select * from %@ where thread_id = :thread_id", [KMessage tableName]];
+    NSDictionary *parameters = @{@"thread_id" : self.uniqueId};
+    
+    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
+        return [database executeQuery:messagesInThreadSQL withParameterDictionary:parameters];
+    }];
+    
+    NSMutableArray *messages = [[NSMutableArray alloc] init];
+    while(resultSet.next) [messages addObject:[[KMessage alloc] initWithResultSetRow:resultSet.resultDictionary]];
+    [resultSet close];
+    return messages;
+}
+
+- (BOOL)saved {
+    return (BOOL) self.uniqueId;
+}
 @end
