@@ -21,6 +21,7 @@
 #import "PreKeyExchange.h"
 #import "KUser.h"
 #import "FreeKeyTestExample.h"
+#import "KStorageManager.h"
 
 @interface SessionTests : XCTestCase
 
@@ -48,6 +49,7 @@
     _bobBaseKeyPair   = example.bobBaseKeyPair;
     _bobPreKey        = example.bobPreKey;
     _alicePreKeyExchange = example.alicePreKeyExchange;
+    NSLog(@"DATABASE PATH: %@", [KStorageManager sharedManager].database.databasePath);
     
 }
 
@@ -60,30 +62,40 @@
  * Testing Ratcheting Session
  */
 - (void)testRatchetAgreement {
-    Session *aliceSession = [[Session alloc] initWithReceiverId:_bob.uniqueId identityKey:_aliceIdentityKey];
-    Session *bobSession   = [[Session alloc] initWithReceiverId:_alice.uniqueId identityKey:_bobIdentityKey];
+    Session *aliceSession = [[Session alloc] initWithSenderId:_alice.uniqueId receiverId:_bob.uniqueId];
+    Session *bobSession   = [[Session alloc] initWithSenderId:_bob.uniqueId receiverId:_alice.uniqueId];
     
     [aliceSession addPreKey:_bobPreKey ourBaseKey:_aliceBaseKeyPair];
     [bobSession addOurPreKey:_bobPreKey preKeyExchange:_alicePreKeyExchange];
 
-    XCTAssert([aliceSession.receiverRootChain.theirRatchetKey isEqual:_bobPreKey.signedPreKeyPublic]);
-    XCTAssert([bobSession.receiverRootChain.theirRatchetKey isEqual:_alicePreKeyExchange.sentSignedBaseKey]);
-    XCTAssert([aliceSession.senderRootChain.chainKey.messageKey.cipherKey isEqual:bobSession.receiverRootChain.chainKey.messageKey.cipherKey]);
+    RootChain *aliceRRC = [RootChain findById:aliceSession.receiverChainId];
+    XCTAssert([aliceRRC.theirRatchetKey isEqual:_bobPreKey.signedPreKeyPublic]);
+    
+    RootChain *bobRRC = [RootChain findById:bobSession.receiverChainId];
+    XCTAssert([bobRRC.theirRatchetKey isEqual:_alicePreKeyExchange.sentSignedBaseKey]);
+    
+    RootChain *aliceSRC = [RootChain findById:aliceSession.senderChainId];
+    XCTAssert([aliceSRC.chainKey.messageKey.cipherKey isEqual:bobRRC.chainKey.messageKey.cipherKey]);
     
     NSString *sendingMessage = @"Free Key!";
     NSData *sendingMessageData = [sendingMessage dataUsingEncoding:NSUTF8StringEncoding];
     EncryptedMessage *fromAlice = [aliceSession encryptMessage:sendingMessageData];
     [bobSession decryptMessage:fromAlice];
-    XCTAssert([aliceSession.senderRootChain.ourRatchetKeyPair.publicKey isEqual:bobSession.receiverRootChain.theirRatchetKey]);
-    XCTAssert([aliceSession.senderRootChain.chainKey.messageKey.cipherKey isEqual:bobSession.receiverRootChain.chainKey.messageKey.cipherKey]);
+    
+    aliceSRC = [RootChain findById:aliceSession.senderChainId];
+    bobRRC = [RootChain findById:bobSession.receiverChainId];
+    XCTAssert([aliceSRC.ourRatchetKeyPair.publicKey isEqual:bobRRC.theirRatchetKey]);
+    XCTAssert([aliceSRC.chainKey.messageKey.cipherKey isEqual:bobRRC.chainKey.messageKey.cipherKey]);
     
     EncryptedMessage *fromBob = [bobSession encryptMessage:sendingMessageData];
     [aliceSession decryptMessage:fromBob];
-    XCTAssert([aliceSession.receiverRootChain.theirRatchetKey isEqual:bobSession.senderRootChain.ourRatchetKeyPair.publicKey]);
-    XCTAssert([aliceSession.receiverRootChain.chainKey.messageKey.cipherKey isEqual:bobSession.senderRootChain.chainKey.messageKey.cipherKey]);
+    aliceRRC = [RootChain findById:aliceSession.receiverChainId];
+    RootChain *bobSRC = [RootChain findById:bobSession.senderChainId];
+    XCTAssert([aliceRRC.theirRatchetKey isEqual:bobSRC.ourRatchetKeyPair.publicKey]);
+    XCTAssert([aliceRRC.chainKey.messageKey.cipherKey isEqual:bobSRC.chainKey.messageKey.cipherKey]);
     [bobSession decryptMessage:[aliceSession encryptMessage:sendingMessageData]];
-    XCTAssert([bobSession.receiverRootChain.theirRatchetKey isEqual:aliceSession.senderRootChain.ourRatchetKeyPair.publicKey]);
-    XCTAssert([aliceSession.senderRootChain.chainKey.messageKey.cipherKey isEqual:bobSession.receiverRootChain.chainKey.messageKey.cipherKey]);
+    XCTAssert([bobRRC.theirRatchetKey isEqual:aliceSRC.ourRatchetKeyPair.publicKey]);
+    XCTAssert([aliceSRC.chainKey.messageKey.cipherKey isEqual:bobRRC.chainKey.messageKey.cipherKey]);
 }
 
 /**
@@ -92,8 +104,8 @@
  */
 
 - (void)testSimpleExchange {
-    Session *aliceSession = [[Session alloc] initWithReceiverId:_bob.uniqueId identityKey:_aliceIdentityKey];
-    Session *bobSession   = [[Session alloc] initWithReceiverId:_alice.uniqueId identityKey:_bobIdentityKey];
+    Session *aliceSession = [[Session alloc] initWithSenderId:_alice.uniqueId receiverId:_bob.uniqueId];
+    Session *bobSession   = [[Session alloc] initWithSenderId:_bob.uniqueId receiverId:_alice.uniqueId];
     
     [aliceSession addPreKey:_bobPreKey ourBaseKey:_aliceBaseKeyPair];
     [bobSession addOurPreKey:_bobPreKey preKeyExchange:_alicePreKeyExchange];
@@ -153,8 +165,8 @@
 }
 
 - (void)testBobSendingFirst {
-    Session *aliceSession = [[Session alloc] initWithReceiverId:_bob.uniqueId identityKey:_aliceIdentityKey];
-    Session *bobSession   = [[Session alloc] initWithReceiverId:_alice.uniqueId identityKey:_bobIdentityKey];
+    Session *aliceSession = [[Session alloc] initWithSenderId:_alice.uniqueId receiverId:_bob.uniqueId];
+    Session *bobSession   = [[Session alloc] initWithSenderId:_bob.uniqueId receiverId:_alice.uniqueId];
     
     [aliceSession addPreKey:_bobPreKey ourBaseKey:_aliceBaseKeyPair];
     [bobSession addOurPreKey:_bobPreKey preKeyExchange:_alicePreKeyExchange];

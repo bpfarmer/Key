@@ -23,14 +23,12 @@
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder{
-    NSNumber *index = (NSNumber *)[aDecoder decodeObjectOfClass:[NSNumber class] forKey:kCoderIndex];
-    NSNumber *previousIndex = (NSNumber *)[aDecoder decodeObjectOfClass:[NSNumber class] forKey:kCoderPreviousIndex];
     return [self initWithSenderRatchetKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderSenderRatchetKey]
                                  senderId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderSenderId]
                                receiverId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderReceiverId]
                            serializedData:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderSerializedData]
-                                    index:[index intValue]
-                            previousIndex:[previousIndex intValue]];
+                                    index:[aDecoder decodeObjectOfClass:[NSNumber class] forKey:kCoderPreviousIndex]
+                            previousIndex:[aDecoder decodeObjectOfClass:[NSNumber class] forKey:kCoderIndex]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder{
@@ -38,10 +36,8 @@
     [aCoder encodeObject:self.senderId forKey:kCoderSenderId];
     [aCoder encodeObject:self.receiverId forKey:kCoderReceiverId];
     [aCoder encodeObject:self.serializedData forKey:kCoderSerializedData];
-    NSNumber *index = [NSNumber numberWithInt:self.index];
-    NSNumber *previousIndex = [NSNumber numberWithInt:self.previousIndex];
-    [aCoder encodeObject:index forKey:kCoderIndex];
-    [aCoder encodeObject:previousIndex forKey:kCoderPreviousIndex];
+    [aCoder encodeObject:self.index forKey:kCoderIndex];
+    [aCoder encodeObject:self.previousIndex forKey:kCoderPreviousIndex];
 }
 
 + (BOOL)hasUniqueId {

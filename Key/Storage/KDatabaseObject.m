@@ -46,7 +46,7 @@
 }
 
 +(NSDictionary *)propertyTypeToColumnTypeMapping {
-    return @{@"NSString" : @"text", @"bool" : @"integer", @"float" : @"real", @"int" : @"integer"};
+    return @{@"NSString" : @"text", @"bool" : @"integer", @"float" : @"real", @"int" : @"integer", @"NSNumber" : @"integer"};
 }
 
 + (NSArray *)storedPropertyList {
@@ -96,7 +96,7 @@
 }
 
 - (void)remove {
-    NSString *deleteSQL = [NSString stringWithFormat:@"DELETE FROM %@ WHERE unique_id=:unique_id", [[self class] tableName]];
+    NSString *deleteSQL = [NSString stringWithFormat:@"delete from %@ where unique_id=:unique_id", [[self class] tableName]];
     NSDictionary *parameterDictionary = @{@"unique_id" : self.uniqueId};
     [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
         [database executeUpdate:deleteSQL withParameterDictionary:parameterDictionary];

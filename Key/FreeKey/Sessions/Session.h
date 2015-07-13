@@ -24,7 +24,7 @@
 @property (nonatomic, readonly) NSData *baseKeyPublic;
 @property (nonatomic, readwrite) NSString *senderChainId;
 @property (nonatomic, readwrite) NSString *receiverChainId;
-@property (nonatomic, readwrite) int previousIndex;
+@property (nonatomic, readwrite) NSNumber *previousIndex;
 
 - (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId;
 

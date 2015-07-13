@@ -23,7 +23,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder{
     return [self initWithMessageKey:[aDecoder decodeObjectOfClass:[MessageKey class] forKey:kCoderMessageKey]
                    senderRatchetKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderSenderRatchetKey]
-                       messageIndex:[aDecoder decodeIntForKey:kCoderIndex]
+                       messageIndex:[aDecoder decodeObjectOfClass:[NSNumber class] forKey:kCoderIndex]
                           sessionId:[aDecoder decodeObjectOfClass:[NSNumber class] forKey:kCoderSessionId]];
     
 }
@@ -31,8 +31,8 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder{
     [aCoder encodeObject:self.messageKey forKey:kCoderMessageKey];
     [aCoder encodeObject:self.senderRatchetKey forKey:kCoderSenderRatchetKey];
-    [aCoder encodeInt:self.messageIndex forKey:kCoderIndex];
-    [aCoder encodeInt:self.sessionId forKey:kCoderSessionId];
+    [aCoder encodeObject:self.messageIndex forKey:kCoderIndex];
+    [aCoder encodeObject:self.sessionId forKey:kCoderSessionId];
 }
 
 + (BOOL)hasUniqueId {

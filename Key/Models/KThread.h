@@ -26,8 +26,6 @@
                          userIds:(NSArray *)userIds
                             name:(NSString *)name
                  latestMessageId:(NSString *)latestMessageId
-                   lastMessageAt:(NSDate *)lastMessageAt
-                      archivedAt:(NSDate *)archivedAt
                             read:(BOOL)read;
 
 - (void)processLatestMessage:(KMessage *)message;

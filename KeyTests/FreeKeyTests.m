@@ -68,15 +68,25 @@
     [super tearDown];
 }
 
+- (void)testSession {
+    NSLog(@"ALICE SESSION SENDER: %@", _aliceSession.senderId);
+    NSLog(@"BOB SESSION SENDER: %@", _bobSession.senderId);
+}
+
 - (void)testSendAndDecryptThread {
     KThread *sentThread = [[KThread alloc] initWithUsers:@[_alice, _bob]];
+    [sentThread save];
     EncryptedMessage *message = [FreeKey encryptObject:sentThread session:_aliceSession];
+    NSLog(@"SENT MAC: %@", message.mac);
+    message.senderId = _alice.uniqueId;
     KThread *receivedThread = (KThread *)[FreeKey decryptEncryptedMessage:message session:_bobSession];
+    NSLog(@"%@ / %@", sentThread.uniqueId, receivedThread.uniqueId);
     XCTAssert([sentThread.uniqueId isEqual:receivedThread.uniqueId]);
 }
 
 - (void)testSendAndDecryptMessage {
     KThread *sentThread = [[KThread alloc] initWithUsers:@[_alice, _bob]];
+    [sentThread save];
     KMessage *sentMessage = [[KMessage alloc] initWithAuthorId:_alice.uniqueId threadId:sentThread.uniqueId body:@"Great Big Test"];
     EncryptedMessage *encryptedThread = [FreeKey encryptObject:sentThread session:_aliceSession];
     EncryptedMessage *encryptedMessage = [FreeKey encryptObject:sentMessage session:_aliceSession];

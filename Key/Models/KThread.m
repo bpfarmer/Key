@@ -23,6 +23,12 @@
         [userIds addObject:user.uniqueId];
         [usernames addObject:user.username];
     }
+    KThread *oldThread = [KThread findByDictionary:@{@"name" : [usernames componentsJoinedByString:@", "]}];
+    if(oldThread) {
+        self = oldThread;
+        return self;
+    }
+    
     self = [super init];
     if (self) {
         _userIds = userIds;
@@ -35,8 +41,6 @@
                          userIds:(NSArray *)userIds
                             name:(NSString *)name
                  latestMessageId:(NSString *)latestMessageId
-                   lastMessageAt:(NSDate *)lastMessageAt
-                      archivedAt:(NSDate *)archivedAt
                             read:(BOOL)read {
     
     self = [super initWithUniqueId:uniqueId];
@@ -44,8 +48,6 @@
         _name = name;
         _userIds            = userIds;
         _latestMessageId    = latestMessageId;
-        //_lastMessageAt      = lastMessageAt;
-        //_archivedAt         = archivedAt;
         _read               = read;
     }
     return self;
@@ -63,8 +65,6 @@
                           userIds:userIds
                              name:nil
                   latestMessageId:nil
-                    lastMessageAt:nil
-                       archivedAt:nil
                              read:NO];
 }
 
@@ -118,6 +118,6 @@
 }
 
 - (BOOL)saved {
-    return (BOOL) self.uniqueId;
+    return ([KThread findById:self.uniqueId] != nil);
 }
 @end

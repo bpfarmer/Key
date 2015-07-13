@@ -13,8 +13,8 @@
 @interface EncryptedMessage : KDatabaseObject <KSendable>
 
 @property (nonatomic, readonly) NSData *senderRatchetKey;
-@property (nonatomic, readonly) int index;
-@property (nonatomic, readonly) int previousIndex;
+@property (nonatomic, readonly) NSNumber *index;
+@property (nonatomic, readonly) NSNumber *previousIndex;
 @property (nonatomic, readonly) NSData *cipherText;
 @property (nonatomic, readonly) NSData *serializedData;
 @property (nonatomic, readonly) NSData *mac;
@@ -27,15 +27,15 @@
            receiverIdentityKey:(NSData *)receiverIdentityKey
               senderRatchetKey:(NSData *)senderRatchetKey
                     cipherText:(NSData *)cipherText
-                         index:(int)index
-                 previousIndex:(int)previousIndex;
+                         index:(NSNumber *)index
+                 previousIndex:(NSNumber *)previousIndex;
 
 - (instancetype) initWithSenderRatchetKey:(NSData *)senderRatchetKey
                                  senderId:(NSString *)senderId
                                receiverId:(NSString *)receiverId
                            serializedData:(NSData *)serializedData
-                                    index:(int)index
-                            previousIndex:(int)previousIndex;
+                                    index:(NSNumber *)index
+                            previousIndex:(NSNumber *)previousIndex;
 
 + (NSArray *)remoteKeys;
 - (NSData *)mac;

@@ -15,8 +15,6 @@
 #define kCoderUserIds @"userIds"
 #define kCoderName @"name"
 #define kCoderLatestMessage @"latestMessage"
-#define kCoderLastMessageAt @"lastMessageAt"
-#define kCoderArchivedAt @"archivedAt"
 #define kCoderRead @"read"
 
 + (BOOL)supportsSecureCoding {
@@ -28,9 +26,7 @@
     return [self initWithUniqueId:[decoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]
                           userIds:[decoder decodeObjectOfClass:[NSArray class] forKey:kCoderUserIds]
                              name:[decoder decodeObjectOfClass:[NSString class] forKey:kCoderName]
-                    latestMessageId:[decoder decodeObjectOfClass:[KMessage class] forKey:kCoderLatestMessage]
-                    lastMessageAt:[decoder decodeObjectOfClass:[NSDate class] forKey:kCoderLastMessageAt]
-                       archivedAt:[decoder decodeObjectOfClass:[NSDate class] forKey:kCoderArchivedAt]
+                  latestMessageId:[decoder decodeObjectOfClass:[KMessage class] forKey:kCoderLatestMessage]
                              read:[decoder decodeBoolForKey:kCoderRead]];
 }
 

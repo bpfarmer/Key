@@ -101,7 +101,6 @@
     IdentityKey *identityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:self.uniqueId];
     [identityKey save];
     [self setPublicKey:identityKey.keyPair.publicKey];
-    self.identityKey = identityKey;
     [self save];
 }
 

@@ -142,7 +142,8 @@ static NSString *TableViewCellIdentifier = @"Messages";
         
         if(!self.thread.saved) {
             [self.thread save];
-            [FreeKey sendEncryptableObject:self.thread recipients:self.thread.recipientIds];
+            NSLog(@"RETRIEVING CURRENT THREAD: %@", self.thread);
+            //[FreeKey sendEncryptableObject:self.thread recipients:self.thread.recipientIds];
         }
         
         if(self.thread.uniqueId) {

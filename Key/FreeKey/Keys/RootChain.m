@@ -6,60 +6,67 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "RootChain.h"
-#import "RootKey.h"
-#import "ChainKey.h"
 #import "KeyDerivation.h"
 #import <25519/Curve25519.h>
 #import <25519/Ed25519.h>
 #import "RootChain+Serialize.h"
+#import "MessageKey.h"
+#import <CommonCrypto/CommonCrypto.h>
+
+#define kTSKeySeedLength 1
+
+static uint8_t kMessageKeySeed[kTSKeySeedLength]    = {01};
+static uint8_t kChainKeySeed[kTSKeySeedLength]      = {02};
 
 @implementation RootChain
 
-- (instancetype)initWithRootKey:(RootKey *)rootKey chainKey:(ChainKey *)chainKey {
+- (instancetype)initWithRootKey:(NSData *)rootKey chainKey:(NSData *)chainKey {
     self = [super init];
     if(self) {
         _rootKey  = rootKey;
         _chainKey = chainKey;
+        _index    = [[NSNumber alloc] initWithInt:0];
     }
     
     return self;
 }
 
-- (instancetype)initWithRootKey:(RootKey *)rootKey
-                       chainKey:(ChainKey *)chainKey
-              ourRatchetKeyPair:(ECKeyPair *)ourRatchetKeyPair
-                theirRatchetKey:(NSData *)theirRatchetKey {
-    self = [self initWithRootKey:rootKey chainKey:chainKey];
-    if(self) {
-        _ourRatchetKeyPair = ourRatchetKeyPair;
-        _theirRatchetKey = theirRatchetKey;
-    }
-    return self;
+- (MessageKey *)messageKey {
+    KeyDerivation *keyMaterial = [[KeyDerivation alloc] fromData:[self baseMaterial:[NSData dataWithBytes:kMessageKeySeed length:kTSKeySeedLength] forKey:self.chainKey]];
+    MessageKey *messageKey = [[MessageKey alloc] initWithCipherKey:keyMaterial.cipherKey
+                                                 macKey:keyMaterial.macKey
+                                                     iv:keyMaterial.iv
+                                                  index:self.index];
+    return messageKey;
 }
 
-- (instancetype)iterateRootKeyWithTheirEphemeral:(NSData *)theirEphemeral ourEphemeral:(ECKeyPair *)ourEphemeral {
+- (void)iterateRootKeyWithTheirEphemeral:(NSData *)theirEphemeral ourEphemeral:(ECKeyPair *)ourEphemeral {
     NSData *sharedSecret = [Curve25519 generateSharedSecretFromPublicKey:theirEphemeral andKeyPair:ourEphemeral];
-    
-    KeyDerivation *keyMaterial = [[KeyDerivation alloc] fromSharedSecret:sharedSecret rootKey:self.rootKey.keyData];
-    
-    RootChain *nextRootChain = [[RootChain alloc] initWithRootKey:[[RootKey alloc] initWithData:keyMaterial.cipherKey]
-                                                         chainKey:[[ChainKey alloc] initWithData:keyMaterial.macKey
-                                                                                           index:0]];
-    [nextRootChain setTheirRatchetKey:theirEphemeral];
-    [nextRootChain setOurRatchetKeyPair:ourEphemeral];
-    return nextRootChain;
+    KeyDerivation *keyMaterial = [[KeyDerivation alloc] fromSharedSecret:sharedSecret rootKey:self.rootKey];
+    self.rootKey  = keyMaterial.cipherKey;
+    self.chainKey = keyMaterial.macKey;
+    self.ourRatchetKeyPair = ourEphemeral;
+    [self save];
 }
 
-- (instancetype)iterateChainKey {
-    RootChain *nextRootChain = [[RootChain alloc] initWithRootKey:self.rootKey chainKey:[self.chainKey nextChainKey]];
-    [nextRootChain setOurRatchetKeyPair:self.ourRatchetKeyPair];
-    [nextRootChain setTheirRatchetKey:self.theirRatchetKey];
-    return nextRootChain;
+- (void)iterateChainKey {
+    self.chainKey = [self baseMaterial:[NSData dataWithBytes:kChainKeySeed length:kTSKeySeedLength] forKey:self.chainKey];
+    [self incrementIndex];
+    [self save];
 }
 
-+ (BOOL)hasUniqueId {
-    return NO;
+- (void)incrementIndex {
+    self.index    = [[NSNumber alloc] initWithInt:self.index.intValue + 1];
 }
+
+- (NSData*)baseMaterial:(NSData*)seed forKey:(NSData *)key{
+    uint8_t result[CC_SHA256_DIGEST_LENGTH] = {0};
+    CCHmacContext ctx;
+    CCHmacInit(&ctx, kCCHmacAlgSHA256, [key bytes], [key length]);
+    CCHmacUpdate(&ctx, [seed bytes], [seed length]);
+    CCHmacFinal(&ctx, result);
+    return [NSData dataWithBytes:result length:sizeof(result)];
+}
+
 
 @end

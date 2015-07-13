@@ -9,26 +9,22 @@
 #import <Foundation/Foundation.h>
 #import "KDatabaseObject.h"
 
-@class RootKey;
-@class ChainKey;
+@class MessageKey;
 @class ECKeyPair;
 @class SessionState;
 
 @interface RootChain : KDatabaseObject
 
-@property (nonatomic) RootKey   *rootKey;
-@property (nonatomic) ChainKey  *chainKey;
+@property (nonatomic) NSData    *rootKey;
+@property (nonatomic) NSNumber  *index;
+@property (nonatomic) NSData    *chainKey;
 @property (nonatomic) ECKeyPair *ourRatchetKeyPair;
 @property (nonatomic) NSData    *theirRatchetKey;
 
-- (instancetype)initWithRootKey:(RootKey *)rootKey chainKey:(ChainKey *)chainKey;
-- (instancetype)initWithRootKey:(RootKey *)rootKey
-                       chainKey:(ChainKey *)chainKey
-              ourRatchetKeyPair:(ECKeyPair *)ourRatchetKeyPair
-                theirRatchetKey:(NSData *)theirRatchetKey;
-- (instancetype)iterateChainKey;
-- (instancetype)iterateRootKeyWithTheirEphemeral:(NSData *)theirEphemeral ourEphemeral:(ECKeyPair *)ourEphemeral;
+- (instancetype)initWithRootKey:(NSData *)rootKey chainKey:(NSData *)chainKey;
 
-//- (void)setRatchetKeyPair:(ECKeyPair *)ratchetKeyPair;
+- (MessageKey *)messageKey;
+- (void)iterateChainKey;
+- (void)iterateRootKeyWithTheirEphemeral:(NSData *)theirEphemeral ourEphemeral:(ECKeyPair *)ourEphemeral;
 
 @end

@@ -36,8 +36,6 @@ static NSString *TableViewCellIdentifier = @"Threads";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSLog(@"CURRENT USER: %@", [KAccountManager sharedManager].user);
-    
     InboxViewController *inboxViewController = [[InboxViewController alloc] initWithNibName:@"InboxView" bundle:nil];
     [self addChildViewController:inboxViewController];
     [self.scrollView addSubview:inboxViewController.view];

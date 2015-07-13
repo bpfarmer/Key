@@ -19,8 +19,8 @@
            receiverIdentityKey:(NSData *)receiverIdentityKey
               senderRatchetKey:(NSData *)senderRatchetKey
                     cipherText:(NSData *)cipherText
-                         index:(int)index
-                 previousIndex:(int)previousIndex {
+                         index:(NSNumber *)index
+                 previousIndex:(NSNumber *)previousIndex {
     
     
     self = [super init];
@@ -30,6 +30,7 @@
         _cipherText       = cipherText;
         
         NSMutableData *messageAndMac = [[NSMutableData alloc] init];
+        NSLog(@"GENERATING MAC WITH: SENDER: %@, RECEIVER: %@", senderIdentityKey, receiverIdentityKey);
         NSData *mac = [HMAC generateMacWithMacKey:macKey
                                 senderIdentityKey:senderIdentityKey
                               receiverIdentityKey:receiverIdentityKey
@@ -48,8 +49,8 @@
                                 senderId:(NSString *)senderId
                               receiverId:(NSString *)receiverId
                           serializedData:(NSData *)serializedData
-                                   index:(int)index
-                           previousIndex:(int)previousIndex {
+                                   index:(NSNumber *)index
+                           previousIndex:(NSNumber *)previousIndex {
     self = [super init];
     
     if(self) {
