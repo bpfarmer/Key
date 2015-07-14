@@ -69,11 +69,11 @@
 }
 
 - (Session *)aliceSession {
-    return [[FreeKeySessionManager sharedManager] processNewKeyExchange:_bobPreKey localUser:_alice remoteUser:_bob];
+    return nil;//return [[FreeKeySessionManager sharedManager] processNewKeyExchange:_bobPreKey localUser:_alice remoteUser:_bob];
 }
 
 - (Session *)bobSession {
-    return [[FreeKeySessionManager sharedManager] processNewKeyExchange:[self aliceSession].preKeyExchange localUser:_bob remoteUser:_alice];
+    return nil;//return [[FreeKeySessionManager sharedManager] processNewKeyExchange:[self aliceSession].preKeyExchange localUser:_bob remoteUser:_alice];
 }
 
 @end

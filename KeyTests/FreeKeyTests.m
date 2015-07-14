@@ -79,7 +79,7 @@
     KThread *sentThread = [[KThread alloc] initWithUsers:@[_alice, _bob]];
     [sentThread save];
     EncryptedMessage *message = [FreeKey encryptObject:sentThread session:aliceSession];
-    NSLog(@"SENT MAC: %@", message.mac);
+    NSLog(@"INDEX: %@", message.index);
     message.senderId = _alice.uniqueId;
     KThread *receivedThread = (KThread *)[FreeKey decryptEncryptedMessage:message session:bobSession];
     NSLog(@"%@ / %@", sentThread.uniqueId, receivedThread.uniqueId);
@@ -116,6 +116,7 @@
     encryptedMessageDictionary[remoteKeys[0]] = [encryptedMessageDictionary[remoteKeys[0]] base64EncodedString];
     encryptedMessageDictionary[remoteKeys[3]] = [encryptedMessageDictionary[remoteKeys[3]] base64EncodedString];
     NSDictionary *decodedMessageDictionary = [[HttpManager sharedManager] base64DecodedDictionary:encryptedMessageDictionary];
+    NSLog(@"ENCRYPTED MESSAGE DICT: %@", decodedMessageDictionary);
     EncryptedMessage *receivedEncryptedMessage = [FreeKeyResponseHandler createEncryptedMessageFromRemoteDictionary:decodedMessageDictionary];
     KMessage *receivedMessage = (KMessage *)[FreeKey decryptEncryptedMessage:receivedEncryptedMessage session:bobSession];
     XCTAssert([sentMessage.body isEqualToString:receivedMessage.body]);

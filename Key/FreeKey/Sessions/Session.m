@@ -36,6 +36,7 @@
     if(self) {
         _senderId   = senderId;
         _receiverId = receiverId;
+        _previousIndex = [[NSNumber alloc] initWithInt:0];
     }
     return self;
 }
@@ -95,10 +96,6 @@
     
     [self ratchetSenderRootChain:theirBaseKey];
     [self addReceivedRatchetKey:theirBaseKey];
-    
-    RootChain *ratchetSRC = [RootChain findById:self.senderChainId];
-    NSLog(@"FIRST RATCHET SENDER ROOT CHAIN FOR %@: %@", self.senderId, ratchetSRC.rootKey);
-    NSLog(@"RATCHETED WITH: %@", ratchetSRC.ourRatchetKeyPair.publicKey);
 }
 
 
@@ -114,13 +111,11 @@
     RootChain *senderRootChain = [[RootChain alloc] initWithRootKey:[derivedSenderMaterial subdataWithRange:NSMakeRange(0, 32)] chainKey:[derivedSenderMaterial subdataWithRange:NSMakeRange(32, 32)]];
     [senderRootChain save];
     _senderChainId = senderRootChain.uniqueId;
-    NSLog(@"INITIAL SENDER ROOT CHAIN FOR %@: %@", self.senderId, senderRootChain.rootKey);
     
     NSData *derivedReceiverMaterial = [HKDFKit deriveKey:masterReceiverKey.keyData info:info salt:salt outputSize:64];
     RootChain *receiverRootChain = [[RootChain alloc] initWithRootKey:[derivedReceiverMaterial subdataWithRange:NSMakeRange(0, 32)] chainKey:[derivedReceiverMaterial subdataWithRange:NSMakeRange(32, 32)]];
     [receiverRootChain save];
     _receiverChainId = receiverRootChain.uniqueId;
-    NSLog(@"INITIAL RECEIVER ROOT CHAIN FOR %@: %@", self.senderId, receiverRootChain.rootKey);
     
     [self save];
 }
@@ -155,7 +150,7 @@
     
     NSData *senderRatchetKey   = senderRootChain.ourRatchetKeyPair.publicKey;
     NSData *encryptedText = [AES_CBC encryptCBCMode:message withKey:messageKey.cipherKey withIV:messageKey.iv];
-    NSLog(@"INDEX: %u", senderRootChain.index);
+    NSLog(@"ENCRYPTING WITH KEY: %@", messageKey.cipherKey);
     EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithMacKey:messageKey.macKey
                                                                 senderIdentityKey:self.sender.identityKey.publicKey
                                                               receiverIdentityKey:self.receiver.publicKey
@@ -173,12 +168,13 @@
     [self processReceiverChain:encryptedMessage];
     NSString *messageIndex = [NSString stringWithFormat:@"%@", encryptedMessage.index];
     SessionState *sessionState = [SessionState findByDictionary:@{@"senderRatchetKey" : encryptedMessage.senderRatchetKey, @"messageIndex" : messageIndex}];
+    NSLog(@"SESSION STATE: %@", sessionState);
     if(![HMAC verifyWithMac:[encryptedMessage mac]
           senderIdentityKey:self.receiver.publicKey
         receiverIdentityKey:self.sender.identityKey.publicKey
                      macKey:sessionState.messageKey.macKey
              serializedData:encryptedMessage.serializedData]); //TODO: throw exception
-    
+    NSLog(@"DECRYPTING WITH KEY: %@", sessionState.messageKey.cipherKey);
     NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
                                             withKey:sessionState.messageKey.cipherKey
                                              withIV:sessionState.messageKey.iv];
@@ -186,23 +182,21 @@
 }
 
 - (void)processReceiverChain:(EncryptedMessage *)encryptedMessage {
-    NSData *senderRatchetKey = encryptedMessage.senderRatchetKey;
-    RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
-    if(![senderRatchetKey isEqualToData:receiverRootChain.theirRatchetKey]) {
-        if(encryptedMessage.previousIndex > receiverRootChain.index) {
-            while(encryptedMessage.index >= receiverRootChain.index) {
-                SessionState *sessionState = [[SessionState alloc] initWithMessageKey:receiverRootChain.messageKey senderRatchetKey:senderRatchetKey messageIndex:receiverRootChain.index sessionId:self.uniqueId];
-                [sessionState save];
-                [receiverRootChain iterateChainKey];
-            }
-        }
+    if([self isNewEphemeral:encryptedMessage.senderRatchetKey]) {
+        [self saveSessionStatesUpToIndex:encryptedMessage.previousIndex];
     }
     [self ratchetRootChains:encryptedMessage.senderRatchetKey];
-    RootChain *newReceiverRootChain = [RootChain findById:self.receiverChainId];
-    while(encryptedMessage.index >= newReceiverRootChain.index) {
-        SessionState *sessionState = [[SessionState alloc] initWithMessageKey:newReceiverRootChain.messageKey senderRatchetKey:senderRatchetKey messageIndex:newReceiverRootChain.index sessionId:self.uniqueId];
+    [self saveSessionStatesUpToIndex:encryptedMessage.index];
+    self.previousIndex = encryptedMessage.index;
+    [self save];
+}
+
+- (void)saveSessionStatesUpToIndex:(NSNumber *)index {
+    RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
+    while(index.intValue >= receiverRootChain.index.intValue) {
+        SessionState *sessionState = [[SessionState alloc] initWithMessageKey:receiverRootChain.messageKey senderRatchetKey:receiverRootChain.theirRatchetKey messageIndex:receiverRootChain.index sessionId:self.uniqueId];
         [sessionState save];
-        [newReceiverRootChain iterateChainKey];
+        [receiverRootChain iterateChainKey];
     }
 }
 
@@ -216,6 +210,7 @@
 
 - (void)ratchetReceiverRootChain:(NSData *)theirEphemeral {
     RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
+    self.previousIndex = receiverRootChain.index;
     ECKeyPair *ourEphemeral = receiverRootChain.ourRatchetKeyPair;
     [receiverRootChain iterateRootKeyWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
     NSLog(@"RATCHETING RRC FOR %@ WITH: %@ AND %@", self.senderId, theirEphemeral, ourEphemeral.publicKey);

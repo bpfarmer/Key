@@ -50,13 +50,12 @@
     NSArray *remoteKeys = [EncryptedMessage remoteKeys];
     NSNumber *index = [[NSNumber alloc] initWithInt:[dictionary[remoteKeys[4]] intValue]];
     NSNumber *previousIndex = [[NSNumber alloc] initWithInt:[dictionary[remoteKeys[5]] intValue]];
-    EncryptedMessage *encryptedMessage =
-    [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[remoteKeys[0]]
-                                              senderId:dictionary[remoteKeys[2]]
-                                            receiverId:dictionary[remoteKeys[1]]
-                                        serializedData:dictionary[remoteKeys[3]]
-                                                 index:index
-                                         previousIndex:previousIndex];
+    EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[remoteKeys[0]]
+                                                                                   senderId:dictionary[remoteKeys[2]]
+                                                                                 receiverId:dictionary[remoteKeys[1]]
+                                                                             serializedData:dictionary[remoteKeys[3]]
+                                                                                      index:index
+                                                                              previousIndex:previousIndex];
     
     [encryptedMessage save];
     return encryptedMessage;

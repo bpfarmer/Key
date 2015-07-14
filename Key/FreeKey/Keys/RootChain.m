@@ -25,7 +25,7 @@ static uint8_t kChainKeySeed[kTSKeySeedLength]      = {02};
     if(self) {
         _rootKey  = rootKey;
         _chainKey = chainKey;
-        _index    = 0;
+        _index    = [[NSNumber alloc] initWithInteger:0];
     }
     return self;
 }
@@ -44,6 +44,7 @@ static uint8_t kChainKeySeed[kTSKeySeedLength]      = {02};
     KeyDerivation *keyMaterial = [[KeyDerivation alloc] fromSharedSecret:sharedSecret rootKey:self.rootKey];
     self.rootKey  = keyMaterial.cipherKey;
     self.chainKey = keyMaterial.macKey;
+    self.index    = [[NSNumber alloc] initWithInt:0];
     [self save];
 }
 
@@ -54,7 +55,7 @@ static uint8_t kChainKeySeed[kTSKeySeedLength]      = {02};
 }
 
 - (void)incrementIndex {
-    self.index    = [[NSNumber alloc] initWithInt:[self.index intValue] + 1];
+    self.index = [[NSNumber alloc] initWithInt:[self.index intValue] + 1];
 }
 
 - (NSData*)baseMaterial:(NSData*)seed forKey:(NSData *)key{
