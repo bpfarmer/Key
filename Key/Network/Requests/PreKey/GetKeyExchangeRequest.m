@@ -26,6 +26,8 @@
 }
 
 + (TOCFuture *)makeRequestWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
+    NSLog(@"LOCAL USER: %@", localUser.uniqueId);
+    NSLog(@"REMOTE USER: %@", remoteUser.uniqueId);
     TOCFutureSource *resultSource = [TOCFutureSource new];
     GetKeyExchangeRequest *request = [[GetKeyExchangeRequest alloc] initWithLocalUser:localUser remoteUser:remoteUser];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
@@ -48,9 +50,7 @@
     if(dictionary[kPreKeyExchangeRemoteAlias]) {
         PreKeyExchange *preKeyExchange = [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:dictionary[kPreKeyExchangeRemoteAlias]];
         
-        [[KStorageManager sharedManager] setObject:preKeyExchange
-                                            forKey:preKeyExchange.senderId
-                                      inCollection:kPreKeyExchangeCollection];
+        [preKeyExchange save];
         NSLog(@"-- PREKEY EXCHANGE BASE KEY: %@", preKeyExchange.sentSignedBaseKey);
         NSLog(@"-- PREKEY EXCHANGE ID KEY: %@", preKeyExchange.senderIdentityPublicKey);
         keyExchange = preKeyExchange;
@@ -58,9 +58,7 @@
         PreKey *preKey =
         [FreeKeyResponseHandler createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
         
-        [[KStorageManager sharedManager] setObject:preKey
-                                            forKey:preKey.userId
-                                      inCollection:kTheirPreKeyCollection];
+        [preKey save];
         keyExchange = preKey;
     }
     return keyExchange;

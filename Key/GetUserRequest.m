@@ -30,12 +30,15 @@
         if(responseObject[kUsersAlias]) {
             NSArray *usersResponseArray = (NSArray *) responseObject[kUsersAlias];
             NSMutableArray *usersArray  = [[NSMutableArray alloc] init];
-            for (NSDictionary *user in usersResponseArray) {
-                [usersArray addObject:[request createUserFromDictionary:[request base64DecodedDictionary:user]]];
+            if(usersResponseArray.count > 0) {
+                for (NSDictionary *user in usersResponseArray) {
+                    [usersArray addObject:[request createUserFromDictionary:[request base64DecodedDictionary:user]]];
+                }
+                [resultSource trySetResult:usersArray];
             }
-            [resultSource trySetResult:usersArray];
         }else {
-            [resultSource trySetResult:[request createUserFromDictionary:[request base64DecodedDictionary:responseObject]]];
+            KUser *remoteUser = [request createUserFromDictionary:[request base64DecodedDictionary:responseObject]];
+            if(remoteUser.uniqueId) [resultSource trySetResult:remoteUser];
         }
     };
     void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =

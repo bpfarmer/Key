@@ -14,7 +14,7 @@
 @implementation KPost
 
 - (KUser *)author {
-    return [[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
+    return [KUser findById:self.authorId];//[[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
 }
 
 - (instancetype)initWithAuthorId:(NSString *)authorId text:(NSString *)text {
@@ -57,7 +57,7 @@
 
 - (NSString *)generateUniqueId {
     NSUInteger uniqueHash = self.authorId.hash ^ (NSUInteger) [self.createdAt timeIntervalSince1970] ^ self.text.hash;
-    return [NSString stringWithFormat:@"%@_%u", [KPost collection], uniqueHash];
+    return [NSString stringWithFormat:@"%@_%u", [KPost tableName], uniqueHash];
 }
 
 @end

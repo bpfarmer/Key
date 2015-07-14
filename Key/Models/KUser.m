@@ -11,7 +11,6 @@
 #import "KStorageManager.h"
 #import "KAccountManager.h"
 #import "KThread.h"
-#import "KYapDatabaseSecondaryIndex.h"
 #import "FreeKey.h"
 #import "IdentityKey.h"
 #import <25519/Curve25519.h>
@@ -52,24 +51,6 @@
     if (self) {
         _username = [username lowercaseString];
         [self setPasswordCryptInKeychain:password];
-    }
-    return self;
-}
-
-- (instancetype)initWithUniqueId:(NSString *)uniqueId
-                        username:(NSString *)username
-                   passwordCrypt:(NSData *)passwordCrypt
-                    passwordSalt:(NSData *)passwordSalt
-                     identityKey:(IdentityKey *)identityKey
-                       publicKey:(NSData *)publicKey{
-    self = [super initWithUniqueId:uniqueId];
-    
-    if (self) {
-        _username      = [username lowercaseString];
-        _passwordCrypt = passwordCrypt;
-        _passwordSalt  = passwordSalt;
-        _identityKey = identityKey;
-        _publicKey   = publicKey;
     }
     return self;
 }
@@ -118,48 +99,13 @@
 
 - (void)setupIdentityKey {
     IdentityKey *identityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:self.uniqueId];
-    [self setIdentityKey:identityKey];
+    [identityKey save];
     [self setPublicKey:identityKey.keyPair.publicKey];
     [self save];
 }
 
-#pragma mark - Batch Query Methods
-
-+ (NSArray *)fullNamesForUserIds:(NSArray *)userIds {
-    NSMutableArray *fullNames = [[NSMutableArray alloc] init];
-    
-    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        [transaction enumerateRowsForKeys:userIds inCollection:[self collection] unorderedUsingBlock:^(NSUInteger keyIndex, id object, id metadata, BOOL *stop) {
-            [fullNames addObject:[object fullName]];
-        }];
-    }];
-    return fullNames;
-}
-
-#pragma mark - Query Methods
-+ (KUser *)fetchObjectWithUsername:(NSString *)username {
-    __block NSString *userId;
-    [[[KStorageManager sharedManager] dbConnection] readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        YapDatabaseQuery *query = [YapDatabaseQuery queryWithFormat:@"WHERE username = ?", [username lowercaseString]];
-        [[transaction ext:KUsernameSQLiteIndex] enumerateKeysMatchingQuery:query usingBlock:^(NSString *collection, NSString *key, BOOL *stop) {
-            userId = key;
-            *stop = YES;
-        }];
-    }];
-    if(userId) {
-        return (KUser *)[[KStorageManager sharedManager] objectForKey:userId inCollection:[KUser collection]];
-    }else {
-        return nil;
-    }
-}
-
-+ (NSArray *)userIdsWithUsernames:(NSArray *)usernames {
-    NSMutableArray *userIds = [[NSMutableArray alloc] init];
-    for(NSString *username in usernames) {
-        KUser *user = [self fetchObjectWithUsername:username];
-        if(user) [userIds addObject:user.uniqueId];
-    }
-    return userIds;
+- (IdentityKey *)identityKey {
+    return [IdentityKey findByDictionary:@{@"userId" : self.uniqueId}];
 }
 
 #pragma mark - User Custom Attributes
@@ -172,11 +118,18 @@
     return [self username];
 }
 
-#pragma mark - YapDatabase Methods
-
-- (NSArray *)yapDatabaseRelationshipEdges {
-    NSArray *edges = nil;
-    return edges;
+- (NSArray *)contacts {
+    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
+        return [database executeQuery:[NSString stringWithFormat:@"select * from %@ where unique_id <> :unique_id", [self.class tableName]] withParameterDictionary:@{@"unique_id" : self.uniqueId}];
+    }];
+    
+    NSMutableArray *contacts = [[NSMutableArray alloc] init];
+    while(resultSet.next) {
+        KUser *contact = [[self.class alloc] initWithResultSetRow:resultSet.resultDictionary];
+        [contacts addObject:contact];
+    }
+    [resultSet close];
+    return contacts;
 }
 
 #pragma mark - Password Handling Methods
@@ -224,6 +177,11 @@
         passwordSalt = [passwordSaltString base64DecodedData];
     }
     return passwordSalt;
+}
+
+- (void)setIdentityKey:(IdentityKey *)identityKey {
+    identityKey.userId = self.uniqueId;
+    [identityKey save];
 }
 
 + (NSArray *)remoteKeys {

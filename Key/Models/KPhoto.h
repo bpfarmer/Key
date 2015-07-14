@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 
-@interface KPhoto : KYapDatabaseObject
+@interface KPhoto : KDatabaseObject
 
 @property (nonatomic, readonly) NSString *filename;
 @property (nonatomic, readonly) NSData   *media;

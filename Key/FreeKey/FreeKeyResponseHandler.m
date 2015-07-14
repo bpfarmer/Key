@@ -27,7 +27,7 @@
                                         identityKey:dictionary[remoteKeys[5]]
                                         baseKeyPair:nil];
     
-    [[KStorageManager sharedManager] setObject:preKey forKey:preKey.userId inCollection:kTheirPreKeyCollection];
+    [preKey save];
     return preKey;
 }
 
@@ -42,30 +42,22 @@
                     receiverIdentityPublicKey:dictionary[remoteKeys[5]]
                              baseKeySignature:dictionary[remoteKeys[6]]];
     
-    [[KStorageManager sharedManager] setObject:preKeyExchange
-                                        forKey:preKeyExchange.senderId
-                                  inCollection:kPreKeyExchangeCollection];
+    [preKeyExchange save];
     return preKeyExchange;
 }
 
 + (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary {
     NSArray *remoteKeys = [EncryptedMessage remoteKeys];
-    NSNumber *index = (NSNumber *)dictionary[remoteKeys[4]];
-    NSNumber *previousIndex = (NSNumber *)dictionary[remoteKeys[5]];
-    EncryptedMessage *encryptedMessage =
-    [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[remoteKeys[0]]
-                                              senderId:dictionary[remoteKeys[2]]
-                                            receiverId:dictionary[remoteKeys[1]]
-                                        serializedData:dictionary[remoteKeys[3]]
-                                                 index:[index intValue]
-                                         previousIndex:[previousIndex intValue]];
+    NSNumber *index = [[NSNumber alloc] initWithInt:[dictionary[remoteKeys[4]] intValue]];
+    NSNumber *previousIndex = [[NSNumber alloc] initWithInt:[dictionary[remoteKeys[5]] intValue]];
+    EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithSenderRatchetKey:dictionary[remoteKeys[0]]
+                                                                                   senderId:dictionary[remoteKeys[2]]
+                                                                                 receiverId:dictionary[remoteKeys[1]]
+                                                                             serializedData:dictionary[remoteKeys[3]]
+                                                                                      index:index
+                                                                              previousIndex:previousIndex];
     
-    NSString *uniqueMessageId = [NSString stringWithFormat:@"%@_%f_%@",
-                                 dictionary[encryptedMessage],
-                                 [[NSDate date] timeIntervalSince1970],
-                                 index];
-    
-    [[KStorageManager sharedManager]setObject:encryptedMessage forKey:uniqueMessageId inCollection:kEncryptedMessageCollection];
+    [encryptedMessage save];
     return encryptedMessage;
 }
 

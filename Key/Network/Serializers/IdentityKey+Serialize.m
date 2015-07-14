@@ -15,6 +15,7 @@
 #define kCoderPublicKey @"publicKey"
 #define kCoderUserId @"userId"
 #define kStorageCollection @"IdentityKey"
+#define kCoderActive @"active"
 
 @implementation IdentityKey(Serialize)
 
@@ -23,17 +24,21 @@
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder{
-    return [self initWithUniqueId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]
-                           userId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUserId]
-                        publicKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderPublicKey]
-                          keyPair:[aDecoder decodeObjectOfClass:[ECKeyPair class] forKey:kCoderKeyPair]];
+    return [self initWithUserId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUserId]
+                      publicKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderPublicKey]
+                        keyPair:[aDecoder decodeObjectOfClass:[ECKeyPair class] forKey:kCoderKeyPair]
+                         active:[aDecoder decodeBoolForKey:kCoderActive]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder{
-    [aCoder encodeObject:self.uniqueId forKey:kCoderUniqueId];
     [aCoder encodeObject:self.keyPair forKey:kCoderKeyPair];
     [aCoder encodeObject:self.publicKey forKey:kCoderPublicKey];
     [aCoder encodeObject:self.userId forKey:kCoderUserId];
+    [aCoder encodeBool:self.active forKey:kCoderActive];
+}
+
++ (BOOL)hasUniqueId {
+    return NO;
 }
 
 @end

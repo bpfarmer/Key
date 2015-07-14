@@ -6,13 +6,13 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 #import "KEncryptable.h"
 
 @class KAttachment;
 @class KUser;
 
-@interface KPost : KYapDatabaseObject <KEncryptable>
+@interface KPost : KDatabaseObject <KEncryptable>
 
 @property (nonatomic, readonly) NSString *authorId;
 @property (nonatomic, readonly) NSString *text;

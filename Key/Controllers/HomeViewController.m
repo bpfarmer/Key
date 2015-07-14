@@ -11,7 +11,6 @@
 #import "KAccountManager.h"
 #import "KThread.h"
 #import "KStorageManager.h"
-#import "KYapDatabaseView.h"
 #import "KMessage.h"
 #import "KPost.h"
 #import "ThreadViewController.h"
@@ -24,9 +23,6 @@
 #import "SelectRecipientViewController.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
-
-YapDatabaseViewMappings *mappings;
-YapDatabaseConnection *databaseConnection;
 
 @interface HomeViewController () <CLLocationManagerDelegate>
 

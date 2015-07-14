@@ -43,9 +43,8 @@
         KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString] password:self.passwordText.text];
         [[KAccountManager sharedManager] setUser:user];
         if([user authenticatePassword:self.passwordText.text]) {
-            [[KStorageManager sharedManager] refreshDatabaseAndConnection];
-            [[KStorageManager sharedManager] setupDatabase];
-            KUser *retrievedUser = [KUser fetchObjectWithUsername:user.username];
+            [[KStorageManager sharedManager] setDatabaseWithName:user.username];
+            KUser *retrievedUser = [KUser findByDictionary:@{@"username" : user.username}];
             if(retrievedUser) {
                 [[KAccountManager sharedManager] setUser:retrievedUser];
                 [self showHome];

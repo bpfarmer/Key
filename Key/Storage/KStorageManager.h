@@ -7,34 +7,26 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <YapDatabase/YapDatabase.h>
+#import <FMDB/FMDB.h>
 
-extern NSString *const KUIDatabaseConnectionDidUpdateNotification;
+@class TOCFuture;
 
 static NSString *keychainService          = @"KKeyChainService";
 static NSString *keychainDBPassAccount    = @"KDatabasePass";
 
+typedef void (^KDatabaseUpdateBlock)(FMDatabase *database);
+typedef FMResultSet* (^KDatabaseSelectBlock)(FMDatabase *database);
+typedef NSUInteger (^KDatabaseCountBlock)(FMDatabase *database);
+
 @interface KStorageManager : NSObject
 
-@property (nonatomic, readonly) YapDatabaseConnection *dbConnection;
+@property (nonatomic, strong) FMDatabase *database;
+@property (nonatomic, strong) FMDatabaseQueue *queue;
 
 + (instancetype)sharedManager;
-- (void)refreshDatabaseAndConnection;
+- (void)setDatabaseWithName:(NSString *)databaseName;
+- (void)queryUpdate:(KDatabaseUpdateBlock)databaseBlock;
+- (FMResultSet *)querySelect:(KDatabaseSelectBlock)databaseBlock;
+- (NSUInteger)queryCount:(KDatabaseCountBlock)databaseBlock;
 
-- (void)setupDatabase;
-- (YapDatabase *)database;
-- (YapDatabaseConnection *)newDatabaseConnection;
-- (NSString *)dbPath;
-
-- (NSUInteger)numberOfKeysInCollection:(NSString *)collection;
-- (void)setObject:(id)object forKey:(NSString*)key inCollection:(NSString*)collection;
-- (void)removeObjectForKey:(NSString*)string inCollection:(NSString *)collection;
-- (BOOL)boolForKey:(NSString*)key inCollection:(NSString*)collection;
-- (id)objectForKey:(NSString*)key inCollection:(NSString *)collection;
-- (NSDictionary *)dictionaryForKey:(NSString*)key inCollection:(NSString *)collection;
-- (NSString *)stringForKey:(NSString*)key inCollection:(NSString*)collection;
-- (NSData *)dataForKey:(NSString*)key inCollection:(NSString*)collection;
-
-- (void)purgeCollection:(NSString*)collection;
-- (void)wipe;
 @end

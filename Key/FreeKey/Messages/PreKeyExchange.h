@@ -8,12 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "KSendable.h"
+#import "KDatabaseObject.h"
 
 @class PreKey;
 @class IdentityKey;
 @class PreKeyExchangeReceipt;
 
-@interface PreKeyExchange : NSObject <KSendable>
+@interface PreKeyExchange : KDatabaseObject <KSendable>
 
 @property (nonatomic, readwrite) NSString *senderId;
 @property (nonatomic, readonly) NSString *senderDeviceId;

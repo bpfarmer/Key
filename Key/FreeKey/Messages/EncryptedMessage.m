@@ -9,7 +9,6 @@
 #import "EncryptedMessage.h"
 #import <CommonCrypto/CommonCrypto.h>
 #import "HMAC.h"
-#import "EncryptedMessage+Serialize.h"
 #import "FreeKey.h"
 
 @implementation EncryptedMessage
@@ -19,8 +18,8 @@
            receiverIdentityKey:(NSData *)receiverIdentityKey
               senderRatchetKey:(NSData *)senderRatchetKey
                     cipherText:(NSData *)cipherText
-                         index:(int)index
-                 previousIndex:(int)previousIndex {
+                         index:(NSNumber *)index
+                 previousIndex:(NSNumber *)previousIndex {
     
     
     self = [super init];
@@ -48,8 +47,8 @@
                                 senderId:(NSString *)senderId
                               receiverId:(NSString *)receiverId
                           serializedData:(NSData *)serializedData
-                                   index:(int)index
-                           previousIndex:(int)previousIndex {
+                                   index:(NSNumber *)index
+                           previousIndex:(NSNumber *)previousIndex {
     self = [super init];
     
     if(self) {

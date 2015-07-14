@@ -11,7 +11,6 @@
 #import "KAccountManager.h"
 #import "KThread.h"
 #import "KStorageManager.h"
-#import "KYapDatabaseView.h"
 #import "KMessage.h"
 #import "FreeKey.h"
 #import "FreeKeyNetworkManager.h"
@@ -19,15 +18,11 @@
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
-YapDatabaseViewMappings *mappings;
-YapDatabaseConnection *databaseConnection;
-
 @interface ThreadViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 @property (nonatomic, strong) UITextField *recipientTextField;
 @property (nonatomic, strong) UIView *titleView;
 @property (nonatomic, strong) KUser *currentUser;
-@property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
-@property (nonatomic, strong) YapDatabaseViewMappings *messageMappings;
+@property (nonatomic, strong) NSArray *messages;
 @end
 
 @implementation ThreadViewController
@@ -39,20 +34,11 @@ YapDatabaseConnection *databaseConnection;
     self.senderDisplayName = self.currentUser.username;
     self.senderId = self.currentUser.uniqueId;
     
-    if(self.thread) {
-        [self setupDatabaseView];
-    }else {
-        self.recipientTextField =
-        [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width - 50.0, 30.0)];
-        self.recipientTextField.tag = 1;
-        self.recipientTextField.center = self.navigationItem.titleView.center;
-        self.recipientTextField.borderStyle = UITextBorderStyleRoundedRect;
-        self.recipientTextField.delegate = self;
-        self.titleView = self.navigationItem.titleView;
-        self.navigationItem.titleView = self.recipientTextField;
-    }
+    self.messages = @[];
     
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    if(self.thread && self.thread.saved) {
+        self.messages = self.thread.messages;
+    }
     
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
@@ -63,135 +49,53 @@ YapDatabaseConnection *databaseConnection;
     [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleBlueColor]];
     
     self.showLoadEarlierMessagesHeader = NO;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(databaseModified:)
+                                                 name:[KMessage notificationChannel]
+                                               object:nil];
 }
+
+- (void)databaseModified:(NSNotification *)notification {
+    if([notification.object isKindOfClass:[KMessage class]]) {
+        if([((KMessage *)notification.object).threadId isEqualToString:self.thread.uniqueId]) return;
+        NSMutableArray *messages = [[NSMutableArray alloc] initWithArray:self.messages];
+        [messages addObject:[notification object]];
+        self.messages = [[NSArray alloc] initWithArray:messages];
+        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
+    }
+}
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
     if(self.thread) {
-        self.title = self.thread.displayName;
+        self.title = self.thread.name;
         [self.thread setRead:YES];
         [self.thread save];
     }
-}
-
-- (void) setupDatabaseView {
-    _databaseConnection = [[KStorageManager sharedManager] newDatabaseConnection];
-    [self.databaseConnection beginLongLivedReadTransaction];
-    _messageMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[self.thread.uniqueId]
-                                                                  view:@"KMessageDatabaseViewExtension"];
-
-    
-    [self.databaseConnection beginLongLivedReadTransaction];
-    [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
-        [self.messageMappings updateWithTransaction:transaction];
-    }];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(yapDatabaseModified:)
-                                                 name:YapDatabaseModifiedNotification
-                                               object:self.databaseConnection.database];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
-- (void)yapDatabaseModified:(NSNotification *)notification {
-    NSArray *notifications = [self.databaseConnection beginLongLivedReadTransaction];
-    
-    NSArray *sectionChanges = nil;
-    NSArray *rowChanges = nil;
-    
-    [[self.databaseConnection ext:@"KMessageDatabaseViewExtension"] getSectionChanges:&sectionChanges
-                                                                               rowChanges:&rowChanges
-                                                                         forNotifications:notifications
-                                                                             withMappings:self.messageMappings];
-    
-    if ([sectionChanges count] == 0 & [rowChanges count] == 0)
-    {
-        return;
-    }
-    
-    [self.collectionView performBatchUpdates:^{
-        for (YapDatabaseViewSectionChange *sectionChange in sectionChanges)
-        {
-            switch (sectionChange.type)
-            {
-                case YapDatabaseViewChangeDelete :
-                {
-                    [self.collectionView deleteSections:[NSIndexSet indexSetWithIndex:sectionChange.index]];
-                    break;
-                }
-                case YapDatabaseViewChangeInsert :
-                {
-                    [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:sectionChange.index]];
-                    break;
-                }
-                case YapDatabaseViewChangeMove :
-                {
-                    break;
-                }
-                case YapDatabaseViewChangeUpdate :
-                {
-                    break;
-                }
-            }
-        }
-        
-        for (YapDatabaseViewRowChange *rowChange in rowChanges)
-        {
-            switch (rowChange.type)
-            {
-                case YapDatabaseViewChangeDelete :
-                {
-                    [self.collectionView deleteItemsAtIndexPaths:@[rowChange.indexPath]];
-                    break;
-                }
-                case YapDatabaseViewChangeInsert :
-                {
-                    [self.collectionView insertItemsAtIndexPaths:@[rowChange.newIndexPath]];
-                    break;
-                }
-                case YapDatabaseViewChangeMove :
-                {
-                    [self.collectionView deleteItemsAtIndexPaths:@[rowChange.indexPath]];
-                    [self.collectionView insertItemsAtIndexPaths:@[rowChange.newIndexPath]];
-                    break;
-                }
-                case YapDatabaseViewChangeUpdate :
-                {
-                    [self.collectionView reloadItemsAtIndexPaths:@[rowChange.indexPath]];
-                    break;
-                }
-            }
-        }
-    } completion:^(BOOL success) {
-        if (!success) {
-            [self.collectionView.collectionViewLayout invalidateLayoutWithContext:[JSQMessagesCollectionViewFlowLayoutInvalidationContext context]];
-            [self.collectionView reloadData];
-        }
-        [self scrollToBottomAnimated:YES];
-    }];
-}
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    if ([self.messageMappings numberOfItemsInAllGroups] == 0) return 1;
-    else return [self.messageMappings numberOfSections];
+    return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [self.messageMappings numberOfItemsInSection:section];
+    return self.messages.count;
 }
 
 - (id <JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
     return [self messageAtIndexPath:indexPath];
 }
 
-- (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView
-             messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
     id <JSQMessageData> message = [self messageAtIndexPath:indexPath];
     
     if ([message.senderId isEqualToString:self.senderId]) {
@@ -201,8 +105,7 @@ YapDatabaseConnection *databaseConnection;
     return self.incomingBubbleImageData;
 }
 
-- (UICollectionViewCell *)collectionView:(JSQMessagesCollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (UICollectionViewCell *)collectionView:(JSQMessagesCollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     JSQMessagesCollectionViewCell *cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     
     id <JSQMessageData> msg = [self messageAtIndexPath:indexPath];
@@ -216,15 +119,10 @@ YapDatabaseConnection *databaseConnection;
 
 
 - (id<JSQMessageData>)messageAtIndexPath:(NSIndexPath *)indexPath {
-    __block KMessage *message;
-    [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        message = (KMessage *)[[transaction extension:@"KMessageDatabaseViewExtension"] objectAtIndexPath:indexPath withMappings:self.messageMappings];
-    }];
-    return message;
+    return self.messages[indexPath.row];
 }
 
-- (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView
-                    avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
+- (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
     KMessage *message = (KMessage *)[self messageAtIndexPath:indexPath];
     NSString *userInitial = [[message.senderDisplayName substringToIndex:1] uppercaseString];
     if (![message.senderId isEqualToString:self.senderId]) {
@@ -242,11 +140,14 @@ YapDatabaseConnection *databaseConnection;
     if (text.length > 0) {
         [JSQSystemSoundPlayer jsq_playMessageSentSound];
         
-        if (!self.thread) {
-            [self setupThread];
+        if(!self.thread.saved) {
+            [self.thread save];
+            NSLog(@"RETRIEVING CURRENT THREAD: %@", self.thread);
+            //[FreeKey sendEncryptableObject:self.thread recipients:self.thread.recipientIds];
         }
         
-        if(self.thread) {
+        if(self.thread.uniqueId) {
+            NSLog(@"GETTING READY TO SEND MESSAGE");
             KMessage *message = [[KMessage alloc] initWithAuthorId:self.senderId threadId:self.thread.uniqueId body:text];
             [message save];
             
@@ -261,31 +162,7 @@ YapDatabaseConnection *databaseConnection;
     }
 }
 
-- (void)setupThread {
-    NSArray *usernames = [self.recipientTextField.text componentsSeparatedByString:@", "];
-    NSMutableArray *users = [[NSMutableArray alloc] init];
-    [usernames enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        KUser *user = [KUser fetchObjectWithUsername:obj];
-        if(user) {
-            [users addObject:user];
-        }
-    }];
-    if([users count] != [usernames count]) return;
-    [users addObject:[[KAccountManager sharedManager] user]];
-    self.thread = [[KThread alloc] initWithUsers:users];
-    [self.thread save];
-    KUser *currentUser = [[KAccountManager sharedManager] user];
-    [users enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        KUser *user = (KUser *)obj;
-        if(![user.uniqueId isEqual:currentUser.uniqueId]) {
-            [FreeKey sendEncryptableObject:self.thread recipients:self.thread.recipientIds];
-        }
-    }];
-    [self setupDatabaseView];
-    [self.recipientTextField setHidden:YES];
-    self.navigationItem.titleView = self.titleView;
-    self.navigationItem.title = self.thread.displayName;
-}
+
 
 - (void)didPressAccessoryButton:(UIButton *)sender
 {
@@ -328,6 +205,10 @@ YapDatabaseConnection *databaseConnection;
 - (BOOL)textFieldShouldReturn:(UITextField*)aTextField
 {
     [aTextField resignFirstResponder];
+    return YES;
+}
+
+-(BOOL)prefersStatusBarHidden {
     return YES;
 }
 

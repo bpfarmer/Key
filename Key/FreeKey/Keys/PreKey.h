@@ -7,12 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 #import "KSendable.h"
 
 @class ECKeyPair;
 
-@interface PreKey : NSObject <KSendable>
+@interface PreKey : KDatabaseObject <KSendable>
+
+// TODO: if we're going to provide ID keys, probably need to sign them
 
 @property (nonatomic, readonly) NSString *userId;
 @property (nonatomic, readonly) NSString *deviceId;

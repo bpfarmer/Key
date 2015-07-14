@@ -86,17 +86,9 @@
 }
 
 - (void)saveCurrentUser {
-    [[NSUserDefaults standardUserDefaults] setObject:[KAccountManager sharedManager].user.uniqueId forKey:kUserUniqueId];
 }
 
 - (void)restoreCurrentUser {
-    NSString *userId = [[NSUserDefaults standardUserDefaults] objectForKey:kUserUniqueId];
-    if(userId) {
-        KUser *user = (KUser *)[[KStorageManager sharedManager] objectForKey:userId inCollection:[KUser collection]];
-        if(user) {
-            [[KAccountManager sharedManager] setUser:user];
-        }
-    }
 }
 
 @end

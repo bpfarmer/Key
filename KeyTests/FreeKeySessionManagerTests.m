@@ -18,11 +18,11 @@
 #import "PreKeyExchange.h"
 #import "Session.h"
 #import "RootChain.h"
-#import "ChainKey.h"
 #import "MessageKey.h"
 #import "KStorageManager.h"
 #import "FreeKeyTestExample.h"
 #import "FreeKeyNetworkManager.h"
+#import "KStorageSchema.h"
 
 @interface FreeKeySessionManagerTests : XCTestCase
 
@@ -40,6 +40,9 @@
 @implementation FreeKeySessionManagerTests
 
 - (void)setUp {
+    [[KStorageManager sharedManager] setDatabaseWithName:@"testDB"];
+    [KStorageSchema dropTables];
+    [KStorageSchema createTables];
     FreeKeyTestExample *example = [[FreeKeyTestExample alloc] init];
     _alice            = example.alice;
     _bob              = example.bob;
@@ -49,7 +52,7 @@
     _bobBaseKeyPair   = example.bobBaseKeyPair;
     _bobPreKey        = example.bobPreKey;
     _alicePreKeyExchange = example.alicePreKeyExchange;
-
+    
 }
 
 - (void)tearDown {
@@ -62,30 +65,27 @@
  */
 
 - (void)testSessionCreationWithPreKey {
-    Session *session = [[FreeKeySessionManager sharedManager] createSessionWithLocalUser:_alice
-                                                                              remoteUser:_bob
-                                                                              ourBaseKey:_aliceBaseKeyPair theirPreKey:_bobPreKey];
-    XCTAssert(session.senderRootChain.chainKey);
+    Session *session = [[FreeKeySessionManager sharedManager] processNewKeyExchange:_bobPreKey localUser:_alice remoteUser:_bob];
+    NSLog(@"SENDER CHAIN ID: %@", session.senderChainId);
+    XCTAssert(session.senderChainId);
 }
 
 - (void)testSessionCreationWithPreKeyExchange {
-    Session *session = [[FreeKeySessionManager sharedManager] createSessionWithLocalUser:_bob remoteUser:_alice ourPreKey:_bobPreKey theirPreKeyExchange:_alicePreKeyExchange];
+    Session *aliceSession = [[FreeKeySessionManager sharedManager] processNewKeyExchange:_bobPreKey localUser:_alice remoteUser:_bob];
+    [_bobPreKey save];
+    Session *session = [[FreeKeySessionManager sharedManager] processNewKeyExchange:aliceSession.preKeyExchange localUser:_bob remoteUser:_alice];
     
-    XCTAssert(session.senderRootChain.chainKey);
+    XCTAssert(session.senderChainId);
 }
 
 - (void)testSessionAgreement {
-    Session *aliceSession = [[FreeKeySessionManager sharedManager] createSessionWithLocalUser:_alice
-                                                                                   remoteUser:_bob
-                                                                                   ourBaseKey:_aliceBaseKeyPair
-                                                                                  theirPreKey:_bobPreKey];
+    Session *aliceSession = [[FreeKeySessionManager sharedManager] processNewKeyExchange:_bobPreKey localUser:_alice remoteUser:_bob];
     
-    Session *bobSession = [[FreeKeySessionManager sharedManager] createSessionWithLocalUser:_bob
-                                                                                 remoteUser:_alice
-                                                                                  ourPreKey:_bobPreKey
-                                                                        theirPreKeyExchange:_alicePreKeyExchange];
+    Session *bobSession = [[FreeKeySessionManager sharedManager] processNewKeyExchange:aliceSession.preKeyExchange localUser:_bob remoteUser:_alice];
     
-    XCTAssert([aliceSession.senderRootChain.chainKey.messageKey.cipherKey isEqual:bobSession.receiverRootChain.chainKey.messageKey.cipherKey]);
+    RootChain *aliceSRC = [RootChain findById:aliceSession.senderChainId];
+    RootChain *bobRRC   = [RootChain findById:bobSession.receiverChainId];
+    XCTAssert([aliceSRC.messageKey.cipherKey isEqual:bobRRC.messageKey.cipherKey]);
     
 }
 

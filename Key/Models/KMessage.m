@@ -7,7 +7,6 @@
 //
 #import "KMessage.h"
 #import "KGroup.h"
-#import <AFNetworking/AFHTTPRequestOperationManager.h>
 #import "KUser.h"
 #import "KThread.h"
 #import "KStorageManager.h"
@@ -16,12 +15,8 @@
 #import "Util.h"
 
 #define kStatusUnsent @"UNSENT"
-@implementation KMessage
 
-- (NSArray *)yapDatabaseRelationshipEdges {
-    NSArray *edges = nil;
-    return edges;
-}
+@implementation KMessage
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         authorId:(NSString *)authorId
@@ -56,10 +51,8 @@
     return self;
 }
 
-
-
 - (NSString *)generateUniqueId {
-    NSString *uniqueId = [NSString stringWithFormat:@"%@_%u", [KMessage collection], [self messageHash]];
+    NSString *uniqueId = [NSString stringWithFormat:@"%@_%u", [KMessage tableName], [self messageHash]];
     
     return uniqueId;
 }
@@ -69,7 +62,7 @@
 }
 
 - (KUser *)author {
-    return (KUser *)[[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
+    return [KUser findById:self.authorId];
 }
 
 - (void)save {
@@ -78,7 +71,7 @@
 }
 
 - (KThread *)thread {
-    return [[KStorageManager sharedManager] objectForKey:self.threadId inCollection:[KThread collection]];
+    return [KThread findById:self.threadId];
 }
 
 - (NSString *)text {

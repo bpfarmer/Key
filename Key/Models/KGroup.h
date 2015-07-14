@@ -6,10 +6,9 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 #import <Foundation/Foundation.h>
-#import <YapDatabase/YapDatabaseRelationshipNode.h>
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 
-@interface KGroup : KYapDatabaseObject <YapDatabaseRelationshipNode>
+@interface KGroup : KDatabaseObject
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSArray *users;

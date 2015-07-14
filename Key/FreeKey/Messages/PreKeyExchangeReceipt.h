@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KDatabaseObject.h"
 
 @class IdentityKey;
 
-@interface PreKeyExchangeReceipt : NSObject
+@interface PreKeyExchangeReceipt : KDatabaseObject
 
 @property (nonatomic, readonly) NSString *senderId;
 @property (nonatomic, readonly) NSString *receiverId;

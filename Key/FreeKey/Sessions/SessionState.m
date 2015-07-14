@@ -7,23 +7,27 @@
 //
 
 #import "SessionState.h"
-#import "ChainKey.h"
-#import "SessionState+Serialize.h"
+#import "MessageKey.h"
 
 @implementation SessionState
 
-- (instancetype)initWithMessageKey:(MessageKey *)messageKey
-                  senderRatchetKey:(NSData *)senderRatchetKey
-                             index:(int)index {
+- (instancetype)initWithMessageKey:(MessageKey *)messageKey senderRatchetKey:(NSData *)senderRatchetKey messageIndex:(NSNumber *)messageIndex sessionId:(NSString *)sessionId{
     self = [super init];
     
     if(self) {
-        _messageKey       = messageKey;
+        _cipherKey        = messageKey.cipherKey;
+        _iv               = messageKey.iv;
+        _macKey           = messageKey.macKey;
         _senderRatchetKey = senderRatchetKey;
-        _index            = index;
+        _messageIndex     = messageIndex;
+        _sessionId        = sessionId;
     }
     
     return self;
+}
+
+- (MessageKey *)messageKey {
+    return [[MessageKey alloc] initWithCipherKey:self.cipherKey macKey:self.macKey iv:self.iv index:self.messageIndex];
 }
 
 @end

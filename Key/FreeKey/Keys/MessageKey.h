@@ -7,14 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "KDatabaseObject.h"
 
 @interface MessageKey : NSObject
 
 @property (nonatomic, readonly) NSData *cipherKey;
 @property (nonatomic, readonly) NSData *macKey;
 @property (nonatomic, readonly) NSData *iv;
-@property (nonatomic, readonly) int index;
+@property (nonatomic, readonly) NSNumber *index;
 
-- (instancetype)initWithCipherKey:(NSData*)cipherKey macKey:(NSData*)macKey iv:(NSData*)iv index:(int)index;
+- (instancetype)initWithCipherKey:(NSData*)cipherKey macKey:(NSData*)macKey iv:(NSData*)iv index:(NSNumber *)index;
 
 @end

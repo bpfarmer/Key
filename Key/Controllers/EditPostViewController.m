@@ -66,8 +66,7 @@
         [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
     }
     [selectRecipientView setSendableObjects:sendableObjects];
-    self.toDismiss = YES;
-    [self presentViewController:selectRecipientView animated:NO completion:nil];
+    [self.delegate dismissAndPresentViewController:selectRecipientView];
 }
 
 - (IBAction)didPressLocation:(id)sender {
@@ -81,19 +80,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    if(self.toDismiss) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
+    
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

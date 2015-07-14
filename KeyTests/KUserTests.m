@@ -11,6 +11,11 @@
 #import "KUser.h"
 #import "KStorageManager.h"
 #import "KAccountManager.h"
+#import "CollapsingFutures.h"
+#import "IdentityKey.h"
+#import "KStorageSchema.h"
+#import "Curve25519.h"
+#import "PreKey.h"
 
 @interface KUserTests : XCTestCase
 
@@ -19,42 +24,36 @@
 @implementation KUserTests
 
 - (void)setUp {
+    NSString *testDB = @"testDB";
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    KStorageManager *manager = [KStorageManager sharedManager];
+    [manager setDatabaseWithName:testDB];
+    [KStorageSchema dropTables];
+    [KStorageSchema createTables];
+    KUser *user = [[KUser alloc] initWithUniqueId:@"12345" username:@"brendan" publicKey:nil];
+    [user save];
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
-- (void)testFetchingObjects {
-    [[KStorageManager sharedManager] setupDatabase];
-    NSString *username = @"tester";
-    KUser *savingUser = [[KUser alloc] initWithUsername:username];
-    [savingUser setUniqueId:@"12345"];
-    [[KAccountManager sharedManager] setUser:savingUser];
-    [savingUser save];
-    [[KStorageManager sharedManager] setupDatabase];
-    KUser *retrievingUser = [KUser fetchObjectWithUsername:username];
-    XCTAssert([retrievingUser.username isEqual:savingUser.username]);
+- (void)testIdentityKeys {
+    KUser *user = [KUser findById:@"12345"];
+    [user setupIdentityKey];
+    IdentityKey *idKey = [IdentityKey findByDictionary:@{@"userId" : user.uniqueId}];
+    XCTAssert([idKey.userId isEqualToString:user.uniqueId]);
+    IdentityKey *identityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:@"1"];
+    [identityKey save];
+    IdentityKey *key = [IdentityKey findByDictionary:@{@"userId" : @"1"}];
+    NSLog(@"KEYPAIR: %@", [user identityKey].keyPair);
 }
 
-- (void)testPasswordEncryptionAndLogin {
-    NSString *username = @"TESTER";
-    KUser *user = [[KUser alloc] initWithUsername:username];
-    [user setUniqueId:@"12345"];
-    [user setPasswordCryptInKeychain:@"12345"];
-    [[KAccountManager sharedManager] setUser:user];
-    [[KStorageManager sharedManager] setupDatabase];
-    [user save];
-    KUser *authenticatingUser = [[KUser alloc] initWithUsername:username];
-    XCTAssert(![authenticatingUser authenticatePassword:@"123456"]);
-    XCTAssert([authenticatingUser authenticatePassword:@"12345"]);
-}
-
-- (void)testRemoteQuerying {
-    
+- (void)testPreKeys {
+    KUser *user = [KUser findById:@"12345"];
+    [user asyncSetupPreKeys];
+    PreKey *preKey = [PreKey findByDictionary:@{@"userId" : @"12345"}];
+    XCTAssert([preKey.userId isEqualToString:@"12345"]);
 }
 
 @end

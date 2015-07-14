@@ -11,20 +11,20 @@
 #import "KAccountManager.h"
 #import "KThread.h"
 #import "KStorageManager.h"
-#import "KYapDatabaseView.h"
 #import "KMessage.h"
 #import "ThreadViewController.h"
 #import "LoginViewController.h"
 #import "FreeKeyNetworkManager.h"
 #import "PushManager.h"
 #import "HomeViewController.h"
+#import "DismissAndPresentProtocol.h"
+#import "SelectRecipientViewController.h"
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
-@interface InboxViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface InboxViewController () <UITableViewDataSource, UITableViewDelegate, DismissAndPresentProtocol>
 @property (nonatomic, strong) IBOutlet UITableView *threadsTableView;
-@property (nonatomic, strong) YapDatabaseConnection   *databaseConnection;
-@property (nonatomic, strong) YapDatabaseViewMappings *threadMappings;
+@property (nonatomic, strong) NSArray *threads;
 @end
 
 
@@ -32,12 +32,29 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.threadsTableView.dataSource = self;
-    self.threadsTableView.delegate = self;
-    [self.threadsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     [[KAccountManager sharedManager].user asyncGetFeed];
-    [self setupDatabaseView];
+    self.threads = [KThread all];
+    NSLog(@"THREAD COUNT: %u", self.threads.count);
+    
+    self.threadsTableView.delegate = self;
+    self.threadsTableView.dataSource = self;
+    
+    [self.threadsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(databaseModified:)
+                                                 name:[KThread notificationChannel]
+                                               object:nil];
+}
+
+- (void)databaseModified:(NSNotification *)notification {
+    if([[notification object] isKindOfClass:[KThread class]]) {
+        for(KThread *thread in self.threads) if([thread.uniqueId isEqualToString:((KThread *)notification.object).uniqueId]) return;
+        NSMutableArray *threads = [[NSMutableArray alloc] initWithArray:self.threads];
+        [threads addObject:[notification object]];
+        self.threads = [[NSArray alloc] initWithArray:threads];
+        [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.threads.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -45,130 +62,49 @@ static NSString *TableViewCellIdentifier = @"Messages";
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
-- (void) setupDatabaseView {
-    _databaseConnection = [[KStorageManager sharedManager] newDatabaseConnection];
-    [self.databaseConnection beginLongLivedReadTransaction];
-    _threadMappings = [[YapDatabaseViewMappings alloc] initWithGroups:@[@"KInboxGroup"] view:KThreadDatabaseViewName];
-    
-    [self.databaseConnection beginLongLivedReadTransaction];
-    [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction){
-        [self.threadMappings updateWithTransaction:transaction];
-    }];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(yapDatabaseModified:) name:YapDatabaseModifiedNotification object:self.databaseConnection.database];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
-- (void)yapDatabaseModified:(NSNotification *)notification {
-    NSArray *notifications = [self.databaseConnection beginLongLivedReadTransaction];
-    
-    NSArray *sectionChanges = nil;
-    NSArray *rowChanges = nil;
-    
-    [[self.databaseConnection ext:KThreadDatabaseViewName] getSectionChanges:&sectionChanges rowChanges:&rowChanges forNotifications:notifications withMappings:self.threadMappings];
-    
-    if ([sectionChanges count] == 0 & [rowChanges count] == 0)
-    {
-        return;
-    }
-    
-    [self.threadsTableView beginUpdates];
-    
-    for (YapDatabaseViewSectionChange *sectionChange in sectionChanges)
-    {
-        switch (sectionChange.type)
-        {
-            case YapDatabaseViewChangeDelete :
-            {
-                [self.threadsTableView deleteSections:[NSIndexSet indexSetWithIndex:sectionChange.index] withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeInsert :
-            {
-                [self.threadsTableView insertSections:[NSIndexSet indexSetWithIndex:sectionChange.index] withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeMove :
-            {
-                break;
-            }
-            case YapDatabaseViewChangeUpdate :
-            {
-                break;
-            }
-        }
-    }
-    
-    for (YapDatabaseViewRowChange *rowChange in rowChanges)
-    {
-        switch (rowChange.type)
-        {
-            case YapDatabaseViewChangeDelete :
-            {
-                [self.threadsTableView deleteRowsAtIndexPaths:@[rowChange.indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeInsert :
-            {
-                [self.threadsTableView insertRowsAtIndexPaths:@[rowChange.newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeMove :
-            {
-                [self.threadsTableView deleteRowsAtIndexPaths:@[rowChange.indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                [self.threadsTableView insertRowsAtIndexPaths:@[rowChange.newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                break;
-            }
-            case YapDatabaseViewChangeUpdate :
-            {
-                [self.threadsTableView reloadRowsAtIndexPaths:@[rowChange.indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                break;
-            }
-        }
-    }
-    
-    [self.threadsTableView endUpdates];
+- (IBAction)didPressNewMessage:(id)sender {
+    SelectRecipientViewController *selectRecipientView = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
+    selectRecipientView.desiredObject = kSelectRecipientsForMessage;
+    selectRecipientView.delegate = self;
+    [self.parentViewController presentViewController:selectRecipientView animated:YES completion:nil];
 }
 
-- (IBAction)newMessage:(id)sender {
-    [self.parentViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
+- (IBAction)didPressContacts:(id)sender {
+    [self.parentViewController performSegueWithIdentifier:kContactsSeguePush sender:self];
+}
+
+- (void)dismissAndPresentViewController:(UIViewController *)viewController {
+    [self dismissViewControllerAnimated:NO completion:^{
+        [self presentViewController:viewController animated:NO completion:nil];
+    }];
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)sender
-{
-    return [self.threadMappings numberOfSections];
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)sender {
+    return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section
-{
-    return [self.threadMappings numberOfItemsInSection:section];
+- (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section {
+    NSLog(@"THREAD COUNT FOR SECTION %u", self.threads.count);
+    return self.threads.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    __block KThread *thread = nil;
-    [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        thread = (KThread *)[[transaction extension:KThreadDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.threadMappings];
-    }];
-    
+- (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    
+    KThread *thread = self.threads[indexPath.row];
     NSString *read = @"";
     if(!thread.read) {
         read = @" - UNREAD";
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", [thread displayName], read];
+    NSLog(@"THREAD ID: %@", thread.uniqueId);
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", thread.displayName, read];
     //[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
-}
-
-- (IBAction)pushContacts:(id)sender {
-    [self.parentViewController performSegueWithIdentifier:kContactsSeguePush sender:self];
 }
 
 - (IBAction)logout:(id)sender {
@@ -179,13 +115,11 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    __block KThread *thread = nil;
-    [self.databaseConnection readWithBlock:^(YapDatabaseReadTransaction *transaction) {
-        thread = [[transaction extension:KThreadDatabaseViewName] objectAtIndexPath:indexPath withMappings:self.threadMappings];
-    }];
+    KThread *thread = self.threads[indexPath.row];
     if(thread) {
-        self.selectedThread = thread;
-        [self.parentViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
+        ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
+        threadViewController.thread = thread;
+        [self.parentViewController presentViewController:threadViewController animated:NO completion:nil];
     }
 }
 

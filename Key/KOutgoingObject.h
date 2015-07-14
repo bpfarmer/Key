@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "KYapDatabaseObject.h"
+#import "KDatabaseObject.h"
 #import "KEncryptable.h"
 
-@interface KOutgoingObject : KYapDatabaseObject
+@interface KOutgoingObject : KDatabaseObject
 
 @property (nonatomic) NSArray *recipients;
 
