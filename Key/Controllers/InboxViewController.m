@@ -79,7 +79,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)dismissAndPresentViewController:(UIViewController *)viewController {
     [self dismissViewControllerAnimated:NO completion:^{
-        [self presentViewController:viewController animated:NO completion:nil];
+        [self.parentViewController presentViewController:viewController animated:NO completion:nil];
     }];
 }
 
@@ -117,10 +117,16 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
     KThread *thread = self.threads[indexPath.row];
     if(thread) {
-        ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
-        threadViewController.thread = thread;
-        [self.parentViewController presentViewController:threadViewController animated:NO completion:nil];
+        self.selectedThread = thread;
+        [self.parentViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
     }
+}
+
+- (void)dismissAndPresentThread:(KThread *)thread {
+    [self dismissViewControllerAnimated:NO completion:^{
+        self.selectedThread = thread;
+        [self.parentViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
+    }];
 }
 
 @end

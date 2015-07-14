@@ -13,7 +13,7 @@
 
 @property (nonatomic) NSArray *recipients;
 
-- (instancetype)initWithObject:(id<KEncryptable>)object recipients:(NSArray *)recipients;
-+ (void)confirmDeliveryOfObject:(id<KEncryptable>)object toRecipient:(NSString *)recipientId;
+- (instancetype)initWithObject:(KDatabaseObject *)object recipients:(NSArray *)recipients;
++ (void)confirmDeliveryOfObject:(KDatabaseObject *)object toRecipient:(NSString *)recipientId;
 
 @end

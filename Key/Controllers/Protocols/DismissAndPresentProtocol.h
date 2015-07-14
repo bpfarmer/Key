@@ -8,8 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+@class KThread;
+
 @protocol DismissAndPresentProtocol <NSObject>
 
 - (void)dismissAndPresentViewController:(UIViewController *)viewController;
+- (void)dismissAndPresentThread:(KThread *)thread;
 
 @end

@@ -139,7 +139,6 @@
     }
     
     if (![Ed25519 verifySignature:theirPreKey.signedPreKeySignature publicKey:theirIdentityKey.publicKey data:theirPreKey.signedPreKeyPublic]) {
-        NSLog(@"FAILED SIGNATURE VERIFICATION");
         //@throw [NSException exceptionWithName:InvalidKeyException reason:@"KeyIsNotValidlySigned" userInfo:nil];
     }
 }
@@ -150,7 +149,6 @@
     
     NSData *senderRatchetKey   = senderRootChain.ourRatchetKeyPair.publicKey;
     NSData *encryptedText = [AES_CBC encryptCBCMode:message withKey:messageKey.cipherKey withIV:messageKey.iv];
-    NSLog(@"ENCRYPTING WITH KEY: %@", messageKey.cipherKey);
     EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithMacKey:messageKey.macKey
                                                                 senderIdentityKey:self.sender.identityKey.publicKey
                                                               receiverIdentityKey:self.receiver.publicKey
@@ -158,9 +156,7 @@
                                                                        cipherText:encryptedText
                                                                             index:senderRootChain.index
                                                                     previousIndex:self.previousIndex];
-    
     [senderRootChain iterateChainKey];
-    
     return encryptedMessage;
 }
 
@@ -168,13 +164,11 @@
     [self processReceiverChain:encryptedMessage];
     NSString *messageIndex = [NSString stringWithFormat:@"%@", encryptedMessage.index];
     SessionState *sessionState = [SessionState findByDictionary:@{@"senderRatchetKey" : encryptedMessage.senderRatchetKey, @"messageIndex" : messageIndex}];
-    NSLog(@"SESSION STATE: %@", sessionState);
     if(![HMAC verifyWithMac:[encryptedMessage mac]
           senderIdentityKey:self.receiver.publicKey
         receiverIdentityKey:self.sender.identityKey.publicKey
                      macKey:sessionState.messageKey.macKey
-             serializedData:encryptedMessage.serializedData]); //TODO: throw exception
-    NSLog(@"DECRYPTING WITH KEY: %@", sessionState.messageKey.cipherKey);
+             serializedData:encryptedMessage.serializedData]) NSLog(@"FAILED HMAC VERIFICATION"); //TODO: throw exception
     NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
                                             withKey:sessionState.messageKey.cipherKey
                                              withIV:sessionState.messageKey.iv];
@@ -213,8 +207,6 @@
     self.previousIndex = receiverRootChain.index;
     ECKeyPair *ourEphemeral = receiverRootChain.ourRatchetKeyPair;
     [receiverRootChain iterateRootKeyWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
-    NSLog(@"RATCHETING RRC FOR %@ WITH: %@ AND %@", self.senderId, theirEphemeral, ourEphemeral.publicKey);
-    NSLog(@"NOW RRC FOR %@ IS: %@", self.senderId, receiverRootChain.rootKey);
 }
 
 - (void)ratchetSenderRootChain:(NSData *)theirEphemeral {
@@ -228,8 +220,6 @@
     [senderRootChain iterateRootKeyWithTheirEphemeral:theirEphemeral ourEphemeral:ourEphemeral];
     senderRootChain.ourRatchetKeyPair = ourEphemeral;
     [senderRootChain save];
-    NSLog(@"RATCHETING SRC FOR %@ WITH: %@ AND %@", self.senderId, theirEphemeral, ourEphemeral.publicKey);
-    NSLog(@"NOW SRC FOR %@ IS: %@", self.senderId, senderRootChain.rootKey);
 }
 
 - (BOOL)isNewEphemeral:(NSData *)theirEphemeral {
