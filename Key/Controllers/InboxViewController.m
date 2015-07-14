@@ -34,7 +34,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
     [super viewDidLoad];
     [[KAccountManager sharedManager].user asyncGetFeed];
     self.threads = [KThread all];
-    NSLog(@"THREAD COUNT: %u", self.threads.count);
     
     self.threadsTableView.delegate = self;
     self.threadsTableView.dataSource = self;
@@ -90,7 +89,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"THREAD COUNT FOR SECTION %u", self.threads.count);
     return self.threads.count;
 }
 
@@ -101,9 +99,8 @@ static NSString *TableViewCellIdentifier = @"Messages";
     if(!thread.read) {
         read = @" - UNREAD";
     }
-    NSLog(@"THREAD ID: %@", thread.uniqueId);
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", thread.displayName, read];
-    //[cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
 

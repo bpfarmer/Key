@@ -85,6 +85,7 @@
                                   signedPreKeySignature:preKeySignature
                                             identityKey:localUser.publicKey
                                             baseKeyPair:baseKeyPair];
+        [preKey setUniqueId:uniquePreKeyId];
         [preKey save];
         [preKeys addObject:[self base64EncodedPreKeyDictionary:preKey]];
         index++;

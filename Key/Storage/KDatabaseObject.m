@@ -91,7 +91,7 @@
             [output appendFormat:@"%C", c];
         }
     }
-    if([output isEqualToString:@"index"]) output = @"kIndex";
+    if([output isEqualToString:@"index"]) return @"kIndex";
     return output;
 }
 

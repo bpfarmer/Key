@@ -85,15 +85,22 @@ static NSString *TableViewCellIdentifier = @"Recipients";
 }
 
 - (IBAction)sendToRecipients:(id)sender {
-    if([self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
-        KThread *thread = [self setupThread];
-        ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
-        threadViewController.thread = thread;
-        [self.delegate dismissAndPresentThread:thread];
+    if(self.selectedRecipients.count > 0) {
+        if([self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
+            KThread *thread = [self setupThread];
+            ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
+            threadViewController.thread = thread;
+            [self.delegate dismissAndPresentThread:thread];
+        }else {
+            [self.post save];
+            dispatch_queue_t queue = dispatch_queue_create([@"randomtestqueue" cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+            dispatch_async(queue, ^{
+                [FreeKey sendEncryptableObject:self.post recipients:self.selectedRecipients];
+            });
+            //[self dismissViewControllerAnimated:NO completion:nil];
+        }
     }else {
-        [FreeKey sendEncryptableObject:self.post recipients:self.selectedRecipients];
-        [self.post save];
-        [self dismissViewControllerAnimated:NO completion:nil];
+        //[self dismissViewControllerAnimated:NO completion:nil];
     }
 }
 

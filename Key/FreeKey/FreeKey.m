@@ -31,12 +31,12 @@
 @implementation FreeKey
 
 + (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject recipients:(NSArray *)recipients {
-    KOutgoingObject *outgoingObject = [[KOutgoingObject alloc] initWithObject:encryptableObject recipients:recipients];
-    [outgoingObject save];
+    //KOutgoingObject *outgoingObject = [[KOutgoingObject alloc] initWithObject:encryptableObject recipients:recipients];
+    //[outgoingObject save];
     
     dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
 
-    [outgoingObject.recipients enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [recipients enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         dispatch_async(queue, ^{
             KUser *localUser = [KAccountManager sharedManager].user;
             KUser *remoteUser = [KUser findById:obj];
@@ -55,11 +55,22 @@
     dispatch_async(queue, ^{
         KUser *localUser = [KAccountManager sharedManager].user;
         KUser *remoteUser = [KUser findById:encryptedMessage.senderId];
-        TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
-        [futureSession thenDo:^(Session *session) {
-            KDatabaseObject *decryptedObject = (KDatabaseObject *)[self decryptEncryptedMessage:encryptedMessage session:session];
-            [decryptedObject save];
-        }];
+        if(remoteUser) {
+            TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
+            [futureSession thenDo:^(Session *session) {
+                KDatabaseObject *decryptedObject = (KDatabaseObject *)[self decryptEncryptedMessage:encryptedMessage session:session];
+                [decryptedObject save];
+            }];
+        }else {
+            TOCFuture *futureUser = [KUser asyncRetrieveWithUniqueId:encryptedMessage.senderId];
+            [futureUser thenDo:^(KUser *remoteUser) {
+                TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
+                [futureSession thenDo:^(Session *session) {
+                    KDatabaseObject *decryptedObject = (KDatabaseObject *)[self decryptEncryptedMessage:encryptedMessage session:session];
+                    [decryptedObject save];
+                }];
+            }];
+        }
     });
 }
 

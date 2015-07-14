@@ -66,6 +66,10 @@
     return _noCameraInSimulatorMessage;
 }
 
+- (void)dismissAndPresentThread:(KThread *)thread {
+    
+}
+
 - (void)startCamera
 ;
 {
@@ -178,7 +182,7 @@
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (TARGET_IPHONE_SIMULATOR) {
-            [self didTakePhoto: [UIImage imageNamed:@"Simulator_OriginalPhoto@2x.jpg"]];
+            [self didTakePhoto:[[NSData alloc] init]];
             return;
         }
         
@@ -340,7 +344,7 @@
 
 - (void)dismissAndPresentViewController:(UIViewController *)viewController {
     [self dismissViewControllerAnimated:NO completion:^{
-        [self presentViewController:viewController animated:NO completion:nil];
+        [self presentViewController:viewController animated:YES completion:nil];
     }];
 }
 

@@ -21,6 +21,7 @@ static NSString *TableViewCellIdentifier = @"Posts";
 
 @property (nonatomic, strong) IBOutlet UITextView *postTextView;
 @property (nonatomic, strong) IBOutlet UITableView *postsTableView;
+@property (nonatomic, weak) NSArray *posts;
 
 @end
 
@@ -44,6 +45,8 @@ static NSString *TableViewCellIdentifier = @"Posts";
     
     [self.postsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
+    self.posts = [KPost all];
+    
     self.currentUser = [KAccountManager sharedManager].user;
 }
 
@@ -58,14 +61,28 @@ static NSString *TableViewCellIdentifier = @"Posts";
 }
 
 - (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    return self.posts.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return nil;
+    KPost *post = self.posts[indexPath.row];
+    UITableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
+                                                                      forIndexPath:indexPath];
+    
+    NSString *text = post.text;
+    if(text == nil) text = @"Tap to View";
+    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", post.author.username, text];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+    KPost *post = self.posts[indexPath.row];
+    if(post) {
+        MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
+        mediaViewController.post = post;
+        [self.parentViewController presentViewController:mediaViewController animated:NO completion:nil];
+    }
 }
 
 
