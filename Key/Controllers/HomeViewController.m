@@ -35,7 +35,6 @@ static NSString *TableViewCellIdentifier = @"Threads";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     InboxViewController *inboxViewController = [[InboxViewController alloc] initWithNibName:@"InboxView" bundle:nil];
     [self addChildViewController:inboxViewController];
     [self.scrollView addSubview:inboxViewController.view];

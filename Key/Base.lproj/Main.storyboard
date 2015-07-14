@@ -264,11 +264,36 @@
                     <connections>
                         <outlet property="scrollView" destination="gA6-BN-5tx" id="aGo-5b-BIg"/>
                         <segue destination="DsG-xX-ckQ" kind="push" identifier="contactsSeguePush" id="2Hs-bf-p7X"/>
+                        <segue destination="qVh-7y-9nV" kind="push" identifier="threadSeguePush" id="Zd3-pg-MKU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E2R-a3-co8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="747" y="-6"/>
+        </scene>
+        <!--Thread View Controller-->
+        <scene sceneID="hyl-RV-wRl">
+            <objects>
+                <viewController id="qVh-7y-9nV" customClass="ThreadViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="nT3-wg-wtN"/>
+                        <viewControllerLayoutGuide type="bottom" id="TRA-nf-8Zd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0X1-N4-3yu" customClass="ThreadViewC">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="vfa-dG-xGb"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="juB-xx-tXO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1303" y="-6"/>
         </scene>
         <!--Home Navigation View Controller-->
         <scene sceneID="dAq-sW-I7Y">

@@ -23,6 +23,13 @@ static NSString *TableViewCellIdentifier = @"Messages";
 @property (nonatomic, strong) UIView *titleView;
 @property (nonatomic, strong) KUser *currentUser;
 @property (nonatomic, strong) NSArray *messages;
+@property (nonatomic, strong) IBOutlet UINavigationBar *navigationBar;
+@property (nonatomic, weak)   UIView *navView;
+@end
+
+@interface UINavigationItem(){
+    UIView *backButtonView;
+}
 @end
 
 @implementation ThreadViewController
@@ -50,10 +57,15 @@ static NSString *TableViewCellIdentifier = @"Messages";
     
     self.showLoadEarlierMessagesHeader = NO;
     
+    self.titleView = self.navigationItem.titleView;
+    self.navigationItem.titleView = self.recipientTextField;
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(databaseModified:)
                                                  name:[KMessage notificationChannel]
                                                object:nil];
+
 }
 
 - (void)databaseModified:(NSNotification *)notification {
@@ -71,7 +83,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
     [super viewWillAppear:YES];
     
     if(self.thread) {
-        self.title = self.thread.name;
+        self.title = self.thread.displayName;
         [self.thread setRead:YES];
         [self.thread save];
     }
@@ -200,6 +212,10 @@ static NSString *TableViewCellIdentifier = @"Messages";
     [JSQSystemSoundPlayer jsq_playMessageSentSound];
     
     [self finishSendingMessageAnimated:YES];
+}
+
+- (IBAction)didPressBack:(id)sender {
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField*)aTextField

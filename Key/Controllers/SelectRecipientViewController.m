@@ -89,7 +89,7 @@ static NSString *TableViewCellIdentifier = @"Recipients";
         KThread *thread = [self setupThread];
         ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
         threadViewController.thread = thread;
-        [self.delegate dismissAndPresentViewController:threadViewController];
+        [self.delegate dismissAndPresentThread:thread];
     }else {
         [FreeKey sendEncryptableObject:self.post recipients:self.selectedRecipients];
         [self.post save];

@@ -24,14 +24,13 @@
 #import "FreeKeySessionManager.h"
 #import "FreeKeyNetworkManager.h"
 #import "RootChain.h"
-#import "ChainKey.h"
 #import "MessageKey.h"
 #import "KOutgoingObject.h"
 #import "CollapsingFutures.h"
 
 @implementation FreeKey
 
-+ (void)sendEncryptableObject:(id<KEncryptable>)encryptableObject recipients:(NSArray *)recipients {
++ (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject recipients:(NSArray *)recipients {
     KOutgoingObject *outgoingObject = [[KOutgoingObject alloc] initWithObject:encryptableObject recipients:recipients];
     [outgoingObject save];
     
@@ -39,7 +38,9 @@
 
     [outgoingObject.recipients enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         dispatch_async(queue, ^{
-            TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionForRemoteUserId:obj];
+            KUser *localUser = [KAccountManager sharedManager].user;
+            KUser *remoteUser = [KUser findById:obj];
+            TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
             [futureSession thenDo:^(Session *session) {
                 EncryptedMessage *encryptedMessage = [self encryptObject:encryptableObject session:session];
                 [[FreeKeyNetworkManager sharedManager] sendEncryptedMessage:encryptedMessage];
@@ -52,7 +53,9 @@
     dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
     
     dispatch_async(queue, ^{
-        TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionForRemoteUserId:encryptedMessage.senderId];
+        KUser *localUser = [KAccountManager sharedManager].user;
+        KUser *remoteUser = [KUser findById:encryptedMessage.senderId];
+        TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
         [futureSession thenDo:^(Session *session) {
             KDatabaseObject *decryptedObject = (KDatabaseObject *)[self decryptEncryptedMessage:encryptedMessage session:session];
             [decryptedObject save];
