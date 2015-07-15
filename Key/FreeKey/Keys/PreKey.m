@@ -7,7 +7,6 @@
 //
 
 #import "PreKey.h"
-#import "PreKey+Serialize.h"
 #import "FreeKey.h"
 
 @implementation PreKey

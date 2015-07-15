@@ -39,27 +39,30 @@
 
 - (TOCFuture *)sessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     TOCFutureSource *resultSource = [TOCFutureSource new];
-    Session *session = [Session findByDictionary:@{@"receiverId" : remoteUser.uniqueId}];
-    if(session) {
-        [resultSource trySetResult:session];
-    }else {
+    NSString *countSessionsSQL = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE receiver_id = ?", [Session tableName]];
+    NSUInteger count = [[KStorageManager sharedManager] queryCount:^NSUInteger(FMDatabase *database) {
+        return [database intForQuery:countSessionsSQL, remoteUser.uniqueId];
+    }];
+    if(count > 0) [resultSource trySetResult:[Session findByDictionary:@{@"receiverId" : remoteUser.uniqueId}]];
+    else {
         TOCFuture *futureResponse = [localUser asyncRetrieveKeyExchangeWithRemoteUser:remoteUser];
         [futureResponse thenDo:^(Session *session) {
             [resultSource trySetResult:session];
         }];
     }
-    
     return resultSource.future;
 }
 
 - (Session *)processNewKeyExchange:(NSObject *)keyExchange localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
+    NSLog(@"KEY EXCHANGE: %@", keyExchange);
     if([keyExchange isKindOfClass:[PreKey class]]) {
         Session *session = [[Session alloc] initWithSenderId:localUser.uniqueId receiverId:remoteUser.uniqueId];
         [session addPreKey:(PreKey *)keyExchange ourBaseKey:[Curve25519 generateKeyPair]];
+        [SendPreKeyExchangeRequest makeRequestWithPreKeyExchange:session.preKeyExchange];
         return session;
     }else if([keyExchange isKindOfClass:[PreKeyExchange class]]) {
         Session *session = [[Session alloc] initWithSenderId:localUser.uniqueId receiverId:remoteUser.uniqueId];
-        PreKey *ourPreKey = [PreKey findById:((PreKeyExchange *)keyExchange).signedTargetPreKeyId];
+        PreKey *ourPreKey = [PreKey findById:(NSString *)((PreKeyExchange *)keyExchange).signedTargetPreKeyId];
         if(ourPreKey) {
             [session addOurPreKey:ourPreKey preKeyExchange:(PreKeyExchange *)keyExchange];
             return session;

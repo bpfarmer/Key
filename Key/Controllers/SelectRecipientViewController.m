@@ -40,13 +40,14 @@ static NSString *TableViewCellIdentifier = @"Recipients";
     self.contactsTableView.delegate = self;
     [self.contactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
-    //if(!self.post) {
-    //    self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:nil];
-    //}
+    if(![self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
+        if(!self.post) {
+            self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:nil];
+        }
+        self.post.attachments = self.sendableObjects;
+    }
     
     self.contactsTableView.allowsMultipleSelection = YES;
-    
-    //self.post.attachments = self.sendableObjects;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -85,14 +86,20 @@ static NSString *TableViewCellIdentifier = @"Recipients";
 }
 
 - (IBAction)sendToRecipients:(id)sender {
-    if([self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
-        KThread *thread = [self setupThread];
-        ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
-        threadViewController.thread = thread;
-        [self.delegate dismissAndPresentThread:thread];
+    if(self.selectedRecipients.count > 0) {
+        if([self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
+            KThread *thread = [self setupThread];
+            ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
+            threadViewController.thread = thread;
+            [self.delegate dismissAndPresentThread:thread];
+        }else {
+            [self.post save];
+            NSMutableArray *recipientIds = [[NSMutableArray alloc] init];
+            for(KUser *user in self.selectedRecipients) [recipientIds addObject:user.uniqueId];
+            [FreeKey sendEncryptableObject:self.post recipients:recipientIds];
+            [self dismissViewControllerAnimated:NO completion:nil];
+        }
     }else {
-        [FreeKey sendEncryptableObject:self.post recipients:self.selectedRecipients];
-        [self.post save];
         [self dismissViewControllerAnimated:NO completion:nil];
     }
 }

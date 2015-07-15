@@ -23,6 +23,9 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
 
 @interface KStorageManager ()
 
+@property (nonatomic, strong) FMDatabaseQueue *readQueue;
+@property (nonatomic, strong) FMDatabaseQueue *writeQueue;
+
 @end
 
 @implementation KStorageManager
@@ -39,12 +42,12 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
 - (void)setDatabaseWithName:(NSString *)databaseName {
     NSString *databasePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
     self.database = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@", databasePath, databaseName]];
-    self.queue    = [FMDatabaseQueue databaseQueueWithPath:self.database.databasePath];
+    if(self.database.open) self.queue    = [FMDatabaseQueue databaseQueueWithPath:self.database.databasePath];
     [KStorageSchema createTables];
 }
 
 - (void)queryUpdate:(KDatabaseUpdateBlock)databaseBlock {
-    if(self.database && self.database.open) {
+    if(self.queue) {
         [self.queue inDatabase:^(FMDatabase *db) {
             databaseBlock(db);
         }];
@@ -53,7 +56,7 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
 
 - (FMResultSet *)querySelect:(KDatabaseSelectBlock)databaseBlock {
     __block FMResultSet *resultSet;
-    if(self.database && self.database.open) {
+    if(self.queue) {
         [self.queue inDatabase:^(FMDatabase *db) {
             resultSet = databaseBlock(db);
         }];
@@ -63,7 +66,7 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
 
 - (NSUInteger)queryCount:(KDatabaseCountBlock)databaseBlock {
     __block NSUInteger count;
-    if(self.database && self.database.open) {
+    if(self.queue) {
         [self.queue inDatabase:^(FMDatabase *db) {
             count = databaseBlock(db);
         }];
