@@ -74,10 +74,11 @@
 - (NSArray *)generatePreKeysForLocalUser:(KUser *)localUser {
     int index = 0;
     NSMutableArray *preKeys = [[NSMutableArray alloc] init];
+    IdentityKey *identityKey = [localUser identityKey];
     while(index < 100) {
         ECKeyPair *baseKeyPair = [Curve25519 generateKeyPair];
         NSString *uniquePreKeyId = [NSString stringWithFormat:@"%@_%f_%d", localUser.uniqueId, [[NSDate date] timeIntervalSince1970], index];
-        NSData *preKeySignature = [Ed25519 sign:baseKeyPair.publicKey withKeyPair:[localUser identityKey].keyPair];
+        NSData *preKeySignature = [Ed25519 sign:baseKeyPair.publicKey withKeyPair:identityKey.keyPair];
         PreKey *preKey = [[PreKey alloc] initWithUserId:localUser.uniqueId
                                                deviceId:@"1"
                                          signedPreKeyId:uniquePreKeyId
@@ -85,6 +86,7 @@
                                   signedPreKeySignature:preKeySignature
                                             identityKey:localUser.publicKey
                                             baseKeyPair:baseKeyPair];
+        [preKey setUniqueId:uniquePreKeyId];
         [preKey save];
         [preKeys addObject:[self base64EncodedPreKeyDictionary:preKey]];
         index++;

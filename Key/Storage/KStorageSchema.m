@@ -22,6 +22,7 @@
 #import "PreKeyExchange.h"
 #import "RootChain.h"
 #import "EncryptedMessage.h"
+#import "KPost.h"
 
 @implementation KStorageSchema
 
@@ -41,6 +42,7 @@
     [PreKeyExchange createTable];
     [RootChain createTable];
     [EncryptedMessage createTable];
+    [KPost createTable];
 }
 
 + (void)dropTables {
@@ -58,6 +60,7 @@
     [PreKeyExchange dropTable];
     [PreKey dropTable];
     [EncryptedMessage createTable];
+    [KPost createTable];
 }
 
 

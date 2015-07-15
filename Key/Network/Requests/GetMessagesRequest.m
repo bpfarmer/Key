@@ -47,11 +47,11 @@
             PreKeyExchange *preKeyExchange = [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:messages[kPreKeyExchangeRemoteAlias]];
             KUser *remoteUser = [KUser findById:preKeyExchange.senderId];
             if(remoteUser) {
-                [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
+                [[FreeKeySessionManager sharedManager] processNewKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
             }else {
                 TOCFuture *futureUser = [KUser asyncRetrieveWithUniqueId:preKeyExchange.senderId];
                 [futureUser thenDo:^(KUser *remoteUser) {
-                    [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
+                    [[FreeKeySessionManager sharedManager] processNewKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
                 }];
             }
         }else {
@@ -59,11 +59,11 @@
                 PreKeyExchange *preKeyExchange = [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:msg];
                 KUser *remoteUser = [KUser findById:preKeyExchange.senderId];
                 if(remoteUser) {
-                    [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
+                    [[FreeKeySessionManager sharedManager] processNewKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
                 }else {
                     TOCFuture *futureUser = [KUser asyncRetrieveWithUniqueId:preKeyExchange.senderId];
                     [futureUser thenDo:^(KUser *remoteUser) {
-                        [[FreeKeySessionManager sharedManager] processNewPreKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
+                        [[FreeKeySessionManager sharedManager] processNewKeyExchange:preKeyExchange localUser:localUser remoteUser:remoteUser];
                     }];
                 }
             }

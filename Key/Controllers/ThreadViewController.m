@@ -70,11 +70,13 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)databaseModified:(NSNotification *)notification {
     if([notification.object isKindOfClass:[KMessage class]]) {
-        if([((KMessage *)notification.object).threadId isEqualToString:self.thread.uniqueId]) return;
+        if(![((KMessage *)notification.object).threadId isEqualToString:self.thread.uniqueId]) return;
         NSMutableArray *messages = [[NSMutableArray alloc] initWithArray:self.messages];
         [messages addObject:[notification object]];
         self.messages = [[NSArray alloc] initWithArray:messages];
         [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
+        __weak UICollectionView *weakView = self.collectionView;
+        //[weakView reloadData];
     }
 }
 
@@ -152,11 +154,8 @@ static NSString *TableViewCellIdentifier = @"Messages";
     if (text.length > 0) {
         [JSQSystemSoundPlayer jsq_playMessageSentSound];
         
-        if(!self.thread.saved) {
-            [self.thread save];
-            NSLog(@"RETRIEVING CURRENT THREAD: %@", self.thread);
-            //[FreeKey sendEncryptableObject:self.thread recipients:self.thread.recipientIds];
-        }
+        [self.thread save];
+        [FreeKey sendEncryptableObject:self.thread recipients:self.thread.recipientIds];
         
         if(self.thread.uniqueId) {
             NSLog(@"GETTING READY TO SEND MESSAGE");
