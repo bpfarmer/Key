@@ -40,20 +40,33 @@ static NSString *TableViewCellIdentifier = @"Posts";
     [self.postTextView sizeToFit];
     [self.postTextView layoutIfNeeded];
     
+    self.posts = [KPost all];
+    
     self.postsTableView.delegate = self;
     self.postsTableView.dataSource = self;
     
     [self.postsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
-    self.posts = [KPost all];
-    
     self.currentUser = [KAccountManager sharedManager].user;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(databaseModified:)
+                                                 name:[KPost notificationChannel]
+                                               object:nil];
+}
+
+- (void)databaseModified:(NSNotification *)notification {
+    if([[notification object] isKindOfClass:[KPost class]]) {
+        NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.posts];
+        [posts addObject:[notification object]];
+        self.posts = [[NSArray alloc] initWithArray:posts];
+        [self.postsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.posts.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)sender {
@@ -66,6 +79,7 @@ static NSString *TableViewCellIdentifier = @"Posts";
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     KPost *post = self.posts[indexPath.row];
+    NSLog(@"POST: %@", post);
     UITableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
                                                                       forIndexPath:indexPath];
     
