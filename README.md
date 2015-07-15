@@ -1,9 +1,9 @@
 ##key : share freely##
 
 ####About Key####
-Key is an end-to-end encrypted social platform that allows people to share freely and securely with their friends. 
+Key helps people navigate their digital lives freely, securely and privately. 
 
-Key is built on top of the FreeKey encryption protocol, which is a custom implementation of the axolotl protocol developed by Open Whisper Systems and Trevor Perrin. 
+Key is built on top of the FreeKey encryption protocol, which is a derivation of the OTR protocol, based on the axolotl protocol designed by Open Whisper Systems and Trevor Perrin.
 
 FreeKey is designed to offer strong encryption, perfect forward secrecy, and replay protection, and relies on:
 
