@@ -52,7 +52,7 @@
 }
 
 - (NSString *)generateUniqueId {
-    NSString *uniqueId = [NSString stringWithFormat:@"%@_%u", [KMessage tableName], [self messageHash]];
+    NSString *uniqueId = [NSString stringWithFormat:@"%@_%lu", [KMessage tableName], (unsigned long)[self messageHash]];
     
     return uniqueId;
 }

@@ -9,5 +9,5 @@ pod 'TwistedOakCollapsingFutures', '~> 1.0'
 pod 'AFNetworking', :inhibit_warnings => true
 pod 'SSKeychain', :inhibit_warnings => true
 pod 'JSQMessagesViewController'
-pod 'FMDB/SQLCipher'
+pod 'FMDB'
 pod 'Mantle'

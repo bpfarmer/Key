@@ -21,7 +21,7 @@ static NSString *TableViewCellIdentifier = @"Posts";
 
 @property (nonatomic, strong) IBOutlet UITextView *postTextView;
 @property (nonatomic, strong) IBOutlet UITableView *postsTableView;
-@property (nonatomic, weak) NSArray *posts;
+@property (nonatomic) NSArray *posts;
 
 @end
 

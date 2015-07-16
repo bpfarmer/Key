@@ -57,7 +57,7 @@
 
 - (NSString *)generateUniqueId {
     NSUInteger uniqueHash = self.authorId.hash ^ (NSUInteger) [self.createdAt timeIntervalSince1970] ^ self.text.hash;
-    return [NSString stringWithFormat:@"%@_%u", [KPost tableName], uniqueHash];
+    return [NSString stringWithFormat:@"%@_%lu", [KPost tableName], (unsigned long)uniqueHash];
 }
 
 @end
