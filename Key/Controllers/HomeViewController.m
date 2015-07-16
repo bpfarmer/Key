@@ -22,6 +22,7 @@
 #import "ShareViewController.h"
 #import "SelectRecipientViewController.h"
 #import "ContentViewController.h"
+#import "ContentTabBarController.h"
 
 static NSString *TableViewCellIdentifier = @"Threads";
 
@@ -36,15 +37,12 @@ static NSString *TableViewCellIdentifier = @"Threads";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    ContentViewController *contentVC = [[ContentViewController alloc] initWithNibName:@"ContentView" bundle:nil];
-    [self addChildViewController:contentVC];
-    [self.scrollView addSubview:contentVC.view];
-    [contentVC didMoveToParentViewController:self];
+    ContentViewController *contentVC = [[ContentViewController alloc] init];
+    [[NSBundle mainBundle] loadNibNamed:@"ContentView" owner:contentVC options:nil];
     
-    /*InboxViewController *inboxViewController = [[InboxViewController alloc] initWithNibName:@"InboxView" bundle:nil];
-    [self addChildViewController:inboxViewController];
-    [self.scrollView addSubview:inboxViewController.view];
-    [inboxViewController didMoveToParentViewController:self];*/
+    [self addChildViewController:contentVC];
+    [self.scrollView addSubview:contentVC.contentTC.view];
+    [contentVC didMoveToParentViewController:self];
     
     ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
     [self addChildViewController:shareViewController];

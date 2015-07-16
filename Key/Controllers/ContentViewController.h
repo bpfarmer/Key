@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ContentViewController : UITabBarController
+@class ContentTabBarController;
+
+@interface ContentViewController : UIViewController
+
+@property (nonatomic, strong) IBOutlet ContentTabBarController *contentTC;
 
 @end

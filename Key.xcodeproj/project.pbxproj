@@ -99,6 +99,8 @@
 		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
 		EFE43D3C1B580CE50092CAC5 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */; };
 		EFE43D3E1B580F670092CAC5 /* ContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFE43D3D1B580F670092CAC5 /* ContentView.xib */; };
+		EFE43D411B5818110092CAC5 /* ContentTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D401B5818110092CAC5 /* ContentTabBarController.m */; };
+		EFE43D441B581C840092CAC5 /* ContentTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D431B581C840092CAC5 /* ContentTabBar.m */; };
 		EFE5667C1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */; };
 		EFE5667D1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
@@ -302,6 +304,10 @@
 		EFE43D3A1B580CE50092CAC5 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
 		EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
 		EFE43D3D1B580F670092CAC5 /* ContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContentView.xib; path = Views/ContentView.xib; sourceTree = "<group>"; };
+		EFE43D3F1B5818110092CAC5 /* ContentTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentTabBarController.h; sourceTree = "<group>"; };
+		EFE43D401B5818110092CAC5 /* ContentTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentTabBarController.m; sourceTree = "<group>"; };
+		EFE43D421B581C840092CAC5 /* ContentTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentTabBar.h; sourceTree = "<group>"; };
+		EFE43D431B581C840092CAC5 /* ContentTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentTabBar.m; sourceTree = "<group>"; };
 		EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRecipientViewController.h; sourceTree = "<group>"; };
 		EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRecipientViewController.m; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
@@ -786,6 +792,10 @@
 				EFABC0301B39EA6B0062B807 /* CameraViewController.m */,
 				EF6B44A61ABA2F8A00B88323 /* ContactViewController.h */,
 				EF6B44A71ABA2F8A00B88323 /* ContactViewController.m */,
+				EFE43D421B581C840092CAC5 /* ContentTabBar.h */,
+				EFE43D431B581C840092CAC5 /* ContentTabBar.m */,
+				EFE43D3F1B5818110092CAC5 /* ContentTabBarController.h */,
+				EFE43D401B5818110092CAC5 /* ContentTabBarController.m */,
 				EFE43D3A1B580CE50092CAC5 /* ContentViewController.h */,
 				EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */,
 				EFB722761B4240B200E6DF7A /* EditLocationViewController.h */,
@@ -1015,6 +1025,7 @@
 				EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */,
 				EF524AE51AAE239800F3B9AF /* NSData+keyVersionByte.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
+				EFE43D411B5818110092CAC5 /* ContentTabBarController.m in Sources */,
 				EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */,
 				EF78AA561B33622300A4627F /* HomeNavigationViewController.m in Sources */,
 				EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */,
@@ -1022,6 +1033,7 @@
 				EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */,
 				EFB722851B45E57700E6DF7A /* KLocation.m in Sources */,
 				EF4920AB1AD7A28D00A9FE89 /* UIColor+Messages.m in Sources */,
+				EFE43D441B581C840092CAC5 /* ContentTabBar.m in Sources */,
 				EFC181A71AC3719800BE8B0B /* GetMessagesRequest.m in Sources */,
 				EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */,
 				EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */,
