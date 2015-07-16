@@ -97,6 +97,8 @@
 		EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */; };
 		EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEC61A6857E000B0EB8F /* Podfile */; };
 		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
+		EFE43D3C1B580CE50092CAC5 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */; };
+		EFE43D3E1B580F670092CAC5 /* ContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFE43D3D1B580F670092CAC5 /* ContentView.xib */; };
 		EFE5667C1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */; };
 		EFE5667D1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
@@ -297,6 +299,9 @@
 		EFC6BEC61A6857E000B0EB8F /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		EFCD01D61A83E651005065B2 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThread.h; path = Models/KThread.h; sourceTree = "<group>"; };
 		EFCD01D71A83E651005065B2 /* KThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KThread.m; path = Models/KThread.m; sourceTree = "<group>"; };
+		EFE43D3A1B580CE50092CAC5 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
+		EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
+		EFE43D3D1B580F670092CAC5 /* ContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContentView.xib; path = Views/ContentView.xib; sourceTree = "<group>"; };
 		EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRecipientViewController.h; sourceTree = "<group>"; };
 		EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRecipientViewController.m; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
@@ -424,6 +429,7 @@
 				EFB7227C1B432C3300E6DF7A /* EditPostView.xib */,
 				EFB7227E1B44324E00E6DF7A /* SelectRecipientsView.xib */,
 				EFB4A2A61B5211580042F3DF /* ThreadView.xib */,
+				EFE43D3D1B580F670092CAC5 /* ContentView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -776,11 +782,12 @@
 		EFF70AB01AAE1CBC006C10D2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				EF9A744D1B52B60D009689A7 /* Protocols */,
 				EFABC02F1B39EA6B0062B807 /* CameraViewController.h */,
 				EFABC0301B39EA6B0062B807 /* CameraViewController.m */,
 				EF6B44A61ABA2F8A00B88323 /* ContactViewController.h */,
 				EF6B44A71ABA2F8A00B88323 /* ContactViewController.m */,
+				EFE43D3A1B580CE50092CAC5 /* ContentViewController.h */,
+				EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */,
 				EFB722761B4240B200E6DF7A /* EditLocationViewController.h */,
 				EFB722771B4240B200E6DF7A /* EditLocationViewController.m */,
 				EFB7226F1B41A25700E6DF7A /* EditMediaViewController.h */,
@@ -797,6 +804,7 @@
 				EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */,
 				EFB225F01B48C4EF00D7E44B /* MediaViewController.h */,
 				EFB225F11B48C4EF00D7E44B /* MediaViewController.m */,
+				EF9A744D1B52B60D009689A7 /* Protocols */,
 				EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */,
 				EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */,
 				EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */,
@@ -805,12 +813,12 @@
 				EF01716A1ADD936C00AFCBA4 /* ShareViewController.m */,
 				EF01716C1ADD93B500AFCBA4 /* SocialViewController.h */,
 				EF01716D1ADD93B500AFCBA4 /* SocialViewController.m */,
+				EF9A744F1B54A735009689A7 /* ThreadHeader.h */,
+				EF9A74501B54A735009689A7 /* ThreadHeader.m */,
 				EF6B44A91ABA399D00B88323 /* ThreadViewController.h */,
 				EF6B44AA1ABA399D00B88323 /* ThreadViewController.m */,
 				EFF70ABF1AAE1CBC006C10D2 /* WelcomeScreenViewController.h */,
 				EFF70AC01AAE1CBC006C10D2 /* WelcomeScreenViewController.m */,
-				EF9A744F1B54A735009689A7 /* ThreadHeader.h */,
-				EF9A74501B54A735009689A7 /* ThreadHeader.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -904,6 +912,7 @@
 				EFC6BEAC1A6857D400B0EB8F /* Main.storyboard in Resources */,
 				EFB7227F1B44324E00E6DF7A /* SelectRecipientsView.xib in Resources */,
 				EF8358281AE02B0F00B631AB /* SocialView.xib in Resources */,
+				EFE43D3E1B580F670092CAC5 /* ContentView.xib in Resources */,
 				EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */,
 				EFABC0281B39BEA50062B807 /* MediaView.xib in Resources */,
 				EF8358261AE02AED00B631AB /* ShareView.xib in Resources */,
@@ -997,6 +1006,7 @@
 				EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */,
 				EFC181AA1AC371C300BE8B0B /* SendPreKeysRequest.m in Sources */,
 				EFB225F21B48C4EF00D7E44B /* MediaViewController.m in Sources */,
+				EFE43D3C1B580CE50092CAC5 /* ContentViewController.m in Sources */,
 				EF2CDEB81AB49A6F001E2F20 /* IdentityKey+Serialize.m in Sources */,
 				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
 				EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */,
@@ -1217,7 +1227,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"HEADER_SEARCH_PATHS[arch=*]" = "";
 				INFOPLIST_FILE = Key/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1233,7 +1243,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"HEADER_SEARCH_PATHS[arch=*]" = "";
 				INFOPLIST_FILE = Key/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";

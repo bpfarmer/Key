@@ -352,11 +352,11 @@
     [self takePhoto];
 }
 
-- (IBAction)postText:(id)sender {
+- (IBAction)didPressMessages:(id)sender {
     [self stopCamera];
-    EditPostViewController *editPostView = [[EditPostViewController alloc] initWithNibName:@"EditPostView" bundle:nil];
-    editPostView.delegate = self;
-    [self.parentViewController presentViewController:editPostView animated:NO completion:nil];
+    HomeViewController *homeVC = (HomeViewController *)self.parentViewController;
+    CGPoint point = CGPointMake(0, 0);
+    [homeVC.scrollView setContentOffset:point animated:YES];
 }
 
 @end
