@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "ContentTabBar.h"
 
+@class InboxViewController;
+@class SocialViewController;
+
 @interface ContentTabBarController : UITabBarController
+
+@property (nonatomic, strong) InboxViewController *inboxVC;
+@property (nonatomic, strong) SocialViewController *socialVC;
 
 @end

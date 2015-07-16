@@ -14,14 +14,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    InboxViewController *inboxVC = [[InboxViewController alloc] initWithNibName:@"InboxView" bundle:nil];
-    SocialViewController *socialVC = [[SocialViewController alloc] initWithNibName:@"SocialView" bundle:nil];
-    NSArray *tabViewControllers = @[inboxVC, socialVC];
+    self.inboxVC = [[InboxViewController alloc] initWithNibName:@"InboxView" bundle:nil];
+    self.socialVC = [[SocialViewController alloc] initWithNibName:@"SocialView" bundle:nil];
+    NSArray *tabViewControllers = @[self.inboxVC, self.socialVC];
     [self setViewControllers:tabViewControllers];
-    inboxVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Inbox" image:nil selectedImage:nil];
-    [inboxVC.tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"Helvetica" size:18.0], NSFontAttributeName, nil]forState:UIControlStateNormal];
-    socialVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Shared" image:nil selectedImage:nil];
-    [socialVC.tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"Helvetica" size:18.0], NSFontAttributeName, nil]forState:UIControlStateNormal];
+    self.inboxVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Inbox" image:nil selectedImage:nil];
+    [self.inboxVC.tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"Helvetica" size:18.0], NSFontAttributeName, nil]forState:UIControlStateNormal];
+    self.socialVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Shared" image:nil selectedImage:nil];
+    [self.socialVC.tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"Helvetica" size:18.0], NSFontAttributeName, nil]forState:UIControlStateNormal];
     CGRect frame = self.tabBar.frame;
     frame.origin = CGPointMake(0, 0);
     self.tabBar.frame = frame;
