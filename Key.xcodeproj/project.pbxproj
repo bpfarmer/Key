@@ -101,6 +101,7 @@
 		EFE43D3E1B580F670092CAC5 /* ContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFE43D3D1B580F670092CAC5 /* ContentView.xib */; };
 		EFE43D411B5818110092CAC5 /* ContentTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D401B5818110092CAC5 /* ContentTabBarController.m */; };
 		EFE43D441B581C840092CAC5 /* ContentTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D431B581C840092CAC5 /* ContentTabBar.m */; };
+		EFE43D461B5837060092CAC5 /* ContactView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFE43D451B5837060092CAC5 /* ContactView.xib */; };
 		EFE5667C1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */; };
 		EFE5667D1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
@@ -308,6 +309,7 @@
 		EFE43D401B5818110092CAC5 /* ContentTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentTabBarController.m; sourceTree = "<group>"; };
 		EFE43D421B581C840092CAC5 /* ContentTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentTabBar.h; sourceTree = "<group>"; };
 		EFE43D431B581C840092CAC5 /* ContentTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentTabBar.m; sourceTree = "<group>"; };
+		EFE43D451B5837060092CAC5 /* ContactView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContactView.xib; path = Views/ContactView.xib; sourceTree = "<group>"; };
 		EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRecipientViewController.h; sourceTree = "<group>"; };
 		EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRecipientViewController.m; sourceTree = "<group>"; };
 		EFEBDD361A68CE9600973E15 /* KUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KUser.h; path = Models/KUser.h; sourceTree = "<group>"; };
@@ -436,6 +438,7 @@
 				EFB7227E1B44324E00E6DF7A /* SelectRecipientsView.xib */,
 				EFB4A2A61B5211580042F3DF /* ThreadView.xib */,
 				EFE43D3D1B580F670092CAC5 /* ContentView.xib */,
+				EFE43D451B5837060092CAC5 /* ContactView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -923,6 +926,7 @@
 				EFB7227F1B44324E00E6DF7A /* SelectRecipientsView.xib in Resources */,
 				EF8358281AE02B0F00B631AB /* SocialView.xib in Resources */,
 				EFE43D3E1B580F670092CAC5 /* ContentView.xib in Resources */,
+				EFE43D461B5837060092CAC5 /* ContactView.xib in Resources */,
 				EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */,
 				EFABC0281B39BEA50062B807 /* MediaView.xib in Resources */,
 				EF8358261AE02AED00B631AB /* ShareView.xib in Resources */,
