@@ -17,7 +17,7 @@
 
 static NSString *TableViewCellIdentifier = @"Contacts";
 
-@interface ContactViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ContactViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *contactsTableView;
 @property (nonatomic, strong) IBOutlet UITextField *contactTextField;
 @property (nonatomic) KUser *currentUser;
@@ -34,6 +34,9 @@ static NSString *TableViewCellIdentifier = @"Contacts";
     self.contactsTableView.dataSource = self;
     self.contactsTableView.delegate = self;
     [self.contactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    self.contactTextField.delegate = self;
+    
+    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(databaseModified:)
@@ -95,7 +98,11 @@ static NSString *TableViewCellIdentifier = @"Contacts";
     }
 }
 
--(BOOL)prefersStatusBarHidden {
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
+- (BOOL)resignFirstResponder {
     return YES;
 }
 

@@ -75,8 +75,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
         [messages addObject:[notification object]];
         self.messages = [[NSArray alloc] initWithArray:messages];
         [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
-        __weak UICollectionView *weakView = self.collectionView;
-        //[weakView reloadData];
     }
 }
 
