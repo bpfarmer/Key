@@ -61,8 +61,9 @@ static NSString *TableViewCellIdentifier = @"Threads";
     self.scrollView.contentSize = CGSizeMake(scrollWidth, scrollHeight);
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
+    self.scrollView.bounces = NO;
     
-    CGFloat newContentOffsetX = (self.scrollView.contentSize.width/2);
+    CGFloat newContentOffsetX = (shareViewController.view.frame.size.width);
     self.scrollView.contentOffset = CGPointMake(newContentOffsetX, 0);
     
     [[KAccountManager sharedManager] initLocationManager];
