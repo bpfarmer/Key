@@ -11,6 +11,17 @@
 #import "InboxViewController.h"
 #import "SocialViewController.h"
 
+@interface ContentTabBar : UITabBar
+@end
+
+@implementation ContentTabBar
+- (CGSize)sizeThatFits:(CGSize)size {
+    CGSize sizeThatFits = [super sizeThatFits:size];
+    sizeThatFits.height = 50;
+    return sizeThatFits;
+}
+@end
+
 @interface ContentViewController ()
 
 @end
@@ -25,6 +36,9 @@
     [self setViewControllers:tabViewControllers];
     inboxVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Inbox" image:nil selectedImage:nil];
     socialVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Shared" image:nil selectedImage:nil];
+    CGRect frame = self.tabBar.frame;
+    frame.origin = CGPointMake(0, 0);
+    [self.tabBar setFrame:frame];
 }
 
 - (void)didReceiveMemoryWarning {
