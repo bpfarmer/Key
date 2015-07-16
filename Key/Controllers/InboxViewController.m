@@ -73,7 +73,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (IBAction)didPressContacts:(id)sender {
-    [self.parentViewController performSegueWithIdentifier:kContactsSeguePush sender:self];
+    if(self.homeViewController) [self.homeViewController performSegueWithIdentifier:kContactsSeguePush sender:self];
 }
 
 - (void)dismissAndPresentViewController:(UIViewController *)viewController {
@@ -115,14 +115,14 @@ static NSString *TableViewCellIdentifier = @"Messages";
     KThread *thread = self.threads[indexPath.row];
     if(thread) {
         self.selectedThread = thread;
-        [self.parentViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
+        if(self.homeViewController) [self.homeViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
     }
 }
 
 - (void)dismissAndPresentThread:(KThread *)thread {
     [self dismissViewControllerAnimated:NO completion:^{
         self.selectedThread = thread;
-        [self.parentViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
+        if(self.homeViewController) [self.homeViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
     }];
 }
 

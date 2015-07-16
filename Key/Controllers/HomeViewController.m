@@ -43,8 +43,8 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [self addChildViewController:contentVC];
     [self.scrollView addSubview:contentVC.contentTC.view];
     [contentVC didMoveToParentViewController:self];
-    [self addChildViewController:contentVC.contentTC.inboxVC];
-    [contentVC.contentTC.inboxVC didMoveToParentViewController:self];
+    
+    contentVC.contentTC.inboxVC.homeViewController = self;
     
     ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
     [self addChildViewController:shareViewController];
