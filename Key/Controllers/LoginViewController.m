@@ -24,7 +24,14 @@
     self.usernameText.delegate = self;
     self.passwordText.delegate = self;
     
-    // Do any additional setup after loading the view.
+    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    if([KAccountManager sharedManager].user || [[KAccountManager sharedManager] setUserFromPlist]) {
+        NSLog(@"SHOWTIME");
+        [self showHome];
+    }
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

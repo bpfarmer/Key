@@ -61,6 +61,8 @@ static NSString *TableViewCellIdentifier = @"Messages";
     self.navigationItem.titleView = self.recipientTextField;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
+    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(databaseModified:)
                                                  name:[KMessage notificationChannel]

@@ -28,7 +28,7 @@
 - (void)setUser:(KUser *)user {
     if(self) {
         _user = user;
-        
+        [self saveToPlist];
         if(user.uniqueId) {
             TOCFuture *pushNotificationFuture = [[PushManager sharedManager] registerForRemoteNotifications];
         
@@ -77,6 +77,46 @@
 - (void)refreshCurrentCoordinate {
     self.streamLocation = NO;
     [self.locationManager startUpdatingLocation];
+}
+
+- (NSDictionary *)plistData {
+    NSString *destPath = [self plistPath];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:destPath]) {
+        NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"User" ofType:@"plist"];
+        [fileManager copyItemAtPath:sourcePath toPath:destPath error:nil];
+    }
+    NSLog(@"PLIST DATA: %@", [[NSDictionary alloc] initWithContentsOfFile:destPath]);
+    return [[NSDictionary alloc] initWithContentsOfFile:destPath];
+}
+
+- (NSString *)plistPath {
+    NSString *destPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    return [destPath stringByAppendingPathComponent:@"User.plist"];
+}
+
+- (void)saveToPlist {
+    NSMutableDictionary *plistData = [[NSMutableDictionary alloc] initWithDictionary:self.plistData];
+    if(self.user) [plistData setObject:self.user.username forKey:@"username"];
+    else [plistData removeObjectForKey:@"username"];
+    [plistData writeToFile:self.plistPath atomically:YES];
+}
+
+- (BOOL)setUserFromPlist {
+    NSString *username = [self.plistData objectForKey:@"username"];
+    if(username.length == 0) {
+        NSLog(@"FAILING ON USERNAME");
+        return NO;
+    }
+    NSLog(@"USERNAME :%@", username);
+    [[KStorageManager sharedManager] setDatabaseWithName:username];
+    KUser *user = [KUser findByDictionary:@{@"username" : username}];
+    if(!user) {
+        NSLog(@"FAILING ON USER QUERY");
+        return NO;
+    }
+    [self setUser:user];
+    return YES;
 }
 
 @end

@@ -26,5 +26,6 @@
 - (NSString *)uniqueId;
 - (void)initLocationManager;
 - (void)refreshCurrentCoordinate;
+- (BOOL)setUserFromPlist;
 
 @end

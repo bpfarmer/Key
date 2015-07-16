@@ -31,6 +31,8 @@
     self.emailText.delegate = self;
     self.passwordText.delegate = self;
     self.usernameText.delegate = self;
+    
+    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
 }
 
 // TODO: show 'waiting' spinner animation

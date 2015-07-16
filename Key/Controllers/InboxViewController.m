@@ -105,6 +105,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (IBAction)logout:(id)sender {
+    [[KAccountManager sharedManager] setUser:nil];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     LoginViewController *loginView = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
     [self presentViewController:loginView animated:YES completion:nil];
