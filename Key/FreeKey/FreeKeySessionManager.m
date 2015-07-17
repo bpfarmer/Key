@@ -39,11 +39,12 @@
 
 - (TOCFuture *)sessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     TOCFutureSource *resultSource = [TOCFutureSource new];
-    NSString *countSessionsSQL = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE receiver_id = ?", [Session tableName]];
+    /*NSString *countSessionsSQL = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE receiver_id = ?", [Session tableName]];
     NSUInteger count = [[KStorageManager sharedManager] queryCount:^NSUInteger(FMDatabase *database) {
         return [database intForQuery:countSessionsSQL, remoteUser.uniqueId];
-    }];
-    if(count > 0) [resultSource trySetResult:[Session findByDictionary:@{@"receiverId" : remoteUser.uniqueId}]];
+    }];*/
+    Session *session = [Session findByDictionary:@{@"receiverId" : remoteUser.uniqueId}];
+    if(session != nil) [resultSource trySetResult:session];
     else {
         TOCFuture *futureResponse = [localUser asyncRetrieveKeyExchangeWithRemoteUser:remoteUser];
         [futureResponse thenDo:^(Session *session) {

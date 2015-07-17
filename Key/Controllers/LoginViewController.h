@@ -10,7 +10,7 @@
 
 @interface LoginViewController : UIViewController <UITextFieldDelegate>
 
-@property (strong, nonatomic) IBOutlet UITextField *usernameText;
-@property (strong, nonatomic) IBOutlet UITextField *passwordText;
+@property (nonatomic) IBOutlet UITextField *usernameText;
+@property (nonatomic) IBOutlet UITextField *passwordText;
 
 @end

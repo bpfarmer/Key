@@ -38,8 +38,20 @@
 
     [recipients enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         dispatch_async(queue, ^{
+            NSLog(@"RECIPIENT ID PROVIDED: %@", obj);
             KUser *localUser = [KAccountManager sharedManager].user;
             KUser *remoteUser = [KUser findById:obj];
+            NSLog(@"LOCAL USER: %@, REMOTE USER: %@", localUser, remoteUser);
+            if(!remoteUser) {
+                TOCFuture *futureUser = [KUser asyncRetrieveWithUniqueId:obj];
+                [futureUser thenDo:^(KUser *retrievedUser) {
+                    TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
+                    [futureSession thenDo:^(Session *session) {
+                        EncryptedMessage *encryptedMessage = [self encryptObject:encryptableObject session:session];
+                        [[FreeKeyNetworkManager sharedManager] sendEncryptedMessage:encryptedMessage];
+                    }];
+                }];
+            }
             TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
             [futureSession thenDo:^(Session *session) {
                 EncryptedMessage *encryptedMessage = [self encryptObject:encryptableObject session:session];

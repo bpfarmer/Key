@@ -67,7 +67,7 @@
 
 - (void)save {
     [super save];
-    [self.thread processLatestMessage:self];
+    //[self.thread processLatestMessage:self];
 }
 
 - (KThread *)thread {

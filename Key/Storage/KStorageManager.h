@@ -20,8 +20,8 @@ typedef NSUInteger (^KDatabaseCountBlock)(FMDatabase *database);
 
 @interface KStorageManager : NSObject
 
-@property (nonatomic, strong) FMDatabase *database;
-@property (nonatomic, strong) FMDatabaseQueue *queue;
+@property (nonatomic) FMDatabase *database;
+@property (nonatomic) FMDatabaseQueue *queue;
 
 + (instancetype)sharedManager;
 - (void)setDatabaseWithName:(NSString *)databaseName;

@@ -14,7 +14,7 @@
 
 @interface KAccountManager : NSObject <CLLocationManagerDelegate>
 
-@property (nonatomic) KUser *user;
+@property (nonatomic, strong) KUser *user;
 @property (nonatomic) CLAuthorizationStatus authorizationStatus;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic) CLLocation *currentCoordinate;

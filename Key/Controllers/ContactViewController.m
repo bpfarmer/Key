@@ -21,7 +21,7 @@ static NSString *TableViewCellIdentifier = @"Contacts";
 @property (nonatomic, strong) IBOutlet UITableView *contactsTableView;
 @property (nonatomic, strong) IBOutlet UITextField *contactTextField;
 @property (nonatomic) KUser *currentUser;
-@property (nonatomic, strong) NSArray *contacts;
+@property (nonatomic) NSArray *contacts;
 @end
 
 @implementation ContactViewController

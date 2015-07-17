@@ -20,9 +20,8 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 @interface ThreadViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 @property (nonatomic, strong) UITextField *recipientTextField;
-@property (nonatomic, strong) UIView *titleView;
-@property (nonatomic, strong) KUser *currentUser;
-@property (nonatomic, strong) NSArray *messages;
+@property (nonatomic) UIView *titleView;
+@property (nonatomic) NSArray *messages;
 @property (nonatomic, strong) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic, weak)   UIView *navView;
 @end
@@ -36,10 +35,9 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.currentUser = [KAccountManager sharedManager].user;
-    self.senderDisplayName = self.currentUser.username;
-    self.senderId = self.currentUser.uniqueId;
+    KUser *currentUser = [KAccountManager sharedManager].user;
+    self.senderDisplayName = currentUser.username;
+    self.senderId = currentUser.uniqueId;
     
     self.messages = @[];
     
@@ -159,7 +157,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
         
         if(self.thread.uniqueId) {
             NSLog(@"GETTING READY TO SEND MESSAGE");
-            KMessage *message = [[KMessage alloc] initWithAuthorId:self.senderId threadId:self.thread.uniqueId body:text];
+            KMessage *message = [[KMessage alloc] initWithAuthorId:[KAccountManager sharedManager].user.uniqueId threadId:self.thread.uniqueId body:text];
             [message save];
             
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);

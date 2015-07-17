@@ -23,9 +23,6 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
 
 @interface KStorageManager ()
 
-@property (nonatomic, strong) FMDatabaseQueue *readQueue;
-@property (nonatomic, strong) FMDatabaseQueue *writeQueue;
-
 @end
 
 @implementation KStorageManager
