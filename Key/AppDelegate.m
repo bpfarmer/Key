@@ -27,12 +27,13 @@
     [[PushManager sharedManager] registerForRemoteNotifications];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UINavigationController *navController = [storyboard instantiateViewControllerWithIdentifier:@"MainNavigationController"];
-    UIViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
 
-    if([KAccountManager sharedManager].user) {
-        [self.window setRootViewController:navController];
+    if([KAccountManager sharedManager].user || [[KAccountManager sharedManager] setUserFromPlist]) {
+        NSLog(@"SHOWTIME");
+        UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MainNavigationController"];
+        [self.window setRootViewController:navigationController];
     }else {
+        UIViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         [self.window setRootViewController:loginViewController];
     }
     return YES;
@@ -55,7 +56,6 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    [self saveCurrentUser];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

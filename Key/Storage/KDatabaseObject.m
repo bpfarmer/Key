@@ -108,7 +108,7 @@
     NSString *columnKeys = [[self instanceMapping].allKeys componentsJoinedByString:@", "];
     NSString *valueKeys   = [@":" stringByAppendingString:[[self instanceMapping].allKeys componentsJoinedByString:@", :"]];
     NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (%@) values(%@)", [self.class tableName], columnKeys, valueKeys];
-    
+    NSLog(@"SAVING WITH SQL: %@ AND PARAMETERS: %@", insertOrReplaceSQL, [self instanceMapping]);
     [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
         [database executeUpdate:insertOrReplaceSQL withParameterDictionary:[self instanceMapping]];
     }];
@@ -133,10 +133,9 @@
 
 + (instancetype)findById:(NSString *)uniqueId {
     if(!uniqueId) return nil;
-    NSString *findByUniqueIdSQL;
-    NSDictionary *parameterDictionary;
-    findByUniqueIdSQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE unique_id=:unique_id", [[self class] tableName]];
-    parameterDictionary = @{@"unique_id" : uniqueId};
+    NSDictionary *parameterDictionary = @{@"unique_id" : uniqueId};
+    NSString *findByUniqueIdSQL = [NSString stringWithFormat:@"select * from %@ where unique_id=:unique_id", [[self class] tableName]];
+    NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@",findByUniqueIdSQL, parameterDictionary);
     FMResultSet *result = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
         return [database executeQuery:findByUniqueIdSQL withParameterDictionary:parameterDictionary];
     }];
@@ -161,6 +160,8 @@
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [parameterDictionary setObject:obj forKey:[self columnNameFromProperty:key]];
     }];
+    
+    NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@", selectSQL, parameterDictionary);
     
     FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
         return [database executeQuery:selectSQL withParameterDictionary:parameterDictionary];

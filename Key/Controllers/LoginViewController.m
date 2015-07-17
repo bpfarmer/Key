@@ -27,13 +27,6 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    if([KAccountManager sharedManager].user || [[KAccountManager sharedManager] setUserFromPlist]) {
-        NSLog(@"SHOWTIME");
-        [self showHome];
-    }
-}
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;
