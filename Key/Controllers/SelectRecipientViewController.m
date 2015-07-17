@@ -32,7 +32,6 @@ static NSString *TableViewCellIdentifier = @"Recipients";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"HERE");
     
     self.contacts = [[KAccountManager sharedManager].user contacts];
     

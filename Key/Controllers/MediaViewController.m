@@ -114,7 +114,6 @@
 }
 
 - (void)dismissViews:(UITapGestureRecognizer *)sender {
-    NSLog(@"HERE");
     [self.imageView removeFromSuperview];
     if(self.location) {
         [self setupMapViewWithLocation:self.location.location];

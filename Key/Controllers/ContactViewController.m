@@ -75,10 +75,6 @@ static NSString *TableViewCellIdentifier = @"Contacts";
     return cell;
 }
 
-- (IBAction)pushBackButton:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (IBAction)addContact:(id)sender {
     if(![self.contactTextField.text isEqualToString:@""] &&
        ![self.contactTextField.text isEqualToString:self.currentUser.username]) {
