@@ -104,7 +104,7 @@
 }
 
 - (void)save {
-    if(!self.uniqueId) self.uniqueId = [[NSUUID UUID] UUIDString];
+    if(!self.uniqueId) self.uniqueId = [self.class generateUniqueId];
     NSString *columnKeys = [[self instanceMapping].allKeys componentsJoinedByString:@", "];
     NSString *valueKeys   = [@":" stringByAppendingString:[[self instanceMapping].allKeys componentsJoinedByString:@", :"]];
     NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (%@) values(%@)", [self.class tableName], columnKeys, valueKeys];
@@ -209,6 +209,10 @@
 
 + (NSString *)tableName {
     return [self columnNameFromProperty:NSStringFromClass([self class])];
+}
+
++ (NSString *)generateUniqueId {
+    return [[NSUUID UUID] UUIDString];
 }
 
 @end

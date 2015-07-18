@@ -43,7 +43,7 @@ static NSString *TableViewCellIdentifier = @"Recipients";
         if(!self.post) {
             self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:nil];
         }
-        self.post.attachments = self.sendableObjects;
+        //self.post.attachments = self.sendableObjects;
     }
     
     self.contactsTableView.allowsMultipleSelection = YES;

@@ -97,6 +97,8 @@
 		EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */; };
 		EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEC61A6857E000B0EB8F /* Podfile */; };
 		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
+		EFDDD9B21B59560600089124 /* AttachmentKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9B11B59560600089124 /* AttachmentKey.m */; };
+		EFDDD9B51B595FAC00089124 /* NSData+gzip.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9B41B595FAC00089124 /* NSData+gzip.m */; };
 		EFE43D3C1B580CE50092CAC5 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */; };
 		EFE43D3E1B580F670092CAC5 /* ContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFE43D3D1B580F670092CAC5 /* ContentView.xib */; };
 		EFE43D411B5818110092CAC5 /* ContentTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D401B5818110092CAC5 /* ContentTabBarController.m */; };
@@ -303,6 +305,10 @@
 		EFC6BEC61A6857E000B0EB8F /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		EFCD01D61A83E651005065B2 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThread.h; path = Models/KThread.h; sourceTree = "<group>"; };
 		EFCD01D71A83E651005065B2 /* KThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KThread.m; path = Models/KThread.m; sourceTree = "<group>"; };
+		EFDDD9B01B59560600089124 /* AttachmentKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentKey.h; sourceTree = "<group>"; };
+		EFDDD9B11B59560600089124 /* AttachmentKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentKey.m; sourceTree = "<group>"; };
+		EFDDD9B31B595FAC00089124 /* NSData+gzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+gzip.h"; sourceTree = "<group>"; };
+		EFDDD9B41B595FAC00089124 /* NSData+gzip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+gzip.m"; sourceTree = "<group>"; };
 		EFE43D3A1B580CE50092CAC5 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
 		EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
 		EFE43D3D1B580F670092CAC5 /* ContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContentView.xib; path = Views/ContentView.xib; sourceTree = "<group>"; };
@@ -486,6 +492,8 @@
 				EFB226051B4D6BD700D7E44B /* NSObject+Properties.m */,
 				EFB226071B4D6E2E00D7E44B /* NSString+PropertyKVC.h */,
 				EFB226081B4D6E2E00D7E44B /* NSString+PropertyKVC.m */,
+				EFDDD9B31B595FAC00089124 /* NSData+gzip.h */,
+				EFDDD9B41B595FAC00089124 /* NSData+gzip.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -761,6 +769,8 @@
 				EFF70A721AAE19C3006C10D2 /* RootChain.m */,
 				EFF70A751AAE19C3006C10D2 /* SessionKeyBundle.h */,
 				EFF70A761AAE19C3006C10D2 /* SessionKeyBundle.m */,
+				EFDDD9B01B59560600089124 /* AttachmentKey.h */,
+				EFDDD9B11B59560600089124 /* AttachmentKey.m */,
 			);
 			path = Keys;
 			sourceTree = "<group>";
@@ -1026,6 +1036,7 @@
 				EFB225F21B48C4EF00D7E44B /* MediaViewController.m in Sources */,
 				EFE43D3C1B580CE50092CAC5 /* ContentViewController.m in Sources */,
 				EF2CDEB81AB49A6F001E2F20 /* IdentityKey+Serialize.m in Sources */,
+				EFDDD9B51B595FAC00089124 /* NSData+gzip.m in Sources */,
 				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
 				EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */,
 				EFAC97D11B2E171600B4FD0F /* KOutgoingObject.m in Sources */,
@@ -1080,6 +1091,7 @@
 				EF99E2771AC72F71002583E2 /* FreeKeyResponseHandler.m in Sources */,
 				EFB722781B4240B200E6DF7A /* EditLocationViewController.m in Sources */,
 				EFB2260C1B4F125B00D7E44B /* KStorageSchema.m in Sources */,
+				EFDDD9B21B59560600089124 /* AttachmentKey.m in Sources */,
 				EFF70A911AAE19C3006C10D2 /* EncryptedMessage.m in Sources */,
 				EF6B44B81ABC943C00B88323 /* FreeKeyNetworkManager.m in Sources */,
 				EF4920951AD6F82A00A9FE89 /* UIDevice+Messages.m in Sources */,

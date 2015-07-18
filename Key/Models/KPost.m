@@ -23,8 +23,6 @@
     if(self) {
         _authorId = authorId;
         _text     = text;
-        _attachmentKey = [Util generateRandomData:128];
-        _commentKey    = [Util generateRandomData:128];
         _createdAt     = [NSDate date];
         [self setUniqueId:[self generateUniqueId]];
     }
@@ -35,9 +33,6 @@
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         authorId:(NSString *)authorId
                             text:(NSString *)text
-                      commentKey:(NSData *)commentKey
-                        comments:(NSArray *)comments
-                   attachmentKey:(NSData *)attachmentKey
                      attachments:(NSArray *)attachments
                             seen:(BOOL)seen
                        createdAt:(NSDate *)createdAt{
@@ -46,11 +41,11 @@
     if(self) {
         _authorId     = authorId;
         _text         = text;
-        _commentKey   = commentKey;
-        _attachmentKey = attachmentKey;
         _seen         = seen;
         _createdAt    = createdAt;
-        _attachments  = attachments;
+        NSMutableArray *attachmentIds = [[NSMutableArray alloc] init];
+        for(KDatabaseObject *attachment in attachments) [attachmentIds addObject:attachment.uniqueId];
+        _attachmentIds  = [attachmentIds componentsJoinedByString:@"_"];
     }
     return self;
 }

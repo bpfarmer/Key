@@ -7,18 +7,36 @@
 //
 
 #import "KPhoto.h"
+#import "NSData+gzip.h"
 
 @implementation KPhoto
 
 - (instancetype)initWithMedia:(NSData *)media ephemeral:(BOOL)ephemeral {
-    self = [super init];
+    self = [super initWithUniqueId:[self.class generateUniqueId]];
     
     if(self) {
-        _media     = media;
+        _media = media;
+        NSData *zippedMedia = media.gzippedData;
+        [zippedMedia writeToFile:self.uniqueId atomically:YES];
         _ephemeral = ephemeral;
     }
     
     return self;
+}
+
+- (instancetype)initWithResultSetRow:(NSDictionary *)resultSetRow {
+    self = [super initWithResultSetRow:resultSetRow];
+    if(self) {
+        NSData *zippedMedia = [NSData dataWithContentsOfFile:self.uniqueId];
+        _media = [zippedMedia gunzippedData];
+    }
+    return self;
+}
+
++ (NSArray *)unsavedPropertyList {
+    NSMutableArray *unsavedProperties = [[NSMutableArray alloc] initWithArray:[super unsavedPropertyList]];
+    [unsavedProperties addObject:@"media"];
+    return unsavedProperties;
 }
 
 @end

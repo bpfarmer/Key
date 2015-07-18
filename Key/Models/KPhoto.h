@@ -10,9 +10,8 @@
 
 @interface KPhoto : KDatabaseObject
 
-@property (nonatomic, readonly) NSString *filename;
-@property (nonatomic, readonly) NSData   *media;
 @property (nonatomic, readonly) BOOL ephemeral;
+@property (nonatomic) NSData *media;
 
 - (instancetype)initWithMedia:(NSData *)media ephemeral:(BOOL)ephemeral;
 

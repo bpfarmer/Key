@@ -9,12 +9,17 @@
 #import "KDatabaseObject.h"
 #import "KSendable.h"
 
+@class AttachmentKey;
+
 @interface KAttachment : KDatabaseObject <KSendable>
 
 @property (nonatomic, readonly) NSData *cipherText;
-@property (nonatomic, readonly) NSData *hmac;
-@property (nonatomic, readonly) NSString *messageUniqueId;
+@property (nonatomic, readonly) NSData *mac;
+@property (nonatomic, readonly) NSString *attachmentKeyId;
 
-- (instancetype)initWithCipherText:(NSData *)cipherText hmac:(NSData *)hmac messageUniqueId:(NSString *)messageUniqueId;
+- (instancetype)initWithObject:(KDatabaseObject *)object;
+- (instancetype)initWithCipherText:(NSData *)cipherText mac:(NSData *)mac attachmentKeyId:(NSString *)attachmentKeyId;
+
+- (AttachmentKey *)attachmentKey;
 
 @end

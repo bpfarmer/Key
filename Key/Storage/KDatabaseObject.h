@@ -35,6 +35,6 @@
 + (NSDictionary *)columnToPropertyMapping;
 + (NSDictionary *)propertyTypeToColumnTypeMapping;
 + (NSString *)notificationChannel;
-
++ (NSString *)generateUniqueId;
 
 @end
