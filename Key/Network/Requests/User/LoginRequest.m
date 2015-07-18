@@ -13,7 +13,8 @@
 @implementation LoginRequest
 
 - (instancetype)initWithParameters:(NSDictionary *)parameters {
-    self = [super initWithHttpMethod:GET endpoint:kUserLoginEndpoint parameters:parameters];
+    NSLog(@"SENDING: %@",[super base64EncodedDictionary:parameters]);
+    self = [super initWithHttpMethod:POST endpoint:kUserLoginEndpoint parameters:[super base64EncodedDictionary:parameters]];
     return self;
 }
 
@@ -21,6 +22,7 @@
     TOCFutureSource *resultSource = [TOCFutureSource new];
     LoginRequest *request = [[LoginRequest alloc] initWithParameters:parameters];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
+        NSLog(@"RESPONSE OBJECT: %@", responseObject);
         if([responseObject[@"status"] isEqualToString:@"SUCCESS"]) {
             [resultSource trySetResult:[self createUserFromDictionary:(NSDictionary *)responseObject[kUserAlias]]];
         }else {

@@ -43,13 +43,14 @@
     // TODO: enforce passwords
     if(![self.usernameText.text isEqualToString:@""] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
         KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString] password:self.passwordText.text];
-        [[KAccountManager sharedManager] setUser:user];
         if([user authenticatePassword:self.passwordText.text]) {
+            NSLog(@"MAKING REQUEST W/ USERNAME: %@, PASSWORD: %@", user.username, user.passwordCrypt);
             TOCFuture *futureLogin = [LoginRequest makeRequestWithParameters:@{@"username" : user.username, @"password_crypt" : user.passwordCrypt}];
             [futureLogin catchDo:^(id failure) {
                 NSLog(@"REMOTE LOGIN ERROR");
             }];
             [futureLogin thenDo:^(KUser *remoteUser) {
+                [[KAccountManager sharedManager] setUser:user];
                 [[KStorageManager sharedManager] setDatabaseWithName:user.username];
                 KUser *retrievedUser = [KUser findByDictionary:@{@"username" : user.username}];
                 if(!retrievedUser) [remoteUser save];

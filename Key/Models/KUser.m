@@ -157,8 +157,8 @@
 
 - (BOOL)authenticatePassword:(NSString *)password {
     // TODO: eventually do remote authentication
-    NSData *passwordCrypt = [self encryptPassword:password];
-    return [[passwordCrypt base64EncodedString] isEqual:[self getPasswordCryptFromKeychain]];
+    _passwordCrypt = [self encryptPassword:password];
+    return [[_passwordCrypt base64EncodedString] isEqual:[self getPasswordCryptFromKeychain]];
 }
 
 - (void)setSalt {
