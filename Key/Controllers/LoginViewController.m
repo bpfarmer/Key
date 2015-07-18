@@ -12,6 +12,8 @@
 #import "KStorageManager.h"
 #import "HomeViewController.h"
 #import "PushManager.h"
+#import "LoginRequest.h"
+#import "CollapsingFutures.h"
 
 @interface LoginViewController ()
 
@@ -43,15 +45,17 @@
         KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString] password:self.passwordText.text];
         [[KAccountManager sharedManager] setUser:user];
         if([user authenticatePassword:self.passwordText.text]) {
-            [[KStorageManager sharedManager] setDatabaseWithName:user.username];
-            KUser *retrievedUser = [KUser findByDictionary:@{@"username" : user.username}];
-            if(retrievedUser) {
-                [[KAccountManager sharedManager] setUser:retrievedUser];
+            TOCFuture *futureLogin = [LoginRequest makeRequestWithParameters:@{@"username" : user.username, @"password_crypt" : user.passwordCrypt}];
+            [futureLogin catchDo:^(id failure) {
+                NSLog(@"REMOTE LOGIN ERROR");
+            }];
+            [futureLogin thenDo:^(KUser *remoteUser) {
+                [[KStorageManager sharedManager] setDatabaseWithName:user.username];
+                KUser *retrievedUser = [KUser findByDictionary:@{@"username" : user.username}];
+                if(!retrievedUser) [remoteUser save];
+                [[KAccountManager sharedManager] setUser:remoteUser];
                 [self showHome];
-            }else {
-                NSLog(@"PROBLEM RETRIEVING USER FROM DB");
-            }
-        
+            }];
         }else {
           NSLog(@"ERROR LOGGING IN");
         }
