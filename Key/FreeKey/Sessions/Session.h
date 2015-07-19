@@ -20,7 +20,8 @@
 
 @property (nonatomic, readonly) NSString *senderId;
 @property (nonatomic, readonly) NSString *receiverId;
-@property (nonatomic, readonly) NSString *deviceId;
+@property (nonatomic, readonly) NSString *senderDeviceId;
+@property (nonatomic, readonly) NSString *receiverDeviceId;
 @property (nonatomic, readonly) NSString *preKeyId;
 @property (nonatomic, readonly) NSData *baseKeyPublic;
 @property (nonatomic, readwrite) NSString *senderChainId;
@@ -28,7 +29,7 @@
 @property (nonatomic, readwrite) NSNumber *previousIndex;
 @property (nonatomic, readwrite) NSArray  *receivedRatchetKeys;
 
-- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId;
+- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId senderDeviceId:(NSString *)senderDeviceId receiverDeviceId:(NSString *)receiverDeviceId;
 
 - (void)addOurPreKey:(PreKey *)ourPreKey preKeyExchange:(PreKeyExchange *)preKeyExchange;
 - (void)addPreKey:(PreKey *)preKey ourBaseKey:(ECKeyPair *)ourBaseKey;

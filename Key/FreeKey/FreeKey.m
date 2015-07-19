@@ -27,6 +27,7 @@
 #import "MessageKey.h"
 #import "KOutgoingObject.h"
 #import "CollapsingFutures.h"
+#import "KDevice.h"
 
 @implementation FreeKey
 
@@ -41,24 +42,26 @@
             NSLog(@"RECIPIENT ID PROVIDED: %@", obj);
             KUser *localUser = [KAccountManager sharedManager].user;
             KUser *remoteUser = [KUser findById:obj];
-            NSLog(@"LOCAL USER: %@, REMOTE USER: %@", localUser, remoteUser);
             if(!remoteUser) {
                 TOCFuture *futureUser = [KUser asyncRetrieveWithUniqueId:obj];
                 [futureUser thenDo:^(KUser *retrievedUser) {
-                    TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
-                    [futureSession thenDo:^(Session *session) {
-                        EncryptedMessage *encryptedMessage = [self encryptObject:encryptableObject session:session];
-                        [[FreeKeyNetworkManager sharedManager] sendEncryptedMessage:encryptedMessage];
-                    }];
+                    [self sendEncryptableObject:encryptableObject localUser:localUser remoteUser:retrievedUser];
                 }];
+            }else {
+                [self sendEncryptableObject:encryptableObject localUser:localUser remoteUser:remoteUser];
             }
-            TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser];
-            [futureSession thenDo:^(Session *session) {
-                EncryptedMessage *encryptedMessage = [self encryptObject:encryptableObject session:session];
-                [[FreeKeyNetworkManager sharedManager] sendEncryptedMessage:encryptedMessage];
-            }];
         });
     }];
+}
+
++ (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
+    for(KDevice *device in remoteUser.devices) {
+        TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser deviceId:device.deviceId];
+        [futureSession thenDo:^(Session *session) {
+            EncryptedMessage *encryptedMessage = [self encryptObject:encryptableObject session:session];
+            [[FreeKeyNetworkManager sharedManager] sendEncryptedMessage:encryptedMessage];
+        }];
+    }
 }
 
 + (void)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage {

@@ -17,11 +17,12 @@
 #import "FreeKeyResponseHandler.h"
 #import "FreeKeySessionManager.h"
 #import "Session.h"
+#import "KDevice.h"
 
 @implementation GetKeyExchangeRequest
 
 - (instancetype)initWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
-    NSDictionary *parameters = @{kPreKeyLocalUserId : localUser.uniqueId, kPreKeyRemoteUserId : remoteUser.uniqueId};
+    NSDictionary *parameters = @{kPreKeyLocalUserId : localUser.uniqueId, kPreKeyRemoteUserId : remoteUser.uniqueId, kPreKeyLocalDeviceId : localUser.currentDevice.deviceId};
     return [super initWithHttpMethod:GET endpoint:kPreKeyEndpoint parameters:parameters];
 }
 

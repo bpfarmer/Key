@@ -36,6 +36,7 @@
     PreKeyExchange *preKeyExchange =
     [[PreKeyExchange alloc]  initWithSenderId:dictionary[remoteKeys[0]]
                                    receiverId:dictionary[remoteKeys[1]]
+                               senderDeviceId:dictionary[remoteKeys[2]]
                          signedTargetPreKeyId:dictionary[remoteKeys[2]]
                             sentSignedBaseKey:dictionary[remoteKeys[3]]
                       senderIdentityPublicKey:dictionary[remoteKeys[4]]

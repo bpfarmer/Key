@@ -31,12 +31,14 @@
 
 @implementation Session
 
-- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId {
+- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId senderDeviceId:(NSString *)senderDeviceId receiverDeviceId:(NSString *)receiverDeviceId {
     self = [super init];
     if(self) {
-        _senderId   = senderId;
-        _receiverId = receiverId;
-        _previousIndex = [[NSNumber alloc] initWithInt:0];
+        _senderId         = senderId;
+        _senderDeviceId   = senderDeviceId;
+        _receiverId       = receiverId;
+        _receiverDeviceId = receiverDeviceId;
+        _previousIndex    = [[NSNumber alloc] initWithInt:0];
     }
     return self;
 }
@@ -124,6 +126,7 @@
     NSData *signature = [Ed25519 sign:self.baseKeyPublic withKeyPair:self.sender.identityKey.keyPair];
     PreKeyExchange *preKeyExchange = [[PreKeyExchange alloc] initWithSenderId:self.senderId
                                                                    receiverId:self.receiverId
+                                                               senderDeviceId:self.senderDeviceId
                                                          signedTargetPreKeyId:self.preKeyId
                                                             sentSignedBaseKey:self.baseKeyPublic
                                                       senderIdentityPublicKey:self.sender.identityKey.publicKey

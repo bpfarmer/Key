@@ -45,5 +45,6 @@
 - (void)setupIdentityKey;
 - (IdentityKey *)identityKey;
 - (KDevice *)currentDevice;
+- (NSArray *)devices;
 
 @end

@@ -812,6 +812,7 @@
 		EFF70AB01AAE1CBC006C10D2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				EF9A744D1B52B60D009689A7 /* Protocols */,
 				EFABC02F1B39EA6B0062B807 /* CameraViewController.h */,
 				EFABC0301B39EA6B0062B807 /* CameraViewController.m */,
 				EF6B44A61ABA2F8A00B88323 /* ContactViewController.h */,
@@ -838,7 +839,6 @@
 				EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */,
 				EFB225F01B48C4EF00D7E44B /* MediaViewController.h */,
 				EFB225F11B48C4EF00D7E44B /* MediaViewController.m */,
-				EF9A744D1B52B60D009689A7 /* Protocols */,
 				EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */,
 				EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */,
 				EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */,

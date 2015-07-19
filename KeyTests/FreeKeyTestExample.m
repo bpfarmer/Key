@@ -54,6 +54,7 @@
     NSData *preKeyExchangeSignature = [Ed25519 sign:_aliceBaseKeyPair.publicKey withKeyPair:_alice.identityKey.keyPair];
     _alicePreKeyExchange = [[PreKeyExchange alloc] initWithSenderId:_alice.uniqueId
                                                          receiverId:_bob.uniqueId
+                                                     senderDeviceId:@"1" 
                                                signedTargetPreKeyId:@"1"
                                                   sentSignedBaseKey:_aliceBaseKeyPair.publicKey
                                             senderIdentityPublicKey:_alice.identityKey.publicKey

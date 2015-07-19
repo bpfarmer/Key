@@ -23,6 +23,7 @@
 #import "CollapsingFutures.h"
 #import "KAccountManager.h"
 #import "SendPreKeyExchangeRequest.h"
+#import "KDevice.h"
 
 @implementation FreeKeySessionManager
 
@@ -54,15 +55,35 @@
     return resultSource.future;
 }
 
+- (TOCFuture *)sessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId{
+    TOCFutureSource *resultSource = [TOCFutureSource new];
+    /*NSString *countSessionsSQL = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE receiver_id = ?", [Session tableName]];
+     NSUInteger count = [[KStorageManager sharedManager] queryCount:^NSUInteger(FMDatabase *database) {
+     return [database intForQuery:countSessionsSQL, remoteUser.uniqueId];
+     }];*/
+    Session *session = [Session findByDictionary:@{@"receiverId" : remoteUser.uniqueId, @"deviceId" : deviceId}];
+    if(session != nil) [resultSource trySetResult:session];
+    else {
+        TOCFuture *futureResponse = [localUser asyncRetrieveKeyExchangeWithRemoteUser:remoteUser deviceId:deviceId];
+        [futureResponse thenDo:^(Session *session) {
+            [resultSource trySetResult:session];
+        }];
+    }
+    return resultSource.future;
+}
+
 - (Session *)processNewKeyExchange:(NSObject *)keyExchange localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     NSLog(@"KEY EXCHANGE: %@", keyExchange);
+    NSString *senderDeviceId = localUser.currentDevice.deviceId;
     if([keyExchange isKindOfClass:[PreKey class]]) {
-        Session *session = [[Session alloc] initWithSenderId:localUser.uniqueId receiverId:remoteUser.uniqueId];
-        [session addPreKey:(PreKey *)keyExchange ourBaseKey:[Curve25519 generateKeyPair]];
+        PreKey *preKey = (PreKey *)keyExchange;
+        Session *session = [[Session alloc] initWithSenderId:localUser.uniqueId receiverId:remoteUser.uniqueId senderDeviceId:senderDeviceId receiverDeviceId:preKey.deviceId];
+        [session addPreKey:preKey ourBaseKey:[Curve25519 generateKeyPair]];
         [SendPreKeyExchangeRequest makeRequestWithPreKeyExchange:session.preKeyExchange];
         return session;
     }else if([keyExchange isKindOfClass:[PreKeyExchange class]]) {
-        Session *session = [[Session alloc] initWithSenderId:localUser.uniqueId receiverId:remoteUser.uniqueId];
+        PreKeyExchange *preKeyExchange = (PreKeyExchange *)keyExchange;
+        Session *session = [[Session alloc] initWithSenderId:localUser.uniqueId receiverId:remoteUser.uniqueId senderDeviceId:senderDeviceId receiverDeviceId:preKeyExchange.senderDeviceId];
         PreKey *ourPreKey = [PreKey findById:(NSString *)((PreKeyExchange *)keyExchange).signedTargetPreKeyId];
         if(ourPreKey) {
             [session addOurPreKey:ourPreKey preKeyExchange:(PreKeyExchange *)keyExchange];
