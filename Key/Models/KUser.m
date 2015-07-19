@@ -77,6 +77,10 @@
     return [GetKeyExchangeRequest makeRequestWithLocalUser:self remoteUser:remoteUser];
 }
 
+- (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId {
+    return [GetKeyExchangeRequest makeRequestWithLocalUser:self remoteUser:remoteUser deviceId:deviceId];
+}
+
 - (TOCFuture *)asyncSetupPreKeys {
     NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:self];
     return [SendPreKeysRequest makeRequestWithPreKeys:preKeys];
@@ -144,6 +148,20 @@
 
 - (KDevice *)currentDevice {
     return [KDevice findByDictionary:@{@"userId" : self.uniqueId, @"isCurrentDevice" : @YES}];
+}
+
+- (NSArray *)devices {
+    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
+        return [database executeQuery:[NSString stringWithFormat:@"select * from %@ where user_id <> :unique_id", [KDevice tableName]] withParameterDictionary:@{@"unique_id" : self.uniqueId}];
+    }];
+    
+    NSMutableArray *devices = [[NSMutableArray alloc] init];
+    while(resultSet.next) {
+        KDevice *device = [[KDevice alloc] initWithResultSetRow:resultSet.resultDictionary];
+        [devices addObject:device];
+    }
+    [resultSet close];
+    return devices;
 }
 
 @end

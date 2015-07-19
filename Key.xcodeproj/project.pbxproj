@@ -678,6 +678,7 @@
 		EFC6BEB91A6857D500B0EB8F /* KeyTests */ = {
 			isa = PBXGroup;
 			children = (
+				EFDDD9BC1B5C2AEF00089124 /* NetworkTests */,
 				EFB225FD1B4AD18800D7E44B /* FreeKeyTests */,
 				EFB225FC1B4AD16E00D7E44B /* ModelTests */,
 				EF6B44C31ABDAE1D00B88323 /* HttpManagerTests.m */,
@@ -694,6 +695,13 @@
 				EFC6BEBB1A6857D500B0EB8F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EFDDD9BC1B5C2AEF00089124 /* NetworkTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = NetworkTests;
 			sourceTree = "<group>";
 		};
 		EFEBDD321A68673D00973E15 /* Models */ = {

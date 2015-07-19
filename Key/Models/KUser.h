@@ -35,6 +35,7 @@
 + (TOCFuture *)asyncRetrieveWithUsername:(NSString *)username;
 + (TOCFuture *)asyncRetrieveWithUniqueId:(NSString *)uniqueId;
 - (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser;
+- (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId;
 - (TOCFuture *)asyncSetupPreKeys;
 - (TOCFuture *)asyncUpdate;
 - (TOCFuture *)asyncGetFeed;

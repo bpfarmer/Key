@@ -25,11 +25,39 @@
     return [super initWithHttpMethod:GET endpoint:kPreKeyEndpoint parameters:parameters];
 }
 
+- (instancetype)initWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId{
+    NSDictionary *parameters = @{kPreKeyLocalUserId : localUser.uniqueId, kPreKeyRemoteUserId : remoteUser.uniqueId};
+    return [super initWithHttpMethod:GET endpoint:kPreKeyDeviceEndpoint parameters:parameters];
+}
+
 + (TOCFuture *)makeRequestWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     NSLog(@"LOCAL USER: %@", localUser.uniqueId);
     NSLog(@"REMOTE USER: %@", remoteUser.uniqueId);
     TOCFutureSource *resultSource = [TOCFutureSource new];
     GetKeyExchangeRequest *request = [[GetKeyExchangeRequest alloc] initWithLocalUser:localUser remoteUser:remoteUser];
+    void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
+        NSLog(@"-- PKE RESPONSE OBJECT: %@ --", responseObject);
+        for(NSDictionary *keyDict in responseObject[@"keys"]) {
+            NSObject *keyExchange = [request createKeyExchangeFromDictionary:[request base64DecodedDictionary:keyDict]];
+            [remoteUser setHasLocalPreKey:YES];
+            [remoteUser save];
+            Session *session = [[FreeKeySessionManager sharedManager] processNewKeyExchange:keyExchange localUser:localUser remoteUser:remoteUser];
+            [resultSource trySetResult:session];
+        }
+    };
+    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) = ^(AFHTTPRequestOperation *operation, NSError *error){
+        [resultSource trySetFailure:error];
+    };
+    [request makeRequestWithSuccess:success failure:failure];
+    return resultSource.future;
+}
+
++ (TOCFuture *)makeRequestWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId {
+    NSLog(@"LOCAL USER: %@", localUser.uniqueId);
+    NSLog(@"REMOTE USER: %@", remoteUser.uniqueId);
+    NSLog(@"DEVICE ID: %@", deviceId);
+    TOCFutureSource *resultSource = [TOCFutureSource new];
+    GetKeyExchangeRequest *request = [[GetKeyExchangeRequest alloc] initWithLocalUser:localUser remoteUser:remoteUser deviceId:deviceId];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         NSLog(@"-- PKE RESPONSE OBJECT: %@ --", responseObject);
         NSObject *keyExchange = [request createKeyExchangeFromDictionary:[request base64DecodedDictionary:responseObject]];
