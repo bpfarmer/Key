@@ -14,6 +14,7 @@
 #import "PushManager.h"
 #import "LoginRequest.h"
 #import "CollapsingFutures.h"
+#import "KDevice.h"
 
 @interface LoginViewController ()
 
@@ -56,7 +57,11 @@
                 [[KAccountManager sharedManager] setUser:user];
                 [[KStorageManager sharedManager] setDatabaseWithName:user.username];
                 KUser *retrievedUser = [KUser findByDictionary:@{@"username" : user.username}];
-                if(!retrievedUser) [remoteUser save];
+                if(!retrievedUser) {
+                    [remoteUser save];
+                    KDevice *device = [[KDevice alloc] initWithUserId:remoteUser.uniqueId deviceId:[[UIDevice currentDevice].identifierForVendor UUIDString] isCurrentDevice:YES];
+                    [device save];
+                }
                 [[KAccountManager sharedManager] setUser:remoteUser];
                 [self showHome];
             }];

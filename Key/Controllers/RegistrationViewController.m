@@ -2,7 +2,7 @@
 //  registrationViewController.m
 //  Key
 //
-//  Created by Loren on 1/27/15.
+//  Created by Brendan Farmer on 1/27/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 #import "HttpManager.h"
 #import "CollapsingFutures.h"
 #import "PushManager.h"
+#import "KDevice.h"
 
 @interface RegistrationViewController () <UITextFieldDelegate>
 
@@ -49,6 +50,9 @@
             [user save];
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                KDevice *device = [[KDevice alloc] initWithUserId:user.uniqueId deviceId:[[UIDevice currentDevice].identifierForVendor UUIDString] isCurrentDevice:YES];
+                [device save];
+                NSLog(@"CURRENT DEVICE :%@", user.currentDevice.deviceId);
                 [user setupIdentityKey];
                 [user asyncUpdate];
                 [user asyncSetupPreKeys];

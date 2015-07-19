@@ -13,6 +13,7 @@
 @class KStorageManager;
 @class PreKey;
 @class TOCFuture;
+@class KDevice;
 
 @interface KUser : KDatabaseObject <KSendable>
 
@@ -42,5 +43,6 @@
 - (NSArray *)contacts;
 - (void)setupIdentityKey;
 - (IdentityKey *)identityKey;
+- (KDevice *)currentDevice;
 
 @end

@@ -33,6 +33,7 @@
 #import "SendPreKeysRequest.h"
 #import "GetMessagesRequest.h"
 #import "SendPreKeyExchangeRequest.h"
+#import "KDevice.h"
 
 @implementation KUser
 
@@ -139,6 +140,10 @@
 
 + (NSArray *)remoteKeys {
     return @[@"uniqueId", @"publicKey", @"username"];
+}
+
+- (KDevice *)currentDevice {
+    return [KDevice findByDictionary:@{@"userId" : self.uniqueId, @"isCurrentDevice" : @YES}];
 }
 
 @end

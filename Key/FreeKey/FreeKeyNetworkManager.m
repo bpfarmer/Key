@@ -26,6 +26,7 @@
 #import "Session.h"
 #import "SendPreKeyExchangeRequest.h"
 #import "SendMessageRequest.h"
+#import "KDevice.h"
 
 @implementation FreeKeyNetworkManager
 
@@ -80,7 +81,7 @@
         NSString *uniquePreKeyId = [NSString stringWithFormat:@"%@_%f_%d", localUser.uniqueId, [[NSDate date] timeIntervalSince1970], index];
         NSData *preKeySignature = [Ed25519 sign:baseKeyPair.publicKey withKeyPair:identityKey.keyPair];
         PreKey *preKey = [[PreKey alloc] initWithUserId:localUser.uniqueId
-                                               deviceId:@"1"
+                                               deviceId:localUser.currentDevice.deviceId
                                          signedPreKeyId:uniquePreKeyId
                                      signedPreKeyPublic:baseKeyPair.publicKey
                                   signedPreKeySignature:preKeySignature
