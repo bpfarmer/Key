@@ -40,12 +40,15 @@
 }
 
 - (IBAction)login:(id)sender {
-    // TODO: enforce passwords
     if(![self.usernameText.text isEqualToString:@""] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
-        KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString] password:self.passwordText.text];
-        if([user authenticatePassword:self.passwordText.text]) {
-            NSLog(@"MAKING REQUEST W/ USERNAME: %@, PASSWORD: %@", user.username, user.passwordCrypt);
-            TOCFuture *futureLogin = [LoginRequest makeRequestWithParameters:@{@"username" : user.username, @"password_crypt" : user.passwordCrypt}];
+        KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString]];
+        TOCFuture *futureSalt = [LoginRequest makeSaltRequestWithParameters:@{@"username" : user.username}];
+        [futureSalt thenDo:^(id value) {
+            NSLog(@"PROBLEM RETRIEVING SALT");
+        }];
+        [futureSalt thenDo:^(NSData *passwordSalt) {
+            NSData *passwordCrypt = [KUser encryptPassword:self.passwordText.text salt:passwordSalt];
+            TOCFuture *futureLogin = [LoginRequest makeRequestWithParameters:@{@"username" : user.username, @"password_crypt" : passwordCrypt}];
             [futureLogin catchDo:^(id failure) {
                 NSLog(@"REMOTE LOGIN ERROR");
             }];
@@ -57,9 +60,7 @@
                 [[KAccountManager sharedManager] setUser:remoteUser];
                 [self showHome];
             }];
-        }else {
-          NSLog(@"ERROR LOGGING IN");
-        }
+        }];
     }else {
         NSLog(@"Username and Password cannot be blank");
     }

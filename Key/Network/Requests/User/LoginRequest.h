@@ -15,5 +15,6 @@
 
 - (instancetype)initWithParameters:(NSDictionary *)parameters;
 + (TOCFuture *)makeRequestWithParameters:(NSDictionary *)parameters;
++ (TOCFuture *)makeSaltRequestWithParameters:(NSDictionary *)parameters;
 
 @end

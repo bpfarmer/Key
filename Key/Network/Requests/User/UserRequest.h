@@ -19,6 +19,7 @@
 #define kUserPasswordCrypt @"passwordCrypt"
 #define kUserPasswordSalt @"passwordSalt"
 #define kUserLoginEndpoint @"login.json"
+#define kUserLoginSaltEndpoint @"salt.json"
 
 
 #endif

@@ -39,25 +39,11 @@
 #pragma mark - Initializers
 - (instancetype)initWithUsername:(NSString *)username {
     self = [super initWithUniqueId:nil];
-    if(self) {
-        _username = username;
-    }
+    if(self) _username = username;
     return self;
 }
 
-- (instancetype)initWithUsername:(NSString *)username password:(NSString *)password {
-    self = [super initWithUniqueId:nil];
-    
-    if (self) {
-        _username = [username lowercaseString];
-        [self setPasswordCryptInKeychain:password];
-    }
-    return self;
-}
-
-- (instancetype)initWithUniqueId:(NSString *)uniqueId
-                        username:(NSString *)username
-                       publicKey:(NSData *)publicKey {
+- (instancetype)initWithUniqueId:(NSString *)uniqueId username:(NSString *)username publicKey:(NSData *)publicKey {
     self = [super initWithUniqueId:uniqueId];
     
     if(self) {
@@ -68,8 +54,10 @@
 }
 
 + (TOCFuture *)asyncCreateWithUsername:(NSString *)username password:(NSString *)password {
-    KUser *user = [[KUser alloc] initWithUsername:username password:password];
-    return [RegisterUsernameRequest makeRequestWithUser:user];
+    KUser *user = [[KUser alloc] initWithUsername:username];
+    NSData *salt = [self salt];
+    NSData *passwordCrypt = [self encryptPassword:password salt:salt];
+    return [RegisterUsernameRequest makeRequestWithUser:user password:passwordCrypt salt:salt];
 }
 
 + (TOCFuture *)asyncRetrieveWithUsername:(NSString *)username {
@@ -133,50 +121,15 @@
 }
 
 #pragma mark - Password Handling Methods
-- (NSData *)encryptPassword:(NSString *)password {
++ (NSData *)encryptPassword:(NSString *)password salt:(NSData *)salt {
     NSData *passwordData = [password dataUsingEncoding:NSUTF8StringEncoding];
-    if(!self.passwordSalt) {
-        [self setSalt];
-    }
     unsigned char key[32];
-    CCKeyDerivationPBKDF(kCCPBKDF2, passwordData.bytes, passwordData.length, self.passwordSalt.bytes, self.passwordSalt.length, kCCPRFHmacAlgSHA256, 8000, key, 32);
+    CCKeyDerivationPBKDF(kCCPBKDF2, passwordData.bytes, passwordData.length, salt.bytes, salt.length, kCCPRFHmacAlgSHA256, 8000, key, 32);
     return [NSData dataWithBytes:key length:sizeof(key)];
 }
 
-- (void)setPasswordCryptInKeychain:(NSString *)password {
-    _passwordCrypt = [self encryptPassword:password];
-    NSString *keychainPasswordKey = [NSString stringWithFormat:@"password_%@", self.username];
-    NSString *passwordString = [self.passwordCrypt base64EncodedString];
-    [SSKeychain setPassword:passwordString forService:keychainService account:keychainPasswordKey];
-}
-
-- (NSString *)getPasswordCryptFromKeychain {
-    NSString *keychainPasswordKey = [NSString stringWithFormat:@"password_%@", self.username];
-    return [SSKeychain passwordForService:keychainService account:keychainPasswordKey];
-}
-
-- (BOOL)authenticatePassword:(NSString *)password {
-    // TODO: eventually do remote authentication
-    _passwordCrypt = [self encryptPassword:password];
-    return [[_passwordCrypt base64EncodedString] isEqual:[self getPasswordCryptFromKeychain]];
-}
-
-- (void)setSalt {
-    _passwordSalt = [self salt];
-}
-
-- (NSData *)salt {
-    NSString *keychainSaltKey = [NSString stringWithFormat:@"passwordSalt_%@", self.username];
-    NSString *passwordSaltString = [SSKeychain passwordForService:keychainService account:keychainSaltKey];
-    NSData *passwordSalt;
-    if(!passwordSaltString) {
-        passwordSalt = [Util generateRandomData:32];
-        NSString *newPasswordSaltString = [passwordSalt base64EncodedString];
-        [SSKeychain setPassword:newPasswordSaltString forService:keychainService account:keychainSaltKey];
-    }else {
-        passwordSalt = [passwordSaltString base64DecodedData];
-    }
-    return passwordSalt;
++ (NSData *)salt {
+    return [Util generateRandomData:32];
 }
 
 - (void)setIdentityKey:(IdentityKey *)identityKey {
@@ -185,7 +138,7 @@
 }
 
 + (NSArray *)remoteKeys {
-    return @[@"uniqueId", @"passwordCrypt", @"publicKey", @"username"];
+    return @[@"uniqueId", @"publicKey", @"username"];
 }
 
 @end

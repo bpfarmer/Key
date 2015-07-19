@@ -13,14 +13,15 @@
 
 @implementation RegisterUsernameRequest
 
-- (instancetype)initWithUser:(KUser *)user {
-    NSDictionary *parameters = @{kUserAlias : @{kUserUsername : user.username, kUserPasswordCrypt: user.passwordCrypt}};
+- (instancetype)initWithUser:(KUser *)user password:(NSData *)password salt:(NSData *)salt{
+    NSDictionary *parameters = @{kUserAlias : @{kUserUsername : user.username, kUserPasswordCrypt : password, kUserPasswordSalt : salt}};
+    NSLog(@"REGISTRATION PARAMS: %@", [super base64EncodedDictionary:parameters]);
     return [super initWithHttpMethod:PUT endpoint:kUserEndpoint parameters:[super base64EncodedDictionary:parameters]];
 }
 
-+ (TOCFuture *)makeRequestWithUser:(KUser *)user {
++ (TOCFuture *)makeRequestWithUser:(KUser *)user password:(NSData *)password salt:(NSData *)salt{
     TOCFutureSource *resultSource = [TOCFutureSource new];
-    RegisterUsernameRequest *request = [[RegisterUsernameRequest alloc] initWithUser:user];
+    RegisterUsernameRequest *request = [[RegisterUsernameRequest alloc] initWithUser:user password:password salt:salt];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         [user setUniqueId:responseObject[kUserAlias][kUserUniqueId]];
         if(user.uniqueId) [resultSource trySetResult:user];
