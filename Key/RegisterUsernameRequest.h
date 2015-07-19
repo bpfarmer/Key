@@ -14,7 +14,7 @@
 
 @interface RegisterUsernameRequest : HttpRequest
 
-- (instancetype)initWithUser:(KUser *)user;
-+ (TOCFuture *)makeRequestWithUser:(KUser *)user;
+- (instancetype)initWithUser:(KUser *)user password:(NSData *)password salt:(NSData *)salt;
++ (TOCFuture *)makeRequestWithUser:(KUser *)user password:(NSData *)password salt:(NSData *)salt;
 
 @end

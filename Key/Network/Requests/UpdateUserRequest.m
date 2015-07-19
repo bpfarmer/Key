@@ -21,13 +21,11 @@
 + (TOCFuture *)makeRequestWithUser:(KUser *)user {
     UpdateUserRequest *request = [[UpdateUserRequest alloc] initWithUser:user];
     TOCFutureSource *resultSource = [TOCFutureSource new];
-    void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
-    ^(AFHTTPRequestOperation *operation, id responseObject){
+    void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         //TODO: how do we want to set status?
         [resultSource trySetResult:responseObject];
     };
-    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
-    ^(AFHTTPRequestOperation *operation, NSError *error){
+    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) = ^(AFHTTPRequestOperation *operation, NSError *error){
         [resultSource trySetFailure:error];
     };
     [request makeRequestWithSuccess:success failure:failure];
