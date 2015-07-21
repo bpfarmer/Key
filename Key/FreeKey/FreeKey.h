@@ -41,8 +41,10 @@
 @interface FreeKey : NSObject
 
 + (void)sendEncryptableObject:(KDatabaseObject *)object recipients:(NSArray *)recipients;
-
 + (void)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage;
+
++ (void)sendAttachment:(KDatabaseObject *)object recipients:(NSArray *)recipients;
++ (void)decryptAndSaveAttachment:(KAttachment *)
 
 + (EncryptedMessage *)encryptObject:(KDatabaseObject *)object session:(Session *)session;
 + (KDatabaseObject *)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session;

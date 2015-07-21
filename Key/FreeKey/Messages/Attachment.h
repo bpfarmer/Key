@@ -1,17 +1,16 @@
 //
-//  KAttachment.h
+//  Attachment.h
 //  Key
 //
-//  Created by Brendan Farmer on 4/15/15.
+//  Created by Brendan Farmer on 7/21/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
 #import "KDatabaseObject.h"
-#import "KSendable.h"
 
 @class AttachmentKey;
 
-@interface KAttachment : KDatabaseObject <KSendable>
+@interface Attachment : KDatabaseObject
 
 @property (nonatomic, readonly) NSData *cipherText;
 @property (nonatomic, readonly) NSData *mac;

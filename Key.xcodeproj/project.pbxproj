@@ -12,7 +12,6 @@
 		EF01716B1ADD936C00AFCBA4 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF01716A1ADD936C00AFCBA4 /* ShareViewController.m */; };
 		EF01716E1ADD93B500AFCBA4 /* SocialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF01716D1ADD93B500AFCBA4 /* SocialViewController.m */; };
 		EF0171711ADF07BB00AFCBA4 /* KPost.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0171701ADF07BB00AFCBA4 /* KPost.m */; };
-		EF0171741ADF07D100AFCBA4 /* KAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0171731ADF07D100AFCBA4 /* KAttachment.m */; };
 		EF01717A1ADF083700AFCBA4 /* KPost+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0171791ADF083700AFCBA4 /* KPost+Serialize.m */; };
 		EF0F4DBE1AB8D3BA00BB2AFC /* PushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F4DBD1AB8D3BA00BB2AFC /* PushManager.m */; };
 		EF0F4DC41ABA19DE00BB2AFC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F4DC31ABA19DE00BB2AFC /* HomeViewController.m */; };
@@ -102,6 +101,7 @@
 		EFDDD9B81B5AE89700089124 /* LoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9B71B5AE89700089124 /* LoginRequest.m */; };
 		EFDDD9BB1B5C1D4B00089124 /* KDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9BA1B5C1D4B00089124 /* KDevice.m */; };
 		EFDDD9BF1B5D6BB100089124 /* CheckDevicesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9BE1B5D6BB100089124 /* CheckDevicesRequest.m */; };
+		EFDDD9C21B5ED1FF00089124 /* Attachment.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9C11B5ED1FF00089124 /* Attachment.m */; };
 		EFE43D3C1B580CE50092CAC5 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */; };
 		EFE43D3E1B580F670092CAC5 /* ContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFE43D3D1B580F670092CAC5 /* ContentView.xib */; };
 		EFE43D411B5818110092CAC5 /* ContentTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D401B5818110092CAC5 /* ContentTabBarController.m */; };
@@ -156,8 +156,6 @@
 		EF01716D1ADD93B500AFCBA4 /* SocialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialViewController.m; sourceTree = "<group>"; };
 		EF01716F1ADF07BB00AFCBA4 /* KPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KPost.h; path = Models/KPost.h; sourceTree = "<group>"; };
 		EF0171701ADF07BB00AFCBA4 /* KPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPost.m; path = Models/KPost.m; sourceTree = "<group>"; };
-		EF0171721ADF07D100AFCBA4 /* KAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAttachment.h; path = ../../Models/KAttachment.h; sourceTree = "<group>"; };
-		EF0171731ADF07D100AFCBA4 /* KAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAttachment.m; path = ../../Models/KAttachment.m; sourceTree = "<group>"; };
 		EF0171781ADF083700AFCBA4 /* KPost+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KPost+Serialize.h"; path = "Network/Serializers/KPost+Serialize.h"; sourceTree = "<group>"; };
 		EF0171791ADF083700AFCBA4 /* KPost+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KPost+Serialize.m"; path = "Network/Serializers/KPost+Serialize.m"; sourceTree = "<group>"; };
 		EF0F4DBC1AB8D3BA00BB2AFC /* PushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PushManager.h; path = Network/PushManager.h; sourceTree = "<group>"; };
@@ -318,6 +316,8 @@
 		EFDDD9BA1B5C1D4B00089124 /* KDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KDevice.m; path = Models/KDevice.m; sourceTree = "<group>"; };
 		EFDDD9BD1B5D6BB100089124 /* CheckDevicesRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CheckDevicesRequest.h; path = Network/Requests/User/CheckDevicesRequest.h; sourceTree = "<group>"; };
 		EFDDD9BE1B5D6BB100089124 /* CheckDevicesRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CheckDevicesRequest.m; path = Network/Requests/User/CheckDevicesRequest.m; sourceTree = "<group>"; };
+		EFDDD9C01B5ED1FF00089124 /* Attachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attachment.h; sourceTree = "<group>"; };
+		EFDDD9C11B5ED1FF00089124 /* Attachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Attachment.m; sourceTree = "<group>"; };
 		EFE43D3A1B580CE50092CAC5 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
 		EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
 		EFE43D3D1B580F670092CAC5 /* ContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContentView.xib; path = Views/ContentView.xib; sourceTree = "<group>"; };
@@ -780,6 +780,8 @@
 		EFF70A661AAE19C3006C10D2 /* Keys */ = {
 			isa = PBXGroup;
 			children = (
+				EFDDD9B01B59560600089124 /* AttachmentKey.h */,
+				EFDDD9B11B59560600089124 /* AttachmentKey.m */,
 				EFF70A691AAE19C3006C10D2 /* IdentityKey.h */,
 				EFF70A6A1AAE19C3006C10D2 /* IdentityKey.m */,
 				EFF70A6B1AAE19C3006C10D2 /* MasterKey.h */,
@@ -792,8 +794,6 @@
 				EFF70A721AAE19C3006C10D2 /* RootChain.m */,
 				EFF70A751AAE19C3006C10D2 /* SessionKeyBundle.h */,
 				EFF70A761AAE19C3006C10D2 /* SessionKeyBundle.m */,
-				EFDDD9B01B59560600089124 /* AttachmentKey.h */,
-				EFDDD9B11B59560600089124 /* AttachmentKey.m */,
 			);
 			path = Keys;
 			sourceTree = "<group>";
@@ -801,8 +801,8 @@
 		EFF70A771AAE19C3006C10D2 /* Messages */ = {
 			isa = PBXGroup;
 			children = (
-				EF0171721ADF07D100AFCBA4 /* KAttachment.h */,
-				EF0171731ADF07D100AFCBA4 /* KAttachment.m */,
+				EFDDD9C01B5ED1FF00089124 /* Attachment.h */,
+				EFDDD9C11B5ED1FF00089124 /* Attachment.m */,
 				EFF70A781AAE19C3006C10D2 /* EncryptedMessage.h */,
 				EFF70A791AAE19C3006C10D2 /* EncryptedMessage.m */,
 				EFF70A7A1AAE19C3006C10D2 /* PreKeyExchange.h */,
@@ -1127,6 +1127,7 @@
 				EFF70A8E1AAE19C3006C10D2 /* RootChain.m in Sources */,
 				EF6B44A81ABA2F8A00B88323 /* ContactViewController.m in Sources */,
 				EFC1819E1AC3534F00BE8B0B /* RegisterUsernameRequest.m in Sources */,
+				EFDDD9C21B5ED1FF00089124 /* Attachment.m in Sources */,
 				EFB225F81B49851000D7E44B /* KLocation+Serialize.m in Sources */,
 				EF0F4DC41ABA19DE00BB2AFC /* HomeViewController.m in Sources */,
 				EF4920A41AD762A400A9FE89 /* NSBundle+Messages.m in Sources */,
@@ -1138,7 +1139,6 @@
 				EFABC0311B39EA6B0062B807 /* CameraViewController.m in Sources */,
 				EF0171711ADF07BB00AFCBA4 /* KPost.m in Sources */,
 				EFF70A8C1AAE19C3006C10D2 /* MessageKey.m in Sources */,
-				EF0171741ADF07D100AFCBA4 /* KAttachment.m in Sources */,
 				EFC181A41AC3717400BE8B0B /* SendMessageRequest.m in Sources */,
 				EF01717A1ADF083700AFCBA4 /* KPost+Serialize.m in Sources */,
 				EF01716B1ADD936C00AFCBA4 /* ShareViewController.m in Sources */,

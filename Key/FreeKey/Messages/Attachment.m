@@ -1,17 +1,17 @@
 //
-//  KAttachment.m
+//  Attachment.m
 //  Key
 //
-//  Created by Brendan Farmer on 4/15/15.
+//  Created by Brendan Farmer on 7/21/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
-#import "KAttachment.h"
+#import "Attachment.h"
 #import "FreeKey.h"
 #import "AttachmentKey.h"
 #import "AES_CBC.h"
 
-@implementation KAttachment
+@implementation Attachment
 
 - (instancetype)initWithObject:(KDatabaseObject *)object {
     self = [super init];
