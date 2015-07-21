@@ -60,11 +60,13 @@
 + (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     for(KDevice *device in [KDevice devicesForUserId:remoteUser.uniqueId]) {
         NSLog(@"TRYING TO CREATE SESSION FOR DEVICE: %@", device);
-        TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser deviceId:device.deviceId];
-        [futureSession thenDo:^(Session *session) {
-            EncryptedMessage *encryptedMessage = [self encryptObject:encryptableObject session:session];
-            [[FreeKeyNetworkManager sharedManager] sendEncryptedMessage:encryptedMessage];
-        }];
+        if(!device.isCurrentDevice) {
+            TOCFuture *futureSession = [[FreeKeySessionManager sharedManager] sessionWithLocalUser:localUser remoteUser:remoteUser deviceId:device.deviceId];
+            [futureSession thenDo:^(Session *session) {
+                EncryptedMessage *encryptedMessage = [self encryptObject:encryptableObject session:session];
+                [[FreeKeyNetworkManager sharedManager] sendEncryptedMessage:encryptedMessage];
+            }];
+        }
     }
 }
 
