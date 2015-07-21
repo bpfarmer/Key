@@ -20,6 +20,7 @@
 #define kUserPasswordSalt @"passwordSalt"
 #define kUserLoginEndpoint @"login.json"
 #define kUserLoginSaltEndpoint @"salt.json"
+#define kUserCheckDevicesEndpoint @"check_devices.json"
 
 
 #endif

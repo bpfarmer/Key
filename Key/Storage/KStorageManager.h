@@ -28,5 +28,6 @@ typedef NSUInteger (^KDatabaseCountBlock)(FMDatabase *database);
 - (void)queryUpdate:(KDatabaseUpdateBlock)databaseBlock;
 - (FMResultSet *)querySelect:(KDatabaseSelectBlock)databaseBlock;
 - (NSUInteger)queryCount:(KDatabaseCountBlock)databaseBlock;
+- (void)resignDatabase;
 
 @end

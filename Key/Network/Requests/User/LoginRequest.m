@@ -50,7 +50,7 @@
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         NSLog(@"RESPONSE OBJECT: %@", responseObject);
         if([responseObject[@"status"] isEqualToString:@"SUCCESS"]) {
-            [resultSource trySetResult:[self createUserFromDictionary:(NSDictionary *)responseObject[kUserAlias]]];
+            [resultSource trySetResult:[self createUserFromDictionary:[request base64DecodedDictionary:responseObject]]];
         }else {
             [resultSource trySetFailure:nil];
         }
@@ -65,17 +65,15 @@
 
 + (KUser *)createUserFromDictionary:(NSDictionary *)dictionary {
     NSDictionary *userDictionary = dictionary[kUserAlias];
-    KUser *user;
-    
     if(userDictionary) {
-        user = [[KUser alloc] initWithUniqueId:userDictionary[@"uniqueId"]
+        KUser *user = [[KUser alloc] initWithUniqueId:userDictionary[@"uniqueId"]
                                       username:userDictionary[@"username"]
                                      publicKey:userDictionary[@"publicKey"]];
         [user setHasLocalPreKey:NO];
         [user save];
+        return user;
     }
-    
-    return user;
+    return nil;
 }
 
 

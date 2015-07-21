@@ -13,6 +13,7 @@
 @class KStorageManager;
 @class PreKey;
 @class TOCFuture;
+@class KDevice;
 
 @interface KUser : KDatabaseObject <KSendable>
 
@@ -34,6 +35,7 @@
 + (TOCFuture *)asyncRetrieveWithUsername:(NSString *)username;
 + (TOCFuture *)asyncRetrieveWithUniqueId:(NSString *)uniqueId;
 - (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser;
+- (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId;
 - (TOCFuture *)asyncSetupPreKeys;
 - (TOCFuture *)asyncUpdate;
 - (TOCFuture *)asyncGetFeed;
@@ -42,5 +44,9 @@
 - (NSArray *)contacts;
 - (void)setupIdentityKey;
 - (IdentityKey *)identityKey;
+- (void)setupKeysForDevice;
+- (KDevice *)currentDevice;
+- (NSArray *)devices;
+- (void)addDeviceId:(NSString *)deviceId;
 
 @end

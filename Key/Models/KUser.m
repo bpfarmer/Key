@@ -33,6 +33,7 @@
 #import "SendPreKeysRequest.h"
 #import "GetMessagesRequest.h"
 #import "SendPreKeyExchangeRequest.h"
+#import "KDevice.h"
 
 @implementation KUser
 
@@ -74,6 +75,10 @@
 
 - (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser {
     return [GetKeyExchangeRequest makeRequestWithLocalUser:self remoteUser:remoteUser];
+}
+
+- (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId {
+    return [GetKeyExchangeRequest makeRequestWithLocalUser:self remoteUser:remoteUser deviceId:deviceId];
 }
 
 - (TOCFuture *)asyncSetupPreKeys {
@@ -139,6 +144,41 @@
 
 + (NSArray *)remoteKeys {
     return @[@"uniqueId", @"publicKey", @"username"];
+}
+
+- (void)setupKeysForDevice {
+    [self setCurrentDevice];
+    [self setupIdentityKey];
+    [self asyncUpdate];
+    [self asyncSetupPreKeys];
+}
+
+- (void)setCurrentDevice {
+    KDevice *device = [[KDevice alloc] initWithUserId:self.uniqueId deviceId:[NSString stringWithFormat:@"%@_%@", self.uniqueId, [[UIDevice currentDevice].identifierForVendor UUIDString]] isCurrentDevice:YES];
+    [device save];
+}
+
+- (KDevice *)currentDevice {
+    return [KDevice findByDictionary:@{@"userId" : self.uniqueId, @"isCurrentDevice" : @YES}];
+}
+
+- (NSArray *)devices {
+    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
+        return [database executeQuery:[NSString stringWithFormat:@"select * from %@ where user_id = :unique_id", [KDevice tableName]] withParameterDictionary:@{@"unique_id" : self.uniqueId}];
+    }];
+    
+    NSMutableArray *devices = [[NSMutableArray alloc] init];
+    while(resultSet.next) {
+        KDevice *device = [[KDevice alloc] initWithResultSetRow:resultSet.resultDictionary];
+        [devices addObject:device];
+    }
+    [resultSet close];
+    return devices;
+}
+
+- (void)addDeviceId:(NSString *)deviceId {
+    KDevice *device = [[KDevice alloc] initWithUserId:self.uniqueId deviceId:[NSString stringWithFormat:@"%@_%@", self.uniqueId, [[UIDevice currentDevice].identifierForVendor UUIDString]] isCurrentDevice:NO];
+    [device save];
 }
 
 @end

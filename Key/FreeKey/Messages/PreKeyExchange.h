@@ -19,7 +19,6 @@
 @property (nonatomic, readwrite) NSString *senderId;
 @property (nonatomic, readonly) NSString *senderDeviceId;
 @property (nonatomic, readonly) NSString *receiverId;
-@property (nonatomic, readonly) NSString *receiverDeviceId;
 @property (nonatomic, readonly) NSString *signedTargetPreKeyId;
 @property (nonatomic, readonly) NSData *sentSignedBaseKey;
 @property (nonatomic, readonly) NSData *senderIdentityPublicKey;
@@ -29,6 +28,7 @@
 
 - (instancetype)initWithSenderId:(NSString *)senderId
                       receiverId:(NSString *)receiverId
+                  senderDeviceId:(NSString *)senderDeviceId
             signedTargetPreKeyId:(NSString *)signedTargetPreKeyId
                sentSignedBaseKey:(NSData *)sentSignedBaseKey
          senderIdentityPublicKey:(NSData *)senderIdentityPublicKey

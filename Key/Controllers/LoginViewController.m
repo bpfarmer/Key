@@ -14,6 +14,7 @@
 #import "PushManager.h"
 #import "LoginRequest.h"
 #import "CollapsingFutures.h"
+#import "KDevice.h"
 
 @interface LoginViewController ()
 
@@ -43,7 +44,7 @@
     if(![self.usernameText.text isEqualToString:@""] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
         KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString]];
         TOCFuture *futureSalt = [LoginRequest makeSaltRequestWithParameters:@{@"username" : user.username}];
-        [futureSalt thenDo:^(id value) {
+        [futureSalt catchDo:^(id failure) {
             NSLog(@"PROBLEM RETRIEVING SALT");
         }];
         [futureSalt thenDo:^(NSData *passwordSalt) {
@@ -53,11 +54,13 @@
                 NSLog(@"REMOTE LOGIN ERROR");
             }];
             [futureLogin thenDo:^(KUser *remoteUser) {
-                [[KAccountManager sharedManager] setUser:user];
                 [[KStorageManager sharedManager] setDatabaseWithName:user.username];
-                KUser *retrievedUser = [KUser findByDictionary:@{@"username" : user.username}];
-                if(!retrievedUser) [remoteUser save];
-                [[KAccountManager sharedManager] setUser:remoteUser];
+                KUser *retrievedUser = [KUser findById:remoteUser.uniqueId];
+                if(!retrievedUser) {
+                    [remoteUser save];
+                    [remoteUser setupKeysForDevice];
+                }
+                [[KAccountManager sharedManager] setUser:[KUser findById:remoteUser.uniqueId]];
                 [self showHome];
             }];
         }];

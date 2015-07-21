@@ -25,8 +25,7 @@
 + (TOCFuture *)makeRequestWithParameters:(NSDictionary *)parameters {
     TOCFutureSource *resultSource = [TOCFutureSource new];
     GetUserRequest *request = [[GetUserRequest alloc] initWithParameters:parameters];
-    void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
-    ^(AFHTTPRequestOperation *operation, id responseObject){
+    void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         if(responseObject[kUsersAlias]) {
             NSArray *usersResponseArray = (NSArray *) responseObject[kUsersAlias];
             NSMutableArray *usersArray  = [[NSMutableArray alloc] init];
@@ -41,8 +40,7 @@
             if(remoteUser.uniqueId) [resultSource trySetResult:remoteUser];
         }
     };
-    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
-    ^(AFHTTPRequestOperation *operation, NSError *error){
+    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) = ^(AFHTTPRequestOperation *operation, NSError *error){
         NSLog(@"ERROR: %@", error);
         [resultSource trySetFailure:error];
     };
