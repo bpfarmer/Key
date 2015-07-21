@@ -12,6 +12,9 @@
 #import "KStorageManager.h"
 #import "HomeViewController.h"
 #import "PushManager.h"
+#import "LoginRequest.h"
+#import "CollapsingFutures.h"
+#import "KDevice.h"
 
 @interface LoginViewController ()
 
@@ -38,23 +41,29 @@
 }
 
 - (IBAction)login:(id)sender {
-    // TODO: enforce passwords
     if(![self.usernameText.text isEqualToString:@""] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
-        KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString] password:self.passwordText.text];
-        [[KAccountManager sharedManager] setUser:user];
-        if([user authenticatePassword:self.passwordText.text]) {
-            [[KStorageManager sharedManager] setDatabaseWithName:user.username];
-            KUser *retrievedUser = [KUser findByDictionary:@{@"username" : user.username}];
-            if(retrievedUser) {
-                [[KAccountManager sharedManager] setUser:retrievedUser];
+        KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString]];
+        TOCFuture *futureSalt = [LoginRequest makeSaltRequestWithParameters:@{@"username" : user.username}];
+        [futureSalt catchDo:^(id failure) {
+            NSLog(@"PROBLEM RETRIEVING SALT");
+        }];
+        [futureSalt thenDo:^(NSData *passwordSalt) {
+            NSData *passwordCrypt = [KUser encryptPassword:self.passwordText.text salt:passwordSalt];
+            TOCFuture *futureLogin = [LoginRequest makeRequestWithParameters:@{@"username" : user.username, @"password_crypt" : passwordCrypt}];
+            [futureLogin catchDo:^(id failure) {
+                NSLog(@"REMOTE LOGIN ERROR");
+            }];
+            [futureLogin thenDo:^(KUser *remoteUser) {
+                [[KStorageManager sharedManager] setDatabaseWithName:user.username];
+                KUser *retrievedUser = [KUser findById:remoteUser.uniqueId];
+                if(!retrievedUser) {
+                    [remoteUser save];
+                    [remoteUser setupKeysForDevice];
+                }
+                [[KAccountManager sharedManager] setUser:[KUser findById:remoteUser.uniqueId]];
                 [self showHome];
-            }else {
-                NSLog(@"PROBLEM RETRIEVING USER FROM DB");
-            }
-        
-        }else {
-          NSLog(@"ERROR LOGGING IN");
-        }
+            }];
+        }];
     }else {
         NSLog(@"Username and Password cannot be blank");
     }

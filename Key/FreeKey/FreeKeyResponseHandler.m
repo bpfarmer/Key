@@ -36,11 +36,12 @@
     PreKeyExchange *preKeyExchange =
     [[PreKeyExchange alloc]  initWithSenderId:dictionary[remoteKeys[0]]
                                    receiverId:dictionary[remoteKeys[1]]
-                         signedTargetPreKeyId:dictionary[remoteKeys[2]]
-                            sentSignedBaseKey:dictionary[remoteKeys[3]]
-                      senderIdentityPublicKey:dictionary[remoteKeys[4]]
-                    receiverIdentityPublicKey:dictionary[remoteKeys[5]]
-                             baseKeySignature:dictionary[remoteKeys[6]]];
+                               senderDeviceId:dictionary[remoteKeys[2]]
+                         signedTargetPreKeyId:dictionary[remoteKeys[3]]
+                            sentSignedBaseKey:dictionary[remoteKeys[4]]
+                      senderIdentityPublicKey:dictionary[remoteKeys[5]]
+                    receiverIdentityPublicKey:dictionary[remoteKeys[6]]
+                             baseKeySignature:dictionary[remoteKeys[7]]];
     
     [preKeyExchange save];
     return preKeyExchange;
@@ -56,7 +57,7 @@
                                                                              serializedData:dictionary[remoteKeys[3]]
                                                                                       index:index
                                                                               previousIndex:previousIndex];
-    
+    NSLog(@"SAVING NEW ENCRYPTED MESSAGE");
     [encryptedMessage save];
     return encryptedMessage;
 }

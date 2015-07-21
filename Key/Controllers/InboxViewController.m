@@ -32,7 +32,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[KAccountManager sharedManager].user asyncGetFeed];
+    NSLog(@"CURRENT USER: %@", [KAccountManager sharedManager].user);
     self.threads = [KThread all];
     
     self.threadsTableView.delegate = self;
@@ -44,6 +44,10 @@ static NSString *TableViewCellIdentifier = @"Messages";
                                              selector:@selector(databaseModified:)
                                                  name:[KThread notificationChannel]
                                                object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [[KAccountManager sharedManager].user asyncGetFeed];
 }
 
 - (void)databaseModified:(NSNotification *)notification {
@@ -106,6 +110,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (IBAction)logout:(id)sender {
     [[KAccountManager sharedManager] setUser:nil];
+    [[KStorageManager sharedManager] resignDatabase];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     LoginViewController *loginView = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
     [self presentViewController:loginView animated:YES completion:nil];

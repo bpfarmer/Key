@@ -108,7 +108,7 @@
     NSString *columnKeys = [[self instanceMapping].allKeys componentsJoinedByString:@", "];
     NSString *valueKeys   = [@":" stringByAppendingString:[[self instanceMapping].allKeys componentsJoinedByString:@", :"]];
     NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (%@) values(%@)", [self.class tableName], columnKeys, valueKeys];
-    NSLog(@"SAVING WITH SQL: %@ AND PARAMETERS: %@", insertOrReplaceSQL, [self instanceMapping]);
+    //NSLog(@"SAVING WITH SQL: %@ AND PARAMETERS: %@", insertOrReplaceSQL, [self instanceMapping]);
     [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
         [database executeUpdate:insertOrReplaceSQL withParameterDictionary:[self instanceMapping]];
     }];
@@ -135,7 +135,7 @@
     if(!uniqueId) return nil;
     NSDictionary *parameterDictionary = @{@"unique_id" : uniqueId};
     NSString *findByUniqueIdSQL = [NSString stringWithFormat:@"select * from %@ where unique_id=:unique_id", [[self class] tableName]];
-    NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@",findByUniqueIdSQL, parameterDictionary);
+    //NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@",findByUniqueIdSQL, parameterDictionary);
     FMResultSet *result = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
         return [database executeQuery:findByUniqueIdSQL withParameterDictionary:parameterDictionary];
     }];
@@ -161,7 +161,7 @@
         [parameterDictionary setObject:obj forKey:[self columnNameFromProperty:key]];
     }];
     
-    NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@", selectSQL, parameterDictionary);
+    //NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@", selectSQL, parameterDictionary);
     
     FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
         return [database executeQuery:selectSQL withParameterDictionary:parameterDictionary];

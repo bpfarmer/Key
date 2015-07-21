@@ -15,6 +15,7 @@
 
 - (instancetype)initWithSenderId:(NSString *)senderId
                       receiverId:(NSString *)receiverId
+                  senderDeviceId:(NSString *)senderDeviceId
             signedTargetPreKeyId:(NSString *)signedTargetPreKeyId
                sentSignedBaseKey:(NSData *)sentSignedBaseKey
          senderIdentityPublicKey:(NSData *)senderIdentityPublicKey
@@ -24,13 +25,14 @@
     self = [super init];
     
     if(self) {
-        _senderId = senderId;
-        _receiverId = receiverId;
-        _signedTargetPreKeyId = signedTargetPreKeyId;
-        _senderIdentityPublicKey = senderIdentityPublicKey;
-        _sentSignedBaseKey = sentSignedBaseKey;
-        _receiverIdentityPublicKey = receiverIdentityPublicKey;
-        _baseKeySignature = baseKeySignature;
+        _senderId                   = senderId;
+        _receiverId                 = receiverId;
+        _senderDeviceId             = senderDeviceId;
+        _signedTargetPreKeyId       = signedTargetPreKeyId;
+        _senderIdentityPublicKey    = senderIdentityPublicKey;
+        _sentSignedBaseKey          = sentSignedBaseKey;
+        _receiverIdentityPublicKey  = receiverIdentityPublicKey;
+        _baseKeySignature           = baseKeySignature;
     }
     
     return self;
@@ -46,7 +48,7 @@
 }
 
 + (NSArray *)remoteKeys {
-    return @[@"senderId", @"receiverId", @"signedTargetPreKeyId", @"sentSignedBaseKey",
+    return @[@"senderId", @"receiverId", @"senderDeviceId", @"signedTargetPreKeyId", @"sentSignedBaseKey",
              @"senderIdentityPublicKey", @"receiverIdentityPublicKey", @"baseKeySignature"];
 }
 

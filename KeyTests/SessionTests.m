@@ -170,8 +170,8 @@
 }
 
 - (void)testBobSendingFirst {
-    Session *aliceSession = [[Session alloc] initWithSenderId:_alice.uniqueId receiverId:_bob.uniqueId];
-    Session *bobSession   = [[Session alloc] initWithSenderId:_bob.uniqueId receiverId:_alice.uniqueId];
+    Session *aliceSession = [[Session alloc] initWithSenderId:_alice.uniqueId receiverId:_bob.uniqueId senderDeviceId:@"1" receiverDeviceId:@"1"];
+    Session *bobSession   = [[Session alloc] initWithSenderId:_bob.uniqueId receiverId:_alice.uniqueId senderDeviceId:@"1" receiverDeviceId:@"1"];
     
     [aliceSession addPreKey:_bobPreKey ourBaseKey:_aliceBaseKeyPair];
     [bobSession addOurPreKey:_bobPreKey preKeyExchange:_alicePreKeyExchange];
