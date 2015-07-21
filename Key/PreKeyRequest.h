@@ -15,6 +15,7 @@
 #define kPreKeyExchangeAlias @"pre_key_exchange"
 #define kPreKeyExchangeEndpoint @"pre_key_exchange.json"
 #define kPreKeyRemoteUserId @"remoteUserId"
+#define kPreKeyRemoteDeviceId @"remoteDeviceId"
 #define kPreKeyLocalUserId @"localUserId"
 #define kPreKeyLocalDeviceId @"localDeviceId"
 

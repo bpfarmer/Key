@@ -50,12 +50,8 @@
             [user save];
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                KDevice *device = [[KDevice alloc] initWithUserId:user.uniqueId deviceId:[[UIDevice currentDevice].identifierForVendor UUIDString] isCurrentDevice:YES];
-                [device save];
                 NSLog(@"CURRENT DEVICE :%@", user.currentDevice.deviceId);
-                [user setupIdentityKey];
-                [user asyncUpdate];
-                [user asyncSetupPreKeys];
+                [user setupKeysForDevice];
             });
             [self showHome];
         }];

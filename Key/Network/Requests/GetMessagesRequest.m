@@ -16,6 +16,7 @@
 #import "PreKeyExchange.h"
 #import "KStorageManager.h"
 #import "FreeKey.h"
+#import "KDevice.h"
 
 @implementation GetMessagesRequest
 
@@ -26,13 +27,14 @@
 
 + (TOCFuture *)makeRequestWithCurrentUserId:(NSString *)currentUserId {
     TOCFutureSource *resultSource = [TOCFutureSource new];
-    GetMessagesRequest *request = [[GetMessagesRequest alloc] initWithCurrentUserId:currentUserId];
-    void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
-    ^(AFHTTPRequestOperation *operation, id responseObject){
+    KUser *user = [KUser findById:currentUserId];
+    GetMessagesRequest *request = [[GetMessagesRequest alloc] initWithCurrentUserId:user.currentDevice.deviceId];
+    NSLog(@"SHOULD BE RETRIEVING FEED");
+    void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
+        NSLog(@"RESPONSE OBJECT: %@", responseObject);
         [request receiveMessages:[request base64DecodedDictionary:responseObject]];
     };
-    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
-    ^(AFHTTPRequestOperation *operation, NSError *error){
+    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) = ^(AFHTTPRequestOperation *operation, NSError *error){
         NSLog(@"ERROR: %@", error);
         [resultSource trySetFailure:error];
     };
@@ -70,6 +72,7 @@
         }
     }
     if([messages[kEncryptedMessageRemoteAlias] count] > 0) {
+        NSLog(@"HANDLING MESSAGE");
         if([messages[kEncryptedMessageRemoteAlias] isKindOfClass:[NSDictionary class]]) {
             EncryptedMessage *message = [FreeKeyResponseHandler createEncryptedMessageFromRemoteDictionary:messages[kEncryptedMessageRemoteAlias]];
             [[FreeKeyNetworkManager sharedManager] enqueueDecryptableMessage:message toLocalUser:localUser];

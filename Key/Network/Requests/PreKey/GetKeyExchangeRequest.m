@@ -27,7 +27,7 @@
 }
 
 - (instancetype)initWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId{
-    NSDictionary *parameters = @{kPreKeyLocalUserId : localUser.uniqueId, kPreKeyRemoteUserId : remoteUser.uniqueId};
+    NSDictionary *parameters = @{kPreKeyLocalUserId : localUser.uniqueId, kPreKeyRemoteUserId : remoteUser.uniqueId, kPreKeyRemoteDeviceId : deviceId, kPreKeyLocalDeviceId : localUser.currentDevice.deviceId};
     return [super initWithHttpMethod:GET endpoint:kPreKeyDeviceEndpoint parameters:parameters];
 }
 
@@ -78,16 +78,15 @@
     NSObject *keyExchange;
     if(dictionary[kPreKeyExchangeRemoteAlias]) {
         PreKeyExchange *preKeyExchange = [FreeKeyResponseHandler createPreKeyExchangeFromRemoteDictionary:dictionary[kPreKeyExchangeRemoteAlias]];
-        
         [preKeyExchange save];
         NSLog(@"-- PREKEY EXCHANGE BASE KEY: %@", preKeyExchange.sentSignedBaseKey);
         NSLog(@"-- PREKEY EXCHANGE ID KEY: %@", preKeyExchange.senderIdentityPublicKey);
+        [KDevice addDeviceForUserId:preKeyExchange.senderId deviceId:preKeyExchange.senderDeviceId];
         keyExchange = preKeyExchange;
     }else if(dictionary[kPreKeyRemoteAlias]) {
-        PreKey *preKey =
-        [FreeKeyResponseHandler createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
-        
+        PreKey *preKey = [FreeKeyResponseHandler createPreKeyFromRemoteDictionary:dictionary[kPreKeyRemoteAlias]];
         [preKey save];
+        [KDevice addDeviceForUserId:preKey.userId deviceId:preKey.deviceId];
         keyExchange = preKey;
     }
     return keyExchange;

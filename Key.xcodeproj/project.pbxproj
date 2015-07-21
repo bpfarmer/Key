@@ -99,6 +99,7 @@
 		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
 		EFDDD9B81B5AE89700089124 /* LoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9B71B5AE89700089124 /* LoginRequest.m */; };
 		EFDDD9BB1B5C1D4B00089124 /* KDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9BA1B5C1D4B00089124 /* KDevice.m */; };
+		EFDDD9BF1B5D6BB100089124 /* CheckDevicesRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9BE1B5D6BB100089124 /* CheckDevicesRequest.m */; };
 		EFE43D3C1B580CE50092CAC5 /* ContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */; };
 		EFE43D3E1B580F670092CAC5 /* ContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFE43D3D1B580F670092CAC5 /* ContentView.xib */; };
 		EFE43D411B5818110092CAC5 /* ContentTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE43D401B5818110092CAC5 /* ContentTabBarController.m */; };
@@ -309,6 +310,8 @@
 		EFDDD9B71B5AE89700089124 /* LoginRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginRequest.m; path = Network/Requests/User/LoginRequest.m; sourceTree = "<group>"; };
 		EFDDD9B91B5C1D4B00089124 /* KDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KDevice.h; path = Models/KDevice.h; sourceTree = "<group>"; };
 		EFDDD9BA1B5C1D4B00089124 /* KDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KDevice.m; path = Models/KDevice.m; sourceTree = "<group>"; };
+		EFDDD9BD1B5D6BB100089124 /* CheckDevicesRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CheckDevicesRequest.h; path = Network/Requests/User/CheckDevicesRequest.h; sourceTree = "<group>"; };
+		EFDDD9BE1B5D6BB100089124 /* CheckDevicesRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CheckDevicesRequest.m; path = Network/Requests/User/CheckDevicesRequest.m; sourceTree = "<group>"; };
 		EFE43D3A1B580CE50092CAC5 /* ContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContentViewController.h; sourceTree = "<group>"; };
 		EFE43D3B1B580CE50092CAC5 /* ContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentViewController.m; sourceTree = "<group>"; };
 		EFE43D3D1B580F670092CAC5 /* ContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ContentView.xib; path = Views/ContentView.xib; sourceTree = "<group>"; };
@@ -531,6 +534,8 @@
 				EF99E26D1AC5E7C9002583E2 /* UserRequest.h */,
 				EFDDD9B61B5AE89700089124 /* LoginRequest.h */,
 				EFDDD9B71B5AE89700089124 /* LoginRequest.m */,
+				EFDDD9BD1B5D6BB100089124 /* CheckDevicesRequest.h */,
+				EFDDD9BE1B5D6BB100089124 /* CheckDevicesRequest.m */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -1056,6 +1061,7 @@
 				EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */,
 				EF78AA561B33622300A4627F /* HomeNavigationViewController.m in Sources */,
 				EFF70AC41AAE1CBC006C10D2 /* LoginViewController.m in Sources */,
+				EFDDD9BF1B5D6BB100089124 /* CheckDevicesRequest.m in Sources */,
 				EFCD01D81A83E651005065B2 /* KThread.m in Sources */,
 				EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */,
 				EFB722851B45E57700E6DF7A /* KLocation.m in Sources */,

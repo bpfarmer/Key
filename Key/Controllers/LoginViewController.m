@@ -44,7 +44,7 @@
     if(![self.usernameText.text isEqualToString:@""] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
         KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString]];
         TOCFuture *futureSalt = [LoginRequest makeSaltRequestWithParameters:@{@"username" : user.username}];
-        [futureSalt thenDo:^(id value) {
+        [futureSalt catchDo:^(id failure) {
             NSLog(@"PROBLEM RETRIEVING SALT");
         }];
         [futureSalt thenDo:^(NSData *passwordSalt) {
@@ -54,15 +54,13 @@
                 NSLog(@"REMOTE LOGIN ERROR");
             }];
             [futureLogin thenDo:^(KUser *remoteUser) {
-                [[KAccountManager sharedManager] setUser:user];
                 [[KStorageManager sharedManager] setDatabaseWithName:user.username];
-                KUser *retrievedUser = [KUser findByDictionary:@{@"username" : user.username}];
+                KUser *retrievedUser = [KUser findById:remoteUser.uniqueId];
                 if(!retrievedUser) {
                     [remoteUser save];
-                    KDevice *device = [[KDevice alloc] initWithUserId:remoteUser.uniqueId deviceId:[[UIDevice currentDevice].identifierForVendor UUIDString] isCurrentDevice:YES];
-                    [device save];
+                    [remoteUser setupKeysForDevice];
                 }
-                [[KAccountManager sharedManager] setUser:remoteUser];
+                [[KAccountManager sharedManager] setUser:[KUser findById:remoteUser.uniqueId]];
                 [self showHome];
             }];
         }];

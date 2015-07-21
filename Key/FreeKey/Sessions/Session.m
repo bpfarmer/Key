@@ -167,11 +167,10 @@
     [self processReceiverChain:encryptedMessage];
     NSString *messageIndex = [NSString stringWithFormat:@"%@", encryptedMessage.index];
     SessionState *sessionState = [SessionState findByDictionary:@{@"senderRatchetKey" : encryptedMessage.senderRatchetKey, @"messageIndex" : messageIndex}];
-    if(![HMAC verifyWithMac:[encryptedMessage mac]
-          senderIdentityKey:self.receiver.publicKey
-        receiverIdentityKey:self.sender.identityKey.publicKey
-                     macKey:sessionState.messageKey.macKey
-             serializedData:encryptedMessage.serializedData]) NSLog(@"FAILED HMAC VERIFICATION"); //TODO: throw exception
+    if(![HMAC verifyWithMac:[encryptedMessage mac] senderIdentityKey:self.receiver.publicKey receiverIdentityKey:self.sender.identityKey.publicKey macKey:sessionState.messageKey.macKey serializedData:encryptedMessage.serializedData]) {
+        NSLog(@"FAILED HMAC VERIFICATION"); //TODO: throw exception
+    }
+    
     NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
                                             withKey:sessionState.messageKey.cipherKey
                                              withIV:sessionState.messageKey.iv];

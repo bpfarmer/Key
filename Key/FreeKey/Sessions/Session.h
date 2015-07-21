@@ -19,8 +19,8 @@
 @interface Session : KDatabaseObject
 
 @property (nonatomic, readonly) NSString *senderId;
-@property (nonatomic, readonly) NSString *receiverId;
 @property (nonatomic, readonly) NSString *senderDeviceId;
+@property (nonatomic, readonly) NSString *receiverId;
 @property (nonatomic, readonly) NSString *receiverDeviceId;
 @property (nonatomic, readonly) NSString *preKeyId;
 @property (nonatomic, readonly) NSData *baseKeyPublic;

@@ -40,10 +40,6 @@
 
 - (TOCFuture *)sessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser {
     TOCFutureSource *resultSource = [TOCFutureSource new];
-    /*NSString *countSessionsSQL = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE receiver_id = ?", [Session tableName]];
-    NSUInteger count = [[KStorageManager sharedManager] queryCount:^NSUInteger(FMDatabase *database) {
-        return [database intForQuery:countSessionsSQL, remoteUser.uniqueId];
-    }];*/
     Session *session = [Session findByDictionary:@{@"receiverId" : remoteUser.uniqueId}];
     if(session != nil) [resultSource trySetResult:session];
     else {
@@ -57,11 +53,8 @@
 
 - (TOCFuture *)sessionWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId{
     TOCFutureSource *resultSource = [TOCFutureSource new];
-    /*NSString *countSessionsSQL = [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@ WHERE receiver_id = ?", [Session tableName]];
-     NSUInteger count = [[KStorageManager sharedManager] queryCount:^NSUInteger(FMDatabase *database) {
-     return [database intForQuery:countSessionsSQL, remoteUser.uniqueId];
-     }];*/
-    Session *session = [Session findByDictionary:@{@"receiverId" : remoteUser.uniqueId, @"deviceId" : deviceId}];
+    Session *session = [Session findByDictionary:@{@"receiverId" : remoteUser.uniqueId, @"receiverDeviceId" : deviceId}];
+    NSLog(@"RETRIEVED SESSION: %@", session);
     if(session != nil) [resultSource trySetResult:session];
     else {
         TOCFuture *futureResponse = [localUser asyncRetrieveKeyExchangeWithRemoteUser:remoteUser deviceId:deviceId];
@@ -79,6 +72,7 @@
         PreKey *preKey = (PreKey *)keyExchange;
         Session *session = [[Session alloc] initWithSenderId:localUser.uniqueId receiverId:remoteUser.uniqueId senderDeviceId:senderDeviceId receiverDeviceId:preKey.deviceId];
         [session addPreKey:preKey ourBaseKey:[Curve25519 generateKeyPair]];
+        NSLog(@"CREATING SESSION: %@", session);
         [SendPreKeyExchangeRequest makeRequestWithPreKeyExchange:session.preKeyExchange];
         return session;
     }else if([keyExchange isKindOfClass:[PreKeyExchange class]]) {
@@ -87,6 +81,7 @@
         PreKey *ourPreKey = [PreKey findById:(NSString *)((PreKeyExchange *)keyExchange).signedTargetPreKeyId];
         if(ourPreKey) {
             [session addOurPreKey:ourPreKey preKeyExchange:(PreKeyExchange *)keyExchange];
+            NSLog(@"CREATING SESSION :%@", session);
             return session;
         }else {
             NSLog(@"REFERENCE TO A NON-EXISTENT PRE KEY");

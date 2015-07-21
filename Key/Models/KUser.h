@@ -44,7 +44,9 @@
 - (NSArray *)contacts;
 - (void)setupIdentityKey;
 - (IdentityKey *)identityKey;
+- (void)setupKeysForDevice;
 - (KDevice *)currentDevice;
 - (NSArray *)devices;
+- (void)addDeviceId:(NSString *)deviceId;
 
 @end

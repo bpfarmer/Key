@@ -15,5 +15,7 @@
 @property (nonatomic) BOOL isCurrentDevice;
 
 - (instancetype)initWithUserId:(NSString *)userId deviceId:(NSString *)deviceId isCurrentDevice:(BOOL)isCurrentDevice;
++ (NSArray *)devicesForUserId:(NSString *)userId;
++ (NSArray *)addDeviceForUserId:(NSString *)userId deviceId:(NSString *)deviceId;
 
 @end

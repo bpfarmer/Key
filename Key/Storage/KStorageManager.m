@@ -41,6 +41,7 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
     self.database = [FMDatabase databaseWithPath:[NSString stringWithFormat:@"%@/%@", databasePath, databaseName]];
     if(self.database.open) self.queue    = [FMDatabaseQueue databaseQueueWithPath:self.database.databasePath];
     [KStorageSchema createTables];
+    NSLog(@"DATABASE PATH: %@", self.database.databasePath);
 }
 
 - (void)queryUpdate:(KDatabaseUpdateBlock)databaseBlock {
@@ -81,6 +82,11 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
         [SSKeychain setPassword:dbPassword forService:keychainService account:keychainDBPassKey];
     }
     return [dbPassword dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+- (void)resignDatabase {
+    self.queue = nil;
+    self.database = nil;
 }
 
 @end
