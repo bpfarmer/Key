@@ -19,7 +19,6 @@
 #import "Session.h"
 #import "IdentityKey.h"
 #import "PreKeyExchange.h"
-#import "FreeKeyNetworkManager.h"
 #import "CollapsingFutures.h"
 #import "KAccountManager.h"
 #import "SendPreKeyExchangeRequest.h"

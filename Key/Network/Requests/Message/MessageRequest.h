@@ -12,10 +12,12 @@
 #define kMessageCurrentUserId        @"uniqueId"
 #define kFeedEndpoint                @"feed.json"
 #define kMessageEndpoint             @"message.json"
+#define kAttachmentEndpoint          @"attachment.json"
 #define kPreKeyRemoteAlias           @"pre_key"
 #define kPreKeyExchangeRemoteAlias   @"pre_key_exchange"
 #define kEncryptedMessageRemoteAlias @"message"
 #define kMessageAlias                @"message"
+#define kAttachmentAlias             @"attachment"
 #define kFeedRemoteAlias             @"feed"
 
 

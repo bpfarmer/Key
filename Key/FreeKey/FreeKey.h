@@ -20,6 +20,8 @@
 @class PreKey;
 @class Session;
 @class KDatabaseObject;
+@class Attachment;
+@class AttachmentKey;
 
 #define kOurPreKeyCollection         @"OurPreKey"
 #define kTheirPreKeyCollection       @"TheirPreKey"
@@ -40,13 +42,16 @@
 
 @interface FreeKey : NSObject
 
-+ (void)sendEncryptableObject:(KDatabaseObject *)object recipients:(NSArray *)recipients;
++ (void)sendEncryptableObject:(KDatabaseObject *)object recipientIds:(NSArray *)recipientIds;
 + (void)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage;
 
-+ (void)sendAttachment:(KDatabaseObject *)object recipients:(NSArray *)recipients;
-+ (void)decryptAndSaveAttachment:(KAttachment *)
++ (void)sendAttachableObject:(KDatabaseObject *)object recipientIds:(NSArray *)recipientIds;
++ (void)sendAttachmentWithCipherText:(NSData *)cipherText attachmentKey:(AttachmentKey *)attachmentKey localUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
++ (void)decryptAndSaveAttachment:(Attachment *)attachment;
 
 + (EncryptedMessage *)encryptObject:(KDatabaseObject *)object session:(Session *)session;
 + (KDatabaseObject *)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session;
+
++ (NSArray *)generatePreKeysForLocalUser:(KUser *)localUser;
 
 @end

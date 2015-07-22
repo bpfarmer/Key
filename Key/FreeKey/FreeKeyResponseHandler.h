@@ -11,11 +11,13 @@
 @class PreKey;
 @class PreKeyExchange;
 @class EncryptedMessage;
+@class Attachment;
 
 @interface FreeKeyResponseHandler : NSObject
 
 + (PreKey *)createPreKeyFromRemoteDictionary:(NSDictionary *)dictionary;
 + (PreKeyExchange *)createPreKeyExchangeFromRemoteDictionary:(NSDictionary *)dictionary;
 + (EncryptedMessage *)createEncryptedMessageFromRemoteDictionary:(NSDictionary *)dictionary;
++ (Attachment *)createAttachmentFromRemoteDictionary:(NSDictionary *)dictionary;
 
 @end

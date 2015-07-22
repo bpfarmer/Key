@@ -9,7 +9,6 @@
 #import "GetKeyExchangeRequest.h"
 #import "KUser.h"
 #import "CollapsingFutures.h"
-#import "FreeKeyNetworkManager.h"
 #import "KStorageManager.h"
 #import "PreKey.h"
 #import "PreKeyExchange.h"

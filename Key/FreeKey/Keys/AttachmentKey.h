@@ -16,4 +16,7 @@
 
 - (instancetype)init;
 
+- (NSData *)encryptObject:(KDatabaseObject *)object;
+- (KDatabaseObject *)decryptCipherText:(NSData *)cipherText;
+
 @end

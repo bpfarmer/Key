@@ -14,7 +14,6 @@
 #import "KMessage.h"
 #import "ThreadViewController.h"
 #import "LoginViewController.h"
-#import "FreeKeyNetworkManager.h"
 #import "PushManager.h"
 #import "HomeViewController.h"
 #import "DismissAndPresentProtocol.h"

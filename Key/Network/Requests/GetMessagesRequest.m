@@ -8,7 +8,6 @@
 
 #import "GetMessagesRequest.h"
 #import "CollapsingFutures.h"
-#import "FreeKeyNetworkManager.h"
 #import "FreeKeyResponseHandler.h"
 #import "KAccountManager.h"
 #import "KUser.h"
@@ -75,11 +74,23 @@
         NSLog(@"HANDLING MESSAGE");
         if([messages[kEncryptedMessageRemoteAlias] isKindOfClass:[NSDictionary class]]) {
             EncryptedMessage *message = [FreeKeyResponseHandler createEncryptedMessageFromRemoteDictionary:messages[kEncryptedMessageRemoteAlias]];
-            [[FreeKeyNetworkManager sharedManager] enqueueDecryptableMessage:message toLocalUser:localUser];
+            [FreeKey decryptAndSaveEncryptedMessage:message];
         }else {
             for(NSDictionary *msg in messages[kEncryptedMessageRemoteAlias]) {
                 EncryptedMessage *encryptedMessage = [FreeKeyResponseHandler createEncryptedMessageFromRemoteDictionary:msg];
                 [FreeKey decryptAndSaveEncryptedMessage:encryptedMessage];
+            }
+        }
+    }
+    if([messages[kAttachmentAlias] count] > 0) {
+        NSLog(@"HANDLING ATTACHMENTS");
+        if([messages[kAttachmentAlias] isKindOfClass:[NSDictionary class]]) {
+            Attachment *attachment = [FreeKeyResponseHandler createAttachmentFromRemoteDictionary:messages[kAttachmentAlias]];
+            [FreeKey decryptAndSaveAttachment:attachment];
+        }else {
+            for(NSDictionary *attach in messages[kAttachmentAlias]) {
+                Attachment *attachment = [FreeKeyResponseHandler createAttachmentFromRemoteDictionary:attach];
+                [FreeKey decryptAndSaveAttachment:attachment];
             }
         }
     }

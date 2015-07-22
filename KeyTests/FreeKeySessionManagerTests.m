@@ -21,8 +21,8 @@
 #import "MessageKey.h"
 #import "KStorageManager.h"
 #import "FreeKeyTestExample.h"
-#import "FreeKeyNetworkManager.h"
 #import "KStorageSchema.h"
+#import "FreeKey.h"
 
 @interface FreeKeySessionManagerTests : XCTestCase
 
@@ -91,13 +91,13 @@
 
 - (void)testPreKeyGeneration {
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
-    NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:user];
+    NSArray *preKeys = [FreeKey generatePreKeysForLocalUser:user];
     XCTAssert([preKeys count] == 100);
 }
 
 - (void)testPreKeySending {
     KUser *user = [[KUser alloc] initWithUniqueId:@"12345"];
-    NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:user];
+    NSArray *preKeys = [FreeKey generatePreKeysForLocalUser:user];
     //[[FreeKeyNetworkManager sharedManager] sendPreKeysToServer:preKeys];
 }
 

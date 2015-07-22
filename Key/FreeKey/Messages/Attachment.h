@@ -7,18 +7,22 @@
 //
 
 #import "KDatabaseObject.h"
+#import "KSendable.h"
 
 @class AttachmentKey;
 
-@interface Attachment : KDatabaseObject
+@interface Attachment : KDatabaseObject <KSendable>
 
+@property (nonatomic, readonly) NSString *senderId;
+@property (nonatomic, readonly) NSString *receiverId;
 @property (nonatomic, readonly) NSData *cipherText;
+@property (nonatomic, readonly) NSData *serializedData;
 @property (nonatomic, readonly) NSData *mac;
 @property (nonatomic, readonly) NSString *attachmentKeyId;
 
-- (instancetype)initWithObject:(KDatabaseObject *)object;
-- (instancetype)initWithCipherText:(NSData *)cipherText mac:(NSData *)mac attachmentKeyId:(NSString *)attachmentKeyId;
-
+- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId cipherText:(NSData *)cipherText mac:(NSData *)mac attachmentKeyId:(NSString *)attachmentKeyId;
+- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId serializedData:(NSData *)serializedData attachmentKeyId:(NSString *)attachmentKeyId;
 - (AttachmentKey *)attachmentKey;
++ (NSArray *)remoteKeys;
 
 @end

@@ -8,7 +8,6 @@
 
 #import "HttpManager.h"
 #import <AFNetworking/AFHTTPRequestOperationManager.h>
-#import "FreeKeyNetworkManager.h"
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
 #import "EncryptedMessage.h"

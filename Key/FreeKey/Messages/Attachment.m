@@ -13,25 +13,29 @@
 
 @implementation Attachment
 
-- (instancetype)initWithObject:(KDatabaseObject *)object {
+- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId cipherText:(NSData *)cipherText mac:(NSData *)mac attachmentKeyId:(NSString *)attachmentKeyId {
     self = [super init];
     
     if(self) {
-        AttachmentKey *attachmentKey = [[AttachmentKey alloc] init];
-        [attachmentKey save];
-        _attachmentKeyId = attachmentKey.uniqueId;
-        NSData *serializedObject = [NSKeyedArchiver archivedDataWithRootObject:object];
-        _cipherText = [AES_CBC encryptCBCMode:serializedObject withKey:attachmentKey.cipherKey withIV:attachmentKey.iv];
+        _senderId        = senderId;
+        _receiverId      = receiverId;
+        _cipherText      = cipherText;
+        _mac             = mac;
+        _serializedData  = cipherText;
+        _attachmentKeyId = attachmentKeyId;
     }
+    
     return self;
 }
 
-- (instancetype)initWithCipherText:(NSData *)cipherText mac:(NSData *)mac attachmentKeyId:(NSString *)attachmentKeyId {
+- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId serializedData:(NSData *)serializedData attachmentKeyId:(NSString *)attachmentKeyId {
     self = [super init];
     
     if(self) {
-        _cipherText = cipherText;
-        _mac        = mac;
+        _senderId        = senderId;
+        _receiverId      = receiverId;
+        _serializedData  = serializedData;
+        _cipherText      = serializedData;
         _attachmentKeyId = attachmentKeyId;
     }
     
@@ -43,7 +47,7 @@
 }
 
 + (NSArray *)remoteKeys {
-    return @[@"cipherText", @"hmac", @"messageUniqueId"];
+    return @[@"senderId", @"receiverId", @"serializedData", @"attachmentKeyId"];
 }
 
 + (NSString *)remoteAlias {

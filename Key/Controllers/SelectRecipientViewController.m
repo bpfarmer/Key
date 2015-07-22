@@ -14,9 +14,9 @@
 #import "KPhoto.h"
 #import "KLocation.h"
 #import "FreeKey.h"
-#import "FreeKeyNetworkManager.h"
 #import "ThreadViewController.h"
 #import "KThread.h"
+#import "KAttachable.h"
 
 static NSString *TableViewCellIdentifier = @"Recipients";
 
@@ -43,7 +43,6 @@ static NSString *TableViewCellIdentifier = @"Recipients";
         if(!self.post) {
             self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:nil];
         }
-        //self.post.attachments = self.sendableObjects;
     }
     
     self.contactsTableView.allowsMultipleSelection = YES;
@@ -95,7 +94,12 @@ static NSString *TableViewCellIdentifier = @"Recipients";
             [self.post save];
             NSMutableArray *recipientIds = [[NSMutableArray alloc] init];
             for(KUser *user in self.selectedRecipients) [recipientIds addObject:user.uniqueId];
-            [FreeKey sendEncryptableObject:self.post recipients:recipientIds];
+            [FreeKey sendEncryptableObject:self.post recipientIds:recipientIds];
+            for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
+                object.parentId = self.post.uniqueId;
+                [object save];
+                [FreeKey sendAttachableObject:object recipientIds:recipientIds];
+            }
             [self dismissViewControllerAnimated:NO completion:nil];
         }
     }else {

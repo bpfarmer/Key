@@ -7,11 +7,13 @@
 //
 
 #import "KDatabaseObject.h"
+#import "KAttachable.h"
 
-@interface KPhoto : KDatabaseObject
+@interface KPhoto : KDatabaseObject <KAttachable>
 
 @property (nonatomic, readonly) BOOL ephemeral;
 @property (nonatomic) NSData *media;
+@property (nonatomic) NSString *parentId;
 
 - (instancetype)initWithMedia:(NSData *)media ephemeral:(BOOL)ephemeral;
 

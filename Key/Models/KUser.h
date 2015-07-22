@@ -47,6 +47,7 @@
 - (void)setupKeysForDevice;
 - (KDevice *)currentDevice;
 - (NSArray *)devices;
+- (void)setCurrentDevice;
 - (void)addDeviceId:(NSString *)deviceId;
 
 @end

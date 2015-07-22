@@ -9,7 +9,7 @@
 #import "ShareViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "HomeViewController.h"
-#import "KAttachment.h"
+#import "Attachment.h"
 #import "EditMediaViewController.h"
 #import "EditLocationViewController.h"
 #import "EditPostViewController.h"

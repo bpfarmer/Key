@@ -22,7 +22,6 @@
 #import "NSString+Base64.h"
 #import "KUser+Serialize.h"
 #import "PreKey.h"
-#import "FreeKeyNetworkManager.h"
 #import "FreeKeySessionManager.h"
 #import "PreKeyExchange.h"
 #import "RegisterUsernameRequest.h"
@@ -82,7 +81,7 @@
 }
 
 - (TOCFuture *)asyncSetupPreKeys {
-    NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:self];
+    NSArray *preKeys = [FreeKey generatePreKeysForLocalUser:self];
     return [SendPreKeysRequest makeRequestWithPreKeys:preKeys];
 }
 
@@ -177,8 +176,7 @@
 }
 
 - (void)addDeviceId:(NSString *)deviceId {
-    KDevice *device = [[KDevice alloc] initWithUserId:self.uniqueId deviceId:[NSString stringWithFormat:@"%@_%@", self.uniqueId, [[UIDevice currentDevice].identifierForVendor UUIDString]] isCurrentDevice:NO];
-    [device save];
+    [KDevice addDeviceForUserId:self.uniqueId deviceId:[NSString stringWithFormat:@"%@_%@", self.uniqueId, deviceId]];
 }
 
 @end

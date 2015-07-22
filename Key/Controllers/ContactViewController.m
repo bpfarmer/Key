@@ -12,7 +12,6 @@
 #import "KThread.h"
 #import "KStorageManager.h"
 #import "KMessage.h"
-#import "FreeKeyNetworkManager.h"
 #import "CollapsingFutures.h"
 
 static NSString *TableViewCellIdentifier = @"Contacts";

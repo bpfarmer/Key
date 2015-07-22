@@ -10,7 +10,6 @@
 #import "CollapsingFutures.h"
 #import "KUser.h"
 #import "FreeKey.h"
-#import "FreeKeyNetworkManager.h"
 #import "KStorageManager.h"
 #import "PreKeyExchange.h"
 #import "PreKey.h"

@@ -23,7 +23,6 @@
 #import "RootChain.h"
 #import "MessageKey.h"
 #import "FreeKeySessionManager.h"
-#import "FreeKeyNetworkManager.h"
 #import "FreeKeyTestExample.h"
 #import "KThread.h"
 #import "HttpManager.h"

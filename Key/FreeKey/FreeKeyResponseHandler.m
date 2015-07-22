@@ -12,8 +12,8 @@
 #import "KStorageManager.h"
 #import "HttpManager.h"
 #import "FreeKey.h"
-#import "FreeKeyNetworkManager.h"
 #import "EncryptedMessage.h"
+#import "Attachment.h"
 
 @implementation FreeKeyResponseHandler
 
@@ -60,6 +60,13 @@
     NSLog(@"SAVING NEW ENCRYPTED MESSAGE");
     [encryptedMessage save];
     return encryptedMessage;
+}
+
++ (Attachment *)createAttachmentFromRemoteDictionary:(NSDictionary *)dictionary {
+    NSArray *remoteKeys = [Attachment remoteKeys];
+    Attachment *attachment = [[Attachment alloc] initWithSenderId:dictionary[remoteKeys[0]] receiverId:dictionary[remoteKeys[1]] serializedData:dictionary[remoteKeys[2]] attachmentKeyId:dictionary[remoteKeys[3]]];
+    [attachment save];
+    return attachment;
 }
 
 @end
