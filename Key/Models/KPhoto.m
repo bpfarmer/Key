@@ -16,8 +16,6 @@
     
     if(self) {
         _media = media;
-        NSData *zippedMedia = media.gzippedData;
-        [zippedMedia writeToFile:self.uniqueId atomically:YES];
         _ephemeral = ephemeral;
     }
     
@@ -31,6 +29,12 @@
         _media = [zippedMedia gunzippedData];
     }
     return self;
+}
+
+- (void)save {
+    [super save];
+    NSData *zippedMedia = self.media.gzippedData;
+    [zippedMedia writeToFile:self.uniqueId atomically:YES];
 }
 
 + (NSArray *)unsavedPropertyList {
