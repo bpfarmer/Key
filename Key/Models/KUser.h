@@ -9,7 +9,7 @@
 #import "KDatabaseObject.h"
 #import "KSendable.h"
 
-@class IdentityKey;
+@class ECKeyPair;
 @class KStorageManager;
 @class PreKey;
 @class TOCFuture;
@@ -22,7 +22,7 @@
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *localStatus;
 @property (nonatomic, copy) NSData *publicKey;
-@property (nonatomic, readwrite) IdentityKey *identityKey;
+@property (nonatomic, readwrite) ECKeyPair *identityKey;
 @property (nonatomic) BOOL hasLocalPreKey;
 
 + (NSData *)salt;
@@ -34,18 +34,16 @@
 + (TOCFuture *)asyncCreateWithUsername:(NSString *)username password:(NSString *)password;
 + (TOCFuture *)asyncRetrieveWithUsername:(NSString *)username;
 + (TOCFuture *)asyncRetrieveWithUniqueId:(NSString *)uniqueId;
-- (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser;
-- (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId;
-- (TOCFuture *)asyncSetupPreKeys;
++ (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteDeviceId:(NSString *)remoteDeviceId;
 - (TOCFuture *)asyncUpdate;
 - (TOCFuture *)asyncGetFeed;
++ (TOCFuture *)asyncFindById:(NSString *)uniqueId;
 
 - (NSString *)displayName;
 - (NSArray *)contacts;
 - (void)setupIdentityKey;
-- (IdentityKey *)identityKey;
 - (void)setupKeysForDevice;
-- (KDevice *)currentDevice;
+- (NSString *)currentDeviceId;
 - (NSArray *)devices;
 - (void)setCurrentDevice;
 - (void)addDeviceId:(NSString *)deviceId;

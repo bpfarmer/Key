@@ -100,7 +100,7 @@
     KUser *localUser = [KAccountManager sharedManager].user;
     NSMutableArray *recipientIds = [NSMutableArray arrayWithArray:[self.userIds componentsSeparatedByString:@"_"]];
     [recipientIds removeObject:localUser.uniqueId];
-    return recipientIds;
+    return [recipientIds copy];
 }
 
 - (NSArray *)messages {
@@ -114,7 +114,7 @@
     NSMutableArray *messages = [[NSMutableArray alloc] init];
     while(resultSet.next) [messages addObject:[[KMessage alloc] initWithResultSetRow:resultSet.resultDictionary]];
     [resultSet close];
-    return messages;
+    return [messages copy];
 }
 
 - (BOOL)saved {

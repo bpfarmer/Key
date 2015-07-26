@@ -7,31 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KDatabaseObject.h"
-#import "KSendable.h"
+#import "KeyExchange.h"
 
 @class ECKeyPair;
 
-@interface PreKey : KDatabaseObject <KSendable>
+@interface PreKey : KeyExchange
 
 // TODO: if we're going to provide ID keys, probably need to sign them
 
 @property (nonatomic, readonly) NSString *userId;
-@property (nonatomic, readonly) NSString *deviceId;
-@property (nonatomic, readonly) NSString *signedPreKeyId;
-@property (nonatomic, readonly) NSData   *signedPreKeyPublic;
-@property (nonatomic, readonly) NSData   *signedPreKeySignature;
-@property (nonatomic, readonly) NSData   *identityKey;
+@property (nonatomic, readonly) NSData   *basePublicKey;
+@property (nonatomic, readonly) NSData   *signature;
+@property (nonatomic, readonly) NSData   *publicKey;
 @property (nonatomic, readonly) ECKeyPair *baseKeyPair;
 
-- (instancetype)initWithUserId:(NSString *)userId
-                      deviceId:(NSString *)deviceId
-                signedPreKeyId:(NSString *)signedPreKeyId
-            signedPreKeyPublic:(NSData*)signedPreKeyPublic
-         signedPreKeySignature:(NSData*)signedPreKeySignature
-                   identityKey:(NSData*)identityKey
-                   baseKeyPair:(ECKeyPair *)baseKeyPair;
-
-+ (NSArray *)remoteKeys;
+- (instancetype)initWithUniqueId:(NSString *)uniqueId userId:(NSString *)userId basePublicKey:(NSData*)basePublicKey signature:(NSData*)signature publicKey:(NSData*)publicKey baseKeyPair:(ECKeyPair *)baseKeyPair;
 
 @end

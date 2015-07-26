@@ -89,17 +89,27 @@ static NSString *TableViewCellIdentifier = @"Recipients";
             KThread *thread = [self setupThread];
             ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
             threadViewController.thread = thread;
+            dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+            dispatch_async(queue, ^{
+                [thread save];
+                for(NSString *recipientId in thread.recipientIds) [FreeKey sendEncryptableObject:thread recipientId:recipientId];
+            });
             [self.delegate dismissAndPresentThread:thread];
         }else {
             [self.post save];
-            NSMutableArray *recipientIds = [[NSMutableArray alloc] init];
-            for(KUser *user in self.selectedRecipients) [recipientIds addObject:user.uniqueId];
-            [FreeKey sendEncryptableObject:self.post recipientIds:recipientIds];
-            for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
-                object.parentId = self.post.uniqueId;
-                [object save];
-                [FreeKey sendAttachableObject:object recipientIds:recipientIds];
-            }
+            dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+            dispatch_async(queue, ^{
+                NSMutableArray *recipientIds = [[NSMutableArray alloc] init];
+                for(KUser *user in self.selectedRecipients) {
+                    [recipientIds addObject:user.uniqueId];
+                    [FreeKey sendEncryptableObject:self.post recipientId:user.uniqueId];
+                }
+                for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
+                    object.parentId = self.post.uniqueId;
+                    [object save];
+                    [FreeKey sendAttachableObject:object recipientIds:[recipientIds copy]];
+                }
+            });
             [self dismissViewControllerAnimated:NO completion:nil];
         }
     }else {

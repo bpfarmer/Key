@@ -8,7 +8,6 @@
 
 #import "KStorageSchema.h"
 #import "KUser.h"
-#import "IdentityKey.h"
 #import "KMessage.h"
 #import "KThread.h"
 #import "KGroup.h"
@@ -29,7 +28,6 @@
 
 + (void)createTables {
     [KUser createTable];
-    [IdentityKey createTable];
     [KMessage createTable];
     [KThread createTable];
     [KGroup createTable];
@@ -49,7 +47,6 @@
 
 + (void)dropTables {
     [KUser dropTable];
-    [IdentityKey dropTable];
     [KMessage dropTable];
     [KThread dropTable];
     [KGroup dropTable];

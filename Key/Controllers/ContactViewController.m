@@ -84,10 +84,6 @@ static NSString *TableViewCellIdentifier = @"Contacts";
             [futureUser catchDo:^(id failure) {
                 NSLog(@"ERROR: %@", failure);
             }];
-            
-            [futureUser thenDo:^(KUser *user) {
-                [[KAccountManager sharedManager].user asyncRetrieveKeyExchangeWithRemoteUser:user];
-            }];
         }
         self.contactTextField.text = @"";
     }

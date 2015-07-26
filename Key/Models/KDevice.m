@@ -33,7 +33,7 @@
         [devices addObject:device];
     }
     [resultSet close];
-    return devices;
+    return [devices copy];
 }
 
 + (KDevice *)addDeviceForUserId:(NSString *)userId deviceId:(NSString *)deviceId {

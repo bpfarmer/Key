@@ -151,9 +151,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
     if (text.length > 0) {
         [JSQSystemSoundPlayer jsq_playMessageSentSound];
         
-        [self.thread save];
-        [FreeKey sendEncryptableObject:self.thread recipientIds:self.thread.recipientIds];
-        
         if(self.thread.uniqueId) {
             NSLog(@"GETTING READY TO SEND MESSAGE");
             KMessage *message = [[KMessage alloc] initWithAuthorId:[KAccountManager sharedManager].user.uniqueId threadId:self.thread.uniqueId body:text];
@@ -161,7 +158,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
             
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{
-                [FreeKey sendEncryptableObject:message recipientIds:self.thread.recipientIds];
+                for(NSString *recipientId in self.thread.recipientIds) [FreeKey sendEncryptableObject:message recipientId:recipientId];
             });
             
             self.inputToolbar.contentView.textView.text = @"";

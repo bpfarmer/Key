@@ -10,30 +10,26 @@
 #import "PreKey.h"
 #import <25519/Ed25519.h>
 #import <25519/Curve25519.h>
-#import "IdentityKey.h"
 
 @implementation SessionKeyBundle
 
-- (instancetype)initWithTheirBaseKey:(NSData *)theirBaseKey
-                   theirIdentityKey:(NSData *)theirIdentityKey
-                 ourIdentityKeyPair:(ECKeyPair *)ourIdentityKeyPair
-                         ourBaseKey:(ECKeyPair *)ourBaseKey
-                            isAlice:(BOOL)isAlice{
+- (instancetype)initWithSenderIdentityKey:(ECKeyPair *)senderIdentityKey senderBaseKey:(ECKeyPair *)senderBaseKey receiverBasePublicKey:(NSData *)receiverBasePublicKey receiverPublicKey:(NSData *)receiverPublicKey isAlice:(BOOL)isAlice {
     self = [super init];
-
+    
     if(self) {
-        _theirBaseKey       = theirBaseKey;
-        _theirIdentityKey   = theirIdentityKey;
-        _ourIdentityKeyPair = ourIdentityKeyPair;
-        _ourBaseKey         = ourBaseKey;
-        _isAlice            = isAlice;
+        _receiverBasePublicKey = receiverBasePublicKey;
+        _receiverPublicKey     = receiverPublicKey;
+        _senderIdentityKey     = senderIdentityKey;
+        _senderBaseKey         = senderBaseKey;
+        _isAlice               = isAlice;
     }
     
-    NSLog(@"THEIR BASE KEY: %@", theirBaseKey);
-    NSLog(@"OUR BASE KEY: %@", ourBaseKey.publicKey);
-    NSLog(@"THEIR ID KEY: %@", theirIdentityKey);
-    NSLog(@"OUR ID KEY: %@", ourIdentityKeyPair.publicKey);
+    NSLog(@"THEIR BASE KEY: %@", receiverBasePublicKey);
+    NSLog(@"OUR BASE KEY: %@", senderBaseKey.publicKey);
+    NSLog(@"THEIR PUBLIC KEY: %@", receiverPublicKey);
+    NSLog(@"OUR PUBLIC KEY: %@", senderIdentityKey.publicKey);
     return self;
+
 }
 
 - (void)setRolesWithFirstKey:(NSData *)firstKey secondKey:(NSData *)secondKey {

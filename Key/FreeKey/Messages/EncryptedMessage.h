@@ -12,33 +12,18 @@
 
 @interface EncryptedMessage : KDatabaseObject <KSendable>
 
+@property (nonatomic, readwrite) NSString *senderId;
+@property (nonatomic, readwrite) NSString *receiverId;
+@property (nonatomic, readonly) NSData *serializedData;
 @property (nonatomic, readonly) NSData *senderRatchetKey;
 @property (nonatomic, readonly) NSNumber *index;
 @property (nonatomic, readonly) NSNumber *previousIndex;
-@property (nonatomic, readonly) NSData *cipherText;
-@property (nonatomic, readonly) NSData *serializedData;
-@property (nonatomic, readonly) NSData *mac;
-@property (nonatomic, readwrite) NSString *senderId;
-@property (nonatomic, readwrite) NSString *receiverId;
-@property (nonatomic, readwrite) NSString *remoteStatus;
 
-- (instancetype)initWithMacKey:(NSData *)macKey
-             senderIdentityKey:(NSData *)senderIdentityKey
-           receiverIdentityKey:(NSData *)receiverIdentityKey
-              senderRatchetKey:(NSData *)senderRatchetKey
-                    cipherText:(NSData *)cipherText
-                         index:(NSNumber *)index
-                 previousIndex:(NSNumber *)previousIndex;
-
-- (instancetype) initWithSenderRatchetKey:(NSData *)senderRatchetKey
-                                 senderId:(NSString *)senderId
-                               receiverId:(NSString *)receiverId
-                           serializedData:(NSData *)serializedData
-                                    index:(NSNumber *)index
-                            previousIndex:(NSNumber *)previousIndex;
-
-+ (NSArray *)remoteKeys;
-- (NSData *)mac;
-- (void)addMetadataFromLocalUserId:(NSString *)localUser toRemoteUserId:(NSString *)remoteUserId;
+- (instancetype)initWithSenderId:(NSString *)senderId
+                      receiverId:(NSString *)receiverId
+                  serializedData:(NSData *)serializedData
+                senderRatchetKey:(NSData *)senderRatchetKey
+                           index:(NSNumber *)index
+                   previousIndex:(NSNumber *)previousIndex;
 
 @end

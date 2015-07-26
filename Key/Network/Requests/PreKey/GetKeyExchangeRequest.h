@@ -14,10 +14,7 @@
 
 @interface GetKeyExchangeRequest : HttpRequest
 
-- (instancetype)initWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
-+ (TOCFuture *)makeRequestWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser;
-- (instancetype)initWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId;
-+ (TOCFuture *)makeRequestWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId;
++ (TOCFuture *)makeRequestWithRemoteDeviceId:(NSString *)remoteDeviceId;
 
 
 @end

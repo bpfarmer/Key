@@ -7,36 +7,33 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KSendable.h"
-#import "KDatabaseObject.h"
+#import "KeyExchange.h"
 
 @class PreKey;
 @class IdentityKey;
 @class PreKeyExchangeReceipt;
 
-@interface PreKeyExchange : KDatabaseObject <KSendable>
+@interface PreKeyExchange : KeyExchange
 
-@property (nonatomic, readwrite) NSString *senderId;
-@property (nonatomic, readonly) NSString *senderDeviceId;
+@property (nonatomic, readonly) NSString *senderId;
+@property (nonatomic, readonly) NSData   *senderPublicKey;
+@property (nonatomic, readonly) NSData   *basePublicKey;
 @property (nonatomic, readonly) NSString *receiverId;
-@property (nonatomic, readonly) NSString *signedTargetPreKeyId;
-@property (nonatomic, readonly) NSData *sentSignedBaseKey;
-@property (nonatomic, readonly) NSData *senderIdentityPublicKey;
-@property (nonatomic, readonly) NSData *receiverIdentityPublicKey;
-@property (nonatomic, readonly) NSData *baseKeySignature;
-@property (nonatomic, readwrite) NSString *remoteStatus;
+@property (nonatomic, readonly) NSData   *receiverPublicKey;
+@property (nonatomic, readonly) NSString *preKeyId;
+@property (nonatomic, readonly) NSData   *signature;
 
 - (instancetype)initWithSenderId:(NSString *)senderId
+                 senderPublicKey:(NSData *)senderPublicKey
+                   basePublicKey:(NSData *)basePublicKey
                       receiverId:(NSString *)receiverId
-                  senderDeviceId:(NSString *)senderDeviceId
-            signedTargetPreKeyId:(NSString *)signedTargetPreKeyId
-               sentSignedBaseKey:(NSData *)sentSignedBaseKey
-         senderIdentityPublicKey:(NSData *)senderIdentityPublicKey
-       receiverIdentityPublicKey:(NSData *)receiverIdentityPublicKey
-                baseKeySignature:(NSData *)baseKeySignature;
+               receiverPublicKey:(NSData *)receiverPublicKey
+                        preKeyId:(NSString *)preKeyId
+                       signature:(NSData *)signature;
 
 - (PreKeyExchangeReceipt *)createPreKeyExchangeReceipt;
 
-+ (NSArray *)remoteKeys;
+- (NSString *)remoteUserId;
+- (NSString *)remoteDeviceId;
 
 @end

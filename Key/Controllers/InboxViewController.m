@@ -18,6 +18,7 @@
 #import "HomeViewController.h"
 #import "DismissAndPresentProtocol.h"
 #import "SelectRecipientViewController.h"
+#import "KDevice.h"
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
@@ -32,6 +33,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"CURRENT USER: %@", [KAccountManager sharedManager].user);
+    NSLog(@"STORED DEVICES: %@", [KDevice all]);
     self.threads = [KThread all];
     
     self.threadsTableView.delegate = self;

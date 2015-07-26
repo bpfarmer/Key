@@ -9,7 +9,6 @@
 #import "Session.h"
 #import "PreKey.h"
 #import "NSData+keyVersionByte.h"
-#import "IdentityKey.h"
 #import <25519/Ed25519.h>
 #import <25519/Curve25519.h>
 #import "HKDFKit.h"
@@ -24,80 +23,76 @@
 #import "PreKeyExchange.h"
 #import "PreKeyExchangeReceipt.h"
 #import "HMAC.h"
-#import "KUser.h"
-#import "KStorageManager.h"
 
 #define kReceivedSenderRatchets @"previousRatchets"
 
 @implementation Session
 
-- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId senderDeviceId:(NSString *)senderDeviceId receiverDeviceId:(NSString *)receiverDeviceId {
+- (instancetype)initWithSenderDeviceId:(NSString *)senderDeviceId receiverDeviceId:(NSString *)receiverDeviceId {
     self = [super init];
     if(self) {
-        _senderId         = senderId;
         _senderDeviceId   = senderDeviceId;
-        _receiverId       = receiverId;
         _receiverDeviceId = receiverDeviceId;
         _previousIndex    = [[NSNumber alloc] initWithInt:0];
     }
     return self;
 }
 
-- (void)addPreKey:(PreKey *)preKey ourBaseKey:(ECKeyPair *)ourBaseKey {
-    _preKeyId = preKey.signedPreKeyId;
-    _baseKeyPublic = ourBaseKey.publicKey;
+- (PreKeyExchange *)addSenderBaseKey:(ECKeyPair *)senderBaseKey senderIdentityKey:(ECKeyPair *)senderIdentityKey receiverPreKey:(PreKey *)receiverPreKey receiverPublicKey:(NSData *)receiverPublicKey {
+    if(![Session verifySignature:receiverPreKey.signature publicKey:receiverPublicKey data:receiverPreKey.basePublicKey]) {
+        NSLog(@"FAILED SIGNATURE VERIFICATION");
+        // TODO: throw someething crazy!
+    }
 
-    SessionKeyBundle *keyBundle = [[SessionKeyBundle alloc] initWithTheirBaseKey:preKey.signedPreKeyPublic
-                                                                theirIdentityKey:preKey.identityKey
-                                                              ourIdentityKeyPair:self.sender.identityKey.keyPair
-                                                                      ourBaseKey:ourBaseKey
-                                                                         isAlice:NO];
+    _senderPublicKey    = senderIdentityKey.publicKey;
+    _receiverPublicKey  = receiverPublicKey;
     
-    [keyBundle setRolesWithFirstKey:ourBaseKey.publicKey secondKey:preKey.signedPreKeyPublic];
+    SessionKeyBundle *keyBundle = [[SessionKeyBundle alloc] initWithSenderIdentityKey:senderIdentityKey senderBaseKey:senderBaseKey receiverBasePublicKey:receiverPreKey.basePublicKey receiverPublicKey:receiverPublicKey isAlice:NO];
+    [keyBundle setRolesWithFirstKey:senderBaseKey.publicKey secondKey:receiverPreKey.basePublicKey];
     [self setupRootChainsFromKeyBundle:keyBundle];
     
-    RootChain *senderRootChain = [RootChain findById:self.senderChainId];
-    senderRootChain.theirRatchetKey = preKey.signedPreKeyPublic;
-    senderRootChain.ourRatchetKeyPair = ourBaseKey;
+    RootChain *senderRootChain          = [RootChain findById:self.senderChainId];
+    senderRootChain.theirRatchetKey     = receiverPreKey.basePublicKey;
+    senderRootChain.ourRatchetKeyPair   = senderBaseKey;
     [senderRootChain save];
     
-    RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
-    receiverRootChain.theirRatchetKey = preKey.signedPreKeyPublic;
-    receiverRootChain.ourRatchetKeyPair = ourBaseKey;
+    RootChain *receiverRootChain        = [RootChain findById:self.receiverChainId];
+    receiverRootChain.theirRatchetKey   = receiverPreKey.basePublicKey;
+    receiverRootChain.ourRatchetKeyPair = senderBaseKey;
     [receiverRootChain save];
+    
+    return [self preKeyExchangeWithPreKey:receiverPreKey basePublicKey:senderBaseKey.publicKey senderIdentityKey:senderIdentityKey receiverPublicKey:receiverPublicKey];
 }
 
-- (void)addOurPreKey:(PreKey *)ourPreKey preKeyExchange:(PreKeyExchange *)preKeyExchange {
-    // TODO: some sort of verification of trust, signatures, etc
-    if(![Ed25519 verifySignature:preKeyExchange.baseKeySignature publicKey:preKeyExchange.senderIdentityPublicKey data:preKeyExchange.sentSignedBaseKey]) {
+- (void)addSenderPreKey:(PreKey *)senderPreKey senderIdentityKey:(ECKeyPair *)senderIdentityKey receiverPreKeyExchange:(PreKeyExchange *)receiverPreKeyExchange receiverPublicKey:(NSData *)receiverPublicKey {
+    if(![Session verifySignature:receiverPreKeyExchange.signature publicKey:receiverPublicKey data:receiverPreKeyExchange.basePublicKey]) {
         NSLog(@"FAILED SIGNATURE VERIFICATION");
         // TODO: throw someething crazy!
     }
     
-    NSData *theirBaseKey = preKeyExchange.sentSignedBaseKey;
-    _preKeyId = ourPreKey.signedPreKeyId;
+    _senderPublicKey    = senderIdentityKey.publicKey;
+    _receiverPublicKey  = receiverPublicKey;
     
-    SessionKeyBundle *keyBundle = [[SessionKeyBundle alloc] initWithTheirBaseKey:theirBaseKey
-                                                                theirIdentityKey:preKeyExchange.senderIdentityPublicKey
-                                                              ourIdentityKeyPair:self.sender.identityKey.keyPair
-                                                                      ourBaseKey:ourPreKey.baseKeyPair
-                                                                         isAlice:YES];
-    
-    [keyBundle setRolesWithFirstKey:theirBaseKey secondKey:ourPreKey.baseKeyPair.publicKey];
+    SessionKeyBundle *keyBundle = [[SessionKeyBundle alloc] initWithSenderIdentityKey:senderIdentityKey
+                                                                        senderBaseKey:senderPreKey.baseKeyPair
+                                                                receiverBasePublicKey:receiverPreKeyExchange.basePublicKey
+                                                                    receiverPublicKey:receiverPublicKey
+                                                                              isAlice:YES];
+    [keyBundle setRolesWithFirstKey:receiverPreKeyExchange.basePublicKey secondKey:senderPreKey.baseKeyPair.publicKey];
     [self setupRootChainsFromKeyBundle:keyBundle];
     
-    RootChain *senderRootChain = [RootChain findById:self.senderChainId];
-    senderRootChain.theirRatchetKey = theirBaseKey;
-    senderRootChain.ourRatchetKeyPair = ourPreKey.baseKeyPair;
+    RootChain *senderRootChain          = [RootChain findById:self.senderChainId];
+    senderRootChain.theirRatchetKey     = receiverPreKeyExchange.basePublicKey;
+    senderRootChain.ourRatchetKeyPair   = senderPreKey.baseKeyPair;
     [senderRootChain save];
     
-    RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
-    receiverRootChain.theirRatchetKey = theirBaseKey;
-    receiverRootChain.ourRatchetKeyPair = ourPreKey.baseKeyPair;
+    RootChain *receiverRootChain        = [RootChain findById:self.receiverChainId];
+    receiverRootChain.theirRatchetKey   = receiverPreKeyExchange.basePublicKey;
+    receiverRootChain.ourRatchetKeyPair = senderPreKey.baseKeyPair;
     [receiverRootChain save];
     
-    [self ratchetSenderRootChain:theirBaseKey];
-    [self addReceivedRatchetKey:theirBaseKey];
+    [self ratchetSenderRootChain:receiverPreKeyExchange.basePublicKey];
+    [self addReceivedRatchetKey:receiverPreKeyExchange.basePublicKey];
 }
 
 
@@ -122,43 +117,32 @@
     [self save];
 }
 
-- (PreKeyExchange *)preKeyExchange {
-    NSData *signature = [Ed25519 sign:self.baseKeyPublic withKeyPair:self.sender.identityKey.keyPair];
-    PreKeyExchange *preKeyExchange = [[PreKeyExchange alloc] initWithSenderId:self.senderId
-                                                                   receiverId:self.receiverId
-                                                               senderDeviceId:self.senderDeviceId
-                                                         signedTargetPreKeyId:self.preKeyId
-                                                            sentSignedBaseKey:self.baseKeyPublic
-                                                      senderIdentityPublicKey:self.sender.identityKey.publicKey
-                                                    receiverIdentityPublicKey:self.receiver.publicKey
-                                                             baseKeySignature:signature];
-    return preKeyExchange;
-}
-
-- (void)verifyTheirPreKey:(PreKey *)theirPreKey theirIdentityKey:(IdentityKey *)theirIdentityKey {
-    if (![theirIdentityKey isTrustedIdentityKey]) {
-        // TODO: Build trust mechanism for identity keys
-        //@throw [NSException exceptionWithName:UntrustedIdentityKeyException reason:@"Identity key is not valid" userInfo:@{}];
-    }
-    
-    if (![Ed25519 verifySignature:theirPreKey.signedPreKeySignature publicKey:theirIdentityKey.publicKey data:theirPreKey.signedPreKeyPublic]) {
-        //@throw [NSException exceptionWithName:InvalidKeyException reason:@"KeyIsNotValidlySigned" userInfo:nil];
-    }
+- (PreKeyExchange *)preKeyExchangeWithPreKey:(PreKey *)preKey basePublicKey:(NSData *)basePublicKey senderIdentityKey:(ECKeyPair *)senderIdentityKey receiverPublicKey:(NSData *)receiverPublicKey{
+    return [[PreKeyExchange alloc] initWithSenderId:self.senderDeviceId
+                                    senderPublicKey:senderIdentityKey.publicKey
+                                      basePublicKey:basePublicKey
+                                         receiverId:self.receiverDeviceId
+                                  receiverPublicKey:receiverPublicKey
+                                           preKeyId:preKey.uniqueId
+                                          signature:[Ed25519 sign:basePublicKey withKeyPair:senderIdentityKey]];
 }
 
 - (EncryptedMessage *)encryptMessage:(NSData *)message {
     RootChain *senderRootChain = [RootChain findById:self.senderChainId];
     MessageKey *messageKey     = senderRootChain.messageKey;
-    
-    NSData *senderRatchetKey   = senderRootChain.ourRatchetKeyPair.publicKey;
-    NSData *encryptedText = [AES_CBC encryptCBCMode:message withKey:messageKey.cipherKey withIV:messageKey.iv];
-    EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithMacKey:messageKey.macKey
-                                                                senderIdentityKey:self.sender.identityKey.publicKey
-                                                              receiverIdentityKey:self.receiver.publicKey
-                                                                 senderRatchetKey:senderRatchetKey
-                                                                       cipherText:encryptedText
-                                                                            index:senderRootChain.index
-                                                                    previousIndex:self.previousIndex];
+
+    NSData *cipherText         = [AES_CBC encryptCBCMode:message withKey:messageKey.cipherKey withIV:messageKey.iv];
+    NSMutableData *messageAndMac = [[NSMutableData alloc] init];
+    NSData *mac = [HMAC generateMacWithMacKey:messageKey.macKey senderIdentityKey:self.senderPublicKey receiverIdentityKey:self.receiverPublicKey serializedData:cipherText];
+    [messageAndMac appendData:cipherText];
+    [messageAndMac appendData:mac];
+
+    EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] initWithSenderId:self.senderDeviceId
+                                                                         receiverId:self.receiverDeviceId
+                                                                     serializedData:messageAndMac
+                                                                   senderRatchetKey:senderRootChain.ourRatchetKeyPair.publicKey
+                                                                              index:senderRootChain.index
+                                                                      previousIndex:self.previousIndex];
     [senderRootChain iterateChainKey];
     return encryptedMessage;
 }
@@ -167,11 +151,16 @@
     [self processReceiverChain:encryptedMessage];
     NSString *messageIndex = [NSString stringWithFormat:@"%@", encryptedMessage.index];
     SessionState *sessionState = [SessionState findByDictionary:@{@"senderRatchetKey" : encryptedMessage.senderRatchetKey, @"messageIndex" : messageIndex}];
-    if(![HMAC verifyWithMac:[encryptedMessage mac] senderIdentityKey:self.receiver.publicKey receiverIdentityKey:self.sender.identityKey.publicKey macKey:sessionState.messageKey.macKey serializedData:encryptedMessage.serializedData]) {
+    
+    NSData *serializedData = encryptedMessage.serializedData;
+    NSData *cipherText = [serializedData subdataWithRange:NSMakeRange(0, serializedData.length - 8)];
+    NSData *mac        = [serializedData subdataWithRange:NSMakeRange(serializedData.length - 8, 8)];
+    
+    if(![Session verifyMac:mac remotePublicKey:self.receiverPublicKey localPublicKey:self.senderPublicKey macKey:sessionState.messageKey.macKey data:encryptedMessage.serializedData]) {
         NSLog(@"FAILED HMAC VERIFICATION"); //TODO: throw exception
     }
     
-    NSData *decryptedData = [AES_CBC decryptCBCMode:encryptedMessage.cipherText
+    NSData *decryptedData = [AES_CBC decryptCBCMode:cipherText
                                             withKey:sessionState.messageKey.cipherKey
                                              withIV:sessionState.messageKey.iv];
     return decryptedData;
@@ -239,12 +228,12 @@
     [sessionState remove];
 }
 
-- (KUser *)sender {
-    return [KUser findById:self.senderId];
++ (BOOL)verifySignature:(NSData *)signature publicKey:(NSData *)publicKey data:(NSData *)data {
+    return [Ed25519 verifySignature:signature publicKey:publicKey data:data];
 }
 
-- (KUser *)receiver {
-    return [KUser findById:self.receiverId];
++ (BOOL)verifyMac:(id)mac remotePublicKey:(NSData *)remotePublicKey localPublicKey:(NSData *)localPublicKey macKey:(NSData *)macKey data:(NSData *)data {
+    return [HMAC verifyWithMac:mac senderIdentityKey:remotePublicKey receiverIdentityKey:localPublicKey macKey:macKey serializedData:data];
 }
 
 @end

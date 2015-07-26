@@ -13,7 +13,6 @@
 #import "EncryptedMessage.h"
 #import "KAccountManager.h"
 #import "HttpRequest.h"
-#import "FreeKeyResponseHandler.h"
 
 @implementation HttpManager
 

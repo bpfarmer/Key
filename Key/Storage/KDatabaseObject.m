@@ -128,7 +128,7 @@
     NSMutableArray *objects = [[NSMutableArray alloc] init];
     while(resultSet.next) [objects addObject:[[self alloc] initWithResultSetRow:resultSet.resultDictionary]];
     [resultSet close];
-    return objects;
+    return [objects copy];
 }
 
 + (instancetype)findById:(NSString *)uniqueId {
@@ -164,7 +164,7 @@
     //NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@", selectSQL, parameterDictionary);
     
     FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:selectSQL withParameterDictionary:parameterDictionary];
+        return [database executeQuery:selectSQL withParameterDictionary:[parameterDictionary copy]];
     }];
     
     if(resultSet.next) {
