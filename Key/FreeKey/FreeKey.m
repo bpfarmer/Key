@@ -49,9 +49,7 @@
     for(KDevice *device in [KDevice devicesForUserId:recipientId]) {
         TOCFuture *futureSession = [self sessionWithReceiverDeviceId:device.deviceId];
         [futureSession thenDo:^(Session *session) {
-            NSData *serializedObject = [NSKeyedArchiver archivedDataWithRootObject:encryptableObject];
-            EncryptedMessage *encryptedMessage = [session encryptMessage:serializedObject];
-            [session save];
+            EncryptedMessage *encryptedMessage = [session encryptMessage:[NSKeyedArchiver archivedDataWithRootObject:encryptableObject]];
             [SendMessageRequest makeRequestWithSendableMessage:encryptedMessage];
         }];
     }
@@ -62,7 +60,6 @@
     TOCFuture *futureSession = [FreeKey sessionWithReceiverDeviceId:remoteDeviceId];
     [futureSession thenDo:^(Session *session) {
         NSData *decryptedData = [session decryptMessage:encryptedMessage];
-        [session save];
         [((KDatabaseObject *)[NSKeyedUnarchiver unarchiveObjectWithData:decryptedData]) save];
     }];
 }

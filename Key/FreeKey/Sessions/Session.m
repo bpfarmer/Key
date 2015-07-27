@@ -61,6 +61,8 @@
     receiverRootChain.ourRatchetKeyPair = senderBaseKey;
     [receiverRootChain save];
     
+    [self save];
+    
     return [self preKeyExchangeWithPreKey:receiverPreKey basePublicKey:senderBaseKey.publicKey senderIdentityKey:senderIdentityKey receiverPublicKey:receiverPublicKey];
 }
 
@@ -93,6 +95,8 @@
     
     [self ratchetSenderRootChain:receiverPreKeyExchange.basePublicKey];
     [self addReceivedRatchetKey:receiverPreKeyExchange.basePublicKey];
+    
+    [self save];
 }
 
 

@@ -13,21 +13,17 @@
 
 - (instancetype)initWithPreKeyExchange:(PreKeyExchange *)preKeyExchange {
     NSDictionary *parameters = @{ kPreKeyExchangeAlias : [super toDictionary:(id <KSendable>)preKeyExchange] };
-    return [super initWithHttpMethod:PUT
-                            endpoint:kPreKeyExchangeEndpoint
-                          parameters:[super base64EncodedDictionary:parameters]];
+    return [super initWithHttpMethod:PUT endpoint:kPreKeyExchangeEndpoint parameters:[super base64EncodedDictionary:parameters]];
 }
 
 + (TOCFuture *)makeRequestWithPreKeyExchange:(PreKeyExchange *)preKeyExchange {
     TOCFutureSource *resultSource = [TOCFutureSource new];
     SendPreKeyExchangeRequest *request = [[SendPreKeyExchangeRequest alloc] initWithPreKeyExchange:preKeyExchange];
     
-    void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
-    ^(AFHTTPRequestOperation *operation, id responseObject){
+    void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         [resultSource trySetResult:@YES];
     };
-    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
-    ^(AFHTTPRequestOperation *operation, NSError *error){
+    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) = ^(AFHTTPRequestOperation *operation, NSError *error){
         [resultSource trySetFailure:error];
     };
     

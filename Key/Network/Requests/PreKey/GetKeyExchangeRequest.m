@@ -20,16 +20,15 @@
 
 @implementation GetKeyExchangeRequest
 
-- (instancetype)initWithLocalUser:(KUser *)localUser remoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId{
-    NSDictionary *parameters = @{kPreKeyLocalUserId : localUser.uniqueId, kPreKeyRemoteUserId : remoteUser.uniqueId, kPreKeyRemoteDeviceId : deviceId, kPreKeyLocalDeviceId : localUser.currentDeviceId};
+- (instancetype)initWithLocalDeviceId:(NSString *)localDeviceId remoteDeviceId:(NSString *)remoteDeviceId{
+    NSDictionary *parameters = @{kPreKeyLocalUserId : localDeviceId, kPreKeyRemoteUserId : remoteDeviceId};
     return [super initWithHttpMethod:GET endpoint:kPreKeyDeviceEndpoint parameters:parameters];
 }
 
 + (TOCFuture *)makeRequestWithRemoteDeviceId:(NSString *)remoteDeviceId {
     TOCFutureSource *resultSource = [TOCFutureSource new];
     KUser *localUser = [KAccountManager sharedManager].user;
-    KUser *remoteUser = [KUser findById:[remoteDeviceId componentsSeparatedByString:@"_"].firstObject];
-    GetKeyExchangeRequest *request = [[GetKeyExchangeRequest alloc] initWithLocalUser:localUser remoteUser:remoteUser deviceId:remoteDeviceId];
+    GetKeyExchangeRequest *request = [[GetKeyExchangeRequest alloc] initWithLocalDeviceId:localUser.currentDeviceId remoteDeviceId:remoteDeviceId];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         NSObject *keyExchange = [request createKeyExchangeFromDictionary:[request base64DecodedDictionary:responseObject]];
         Session *session = [FreeKey processNewKeyExchange:keyExchange localDeviceId:[localUser.currentDeviceId copy] localIdentityKey:[localUser.identityKey copy]];
