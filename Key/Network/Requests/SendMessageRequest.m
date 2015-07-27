@@ -19,12 +19,10 @@
 + (TOCFuture *)makeRequestWithSendableMessage:(id<KSendable>)message {
     TOCFutureSource *resultSource = [TOCFutureSource new];
     SendMessageRequest *request = [[SendMessageRequest alloc] initWithSendableMessage:message];
-    void (^success)(AFHTTPRequestOperation *operation, id responseObject) =
-    ^(AFHTTPRequestOperation *operation, id responseObject){
+    void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         [resultSource trySetResult:@YES];
     };
-    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) =
-    ^(AFHTTPRequestOperation *operation, NSError *error){
+    void (^failure)(AFHTTPRequestOperation *operation, NSError *error) = ^(AFHTTPRequestOperation *operation, NSError *error){
         [resultSource trySetFailure:error];
     };
     [request makeRequestWithSuccess:success failure:failure];

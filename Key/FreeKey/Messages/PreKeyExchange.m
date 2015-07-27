@@ -14,46 +14,48 @@
 @implementation PreKeyExchange
 
 - (instancetype)initWithSenderId:(NSString *)senderId
+                 senderPublicKey:(NSData *)senderPublicKey
+                   basePublicKey:(NSData *)basePublicKey
                       receiverId:(NSString *)receiverId
-                  senderDeviceId:(NSString *)senderDeviceId
-            signedTargetPreKeyId:(NSString *)signedTargetPreKeyId
-               sentSignedBaseKey:(NSData *)sentSignedBaseKey
-         senderIdentityPublicKey:(NSData *)senderIdentityPublicKey
-       receiverIdentityPublicKey:(NSData *)receiverIdentityPublicKey
-                baseKeySignature:(NSData *)baseKeySignature{
+               receiverPublicKey:(NSData *)receiverPublicKey
+                        preKeyId:(NSString *)preKeyId
+                       signature:(NSData *)signature {
     
     self = [super init];
     
     if(self) {
         _senderId                   = senderId;
+        _senderPublicKey            = senderPublicKey;
+        _basePublicKey              = basePublicKey;
         _receiverId                 = receiverId;
-        _senderDeviceId             = senderDeviceId;
-        _signedTargetPreKeyId       = signedTargetPreKeyId;
-        _senderIdentityPublicKey    = senderIdentityPublicKey;
-        _sentSignedBaseKey          = sentSignedBaseKey;
-        _receiverIdentityPublicKey  = receiverIdentityPublicKey;
-        _baseKeySignature           = baseKeySignature;
+        _receiverPublicKey          = receiverPublicKey;
+        _preKeyId                   = preKeyId;
+        _signature                  = signature;
     }
     
     return self;
+    
 }
 
 - (PreKeyExchangeReceipt *)createPreKeyExchangeReceipt {
-    PreKeyExchangeReceipt *receipt = [[PreKeyExchangeReceipt alloc] initFromSenderId:self.senderId
-                                                                          receiverId:self.receiverId
-                                                                     receivedBaseKey:self.sentSignedBaseKey
-                                                             senderIdentityPublicKey:self.senderIdentityPublicKey
-                                                           receiverIdentityPublicKey:self.receiverIdentityPublicKey];
+    PreKeyExchangeReceipt *receipt = [[PreKeyExchangeReceipt alloc] initFromSenderId:self.senderId receiverId:self.receiverId receivedBasePublicKey:self.basePublicKey];
     return receipt;
 }
 
 + (NSArray *)remoteKeys {
-    return @[@"senderId", @"receiverId", @"senderDeviceId", @"signedTargetPreKeyId", @"sentSignedBaseKey",
-             @"senderIdentityPublicKey", @"receiverIdentityPublicKey", @"baseKeySignature"];
+    return @[@"senderId", @"senderPublicKey", @"basePublicKey", @"receiverId", @"receiverPublicKey", @"preKeyId", @"signature"];
 }
 
 + (NSString *)remoteAlias {
     return kPreKeyExchangeRemoteAlias;
+}
+
+- (NSString *)remoteUserId {
+    return [self.senderId componentsSeparatedByString:@"_"].firstObject;
+}
+
+- (NSString *)remoteDeviceId {
+    return self.senderId;
 }
 
 @end

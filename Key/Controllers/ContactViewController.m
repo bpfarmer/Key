@@ -12,7 +12,6 @@
 #import "KThread.h"
 #import "KStorageManager.h"
 #import "KMessage.h"
-#import "FreeKeyNetworkManager.h"
 #import "CollapsingFutures.h"
 
 static NSString *TableViewCellIdentifier = @"Contacts";
@@ -84,10 +83,6 @@ static NSString *TableViewCellIdentifier = @"Contacts";
             
             [futureUser catchDo:^(id failure) {
                 NSLog(@"ERROR: %@", failure);
-            }];
-            
-            [futureUser thenDo:^(KUser *user) {
-                [[KAccountManager sharedManager].user asyncRetrieveKeyExchangeWithRemoteUser:user];
             }];
         }
         self.contactTextField.text = @"";

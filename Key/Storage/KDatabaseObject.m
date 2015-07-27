@@ -104,7 +104,7 @@
 }
 
 - (void)save {
-    if(!self.uniqueId) self.uniqueId = [[NSUUID UUID] UUIDString];
+    if(!self.uniqueId) self.uniqueId = [self.class generateUniqueId];
     NSString *columnKeys = [[self instanceMapping].allKeys componentsJoinedByString:@", "];
     NSString *valueKeys   = [@":" stringByAppendingString:[[self instanceMapping].allKeys componentsJoinedByString:@", :"]];
     NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (%@) values(%@)", [self.class tableName], columnKeys, valueKeys];
@@ -128,7 +128,7 @@
     NSMutableArray *objects = [[NSMutableArray alloc] init];
     while(resultSet.next) [objects addObject:[[self alloc] initWithResultSetRow:resultSet.resultDictionary]];
     [resultSet close];
-    return objects;
+    return [objects copy];
 }
 
 + (instancetype)findById:(NSString *)uniqueId {
@@ -164,7 +164,7 @@
     //NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@", selectSQL, parameterDictionary);
     
     FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:selectSQL withParameterDictionary:parameterDictionary];
+        return [database executeQuery:selectSQL withParameterDictionary:[parameterDictionary copy]];
     }];
     
     if(resultSet.next) {
@@ -209,6 +209,10 @@
 
 + (NSString *)tableName {
     return [self columnNameFromProperty:NSStringFromClass([self class])];
+}
+
++ (NSString *)generateUniqueId {
+    return [[NSUUID UUID] UUIDString];
 }
 
 @end

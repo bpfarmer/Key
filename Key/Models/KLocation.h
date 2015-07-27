@@ -8,12 +8,14 @@
 
 #import "KDatabaseObject.h"
 #import <MapKit/MapKit.h>
+#import "KAttachable.h"
 
-@interface KLocation : KDatabaseObject
+@interface KLocation : KDatabaseObject <KAttachable>
 
 @property (nonatomic, readonly) NSString *userUniqueId;
 @property (nonatomic, readonly) CLLocation *location;
 @property (nonatomic, readonly) NSDate *timestamp;
+@property (nonatomic) NSString *parentId;
 
 - (instancetype)initWithUserUniqueId:(NSString *)userUniqueId location:(CLLocation *)location;
 

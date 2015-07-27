@@ -11,23 +11,14 @@
 
 @implementation PreKey
 
-- (instancetype)initWithUserId:(NSString *)userId
-                      deviceId:(NSString *)deviceId
-                signedPreKeyId:(NSString *)signedPreKeyId
-            signedPreKeyPublic:(NSData *)signedPreKeyPublic
-         signedPreKeySignature:(NSData *)signedPreKeySignature
-                   identityKey:(NSData *)identityKey
-                   baseKeyPair:(ECKeyPair *)baseKeyPair {
-    
-    self = [super init];
+- (instancetype)initWithUniqueId:(NSString *)uniqueId userId:(NSString *)userId basePublicKey:(NSData *)basePublicKey signature:(NSData *)signature publicKey:(NSData *)publicKey baseKeyPair:(ECKeyPair *)baseKeyPair {
+    self = [super initWithUniqueId:uniqueId];
     
     if (self) {
-        _identityKey           = identityKey;
         _userId                = userId;
-        _deviceId              = deviceId;
-        _signedPreKeyPublic    = signedPreKeyPublic;
-        _signedPreKeyId        = signedPreKeyId;
-        _signedPreKeySignature = signedPreKeySignature;
+        _basePublicKey         = basePublicKey;
+        _signature             = signature;
+        _publicKey             = publicKey;
         _baseKeyPair           = baseKeyPair;
     }
     
@@ -35,11 +26,19 @@
 }
 
 + (NSArray *)remoteKeys {
-    return @[@"userId", @"deviceId", @"signedPreKeyId", @"signedPreKeyPublic", @"signedPreKeySignature", @"identityKey"];
+    return @[@"uniqueId", @"userId", @"basePublicKey", @"signature", @"publicKey"];
 }
 
 + (NSString *)remoteAlias {
     return kPreKeyRemoteAlias;
+}
+
+- (NSString *)remoteUserId {
+    return [self.userId componentsSeparatedByString:@"_"].firstObject;
+}
+
+- (NSString *)remoteDeviceId {
+    return self.userId;
 }
 
 @end

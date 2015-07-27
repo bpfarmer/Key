@@ -14,17 +14,13 @@
 
 @interface SessionKeyBundle : NSObject
 
-@property (nonatomic, readonly) NSData *theirBaseKey;
-@property (nonatomic, readonly) NSData *theirIdentityKey;
-@property (nonatomic, readonly) ECKeyPair *ourIdentityKeyPair;
-@property (nonatomic, readonly) ECKeyPair *ourBaseKey;
+@property (nonatomic, readonly) NSData *receiverBasePublicKey;
+@property (nonatomic, readonly) NSData *receiverPublicKey;
+@property (nonatomic, readonly) ECKeyPair *senderIdentityKey;
+@property (nonatomic, readonly) ECKeyPair *senderBaseKey;
 @property (nonatomic) BOOL isAlice;
 
-- (instancetype)initWithTheirBaseKey:(NSData *)theirBaseKey
-                    theirIdentityKey:(NSData *)theirIdentityKey
-                  ourIdentityKeyPair:(ECKeyPair *)ourIdentityKeyPair
-                          ourBaseKey:(ECKeyPair *)ourBaseKey
-                             isAlice:(BOOL)isAlice;
+- (instancetype)initWithSenderIdentityKey:(ECKeyPair *)senderIdentityKey senderBaseKey:(ECKeyPair *)senderBaseKey receiverBasePublicKey:(NSData *)receiverBasePublicKey receiverPublicKey:(NSData *)receiverPublicKey isAlice:(BOOL)isAlice;
 
 - (instancetype)oppositeBundle;
 - (void)setRolesWithFirstKey:(NSData *)firstKey secondKey:(NSData *)secondKey;

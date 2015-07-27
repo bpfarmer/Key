@@ -11,7 +11,6 @@
 #import <25519/Ed25519.h>
 #import "SessionKeyBundle.h"
 #import "PreKey.h"
-#import "IdentityKey.h"
 
 @implementation MasterKey
 
@@ -22,19 +21,13 @@
         NSMutableData *masterKey = [[NSMutableData alloc] init];
         
         if(keyBundle.isAlice) {
-            [masterKey appendData:
-                    [Curve25519 generateSharedSecretFromPublicKey:keyBundle.theirBaseKey andKeyPair:keyBundle.ourIdentityKeyPair]];
-            [masterKey appendData:
-                    [Curve25519 generateSharedSecretFromPublicKey:keyBundle.theirIdentityKey andKeyPair:keyBundle.ourBaseKey]];
-            [masterKey appendData:
-                    [Curve25519 generateSharedSecretFromPublicKey:keyBundle.theirBaseKey andKeyPair:keyBundle.ourBaseKey]];
+            [masterKey appendData:[Curve25519 generateSharedSecretFromPublicKey:keyBundle.receiverBasePublicKey andKeyPair:keyBundle.senderIdentityKey]];
+            [masterKey appendData:[Curve25519 generateSharedSecretFromPublicKey:keyBundle.receiverPublicKey andKeyPair:keyBundle.senderBaseKey]];
+            [masterKey appendData:[Curve25519 generateSharedSecretFromPublicKey:keyBundle.receiverBasePublicKey andKeyPair:keyBundle.senderBaseKey]];
         }else {
-            [masterKey appendData:
-                    [Curve25519 generateSharedSecretFromPublicKey:keyBundle.theirIdentityKey andKeyPair:keyBundle.ourBaseKey]];
-            [masterKey appendData:
-                    [Curve25519 generateSharedSecretFromPublicKey:keyBundle.theirBaseKey andKeyPair:keyBundle.ourIdentityKeyPair]];
-            [masterKey appendData:
-                    [Curve25519 generateSharedSecretFromPublicKey:keyBundle.theirBaseKey andKeyPair:keyBundle.ourBaseKey]];
+            [masterKey appendData:[Curve25519 generateSharedSecretFromPublicKey:keyBundle.receiverPublicKey andKeyPair:keyBundle.senderBaseKey]];
+            [masterKey appendData:[Curve25519 generateSharedSecretFromPublicKey:keyBundle.receiverBasePublicKey andKeyPair:keyBundle.senderIdentityKey]];
+            [masterKey appendData:[Curve25519 generateSharedSecretFromPublicKey:keyBundle.receiverBasePublicKey andKeyPair:keyBundle.senderBaseKey]];
         }
         _keyData = masterKey;
     }

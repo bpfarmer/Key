@@ -7,32 +7,19 @@
 //
 
 #import "PreKeyExchangeReceipt.h"
-#import "PreKey.h"
-#import "IdentityKey.h"
 
 @implementation PreKeyExchangeReceipt
 
-- (instancetype)initFromSenderId:(NSString *)senderId
-                      receiverId:(NSString *)receiverId
-                 receivedBaseKey:(NSData *)receivedBaseKey
-         senderIdentityPublicKey:(NSData *)senderIdentityPublicKey
-       receiverIdentityPublicKey:(NSData *)receiverIdentityPublicKey {
-    
+- (instancetype)initFromSenderId:(NSString *)senderId receiverId:(NSString *)receiverId receivedBasePublicKey:(NSData *)receivedBasePublicKey {
     self = [super init];
-    
+
     if(self) {
         _senderId           = senderId;
         _receiverId         = receiverId;
-        _receivedBaseKey    = receivedBaseKey;
-        _senderIdentityPublicKey  = senderIdentityPublicKey;
-        _receiverIdentityPublicKey = receiverIdentityPublicKey;
+        _receivedBasePublicKey    = receivedBasePublicKey;
     }
     
     return self;
-}
-
-- (void)sendToServer {
-    
 }
 
 @end

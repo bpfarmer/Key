@@ -12,7 +12,6 @@
 #import "KAccountManager.h"
 #import "KThread.h"
 #import "FreeKey.h"
-#import "IdentityKey.h"
 #import <25519/Curve25519.h>
 #import "HttpManager.h"
 #import <CommonCrypto/CommonCrypto.h>
@@ -22,8 +21,6 @@
 #import "NSString+Base64.h"
 #import "KUser+Serialize.h"
 #import "PreKey.h"
-#import "FreeKeyNetworkManager.h"
-#import "FreeKeySessionManager.h"
 #import "PreKeyExchange.h"
 #import "RegisterUsernameRequest.h"
 #import "GetUserRequest.h"
@@ -34,6 +31,7 @@
 #import "GetMessagesRequest.h"
 #import "SendPreKeyExchangeRequest.h"
 #import "KDevice.h"
+#import "CollapsingFutures.h"
 
 @implementation KUser
 
@@ -73,32 +71,26 @@
     return [UpdateUserRequest makeRequestWithUser:self];
 }
 
-- (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser {
-    return [GetKeyExchangeRequest makeRequestWithLocalUser:self remoteUser:remoteUser];
-}
-
-- (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteUser:(KUser *)remoteUser deviceId:(NSString *)deviceId {
-    return [GetKeyExchangeRequest makeRequestWithLocalUser:self remoteUser:remoteUser deviceId:deviceId];
-}
-
-- (TOCFuture *)asyncSetupPreKeys {
-    NSArray *preKeys = [[FreeKeyNetworkManager sharedManager] generatePreKeysForLocalUser:self];
-    return [SendPreKeysRequest makeRequestWithPreKeys:preKeys];
++ (TOCFuture *)asyncRetrieveKeyExchangeWithRemoteDeviceId:(NSString *)remoteDeviceId {
+    return [GetKeyExchangeRequest makeRequestWithRemoteDeviceId:remoteDeviceId];
 }
 
 - (TOCFuture *)asyncGetFeed {
     return [GetMessagesRequest makeRequestWithCurrentUserId:self.uniqueId];
 }
 
-- (void)setupIdentityKey {
-    IdentityKey *identityKey = [[IdentityKey alloc] initWithKeyPair:[Curve25519 generateKeyPair] userId:self.uniqueId];
-    [identityKey save];
-    [self setPublicKey:identityKey.keyPair.publicKey];
-    [self save];
++ (TOCFuture *)asyncFindById:(NSString *)uniqueId {
+    TOCFutureSource *futureUser = [TOCFutureSource new];
+    KUser *user = [self findById:uniqueId];
+    if(user != nil) [futureUser trySetResult:user];
+    else [futureUser trySetResult:[self asyncRetrieveWithUniqueId:uniqueId]];
+    return futureUser.future;
 }
 
-- (IdentityKey *)identityKey {
-    return [IdentityKey findByDictionary:@{@"userId" : self.uniqueId}];
+- (void)setupIdentityKey {
+    self.identityKey = [Curve25519 generateKeyPair];
+    [self setPublicKey:self.identityKey.publicKey];
+    [self save];
 }
 
 #pragma mark - User Custom Attributes
@@ -122,7 +114,7 @@
         [contacts addObject:contact];
     }
     [resultSet close];
-    return contacts;
+    return [contacts copy];
 }
 
 #pragma mark - Password Handling Methods
@@ -137,11 +129,6 @@
     return [Util generateRandomData:32];
 }
 
-- (void)setIdentityKey:(IdentityKey *)identityKey {
-    identityKey.userId = self.uniqueId;
-    [identityKey save];
-}
-
 + (NSArray *)remoteKeys {
     return @[@"uniqueId", @"publicKey", @"username"];
 }
@@ -150,7 +137,7 @@
     [self setCurrentDevice];
     [self setupIdentityKey];
     [self asyncUpdate];
-    [self asyncSetupPreKeys];
+    [FreeKey generatePreKeysForLocalIdentityKey:self.identityKey localDeviceId:self.currentDevice.deviceId];
 }
 
 - (void)setCurrentDevice {
@@ -162,23 +149,16 @@
     return [KDevice findByDictionary:@{@"userId" : self.uniqueId, @"isCurrentDevice" : @YES}];
 }
 
+- (NSString *)currentDeviceId {
+    return self.currentDevice.deviceId;
+}
+
 - (NSArray *)devices {
-    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:[NSString stringWithFormat:@"select * from %@ where user_id = :unique_id", [KDevice tableName]] withParameterDictionary:@{@"unique_id" : self.uniqueId}];
-    }];
-    
-    NSMutableArray *devices = [[NSMutableArray alloc] init];
-    while(resultSet.next) {
-        KDevice *device = [[KDevice alloc] initWithResultSetRow:resultSet.resultDictionary];
-        [devices addObject:device];
-    }
-    [resultSet close];
-    return devices;
+    return [KDevice devicesForUserId:self.uniqueId];
 }
 
 - (void)addDeviceId:(NSString *)deviceId {
-    KDevice *device = [[KDevice alloc] initWithUserId:self.uniqueId deviceId:[NSString stringWithFormat:@"%@_%@", self.uniqueId, [[UIDevice currentDevice].identifierForVendor UUIDString]] isCurrentDevice:NO];
-    [device save];
+    [KDevice addDeviceForUserId:self.uniqueId deviceId:[NSString stringWithFormat:@"%@_%@", self.uniqueId, deviceId]];
 }
 
 @end

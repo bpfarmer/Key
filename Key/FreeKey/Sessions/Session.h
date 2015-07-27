@@ -11,31 +11,29 @@
 
 @class PreKey;
 @class EncryptedMessage;
-@class IdentityKey;
 @class PreKeyExchange;
-@class PreKeyExchangeReceipt;
 @class ECKeyPair;
 
 @interface Session : KDatabaseObject
 
-@property (nonatomic, readonly) NSString *senderId;
-@property (nonatomic, readonly) NSString *senderDeviceId;
-@property (nonatomic, readonly) NSString *receiverId;
-@property (nonatomic, readonly) NSString *receiverDeviceId;
-@property (nonatomic, readonly) NSString *preKeyId;
-@property (nonatomic, readonly) NSData *baseKeyPublic;
+@property (nonatomic, readonly)  NSString *senderDeviceId;
+@property (nonatomic, readonly)  NSData   *senderPublicKey;
 @property (nonatomic, readwrite) NSString *senderChainId;
+@property (nonatomic, readonly)  NSString *receiverDeviceId;
+@property (nonatomic, readonly)  NSData   *receiverPublicKey;
 @property (nonatomic, readwrite) NSString *receiverChainId;
 @property (nonatomic, readwrite) NSNumber *previousIndex;
 @property (nonatomic, readwrite) NSArray  *receivedRatchetKeys;
 
-- (instancetype)initWithSenderId:(NSString *)senderId receiverId:(NSString *)receiverId senderDeviceId:(NSString *)senderDeviceId receiverDeviceId:(NSString *)receiverDeviceId;
+- (instancetype)initWithSenderDeviceId:(NSString *)senderDeviceId receiverDeviceId:(NSString *)receiverDeviceId;
 
-- (void)addOurPreKey:(PreKey *)ourPreKey preKeyExchange:(PreKeyExchange *)preKeyExchange;
-- (void)addPreKey:(PreKey *)preKey ourBaseKey:(ECKeyPair *)ourBaseKey;
+- (void)addSenderPreKey:(PreKey *)senderPreKey senderIdentityKey:(ECKeyPair *)senderIdentityKey receiverPreKeyExchange:(PreKeyExchange *)receiverPreKeyExchange receiverPublicKey:(NSData *)receiverPublicKey;
+- (PreKeyExchange *)addSenderBaseKey:(ECKeyPair *)senderBaseKey senderIdentityKey:(ECKeyPair *)senderIdentityKey receiverPreKey:(PreKey *)receiverPreKey receiverPublicKey:(NSData *)receiverPublicKey;
 
-- (PreKeyExchange *)preKeyExchange;
 - (EncryptedMessage *)encryptMessage:(NSData *)message;
 - (NSData *)decryptMessage:(EncryptedMessage *)encryptedMessage;
+
++ (BOOL)verifySignature:(NSData *)signature publicKey:(NSData *)publicKey data:(NSData *)data;
++ (BOOL)verifyMac:mac remotePublicKey:(NSData *)remotePublicKey localPublicKey:(NSData *)localPublicKey macKey:(NSData *)macKey data:(NSData *)data;
 
 @end

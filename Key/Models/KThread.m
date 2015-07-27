@@ -31,14 +31,14 @@
     
     self = [super init];
     if (self) {
-        _userIds = userIds;
+        _userIds = [userIds componentsJoinedByString:@"_"];
         _name = [usernames componentsJoinedByString:@", "];
     }
     return self;
 }
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
-                         userIds:(NSArray *)userIds
+                         userIds:(NSString *)userIds
                             name:(NSString *)name
                  latestMessageId:(NSString *)latestMessageId
                             read:(BOOL)read {
@@ -62,7 +62,7 @@
         }
     }];
     return [self initWithUniqueId:threadId
-                          userIds:userIds
+                          userIds:[userIds componentsJoinedByString:@"_"]
                              name:nil
                   latestMessageId:nil
                              read:NO];
@@ -98,9 +98,9 @@
 
 - (NSArray *)recipientIds {
     KUser *localUser = [KAccountManager sharedManager].user;
-    NSMutableArray *recipientIds = [NSMutableArray arrayWithArray:self.userIds];
+    NSMutableArray *recipientIds = [NSMutableArray arrayWithArray:[self.userIds componentsSeparatedByString:@"_"]];
     [recipientIds removeObject:localUser.uniqueId];
-    return recipientIds;
+    return [recipientIds copy];
 }
 
 - (NSArray *)messages {
@@ -114,7 +114,7 @@
     NSMutableArray *messages = [[NSMutableArray alloc] init];
     while(resultSet.next) [messages addObject:[[KMessage alloc] initWithResultSetRow:resultSet.resultDictionary]];
     [resultSet close];
-    return messages;
+    return [messages copy];
 }
 
 - (BOOL)saved {

@@ -36,28 +36,6 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
 }
 
-// TODO: show 'waiting' spinner animation
-- (IBAction)createNewUser:(id)sender {
-    if(![self.usernameText.text isEqualToString:@""]) {
-        TOCFuture *futureUser = [KUser asyncCreateWithUsername:self.usernameText.text password:self.passwordText.text];
-        
-        [futureUser catchDo:^(id error) {
-            NSLog(@"There was an error (%@) creating the user.", error);
-        }];
-        [futureUser thenDo:^(KUser *user) {
-            [[KAccountManager sharedManager] setUser:user];
-            [[KStorageManager sharedManager] setDatabaseWithName:user.username];
-            [user save];
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                NSLog(@"CURRENT DEVICE :%@", user.currentDevice.deviceId);
-                [user setupKeysForDevice];
-            });
-            [self showHome];
-        }];
-    }
-}
-
 - (void)showHome {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MainNavigationController"];

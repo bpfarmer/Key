@@ -13,13 +13,15 @@
 #define kRetrievedPreKeyNotification @"RetrievedPreKeyNotification"
 #define kUserRemoteAlias @"user"
 
-@class KUser;
+@class ECKeyPair;
 @class EncryptedMessage;
 @class PreKeyExchange;
 @class PreKeyReceipt;
 @class PreKey;
 @class Session;
 @class KDatabaseObject;
+@class Attachment;
+@class AttachmentKey;
 
 #define kOurPreKeyCollection         @"OurPreKey"
 #define kTheirPreKeyCollection       @"TheirPreKey"
@@ -40,11 +42,14 @@
 
 @interface FreeKey : NSObject
 
-+ (void)sendEncryptableObject:(KDatabaseObject *)object recipients:(NSArray *)recipients;
-
++ (void)sendEncryptableObject:(KDatabaseObject *)object recipientId:(NSString *)recipientId;
 + (void)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage;
 
-+ (EncryptedMessage *)encryptObject:(KDatabaseObject *)object session:(Session *)session;
-+ (KDatabaseObject *)decryptEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session;
++ (void)sendAttachableObject:(KDatabaseObject *)object recipientIds:(NSArray *)recipientIds;
++ (void)decryptAndSaveAttachment:(Attachment *)attachment;
+
++ (Session *)processNewKeyExchange:(NSObject *)keyExchange localDeviceId:(NSString *)localDeviceId localIdentityKey:(ECKeyPair *)localIdentityKey;
+
++ (void)generatePreKeysForLocalIdentityKey:(ECKeyPair *)localIdentityKey localDeviceId:(NSString *)currentDeviceId;
 
 @end

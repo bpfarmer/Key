@@ -9,22 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "KDatabaseObject.h"
 
-@class IdentityKey;
-
 @interface PreKeyExchangeReceipt : KDatabaseObject
 
 @property (nonatomic, readonly) NSString *senderId;
 @property (nonatomic, readonly) NSString *receiverId;
-@property (nonatomic, readonly) NSData   *receivedBaseKey;
-@property (nonatomic, readonly) NSData   *senderIdentityPublicKey;
-@property (nonatomic, readonly) NSData   *receiverIdentityPublicKey;
+@property (nonatomic, readonly) NSData   *receivedBasePublicKey;
 
-- (instancetype)initFromSenderId:(NSString *)senderId
-                      receiverId:(NSString *)receiverId
-                 receivedBaseKey:(NSData *)receivedBaseKey
-         senderIdentityPublicKey:(NSData *)senderIdentityPublicKey
-       receiverIdentityPublicKey:(NSData *)receiverIdentityPublicKey;
-
-- (void)sendToServer;
+- (instancetype)initFromSenderId:(NSString *)senderId receiverId:(NSString *)receiverId receivedBasePublicKey:(NSData *)receivedBasePublicKey;
 
 @end

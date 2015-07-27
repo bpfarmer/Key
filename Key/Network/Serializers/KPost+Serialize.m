@@ -28,9 +28,6 @@
     return [self initWithUniqueId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]
                          authorId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderAuthorId]
                              text:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderText]
-                       commentKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderCommentKey]
-                         comments:[aDecoder decodeObjectOfClass:[NSArray class] forKey:kCoderComments]
-                    attachmentKey:[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderAttachmentKey]
                       attachments:[aDecoder decodeObjectOfClass:[NSArray class] forKey:kCoderAttachments]
                              seen:[aDecoder decodeBoolForKey:kCoderSeen]
                         createdAt:[aDecoder decodeObjectOfClass:[NSDate class] forKey:kCoderCreatedAt]];
@@ -40,10 +37,6 @@
     [aCoder encodeObject:self.uniqueId forKey:kCoderUniqueId];
     [aCoder encodeObject:self.authorId forKey:kCoderAuthorId];
     [aCoder encodeObject:self.text forKey:kCoderText];
-    [aCoder encodeObject:self.commentKey forKey:kCoderCommentKey];
-    [aCoder encodeObject:self.comments forKey:kCoderComments];
-    [aCoder encodeObject:self.attachmentKey forKey:kCoderAttachmentKey];
-    [aCoder encodeObject:self.attachments forKey:kCoderAttachments];
     [aCoder encodeBool:self.seen forKey:kCoderSeen];
     [aCoder encodeObject:self.createdAt forKey:kCoderCreatedAt];
 }

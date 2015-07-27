@@ -7,17 +7,10 @@
 //
 
 #import "KUser+Serialize.h"
-#import "IdentityKey.h"
 #import "KStorageManager.h"
 #import "CollapsingFutures.h"
 #import <objc/runtime.h>
 
 @implementation KUser(Serialize)
-
-+ (NSArray *)unsavedPropertyList {
-    NSMutableArray *unstoredProperties = [[NSMutableArray alloc] initWithArray:[super unsavedPropertyList]];
-    [unstoredProperties addObject:@"identityKey"];
-    return unstoredProperties;
-}
 
 @end
