@@ -10,12 +10,15 @@
 #import <FMDB/FMDB.h>
 
 @class TOCFuture;
+@class KDatabaseObject;
 
 static NSString *keychainService          = @"KKeyChainService";
 static NSString *keychainDBPassAccount    = @"KDatabasePass";
 
 typedef void (^KDatabaseUpdateBlock)(FMDatabase *database);
-typedef FMResultSet* (^KDatabaseSelectBlock)(FMDatabase *database);
+typedef FMResultSet * (^KDatabaseSelectBlock)(FMDatabase *database);
+typedef KDatabaseObject * (^KDatabaseSelectObjectBlock)(FMDatabase *database);
+typedef NSArray * (^KDatabaseSelectObjectsBlock)(FMDatabase *database);
 typedef NSUInteger (^KDatabaseCountBlock)(FMDatabase *database);
 
 @interface KStorageManager : NSObject
@@ -27,6 +30,8 @@ typedef NSUInteger (^KDatabaseCountBlock)(FMDatabase *database);
 - (void)setDatabaseWithName:(NSString *)databaseName;
 - (void)queryUpdate:(KDatabaseUpdateBlock)databaseBlock;
 - (FMResultSet *)querySelect:(KDatabaseSelectBlock)databaseBlock;
+- (KDatabaseObject *)querySelectObject:(KDatabaseSelectObjectBlock)databaseBlock;
+- (NSArray *)querySelectObjects:(KDatabaseSelectObjectsBlock)databaseBlock;
 - (NSUInteger)queryCount:(KDatabaseCountBlock)databaseBlock;
 - (void)resignDatabase;
 
