@@ -34,8 +34,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
     [super viewDidLoad];
     NSLog(@"CURRENT USER: %@", [KAccountManager sharedManager].user);
     NSLog(@"STORED DEVICES: %@", [KDevice all]);
-    //self.threads = [KThread all];
-    self.threads = @[@"Connor Southard", @"Rob Wetzel", @"Drew McLean"];
+    self.threads = [KThread all];
     self.threadsTableView.delegate = self;
     self.threadsTableView.dataSource = self;
     
@@ -99,13 +98,12 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    /*KThread *thread = self.threads[indexPath.row];
+    KThread *thread = self.threads[indexPath.row];
     NSString *read = @"";
     if(!thread.read) {
         read = @" - UNREAD";
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", thread.displayName, read];*/
-    cell.textLabel.text = self.threads[indexPath.row];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", thread.displayName, read];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
