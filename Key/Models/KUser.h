@@ -24,6 +24,7 @@
 @property (nonatomic, copy) NSData *publicKey;
 @property (nonatomic, readwrite) ECKeyPair *identityKey;
 @property (nonatomic) BOOL hasLocalPreKey;
+@property (nonatomic, copy) NSString *currentDeviceId;
 
 + (NSData *)salt;
 + (NSData *)encryptPassword:(NSString *)password salt:(NSData *)salt;
@@ -43,7 +44,6 @@
 - (NSArray *)contacts;
 - (void)setupIdentityKey;
 - (void)setupKeysForDevice;
-- (NSString *)currentDeviceId;
 - (NSArray *)devices;
 - (void)setCurrentDevice;
 - (void)addDeviceId:(NSString *)deviceId;

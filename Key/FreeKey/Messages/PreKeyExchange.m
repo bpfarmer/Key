@@ -17,9 +17,7 @@
                  senderPublicKey:(NSData *)senderPublicKey
                    basePublicKey:(NSData *)basePublicKey
                       receiverId:(NSString *)receiverId
-               receiverPublicKey:(NSData *)receiverPublicKey
-                        preKeyId:(NSString *)preKeyId
-                       signature:(NSData *)signature {
+                        preKeyId:(NSString *)preKeyId {
     
     self = [super init];
     
@@ -28,9 +26,7 @@
         _senderPublicKey            = senderPublicKey;
         _basePublicKey              = basePublicKey;
         _receiverId                 = receiverId;
-        _receiverPublicKey          = receiverPublicKey;
         _preKeyId                   = preKeyId;
-        _signature                  = signature;
     }
     
     return self;
@@ -43,7 +39,7 @@
 }
 
 + (NSArray *)remoteKeys {
-    return @[@"senderId", @"senderPublicKey", @"basePublicKey", @"receiverId", @"receiverPublicKey", @"preKeyId", @"signature"];
+    return @[@"senderId", @"senderPublicKey", @"basePublicKey", @"receiverId", @"preKeyId"];
 }
 
 + (NSString *)remoteAlias {

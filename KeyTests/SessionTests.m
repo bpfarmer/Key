@@ -26,6 +26,7 @@
 
 - (void)setUp {
     [super setUp];
+    [[KStorageManager sharedManager] setDatabaseWithName:@"TESTING"];
 }
 
 - (void)tearDown {
@@ -76,8 +77,6 @@
     XCTAssert(preKeyExchange.receiverId);
     XCTAssert(preKeyExchange.basePublicKey);
     XCTAssert([preKeyExchange.preKeyId isEqualToString:signedPreKey.uniqueId]);
-    XCTAssert(preKeyExchange.signature);
-    XCTAssert([Session verifySignature:preKeyExchange.signature publicKey:preKeyExchange.senderPublicKey data:preKeyExchange.basePublicKey]);
 }
 
 - (void)testAddPreKeyExchange {

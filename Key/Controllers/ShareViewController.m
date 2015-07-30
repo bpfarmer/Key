@@ -14,11 +14,12 @@
 #import "EditLocationViewController.h"
 #import "EditPostViewController.h"
 #import "DismissAndPresentProtocol.h"
+#import "QRReadRequest.h"
 
 #define kHomeViewPushSegue @"homeViewPush"
 #define kSocialViewPushSegue @"socialViewPush"
 
-@interface ShareViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, DismissAndPresentProtocol>
+@interface ShareViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, DismissAndPresentProtocol, AVCaptureMetadataOutputObjectsDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *cameraOverlayView;
 
@@ -27,6 +28,7 @@
 @property (nonatomic) AVCaptureStillImageOutput *stillImageOutput;
 @property (nonatomic) AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
 @property (nonatomic) BOOL flashOn;
+@property (nonatomic) BOOL readQRCode;
 
 @property (nonatomic) UILabel *noCameraInSimulatorMessage;
 
@@ -42,6 +44,7 @@
     [super viewDidLoad];
     
     self.noCameraInSimulatorMessage.hidden = !TARGET_IPHONE_SIMULATOR;
+    self.readQRCode = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -121,6 +124,14 @@
                     [self.captureSession addOutput:newStillImageOutput];
                     self.stillImageOutput = newStillImageOutput;
                 }
+                
+                AVCaptureMetadataOutput *captureMetadataOutput = [[AVCaptureMetadataOutput alloc] init];
+                NSLog(@"AVAILABLE METADATA OBJECT TYPES: %@", [captureMetadataOutput availableMetadataObjectTypes]);
+                [self.captureSession addOutput:captureMetadataOutput];
+                dispatch_queue_t dispatchQueue;
+                dispatchQueue = dispatch_queue_create("barcodeReaderQueue", NULL);
+                [captureMetadataOutput setMetadataObjectsDelegate:self queue:dispatchQueue];
+                [captureMetadataOutput setMetadataObjectTypes:@[AVMetadataObjectTypeEAN13Code, AVMetadataObjectTypeCode128Code, AVMetadataObjectTypeCode93Code, AVMetadataObjectTypeCode39Code, AVMetadataObjectTypeQRCode]];
                 
                 NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
                 
@@ -325,6 +336,16 @@
             
             [self.captureSession commitConfiguration];
         });
+    }
+}
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
+    if (metadataObjects != nil && [metadataObjects count] > 0 && !self.readQRCode) {
+        AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
+        NSString *barcodeString = metadataObj.stringValue;
+        NSLog(@"Read barcode: %@", barcodeString);
+        [QRReadRequest makeRequest];
+        self.readQRCode = YES;
     }
 }
 

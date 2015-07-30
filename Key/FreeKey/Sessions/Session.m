@@ -67,11 +67,6 @@
 }
 
 - (void)addSenderPreKey:(PreKey *)senderPreKey senderIdentityKey:(ECKeyPair *)senderIdentityKey receiverPreKeyExchange:(PreKeyExchange *)receiverPreKeyExchange receiverPublicKey:(NSData *)receiverPublicKey {
-    if(![Session verifySignature:receiverPreKeyExchange.signature publicKey:receiverPublicKey data:receiverPreKeyExchange.basePublicKey]) {
-        NSLog(@"FAILED SIGNATURE VERIFICATION");
-        // TODO: throw someething crazy!
-    }
-    
     _senderPublicKey    = senderIdentityKey.publicKey;
     _receiverPublicKey  = receiverPublicKey;
     
@@ -126,9 +121,7 @@
                                     senderPublicKey:senderIdentityKey.publicKey
                                       basePublicKey:basePublicKey
                                          receiverId:self.receiverDeviceId
-                                  receiverPublicKey:receiverPublicKey
-                                           preKeyId:preKey.uniqueId
-                                          signature:[Ed25519 sign:basePublicKey withKeyPair:senderIdentityKey]];
+                                           preKeyId:preKey.uniqueId];
 }
 
 - (EncryptedMessage *)encryptMessage:(NSData *)message {
