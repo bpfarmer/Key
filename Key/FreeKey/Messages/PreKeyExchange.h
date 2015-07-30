@@ -19,17 +19,13 @@
 @property (nonatomic, readonly) NSData   *senderPublicKey;
 @property (nonatomic, readonly) NSData   *basePublicKey;
 @property (nonatomic, readonly) NSString *receiverId;
-@property (nonatomic, readonly) NSData   *receiverPublicKey;
 @property (nonatomic, readonly) NSString *preKeyId;
-@property (nonatomic, readonly) NSData   *signature;
 
 - (instancetype)initWithSenderId:(NSString *)senderId
                  senderPublicKey:(NSData *)senderPublicKey
                    basePublicKey:(NSData *)basePublicKey
                       receiverId:(NSString *)receiverId
-               receiverPublicKey:(NSData *)receiverPublicKey
-                        preKeyId:(NSString *)preKeyId
-                       signature:(NSData *)signature;
+                        preKeyId:(NSString *)preKeyId;
 
 - (PreKeyExchangeReceipt *)createPreKeyExchangeReceipt;
 

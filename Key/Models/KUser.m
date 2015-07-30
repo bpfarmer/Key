@@ -137,20 +137,13 @@
     [self setCurrentDevice];
     [self setupIdentityKey];
     [self asyncUpdate];
-    [FreeKey generatePreKeysForLocalIdentityKey:self.identityKey localDeviceId:self.currentDevice.deviceId];
+    [FreeKey generatePreKeysForLocalIdentityKey:self.identityKey localDeviceId:self.currentDeviceId];
 }
 
 - (void)setCurrentDevice {
     KDevice *device = [[KDevice alloc] initWithUserId:self.uniqueId deviceId:[NSString stringWithFormat:@"%@_%@", self.uniqueId, [[UIDevice currentDevice].identifierForVendor UUIDString]] isCurrentDevice:YES];
     [device save];
-}
-
-- (KDevice *)currentDevice {
-    return [KDevice findByDictionary:@{@"userId" : self.uniqueId, @"isCurrentDevice" : @YES}];
-}
-
-- (NSString *)currentDeviceId {
-    return self.currentDevice.deviceId;
+    self.currentDeviceId = device.deviceId;
 }
 
 - (NSArray *)devices {

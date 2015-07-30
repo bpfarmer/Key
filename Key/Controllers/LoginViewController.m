@@ -82,8 +82,8 @@
             [user save];
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                NSLog(@"CURRENT DEVICE :%@", user.currentDeviceId);
                 [user setupKeysForDevice];
+                NSLog(@"CURRENT DEVICE :%@", user.currentDeviceId);
             });
             [self showHome];
         }];

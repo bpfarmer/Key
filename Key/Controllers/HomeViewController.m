@@ -64,8 +64,8 @@ static NSString *TableViewCellIdentifier = @"Threads";
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.bounces = NO;
     
-    CGFloat newContentOffsetX = (self.view.frame.size.width);
-    self.scrollView.contentOffset = CGPointMake(newContentOffsetX, 0);
+    //CGFloat newContentOffsetX = (self.view.frame.size.width);
+    //self.scrollView.contentOffset = CGPointMake(newContentOffsetX, 0);
     
     [[KAccountManager sharedManager] initLocationManager];
 }

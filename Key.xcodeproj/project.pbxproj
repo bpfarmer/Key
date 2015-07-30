@@ -44,6 +44,7 @@
 		EF8358281AE02B0F00B631AB /* SocialView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF8358271AE02B0F00B631AB /* SocialView.xib */; };
 		EF855DD51B64644F006DEAE8 /* KeyExchange.m in Sources */ = {isa = PBXBuildFile; fileRef = EF855DD41B64644F006DEAE8 /* KeyExchange.m */; };
 		EF855DD71B65656F006DEAE8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EF855DD61B65656F006DEAE8 /* Info.plist */; };
+		EF855DDB1B66A68D006DEAE8 /* QRReadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF855DDA1B66A68D006DEAE8 /* QRReadRequest.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */; };
 		EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E27E1ACB2BB9002583E2 /* SendPushTokenRequest.m */; };
@@ -207,6 +208,8 @@
 		EF855DD31B64644F006DEAE8 /* KeyExchange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyExchange.h; sourceTree = "<group>"; };
 		EF855DD41B64644F006DEAE8 /* KeyExchange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyExchange.m; sourceTree = "<group>"; };
 		EF855DD61B65656F006DEAE8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EF855DD91B66A68D006DEAE8 /* QRReadRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QRReadRequest.h; path = Network/Requests/API/QRReadRequest.h; sourceTree = "<group>"; };
+		EF855DDA1B66A68D006DEAE8 /* QRReadRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QRReadRequest.m; path = Network/Requests/API/QRReadRequest.m; sourceTree = "<group>"; };
 		EF973FA31A7E8F5200D92A9E /* KAccountManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KAccountManager.h; path = Models/KAccountManager.h; sourceTree = "<group>"; };
 		EF973FA41A7E8F5200D92A9E /* KAccountManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KAccountManager.m; path = Models/KAccountManager.m; sourceTree = "<group>"; };
 		EF99E26D1AC5E7C9002583E2 /* UserRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserRequest.h; path = Network/Requests/User/UserRequest.h; sourceTree = "<group>"; };
@@ -500,6 +503,15 @@
 			name = Protocols;
 			sourceTree = "<group>";
 		};
+		EF855DD81B66A64C006DEAE8 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				EF855DD91B66A68D006DEAE8 /* QRReadRequest.h */,
+				EF855DDA1B66A68D006DEAE8 /* QRReadRequest.m */,
+			);
+			name = API;
+			sourceTree = "<group>";
+		};
 		EF99E26A1AC5E773002583E2 /* User */ = {
 			isa = PBXGroup;
 			children = (
@@ -586,6 +598,7 @@
 		EFC1819B1AC3524F00BE8B0B /* Requests */ = {
 			isa = PBXGroup;
 			children = (
+				EF855DD81B66A64C006DEAE8 /* API */,
 				EF99E27C1ACB2B91002583E2 /* PushToken */,
 				EF99E26C1AC5E793002583E2 /* PreKey */,
 				EF99E26B1AC5E787002583E2 /* Message */,
@@ -1050,6 +1063,7 @@
 				EFF70A901AAE19C3006C10D2 /* SessionKeyBundle.m in Sources */,
 				EFB225F51B4984F200D7E44B /* KPhoto+Serialize.m in Sources */,
 				EF6B44B21ABA877F00B88323 /* KThread+Serialize.m in Sources */,
+				EF855DDB1B66A68D006DEAE8 /* QRReadRequest.m in Sources */,
 				EFF70A951AAE19C3006C10D2 /* SessionState.m in Sources */,
 				EFDDD9BB1B5C1D4B00089124 /* KDevice.m in Sources */,
 				EFF70A8D1AAE19C3006C10D2 /* PreKey.m in Sources */,
