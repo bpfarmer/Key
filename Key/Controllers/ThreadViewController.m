@@ -14,6 +14,7 @@
 #import "KMessage.h"
 #import "FreeKey.h"
 #import "JSQMessagesAvatarImageFactory.h"
+#import "CheckDevicesRequest.h"
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
@@ -152,13 +153,16 @@ static NSString *TableViewCellIdentifier = @"Messages";
         [JSQSystemSoundPlayer jsq_playMessageSentSound];
         
         if(self.thread.uniqueId) {
-            NSLog(@"GETTING READY TO SEND MESSAGE");
             KMessage *message = [[KMessage alloc] initWithAuthorId:[KAccountManager sharedManager].user.uniqueId threadId:self.thread.uniqueId body:text];
             [message save];
-            
+            NSLog(@"GETTING READY TO SEND MESSAGE: %@", message);
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{
-                for(NSString *recipientId in self.thread.recipientIds) [FreeKey sendEncryptableObject:message recipientId:recipientId];
+                [CheckDevicesRequest makeRequestWithUserIds:self.thread.recipientIds];
+                for(NSString *recipientId in self.thread.recipientIds) {
+                    [FreeKey sendEncryptableObject:message recipientId:recipientId];
+                    NSLog(@"SENDING TO RECIPIENT ID: %@", recipientId);
+                }
             });
             
             self.inputToolbar.contentView.textView.text = @"";

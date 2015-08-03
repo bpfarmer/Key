@@ -46,10 +46,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
                                                object:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [[KAccountManager sharedManager].user asyncGetFeed];
-}
-
 - (void)databaseModified:(NSNotification *)notification {
     if([[notification object] isKindOfClass:[KThread class]]) {
         for(KThread *thread in self.threads) if([thread.uniqueId isEqualToString:((KThread *)notification.object).uniqueId]) return;
@@ -63,6 +59,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    [[KAccountManager sharedManager].user asyncGetFeed];
 }
 
 - (void)didReceiveMemoryWarning {

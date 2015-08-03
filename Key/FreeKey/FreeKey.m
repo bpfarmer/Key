@@ -35,10 +35,13 @@
 + (TOCFuture *)sessionWithReceiverDeviceId:(NSString *)receiverDeviceId{
     TOCFutureSource *resultSource = [TOCFutureSource new];
     Session *session = [Session findByDictionary:@{@"receiverDeviceId" : receiverDeviceId}];
-    if(session != nil) [resultSource trySetResult:session];
-    else {
+    if(session != nil) {
+        NSLog(@"RETRIEVED SESSION: %@", session);
+        [resultSource trySetResult:session];
+    }else {
         TOCFuture *futureSession = [KUser asyncRetrieveKeyExchangeWithRemoteDeviceId:receiverDeviceId];
         [futureSession thenDo:^(Session *session) {
+            NSLog(@"NEWLY CREATED SESSION: %@", session);
             [resultSource trySetResult:session];
         }];
     }
@@ -47,9 +50,12 @@
 
 + (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject recipientId:(NSString *)recipientId {
     for(KDevice *device in [KDevice devicesForUserId:recipientId]) {
+        NSLog(@"ENCRYPTING MESSAGE FOR DEVICE ID: %@", device.deviceId);
         TOCFuture *futureSession = [self sessionWithReceiverDeviceId:device.deviceId];
         [futureSession thenDo:^(Session *session) {
+            NSLog(@"SUCCESSFULLY RETRIEVED OR CREATED SESSION: %@", session);
             EncryptedMessage *encryptedMessage = [session encryptMessage:[NSKeyedArchiver archivedDataWithRootObject:encryptableObject]];
+            NSLog(@"CREATED ENCRYPTED MESSAGE: %@", encryptedMessage);
             [SendMessageRequest makeRequestWithSendableMessage:encryptedMessage];
         }];
     }
@@ -105,7 +111,7 @@
                                                 publicKey:localIdentityKey.publicKey
                                               baseKeyPair:baseKeyPair];
         [preKey save];
-        [preKeys addObject:preKey];
+        [preKeys addObject:[self base64EncodedPreKeyDictionary:preKey]];
     }
     [SendPreKeysRequest makeRequestWithPreKeys:preKeys];
 }
@@ -128,16 +134,20 @@
 
 + (Session *)processNewKeyExchange:(NSObject *)keyExchange localDeviceId:(NSString *)localDeviceId localIdentityKey:(ECKeyPair *)localIdentityKey {
     if([keyExchange isKindOfClass:[PreKey class]]) {
+        NSLog(@"SUCCESSFULLY RECOGNIZED %@ AS PREKEY", keyExchange);
         PreKey *preKey = (PreKey *)keyExchange;
         NSString *remoteUserId = [preKey.userId componentsSeparatedByString:@"_"].firstObject;
+        TOCFuture *futureUser = [KUser asyncFindById:remoteUserId];
         [KDevice addDeviceForUserId:remoteUserId deviceId:preKey.userId];
         Session *session = [[Session alloc] initWithSenderDeviceId:localDeviceId receiverDeviceId:preKey.userId];
         PreKeyExchange *preKeyExchange = [session addSenderBaseKey:[Curve25519 generateKeyPair] senderIdentityKey:localIdentityKey receiverPreKey:preKey receiverPublicKey:preKey.publicKey];
+        NSLog(@"GENERATED PKE: %@", preKeyExchange);
         [SendPreKeyExchangeRequest makeRequestWithPreKeyExchange:preKeyExchange];
         return session;
     }else if([keyExchange isKindOfClass:[PreKeyExchange class]]) {
         PreKeyExchange *preKeyExchange = (PreKeyExchange *)keyExchange;
-        [KDevice addDeviceForUserId:preKeyExchange.senderId deviceId:preKeyExchange.senderId];
+        NSString *remoteUserId = [preKeyExchange.senderId componentsSeparatedByString:@"_"].firstObject;
+        [KDevice addDeviceForUserId:remoteUserId deviceId:preKeyExchange.senderId];
         Session *session = [[Session alloc] initWithSenderDeviceId:localDeviceId receiverDeviceId:preKeyExchange.senderId];
         PreKey *ourPreKey = [PreKey findById:(NSString *)((PreKeyExchange *)keyExchange).preKeyId];
         if(ourPreKey) {

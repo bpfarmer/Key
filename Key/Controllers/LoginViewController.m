@@ -80,7 +80,6 @@
             [[KAccountManager sharedManager] setUser:user];
             [[KStorageManager sharedManager] setDatabaseWithName:user.username];
             [user save];
-            
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [user setupKeysForDevice];
                 NSLog(@"CURRENT DEVICE :%@", user.currentDeviceId);

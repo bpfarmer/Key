@@ -31,17 +31,13 @@
                        failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure {
     
     switch(self.httpMethod) {
-        case PUT:
-            [[HttpManager sharedManager] put:self success:success failure:failure];
+        case PUT:[[HttpManager sharedManager] put:self success:success failure:failure];
             break;
-        case GET:
-            [[HttpManager sharedManager] get:self success:success failure:failure];
+        case GET:[[HttpManager sharedManager] get:self success:success failure:failure];
             break;
-        case POST:
-            [[HttpManager sharedManager] post:self success:success failure:failure];
+        case POST:[[HttpManager sharedManager] post:self success:success failure:failure];
             break;
         case DELETE:
-            
             break;
         default:
             break;
@@ -96,8 +92,7 @@
 }
 
 - (NSArray *)base64EncodedKeys {
-    return @[@"senderRatchetKey", @"serializedData", @"sentSignedBaseKey", @"senderIdentityPublicKey", @"receiverIdentityPublicKey", @"baseKeySignature", @"signedPreKeyPublic", @"signedPreKeySignature", @"identityKey", @"publicKey"];
+    return @[@"senderRatchetKey", @"serializedData", @"basePublicKey", @"senderPublicKey",  @"baseKeySignature", @"basePublicKey", @"signature", @"identityKey", @"publicKey"];
 }
-
 
 @end

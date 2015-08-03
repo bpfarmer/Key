@@ -13,7 +13,6 @@
 #define kHTTPRequestQueue   @"httpRequestQueue"
 #define kHTTPResponseQueue  @"httpResponseQueue"
 #define kRemoteEndpoint     @"https://polar-beyond-3981.herokuapp.com"
-//#define kRemoteEndpoint     @"http://127.0.0.1:9393/"
 
 typedef enum {
     PUT, GET, POST, DELETE
@@ -38,7 +37,5 @@ typedef enum {
 - (void)get:(HttpRequest *)request
      success:(void (^)(AFHTTPRequestOperation *operation, id responseObject))success
      failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure;
-
-- (NSDictionary *)base64DecodedDictionary:(NSDictionary *)dictionary;
 
 @end
