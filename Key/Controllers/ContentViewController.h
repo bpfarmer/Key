@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 
 @class ContentTabBarController;
+@class HomeViewController;
 
 @interface ContentViewController : UIViewController
 
 @property (nonatomic, strong) IBOutlet ContentTabBarController *contentTC;
+@property (nonatomic) HomeViewController *homeViewController;
 
 @end

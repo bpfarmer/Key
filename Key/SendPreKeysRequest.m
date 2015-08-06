@@ -13,6 +13,7 @@
 
 - (instancetype)initWithPreKeys:(NSArray *)preKeys {
     NSDictionary *parameters = @{ kPreKeyAlias : preKeys };
+    NSLog(@"PREKEY PARAMS: %@", [super base64EncodedDictionary:parameters]);
     return [super initWithHttpMethod:PUT endpoint:kPreKeyEndpoint parameters:[super base64EncodedDictionary:parameters]];
 }
 

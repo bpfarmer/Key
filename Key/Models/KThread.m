@@ -107,14 +107,13 @@
     NSString *messagesInThreadSQL = [NSString stringWithFormat:@"select * from %@ where thread_id = :thread_id", [KMessage tableName]];
     NSDictionary *parameters = @{@"thread_id" : self.uniqueId};
     
-    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:messagesInThreadSQL withParameterDictionary:parameters];
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        FMResultSet *result =  [database executeQuery:messagesInThreadSQL withParameterDictionary:parameters];
+        NSMutableArray *messages = [[NSMutableArray alloc] init];
+        while(result.next) [messages addObject:[[KMessage alloc] initWithResultSetRow:result.resultDictionary]];
+        [result close];
+        return [messages copy];
     }];
-    
-    NSMutableArray *messages = [[NSMutableArray alloc] init];
-    while(resultSet.next) [messages addObject:[[KMessage alloc] initWithResultSetRow:resultSet.resultDictionary]];
-    [resultSet close];
-    return [messages copy];
 }
 
 - (BOOL)saved {

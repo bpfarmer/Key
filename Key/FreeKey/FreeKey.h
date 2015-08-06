@@ -48,6 +48,8 @@
 + (void)sendAttachableObject:(KDatabaseObject *)object recipientIds:(NSArray *)recipientIds;
 + (void)decryptAndSaveAttachment:(Attachment *)attachment;
 
++ (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject attachableObjects:(NSArray *)attachableObjects recipientIds:(NSArray *)recipientIds;
+
 + (Session *)processNewKeyExchange:(NSObject *)keyExchange localDeviceId:(NSString *)localDeviceId localIdentityKey:(ECKeyPair *)localIdentityKey;
 
 + (void)generatePreKeysForLocalIdentityKey:(ECKeyPair *)localIdentityKey localDeviceId:(NSString *)currentDeviceId;

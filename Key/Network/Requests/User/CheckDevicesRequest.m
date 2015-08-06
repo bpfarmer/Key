@@ -23,21 +23,13 @@
 
 + (TOCFuture *)makeRequestWithUserIds:(NSArray *)userIds {
     TOCFutureSource *resultSource = [TOCFutureSource new];
-    NSMutableArray *usersWithDevices = [[NSMutableArray alloc] init];
-    for(NSString *userId in userIds) {
-        NSMutableArray *deviceIds = [[NSMutableArray alloc] init];
-        for(KDevice *device in [KDevice devicesForUserId:userId]) {
-            [deviceIds addObject:device.deviceId];
-        }
-        [usersWithDevices addObject:@{userId : [deviceIds copy]}];
-    }
-    CheckDevicesRequest *request = [[CheckDevicesRequest alloc] initWithParameters:@{@"users" : [usersWithDevices copy]}];
+    CheckDevicesRequest *request = [[CheckDevicesRequest alloc] initWithParameters:@{@"users" : userIds}];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         NSLog(@"RESPONSE OBJECT: %@", responseObject);
         if([responseObject[@"status"] isEqualToString:@"SUCCESS"]) {
             for(NSDictionary *userDevices in responseObject[@"users"]) {
                 [userDevices enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-                    [KDevice addDeviceForUserId:key deviceId:obj];
+                    for(NSString *deviceId in obj) [KDevice addDeviceForUserId:key deviceId:deviceId];
                 }];
             }
             [resultSource trySetResult:@YES];

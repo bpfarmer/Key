@@ -7,17 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DismissAndPresentProtocol.h"
 
 @class KUser;
+@class KThread;
 
 static NSString *kSelectRecipientSegueIdentifier = @"selectRecipientsPushSegue";
 static NSString *kThreadSeguePush        = @"threadSeguePush";
 static NSString *kContactsSeguePush      = @"contactsSeguePush";
 static NSString *kShareViewSegue         = @"shareViewSegue";
 
-@interface HomeViewController : UIViewController
+@interface HomeViewController : UIViewController <DismissAndPresentProtocol>
 
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
+@property (nonatomic) KThread *selectedThread;
 
 @property (nonatomic) KUser *currentUser;
 

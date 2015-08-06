@@ -12,13 +12,12 @@
 #import "KLocation.h"
 #import "KAccountManager.h"
 
-@interface EditMediaViewController ()
+@interface EditMediaViewController () <DismissAndPresentProtocol>
 
 @property (nonatomic) IBOutlet UIView *overlayView;
 @property (nonatomic) IBOutlet UIButton *locationButton;
 @property (nonatomic) BOOL locationEnabled;
 @property (nonatomic) BOOL ephemeral;
-@property (nonatomic) BOOL toDismiss;
 
 @end
 
@@ -26,12 +25,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSLog(@"LOADING DATA");
     self.mediaView.image = [UIImage imageWithData:self.imageData];
     [self.view addSubview:self.overlayView];
     [self.overlayView setBackgroundColor:[UIColor clearColor]];
     [self.view bringSubviewToFront:self.overlayView];
+    NSLog(@"VIEW SHOULD BE LOADED");
     self.ephemeral = NO;
     self.locationEnabled = YES;
+    [[KAccountManager sharedManager] refreshCurrentCoordinate];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -77,11 +79,15 @@
         [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
     }
     [selectRecipientView setSendableObjects:sendableObjects];
-    [self.delegate dismissAndPresentViewController:selectRecipientView];
+    selectRecipientView.delegate = self;
+    [self presentViewController:selectRecipientView animated:NO completion:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    
+- (void)dismissAndPresentViewController:(UIViewController *)viewController {
+    [self dismissViewControllerAnimated:NO completion:^{
+        if(viewController != nil) [self presentViewController:viewController animated:YES completion:nil];
+        else [self dismissViewControllerAnimated:NO completion:nil];
+    }];
 }
 
 @end

@@ -35,7 +35,6 @@
     [self.view addGestureRecognizer:tapGestureRecognizer];
     
     if(self.post) {
-        /*
         if(self.post.attachments.count > 0) {
             if([self.post.attachments.firstObject isKindOfClass:[KPhoto class]]) {
                 self.photo = (KPhoto *)self.post.attachments.firstObject;
@@ -50,13 +49,12 @@
                     self.location = (KLocation *)self.post.attachments.lastObject;
                 }
             }
-            
             if(self.photo) {
                 [self setupImageViewWithImage:self.photo.media];
             }else if(self.location) {
                 [self setupMapViewWithLocation:self.location.location];
             }
-        }*/
+        }
     }
 }
 

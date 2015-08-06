@@ -17,6 +17,8 @@
 #import "ThreadViewController.h"
 #import "KThread.h"
 #import "KAttachable.h"
+#import "CheckDevicesRequest.h"
+#import "CollapsingFutures.h"
 
 static NSString *TableViewCellIdentifier = @"Recipients";
 
@@ -44,6 +46,9 @@ static NSString *TableViewCellIdentifier = @"Recipients";
             self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:nil];
         }
     }
+    
+    NSLog(@"SENDABLE OBJECTS: %@", self.sendableObjects);
+    NSLog(@"DESIRED OBJECT: %@", self.desiredObject);
     
     self.contactsTableView.allowsMultipleSelection = YES;
 }
@@ -92,33 +97,48 @@ static NSString *TableViewCellIdentifier = @"Recipients";
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{
                 [thread save];
-                for(NSString *recipientId in thread.recipientIds) [FreeKey sendEncryptableObject:thread recipientId:recipientId];
+                TOCFuture *futureDevices = [CheckDevicesRequest makeRequestWithUserIds:thread.recipientIds];
+                [futureDevices thenDo:^(id value) {
+                    for(NSString *recipientId in thread.recipientIds) [FreeKey sendEncryptableObject:thread recipientId:recipientId];
+                }];
             });
             [self.delegate dismissAndPresentThread:thread];
         }else {
+            NSLog(@"PREPARING TO SEND A POST");
             [self.post save];
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{
                 NSMutableArray *recipientIds = [[NSMutableArray alloc] init];
                 for(KUser *user in self.selectedRecipients) {
                     [recipientIds addObject:user.uniqueId];
-                    [FreeKey sendEncryptableObject:self.post recipientId:user.uniqueId];
                 }
-                for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
-                    object.parentId = self.post.uniqueId;
-                    [object save];
-                    [FreeKey sendAttachableObject:object recipientIds:[recipientIds copy]];
-                }
+                TOCFuture *futureDevices = [CheckDevicesRequest makeRequestWithUserIds:recipientIds];
+                [futureDevices thenDo:^(id value) {
+                    for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
+                        object.parentId = self.post.uniqueId;
+                        [object save];
+                    }
+                    [FreeKey sendEncryptableObject:self.post attachableObjects:self.sendableObjects recipientIds:recipientIds];
+                    /*for(KUser *user in self.selectedRecipients) {
+                        [recipientIds addObject:user.uniqueId];
+                        [FreeKey sendEncryptableObject:self.post recipientId:user.uniqueId];
+                    }
+                    //NSLog(@"SENDABLE OBJECTS: %@", self.sendableObjects);
+                    for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
+                        //NSLog(@"CREATING ATTACHMENT FOR OBJECT: %@", object);
+                        object.parentId = self.post.uniqueId;
+                        [object save];
+                        //[FreeKey sendAttachableObject:object recipientIds:[recipientIds copy]];
+                    }*/
+                }];
             });
-            [self dismissViewControllerAnimated:NO completion:nil];
+            [self.delegate dismissAndPresentViewController:nil];
         }
-    }else {
-        [self dismissViewControllerAnimated:NO completion:nil];
     }
 }
 
 - (IBAction)didPressCancel:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (KThread *)setupThread {

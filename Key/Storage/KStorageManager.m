@@ -62,6 +62,26 @@ NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
     return resultSet;
 }
 
+- (KDatabaseObject *)querySelectObject:(KDatabaseSelectObjectBlock)databaseBlock {
+    __block KDatabaseObject *object;
+    if(self.queue) {
+        [self.queue inDatabase:^(FMDatabase *db) {
+            object = databaseBlock(db);
+        }];
+    }
+    return object;
+}
+
+- (NSArray *)querySelectObjects:(KDatabaseSelectObjectsBlock)databaseBlock {
+    __block NSArray *objects;
+    if(self.queue) {
+        [self.queue inDatabase:^(FMDatabase *db) {
+            objects = databaseBlock(db);
+        }];
+    }
+    return objects;
+}
+
 - (NSUInteger)queryCount:(KDatabaseCountBlock)databaseBlock {
     __block NSUInteger count;
     if(self.queue) {

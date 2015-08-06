@@ -104,17 +104,16 @@
 }
 
 - (NSArray *)contacts {
-    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:[NSString stringWithFormat:@"select * from %@ where unique_id <> :unique_id", [self.class tableName]] withParameterDictionary:@{@"unique_id" : self.uniqueId}];
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where unique_id <> :unique_id", [self.class tableName]] withParameterDictionary:@{@"unique_id" : self.uniqueId}];
+        NSMutableArray *contacts = [[NSMutableArray alloc] init];
+        while(result.next) {
+            KUser *contact = [[self.class alloc] initWithResultSetRow:result.resultDictionary];
+            [contacts addObject:contact];
+        }
+        [result close];
+        return [contacts copy];
     }];
-    
-    NSMutableArray *contacts = [[NSMutableArray alloc] init];
-    while(resultSet.next) {
-        KUser *contact = [[self.class alloc] initWithResultSetRow:resultSet.resultDictionary];
-        [contacts addObject:contact];
-    }
-    [resultSet close];
-    return [contacts copy];
 }
 
 #pragma mark - Password Handling Methods

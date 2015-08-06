@@ -28,14 +28,18 @@
     KUser *user = [KUser findById:currentUserId];
     GetMessagesRequest *request = [[GetMessagesRequest alloc] initWithCurrentUserId:user.currentDeviceId];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
+        NSLog(@"FEED RESPONSE OBJECT: %@", responseObject);
         NSDictionary *messages = [request base64DecodedDictionary:responseObject];
         for(NSDictionary *msg in messages[kEncryptedMessageRemoteAlias]) {
-            EncryptedMessage *encryptedMessage = [[EncryptedMessage alloc] init];
+            EncryptedMessage *encryptedMessage = [EncryptedMessage new];
             [encryptedMessage setValuesForKeysWithDictionary:msg];
-            [FreeKey decryptAndSaveEncryptedMessage:encryptedMessage];
+            TOCFuture *futureUser = [KUser asyncFindById:[encryptedMessage.senderId componentsSeparatedByString:@"_"].firstObject];
+            [futureUser thenDo:^(id value) {
+                [FreeKey decryptAndSaveEncryptedMessage:encryptedMessage];
+            }];
         }
         for(NSDictionary *attach in messages[kAttachmentAlias]) {
-            Attachment *attachment = [[Attachment alloc] init];
+            Attachment *attachment = [Attachment new];
             [attachment setValuesForKeysWithDictionary:attach];
             [FreeKey decryptAndSaveAttachment:attachment];
         }

@@ -122,13 +122,14 @@
 
 + (NSArray *)all {
     NSString *findAllSQL = [NSString stringWithFormat:@"select * from %@", [self.class tableName]];
-    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:findAllSQL];
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        FMResultSet *result = [database executeQuery:findAllSQL];
+        NSMutableArray *objects = [[NSMutableArray alloc] init];
+        while(result.next) [objects addObject:[[self alloc] initWithResultSetRow:result.resultDictionary]];
+        [result close];
+        return [objects copy];
+
     }];
-    NSMutableArray *objects = [[NSMutableArray alloc] init];
-    while(resultSet.next) [objects addObject:[[self alloc] initWithResultSetRow:resultSet.resultDictionary]];
-    [resultSet close];
-    return [objects copy];
 }
 
 + (instancetype)findById:(NSString *)uniqueId {
@@ -136,16 +137,15 @@
     NSDictionary *parameterDictionary = @{@"unique_id" : uniqueId};
     NSString *findByUniqueIdSQL = [NSString stringWithFormat:@"select * from %@ where unique_id=:unique_id", [[self class] tableName]];
     //NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@",findByUniqueIdSQL, parameterDictionary);
-    FMResultSet *result = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:findByUniqueIdSQL withParameterDictionary:parameterDictionary];
+    return [[KStorageManager sharedManager] querySelectObject:^KDatabaseObject *(FMDatabase *database) {
+        FMResultSet *result = [database executeQuery:findByUniqueIdSQL withParameterDictionary:parameterDictionary];
+        if(result.next) {
+            KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
+            [result close];
+            return object;
+        }else return nil;
     }];
-    if(result.next) {
-        KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
-        [result close];
-        return object;
 
-    }
-    return nil;
 }
 
 + (instancetype)findByDictionary:(NSDictionary *)dictionary {
@@ -163,17 +163,14 @@
     
     //NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@", selectSQL, parameterDictionary);
     
-    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:selectSQL withParameterDictionary:[parameterDictionary copy]];
+    return [[KStorageManager sharedManager] querySelectObject:^KDatabaseObject *(FMDatabase *database) {
+        FMResultSet *result = [database executeQuery:selectSQL withParameterDictionary:[parameterDictionary copy]];
+        if(result.next) {
+            KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
+            [result close];
+            return object;
+        }else return nil;
     }];
-    
-    if(resultSet.next) {
-        KDatabaseObject *object = [[self alloc] initWithResultSetRow:resultSet.resultDictionary];
-        [resultSet close];
-        return object;
-    }else {
-        return nil;
-    }
 }
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId {

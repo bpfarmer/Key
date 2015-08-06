@@ -166,10 +166,11 @@
 - (void)processReceiverChain:(EncryptedMessage *)encryptedMessage {
     if([self isNewEphemeral:encryptedMessage.senderRatchetKey]) {
         [self saveSessionStatesUpToIndex:encryptedMessage.previousIndex];
+        RootChain *senderRootChain = [RootChain findById:self.senderChainId];
+        self.previousIndex = senderRootChain.index;
     }
     [self ratchetRootChains:encryptedMessage.senderRatchetKey];
     [self saveSessionStatesUpToIndex:encryptedMessage.index];
-    self.previousIndex = encryptedMessage.index;
     [self save];
 }
 

@@ -23,17 +23,16 @@
 }
 
 + (NSArray *)devicesForUserId:(NSString *)userId {
-    FMResultSet *resultSet = [[KStorageManager sharedManager] querySelect:^FMResultSet *(FMDatabase *database) {
-        return [database executeQuery:[NSString stringWithFormat:@"select * from %@ where user_id = :unique_id", [self tableName]] withParameterDictionary:@{@"unique_id" : userId}];
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where user_id = :unique_id", [self tableName]] withParameterDictionary:@{@"unique_id" : userId}];
+        NSMutableArray *devices = [[NSMutableArray alloc] init];
+        while(result.next) {
+            KDevice *device = [[KDevice alloc] initWithResultSetRow:result.resultDictionary];
+            [devices addObject:device];
+        }
+        [result close];
+        return [devices copy];
     }];
-    
-    NSMutableArray *devices = [[NSMutableArray alloc] init];
-    while(resultSet.next) {
-        KDevice *device = [[KDevice alloc] initWithResultSetRow:resultSet.resultDictionary];
-        [devices addObject:device];
-    }
-    [resultSet close];
-    return [devices copy];
 }
 
 + (KDevice *)addDeviceForUserId:(NSString *)userId deviceId:(NSString *)deviceId {

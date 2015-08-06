@@ -12,6 +12,7 @@
 #import <25519/Randomness.h>
 #import "KeyDerivation.h"
 #import "AES_CBC.h"
+#import "NSData+gzip.h"
 
 @implementation AttachmentKey
 

@@ -11,6 +11,7 @@
 #import "KSendable.h"
 
 @class AFHTTPRequestOperation;
+@class KDatabaseObject;
 
 @interface HttpRequest : NSObject
 

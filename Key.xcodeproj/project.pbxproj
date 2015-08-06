@@ -88,6 +88,7 @@
 		EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC6BEBC1A6857D500B0EB8F /* KeyTests.m */; };
 		EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = EFC6BEC61A6857E000B0EB8F /* Podfile */; };
 		EFCD01D81A83E651005065B2 /* KThread.m in Sources */ = {isa = PBXBuildFile; fileRef = EFCD01D71A83E651005065B2 /* KThread.m */; };
+		EFCE585A1B725EFF00B39E39 /* orwell.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EFCE58591B725EFF00B39E39 /* orwell.jpg */; };
 		EFDDD9B21B59560600089124 /* AttachmentKey.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9B11B59560600089124 /* AttachmentKey.m */; };
 		EFDDD9B51B595FAC00089124 /* NSData+gzip.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9B41B595FAC00089124 /* NSData+gzip.m */; };
 		EFDDD9B81B5AE89700089124 /* LoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EFDDD9B71B5AE89700089124 /* LoginRequest.m */; };
@@ -288,6 +289,7 @@
 		EFC6BEC61A6857E000B0EB8F /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		EFCD01D61A83E651005065B2 /* KThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThread.h; path = Models/KThread.h; sourceTree = "<group>"; };
 		EFCD01D71A83E651005065B2 /* KThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KThread.m; path = Models/KThread.m; sourceTree = "<group>"; };
+		EFCE58591B725EFF00B39E39 /* orwell.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = orwell.jpg; path = Key/Resources/Images/orwell.jpg; sourceTree = "<group>"; };
 		EFDDD9B01B59560600089124 /* AttachmentKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentKey.h; sourceTree = "<group>"; };
 		EFDDD9B11B59560600089124 /* AttachmentKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttachmentKey.m; sourceTree = "<group>"; };
 		EFDDD9B31B595FAC00089124 /* NSData+gzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+gzip.h"; sourceTree = "<group>"; };
@@ -610,12 +612,12 @@
 		EFC6BE941A6857D400B0EB8F = {
 			isa = PBXGroup;
 			children = (
-				EFC6BEC61A6857E000B0EB8F /* Podfile */,
+				BBB3964C9D4C96B33973E253 /* Frameworks */,
 				EFC6BE9F1A6857D400B0EB8F /* Key */,
 				EFC6BEB91A6857D500B0EB8F /* KeyTests */,
-				EFC6BE9E1A6857D400B0EB8F /* Products */,
+				EFC6BEC61A6857E000B0EB8F /* Podfile */,
 				3DB3014B76B4E17FDBD64191 /* Pods */,
-				BBB3964C9D4C96B33973E253 /* Frameworks */,
+				EFC6BE9E1A6857D400B0EB8F /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -640,11 +642,12 @@
 				EFC6BEAA1A6857D400B0EB8F /* Main.storyboard */,
 				EFEBDD321A68673D00973E15 /* Models */,
 				EF524AFD1AAF182800F3B9AF /* Network */,
+				EFCE58571B725E9300B39E39 /* Resources */,
 				EF524ACF1AAE238600F3B9AF /* Storage */,
 				EFC6BEA01A6857D400B0EB8F /* Supporting Files */,
+				EFE43D491B58482D0092CAC5 /* User.plist */,
 				EF524ADF1AAE239800F3B9AF /* Util */,
 				EF4920701AD6973F00A9FE89 /* Views */,
-				EFE43D491B58482D0092CAC5 /* User.plist */,
 			);
 			path = Key;
 			sourceTree = "<group>";
@@ -670,6 +673,23 @@
 				EF855DD61B65656F006DEAE8 /* Info.plist */,
 			);
 			path = KeyTests;
+			sourceTree = "<group>";
+		};
+		EFCE58571B725E9300B39E39 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EFCE58581B725EA200B39E39 /* Images */,
+			);
+			name = Resources;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		EFCE58581B725EA200B39E39 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				EFCE58591B725EFF00B39E39 /* orwell.jpg */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 		EFDDD9BC1B5C2AEF00089124 /* NetworkTests */ = {
@@ -925,6 +945,7 @@
 				EFB722731B42360300E6DF7A /* EditMediaView.xib in Resources */,
 				EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */,
 				EFC6BEAE1A6857D500B0EB8F /* Images.xcassets in Resources */,
+				EFCE585A1B725EFF00B39E39 /* orwell.jpg in Resources */,
 				EF8358241AE02AD800B631AB /* InboxView.xib in Resources */,
 				EFB722751B423DB000E6DF7A /* EditLocationView.xib in Resources */,
 				EFE43D4A1B58482D0092CAC5 /* User.plist in Resources */,
