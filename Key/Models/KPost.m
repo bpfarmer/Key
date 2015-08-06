@@ -10,6 +10,8 @@
 #import "KUser.h"
 #import "KStorageManager.h"
 #import "Util.h"
+#import "KPhoto.h"
+#import "KLocation.h"
 
 @implementation KPost
 
@@ -53,6 +55,15 @@
 - (NSString *)generateUniqueId {
     NSUInteger uniqueHash = self.authorId.hash ^ (NSUInteger) [self.createdAt timeIntervalSince1970] ^ self.text.hash;
     return [NSString stringWithFormat:@"%@_%lu", [KPost tableName], (unsigned long)uniqueHash];
+}
+
+- (NSArray *)attachments {
+    NSMutableArray *attachments = [NSMutableArray new];
+    KPhoto *photo = [KPhoto findByDictionary:@{@"parentId" : self.uniqueId}];
+    if(photo) [attachments addObject:photo];
+    KLocation *location = [KLocation findByDictionary:@{@"parentId" : self.uniqueId}];
+    if(location) [attachments addObject:location];
+    return [attachments copy];
 }
 
 @end

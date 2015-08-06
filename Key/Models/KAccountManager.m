@@ -55,11 +55,11 @@
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     self.authorizationStatus = status;
-    
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     self.currentCoordinate = locations.lastObject;
+    NSLog(@"CURRENT COORDINATE: %@", self.currentCoordinate);
     if(!self.streamLocation) {
         [self.locationManager stopUpdatingLocation];
     }

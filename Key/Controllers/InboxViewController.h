@@ -9,12 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@class KThread;
-@class HomeViewController;
-
 @interface InboxViewController : UIViewController
-
-@property (nonatomic, weak) KThread *selectedThread;
-@property (nonatomic, strong) HomeViewController *homeViewController;
 
 @end

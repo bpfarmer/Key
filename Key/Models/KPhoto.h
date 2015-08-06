@@ -16,5 +16,6 @@
 @property (nonatomic) NSString *parentId;
 
 - (instancetype)initWithMedia:(NSData *)media ephemeral:(BOOL)ephemeral;
+- (instancetype)initWithMedia:(NSData *)media ephemeral:(BOOL)ephemeral parentId:(NSString *)parentId;
 
 @end

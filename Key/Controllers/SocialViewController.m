@@ -44,6 +44,7 @@ static NSString *TableViewCellIdentifier = @"Posts";
     
     self.postsTableView.delegate = self;
     self.postsTableView.dataSource = self;
+    self.postsTableView.scrollEnabled = YES;
     
     [self.postsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     

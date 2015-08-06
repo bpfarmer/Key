@@ -10,25 +10,28 @@
 #import "InboxViewController.h"
 #import "SocialViewController.h"
 #import "ContactViewController.h"
+#import "ContentViewController.h"
 
 @implementation ContentTabBarController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.inboxVC = [[InboxViewController alloc] initWithNibName:@"InboxView" bundle:nil];
-    self.socialVC = [[SocialViewController alloc] initWithNibName:@"SocialView" bundle:nil];
+    InboxViewController *inboxVC = [[InboxViewController alloc] initWithNibName:@"InboxView" bundle:nil];
+    SocialViewController *socialVC = [[SocialViewController alloc] initWithNibName:@"SocialView" bundle:nil];
     ContactViewController *contactVC = [[ContactViewController alloc] initWithNibName:@"ContactView" bundle:nil];
-    [self setViewControllers:@[self.inboxVC, self.socialVC, contactVC]];
-    self.inboxVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Inbox" image:nil selectedImage:nil];
-    [self.inboxVC.tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"Helvetica" size:18.0], NSFontAttributeName, nil] forState:UIControlStateNormal];
-    self.socialVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Shared" image:nil selectedImage:nil];
-    [self.socialVC.tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"Helvetica" size:18.0], NSFontAttributeName, nil] forState:UIControlStateNormal];
+    [self setViewControllers:@[inboxVC, socialVC, contactVC]];
+    inboxVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Inbox" image:nil selectedImage:nil];
+    [inboxVC.tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"Helvetica" size:18.0], NSFontAttributeName, nil] forState:UIControlStateNormal];
+    socialVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Shared" image:nil selectedImage:nil];
+    [socialVC.tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"Helvetica" size:18.0], NSFontAttributeName, nil] forState:UIControlStateNormal];
     contactVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"People" image:nil selectedImage:nil];
     [contactVC.tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"Helvetica" size:18.0], NSFontAttributeName, nil] forState:UIControlStateNormal];
     CGRect frame = self.tabBar.frame;
     frame.origin = CGPointMake(0, 0);
     self.tabBar.frame = frame;
-
+    [self addChildViewController:inboxVC];
+    [self addChildViewController:socialVC];
+    [self addChildViewController:contactVC];
 }
 
 - (void)didReceiveMemoryWarning {

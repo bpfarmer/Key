@@ -18,5 +18,6 @@
 @property (nonatomic) NSString *parentId;
 
 - (instancetype)initWithUserUniqueId:(NSString *)userUniqueId location:(CLLocation *)location;
+- (instancetype)initWithUserUniqueId:(NSString *)userUniqueId location:(CLLocation *)location parentId:(NSString *)parentId;
 
 @end

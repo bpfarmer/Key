@@ -25,7 +25,7 @@
 
 static NSString *TableViewCellIdentifier = @"Threads";
 
-@interface HomeViewController () <CLLocationManagerDelegate>
+@interface HomeViewController () <CLLocationManagerDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
@@ -36,14 +36,15 @@ static NSString *TableViewCellIdentifier = @"Threads";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    ContentViewController *contentVC = [[ContentViewController alloc] init];
+    ContentViewController *contentVC = [ContentViewController new];
     [[NSBundle mainBundle] loadNibNamed:@"ContentView" owner:contentVC options:nil];
+    
+    self.scrollView.delegate = self;
     
     [self addChildViewController:contentVC];
     [self.scrollView addSubview:contentVC.contentTC.view];
     [contentVC didMoveToParentViewController:self];
-    
-    contentVC.contentTC.inboxVC.homeViewController = self;
+    [self addChildViewController:contentVC.contentTC];
     
     ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
     [self addChildViewController:shareViewController];
@@ -68,6 +69,7 @@ static NSString *TableViewCellIdentifier = @"Threads";
     //self.scrollView.contentOffset = CGPointMake(newContentOffsetX, 0);
     
     [[KAccountManager sharedManager] initLocationManager];
+    [[KAccountManager sharedManager] refreshCurrentCoordinate];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -75,9 +77,17 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
--(BOOL)shouldAutorotate
-{
+-(BOOL)shouldAutorotate {
     return NO;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.view endEditing:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.view endEditing:YES];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -96,10 +106,9 @@ static NSString *TableViewCellIdentifier = @"Threads";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if([segue.identifier isEqualToString:kThreadSeguePush]) {
-        InboxViewController *inboxViewController = (InboxViewController *)sender;
-        if(inboxViewController.selectedThread) {
+        if(self.selectedThread) {
             ThreadViewController *threadViewController = (ThreadViewController *)segue.destinationViewController;
-            threadViewController.thread = inboxViewController.selectedThread;
+            threadViewController.thread = self.selectedThread;
         }
     }else if([[segue identifier] isEqual:kSelectRecipientSegueIdentifier]) {
         SelectRecipientViewController *selectRecipientController = (SelectRecipientViewController *)segue.destinationViewController;
@@ -113,5 +122,21 @@ static NSString *TableViewCellIdentifier = @"Threads";
     return YES;
 }
 
+- (void)dismissAndPresentThread:(KThread *)thread {
+    [self dismissViewControllerAnimated:NO completion:^{
+        self.selectedThread = thread;
+        [self performSegueWithIdentifier:kThreadSeguePush sender:self];
+    }];
+}
+
+- (void)dismissAndPresentViewController:(UIViewController *)viewController {
+    [self dismissViewControllerAnimated:NO completion:^{
+        [self presentViewController:viewController animated:YES completion:nil];
+    }];
+}
+
+- (BOOL)resignFirstResponder {
+    return YES;
+}
 
 @end

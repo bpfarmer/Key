@@ -14,5 +14,6 @@
 @property (nonatomic, strong) IBOutlet UIImageView *mediaView;
 @property (nonatomic,weak) id <DismissAndPresentProtocol> delegate;
 @property (nonatomic, strong) NSData *imageData;
+@property (nonatomic) BOOL shoudDismiss;
 
 @end

@@ -193,7 +193,10 @@
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (TARGET_IPHONE_SIMULATOR) {
-            [self didTakePhoto:[[NSData alloc] init]];
+            NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"orwell" ofType:@"jpg"];
+            NSLog(@"IMAGE PATH: %@", imagePath);
+            NSData *img = [NSData dataWithContentsOfFile:imagePath];
+            [self didTakePhoto:img];
             return;
         }
         

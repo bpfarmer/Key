@@ -28,7 +28,7 @@
                        createdAt:(NSDate *)createdAt;
 
 - (instancetype)initWithAuthorId:(NSString *)authorId text:(NSString *)text;
-
+- (NSArray *)attachments;
 - (KUser *)author;
 
 @end

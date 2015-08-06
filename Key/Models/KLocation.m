@@ -20,4 +20,16 @@
     return self;
 }
 
+- (instancetype)initWithUserUniqueId:(NSString *)userUniqueId location:(CLLocation *)location parentId:(NSString *)parentId{
+    self = [super init];
+    
+    if(self) {
+        _userUniqueId = userUniqueId;
+        _location     = location;
+        _parentId     = parentId;
+    }
+    return self;
+}
+
+
 @end

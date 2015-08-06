@@ -23,6 +23,7 @@
 #import "EncryptedMessage.h"
 #import "KPost.h"
 #import "KDevice.h"
+#import "AttachmentKey.h"
 
 @implementation KStorageSchema
 
@@ -43,6 +44,7 @@
     [EncryptedMessage createTable];
     [KPost createTable];
     [KDevice createTable];
+    [AttachmentKey createTable];
 }
 
 + (void)dropTables {
@@ -61,6 +63,7 @@
     [EncryptedMessage dropTable];
     [KPost dropTable];
     [KDevice dropTable];
+    [AttachmentKey dropTable];
 }
 
 

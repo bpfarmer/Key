@@ -10,6 +10,7 @@
 
 #define kCoderLocation @"location"
 #define kCoderUserUniqueId @"userUniqueId"
+#define kCoderParentId @"parentId"
 
 @implementation KLocation(Serialize)
 
@@ -18,12 +19,13 @@
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
-    return [self initWithUserUniqueId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUserUniqueId] location:[aDecoder decodeObjectOfClass:[CLLocation class] forKey:kCoderLocation]];
+    return [self initWithUserUniqueId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUserUniqueId] location:[aDecoder decodeObjectOfClass:[CLLocation class] forKey:kCoderLocation] parentId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderParentId]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:self.userUniqueId forKey:kCoderUserUniqueId];
     [aCoder encodeObject:self.location forKey:kCoderLocation];
+    [aCoder encodeObject:self.parentId forKey:kCoderParentId];
 }
 
 @end

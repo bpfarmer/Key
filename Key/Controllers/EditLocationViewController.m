@@ -11,7 +11,7 @@
 #import "KAccountManager.h"
 #import "KLocation.h"
 
-@interface EditLocationViewController ()
+@interface EditLocationViewController () <DismissAndPresentProtocol>
 
 @property (nonatomic, strong) IBOutlet MKMapView *mapView;
 
@@ -85,8 +85,16 @@
     SelectRecipientViewController *selectRecipientView = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
     NSMutableArray *sendableObjects = [[NSMutableArray alloc] init];
     [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
-    [selectRecipientView setSendableObjects:sendableObjects];
+    [selectRecipientView setSendableObjects:[sendableObjects copy]];
+    selectRecipientView.delegate = self;
     [self presentViewController:selectRecipientView animated:NO completion:nil];
+}
+
+- (void)dismissAndPresentViewController:(UIViewController *)viewController {
+    [self dismissViewControllerAnimated:NO completion:^{
+        if(viewController != nil) [self presentViewController:viewController animated:YES completion:nil];
+        else [self dismissViewControllerAnimated:NO completion:nil];
+    }];
 }
 
 

@@ -61,6 +61,12 @@
     }
 }
 
++ (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject session:(Session *)session {
+    EncryptedMessage *encryptedMessage = [session encryptMessage:[NSKeyedArchiver archivedDataWithRootObject:encryptableObject]];
+    NSLog(@"CREATED ENCRYPTED MESSAGE: %@", encryptedMessage);
+    [SendMessageRequest makeRequestWithSendableMessage:encryptedMessage];
+}
+
 + (void)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage {
     NSString *remoteDeviceId = encryptedMessage.senderId;
     TOCFuture *futureSession = [FreeKey sessionWithReceiverDeviceId:remoteDeviceId];
@@ -68,6 +74,30 @@
         NSData *decryptedData = [session decryptMessage:encryptedMessage];
         [((KDatabaseObject *)[NSKeyedUnarchiver unarchiveObjectWithData:decryptedData]) save];
     }];
+}
+
++ (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject attachableObjects:(NSArray *)attachableObjects recipientIds:(NSArray *)recipientIds {
+    AttachmentKey *attachmentKey = [[AttachmentKey alloc] init];
+    [attachmentKey save];
+    NSMutableArray *cipherAttachments = [NSMutableArray new];
+    for(KDatabaseObject *attachableObject in attachableObjects) {
+        [cipherAttachments addObject:[attachmentKey encryptObject:attachableObject]];
+    }
+    KUser *localUser = [KAccountManager sharedManager].user;
+    for(NSString *recipientId in recipientIds) {
+        for(KDevice *device in [KDevice devicesForUserId:recipientId]) {
+            TOCFuture *futureSession = [self sessionWithReceiverDeviceId:device.deviceId];
+            [futureSession thenDo:^(Session *session) {
+                NSLog(@"SUCCESSFULLY RETRIEVED OR CREATED SESSION: %@", session);
+                [self sendEncryptableObject:encryptableObject session:session];
+                [self sendEncryptableObject:attachmentKey session:session];
+                for(NSData *cipherAttachment in cipherAttachments) {
+                    Attachment *attachment = [[Attachment alloc] initWithSenderId:localUser.currentDeviceId receiverId:device.deviceId cipherText:cipherAttachment mac:nil attachmentKeyId:attachmentKey.uniqueId];
+                    [SendAttachmentRequest makeRequestWithAttachment:attachment];
+                }
+            }];
+        }
+    }
 }
 
 + (void)sendAttachableObject:(KDatabaseObject *)object recipientIds:(NSArray *)recipientIds {
@@ -91,7 +121,8 @@
 + (void)decryptAndSaveAttachment:(Attachment *)attachment {
     AttachmentKey *attachmentKey = [AttachmentKey findById:attachment.attachmentKeyId];
     if(attachmentKey) {
-        KDatabaseObject *object = [attachmentKey decryptCipherText:attachment.cipherText];
+        NSLog(@"TRYING TO DECRYPT ATTACHMENT: %@", attachment);
+        KDatabaseObject *object = [attachmentKey decryptCipherText:attachment.serializedData];
         [object save];
     }
 }
