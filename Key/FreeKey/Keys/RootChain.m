@@ -67,5 +67,4 @@ static uint8_t kChainKeySeed[kTSKeySeedLength]      = {02};
     return [NSData dataWithBytes:result length:sizeof(result)];
 }
 
-
 @end

@@ -35,6 +35,21 @@
     }];
 }
 
++ (NSArray *)devicesForUserIds:(NSArray *)userIds {
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        NSMutableArray *questionMarks = [NSMutableArray new];
+        for(int i = 0; i < userIds.count; i++) [questionMarks addObject:@"?"];
+        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where user_id in (%@)", [self tableName], [questionMarks componentsJoinedByString:@", "]] withArgumentsInArray:userIds];
+        NSMutableArray *devices = [[NSMutableArray alloc] init];
+        while(result.next) {
+            KDevice *device = [[KDevice alloc] initWithResultSetRow:result.resultDictionary];
+            [devices addObject:device];
+        }
+        [result close];
+        return [devices copy];
+    }];
+}
+
 + (KDevice *)addDeviceForUserId:(NSString *)userId deviceId:(NSString *)deviceId {
     KDevice *device = [self findByDictionary:@{@"userId" : userId, @"deviceId": deviceId}];
     if(device != nil) return device;

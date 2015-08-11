@@ -36,6 +36,7 @@
     
     if(self.post) {
         if(self.post.attachments.count > 0) {
+            NSLog(@"SHOULD HAVE ATTACHMENTS");
             if([self.post.attachments.firstObject isKindOfClass:[KPhoto class]]) {
                 self.photo = (KPhoto *)self.post.attachments.firstObject;
             }else if([self.post.attachments.firstObject isKindOfClass:[KLocation class]]) {

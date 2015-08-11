@@ -56,16 +56,6 @@
                         <action selector="toggleOrientation:" destination="-1" eventType="touchUpInside" id="hTx-LB-gkS"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wUZ-lq-Fy4">
-                    <rect key="frame" x="8" y="530" width="30" height="30"/>
-                    <state key="normal" title="(0)">
-                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="didPressMessages:" destination="-1" eventType="touchUpInside" id="QsU-eQ-kma"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HFA-CE-bXj">
                     <rect key="frame" x="252" y="530" width="60" height="30"/>
                     <state key="normal" title="Location">

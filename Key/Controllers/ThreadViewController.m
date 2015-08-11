@@ -15,6 +15,7 @@
 #import "FreeKey.h"
 #import "JSQMessagesAvatarImageFactory.h"
 #import "CheckDevicesRequest.h"
+#import "CollapsingFutures.h"
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
@@ -158,11 +159,10 @@ static NSString *TableViewCellIdentifier = @"Messages";
             NSLog(@"GETTING READY TO SEND MESSAGE: %@", message);
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{
-                [CheckDevicesRequest makeRequestWithUserIds:self.thread.recipientIds];
-                for(NSString *recipientId in self.thread.recipientIds) {
-                    [FreeKey sendEncryptableObject:message recipientId:recipientId];
-                    NSLog(@"SENDING TO RECIPIENT ID: %@", recipientId);
-                }
+                TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:self.thread.recipientIds];
+                [futureDevices thenDo:^(id value) {
+                    [FreeKey sendEncryptableObject:message recipientIds:self.thread.recipientIds];
+                }];
             });
             
             self.inputToolbar.contentView.textView.text = @"";

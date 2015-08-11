@@ -29,51 +29,73 @@
 #import "SendAttachmentRequest.h"
 #import "SendPreKeysRequest.h"
 #import "SendPreKeyExchangeRequest.h"
+#import "CheckDevicesRequest.h"
 
 @implementation FreeKey
+
++ (dispatch_queue_t)sharedQueue {
+    static dispatch_once_t pred;
+    static dispatch_queue_t sharedDispatchQueue;
+    
+    dispatch_once(&pred, ^{
+        sharedDispatchQueue = dispatch_queue_create("FreeKeyQueue", NULL);
+    });
+    
+    return sharedDispatchQueue;
+}
+
+
++ (TOCFuture *)prepareSessionsForRecipientIds:(NSArray *)recipientIds {
+    TOCFutureSource *futureDevicesAndSessions = [TOCFutureSource new];
+    TOCFuture *futureDevices = [CheckDevicesRequest makeRequestWithUserIds:recipientIds];
+    [futureDevices thenDo:^(id value) {
+        TOCFuture *futureUsers = [KUser asyncFindByIds:recipientIds];
+        [futureUsers thenDo:^(id value) {
+            NSMutableArray *futureSessions = [NSMutableArray new];
+            for(NSString *recipientId in recipientIds) {
+                for(KDevice *device in [KDevice devicesForUserId:recipientId]) {
+                    [futureSessions addObject:[self sessionWithReceiverDeviceId:device.deviceId]];
+                }
+            }
+            [futureDevicesAndSessions trySetResult:futureSessions.toc_finallyAll];
+        }];
+    }];
+    return futureDevicesAndSessions.future;
+}
+
 
 + (TOCFuture *)sessionWithReceiverDeviceId:(NSString *)receiverDeviceId{
     TOCFutureSource *resultSource = [TOCFutureSource new];
     Session *session = [Session findByDictionary:@{@"receiverDeviceId" : receiverDeviceId}];
     if(session != nil) {
-        NSLog(@"RETRIEVED SESSION: %@", session);
         [resultSource trySetResult:session];
     }else {
-        TOCFuture *futureSession = [KUser asyncRetrieveKeyExchangeWithRemoteDeviceId:receiverDeviceId];
-        [futureSession thenDo:^(Session *session) {
-            NSLog(@"NEWLY CREATED SESSION: %@", session);
-            [resultSource trySetResult:session];
+        TOCFuture *futureKeyExchange = [KUser asyncRetrieveKeyExchangeWithRemoteDeviceId:receiverDeviceId];
+        [futureKeyExchange thenDo:^(KDatabaseObject *keyExchange) {
+            dispatch_async([self sharedQueue], ^{
+                Session *session = [Session findByDictionary:@{@"receiverDeviceId" : receiverDeviceId}];
+                if(session != nil) {
+                    [resultSource trySetResult:session];
+                }else {
+                    KUser *localUser = [KAccountManager sharedManager].user;
+                    [FreeKey processNewKeyExchange:keyExchange localDeviceId:localUser.currentDeviceId localIdentityKey:localUser.identityKey];
+                    [resultSource trySetResult:[Session findByDictionary:@{@"receiverDeviceId" : receiverDeviceId}]];
+                }
+            });
         }];
     }
     return resultSource.future;
 }
 
-+ (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject recipientId:(NSString *)recipientId {
-    for(KDevice *device in [KDevice devicesForUserId:recipientId]) {
-        NSLog(@"ENCRYPTING MESSAGE FOR DEVICE ID: %@", device.deviceId);
++ (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject recipientIds:(NSArray *)recipientIds {
+    for(KDevice *device in [KDevice devicesForUserIds:recipientIds]) {
         TOCFuture *futureSession = [self sessionWithReceiverDeviceId:device.deviceId];
         [futureSession thenDo:^(Session *session) {
-            NSLog(@"SUCCESSFULLY RETRIEVED OR CREATED SESSION: %@", session);
-            EncryptedMessage *encryptedMessage = [session encryptMessage:[NSKeyedArchiver archivedDataWithRootObject:encryptableObject]];
-            NSLog(@"CREATED ENCRYPTED MESSAGE: %@", encryptedMessage);
-            [SendMessageRequest makeRequestWithSendableMessage:encryptedMessage];
+            dispatch_async([self sharedQueue], ^{
+                [self sendEncryptableObject:encryptableObject session:session];
+            });
         }];
     }
-}
-
-+ (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject session:(Session *)session {
-    EncryptedMessage *encryptedMessage = [session encryptMessage:[NSKeyedArchiver archivedDataWithRootObject:encryptableObject]];
-    NSLog(@"CREATED ENCRYPTED MESSAGE: %@", encryptedMessage);
-    [SendMessageRequest makeRequestWithSendableMessage:encryptedMessage];
-}
-
-+ (void)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage {
-    NSString *remoteDeviceId = encryptedMessage.senderId;
-    TOCFuture *futureSession = [FreeKey sessionWithReceiverDeviceId:remoteDeviceId];
-    [futureSession thenDo:^(Session *session) {
-        NSData *decryptedData = [session decryptMessage:encryptedMessage];
-        [((KDatabaseObject *)[NSKeyedUnarchiver unarchiveObjectWithData:decryptedData]) save];
-    }];
 }
 
 + (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject attachableObjects:(NSArray *)attachableObjects recipientIds:(NSArray *)recipientIds {
@@ -84,37 +106,46 @@
         [cipherAttachments addObject:[attachmentKey encryptObject:attachableObject]];
     }
     KUser *localUser = [KAccountManager sharedManager].user;
-    for(NSString *recipientId in recipientIds) {
-        for(KDevice *device in [KDevice devicesForUserId:recipientId]) {
-            TOCFuture *futureSession = [self sessionWithReceiverDeviceId:device.deviceId];
-            [futureSession thenDo:^(Session *session) {
-                NSLog(@"SUCCESSFULLY RETRIEVED OR CREATED SESSION: %@", session);
+    for(KDevice *device in [KDevice devicesForUserIds:recipientIds]) {
+        TOCFuture *futureSession = [self sessionWithReceiverDeviceId:device.deviceId];
+        [futureSession thenDo:^(Session *session) {
+            dispatch_async([self sharedQueue], ^{
                 [self sendEncryptableObject:encryptableObject session:session];
                 [self sendEncryptableObject:attachmentKey session:session];
-                for(NSData *cipherAttachment in cipherAttachments) {
-                    Attachment *attachment = [[Attachment alloc] initWithSenderId:localUser.currentDeviceId receiverId:device.deviceId cipherText:cipherAttachment mac:nil attachmentKeyId:attachmentKey.uniqueId];
-                    [SendAttachmentRequest makeRequestWithAttachment:attachment];
-                }
-            }];
+            });
+        }];
+        for(NSData *cipherAttachment in cipherAttachments) {
+            Attachment *attachment = [[Attachment alloc] initWithSenderId:localUser.currentDeviceId receiverId:device.deviceId cipherText:cipherAttachment mac:nil attachmentKeyId:attachmentKey.uniqueId];
+            [SendAttachmentRequest makeRequestWithAttachment:attachment];
         }
     }
 }
 
-+ (void)sendAttachableObject:(KDatabaseObject *)object recipientIds:(NSArray *)recipientIds {
-    dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-    dispatch_async(queue, ^{
-        AttachmentKey *attachmentKey = [[AttachmentKey alloc] init];
-        [attachmentKey save];
-        for(NSString *recipientId in recipientIds) [self sendEncryptableObject:attachmentKey recipientId:recipientId];
-        NSData *cipherText = [attachmentKey encryptObject:object];
-        KUser *localUser = [KAccountManager sharedManager].user;
-        for(NSString *recipientId in recipientIds) {
-            for(KDevice *device in [KDevice devicesForUserId:recipientId]) {
-                Attachment *attachment = [[Attachment alloc] initWithSenderId:localUser.currentDeviceId receiverId:device.deviceId cipherText:cipherText mac:nil attachmentKeyId:attachmentKey.uniqueId];
-                [SendAttachmentRequest makeRequestWithAttachment:attachment];
++ (void)sendEncryptableObject:(KDatabaseObject *)encryptableObject session:(Session *)session {
+    EncryptedMessage *encryptedMessage = [session encryptMessage:[NSKeyedArchiver archivedDataWithRootObject:encryptableObject]];
+    [SendMessageRequest makeRequestWithSendableMessage:encryptedMessage];
+}
 
-            }
-        }
++ (void)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage {
+    dispatch_async([self sharedQueue], ^{
+        Session *session = [Session findByDictionary:@{@"receiverDeviceId" : encryptedMessage.senderId}];
+        [self decryptAndSaveEncryptedMessage:encryptedMessage session:session];
+    });
+}
+
++ (KDatabaseObject *)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session {
+    NSData *decryptedData = [session decryptMessage:encryptedMessage];
+    if(decryptedData != nil) {
+        KDatabaseObject *object = (KDatabaseObject *)[NSKeyedUnarchiver unarchiveObjectWithData:decryptedData];
+        [object save];
+        return object;
+    }
+    return nil;
+}
+
++ (void)decryptAndSaveAttachments:(NSArray *)attachments {
+    dispatch_async([self sharedQueue], ^{
+        for(Attachment *attachment in attachments) [self decryptAndSaveAttachment:attachment];
     });
 }
 
@@ -124,6 +155,9 @@
         NSLog(@"TRYING TO DECRYPT ATTACHMENT: %@", attachment);
         KDatabaseObject *object = [attachmentKey decryptCipherText:attachment.serializedData];
         [object save];
+        NSLog(@"SAVED OBJECT: %@", object);
+    }else {
+        NSLog(@"COULDN'T FIND ATTACHMENT");
     }
 }
 
@@ -168,7 +202,6 @@
         NSLog(@"SUCCESSFULLY RECOGNIZED %@ AS PREKEY", keyExchange);
         PreKey *preKey = (PreKey *)keyExchange;
         NSString *remoteUserId = [preKey.userId componentsSeparatedByString:@"_"].firstObject;
-        TOCFuture *futureUser = [KUser asyncFindById:remoteUserId];
         [KDevice addDeviceForUserId:remoteUserId deviceId:preKey.userId];
         Session *session = [[Session alloc] initWithSenderDeviceId:localDeviceId receiverDeviceId:preKey.userId];
         PreKeyExchange *preKeyExchange = [session addSenderBaseKey:[Curve25519 generateKeyPair] senderIdentityKey:localIdentityKey receiverPreKey:preKey receiverPublicKey:preKey.publicKey];

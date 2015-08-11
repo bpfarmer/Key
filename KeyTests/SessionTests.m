@@ -27,6 +27,8 @@
 - (void)setUp {
     [super setUp];
     [[KStorageManager sharedManager] setDatabaseWithName:@"TESTING"];
+    [KStorageSchema dropTables];
+    [KStorageSchema createTables];
 }
 
 - (void)tearDown {
@@ -129,28 +131,76 @@
     NSData *message5 = [@"message5" dataUsingEncoding:NSUTF8StringEncoding];
     NSData *message6 = [@"message6" dataUsingEncoding:NSUTF8StringEncoding];
     
-    XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message5]] isEqualToData:message5]);
-    XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message6]] isEqualToData:message6]);
-    XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message1]] isEqualToData:message1]);
-    XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message2]] isEqualToData:message2]);
+    EncryptedMessage *eMessage1 = [session encryptMessage:message1];
+    EncryptedMessage *eMessage2 = [session encryptMessage:message2];
+    EncryptedMessage *eMessage3 = [session encryptMessage:message3];
+    EncryptedMessage *eMessage4 = [session encryptMessage:message4];
+    EncryptedMessage *eMessage5 = [session encryptMessage:message5];
+    EncryptedMessage *eMessage6 = [session encryptMessage:message6];
+    
+    XCTAssert([[oppositeSession decryptMessage:eMessage5] isEqualToData:message5]);
+    XCTAssert([[oppositeSession decryptMessage:eMessage1] isEqualToData:message1]);
+    XCTAssert([[oppositeSession decryptMessage:eMessage2] isEqualToData:message2]);
+    XCTAssert([[oppositeSession decryptMessage:eMessage3] isEqualToData:message3]);
+    XCTAssert([[oppositeSession decryptMessage:eMessage4] isEqualToData:message4]);
+    XCTAssert([[oppositeSession decryptMessage:eMessage6] isEqualToData:message6]);
+    
+    eMessage1 = [oppositeSession encryptMessage:message1];
+    eMessage2 = [oppositeSession encryptMessage:message2];
+    eMessage3 = [oppositeSession encryptMessage:message3];
+    eMessage4 = [oppositeSession encryptMessage:message4];
+    eMessage5 = [oppositeSession encryptMessage:message5];
+    eMessage6 = [oppositeSession encryptMessage:message6];
+    
+    XCTAssert([[session decryptMessage:eMessage2] isEqualToData:message2]);
+    XCTAssert([[session decryptMessage:eMessage4] isEqualToData:message4]);
+    XCTAssert([[session decryptMessage:eMessage6] isEqualToData:message6]);
+    XCTAssert([[session decryptMessage:eMessage3] isEqualToData:message3]);
+    XCTAssert([[session decryptMessage:eMessage5] isEqualToData:message5]);
+    XCTAssert([[session decryptMessage:eMessage1] isEqualToData:message1]);
+    
+    eMessage1 = [session encryptMessage:message1];
+    eMessage2 = [session encryptMessage:message2];
+    eMessage3 = [session encryptMessage:message3];
+    eMessage4 = [session encryptMessage:message4];
+    eMessage5 = [session encryptMessage:message5];
+    eMessage6 = [session encryptMessage:message6];
+    
+    XCTAssert([[oppositeSession decryptMessage:eMessage1] isEqualToData:message1]);
+    XCTAssert([[oppositeSession decryptMessage:eMessage2] isEqualToData:message2]);
+    XCTAssert([[oppositeSession decryptMessage:eMessage3] isEqualToData:message3]);
+    XCTAssert([[oppositeSession decryptMessage:eMessage4] isEqualToData:message4]);
+    XCTAssert([[oppositeSession decryptMessage:eMessage5] isEqualToData:message5]);
+    XCTAssert([[oppositeSession decryptMessage:eMessage6] isEqualToData:message6]);
+    
+    XCTAssert([[session decryptMessage:[oppositeSession encryptMessage:message2]] isEqualToData:message2]);
+    XCTAssert([[session decryptMessage:[oppositeSession encryptMessage:message4]] isEqualToData:message4]);
+    
     XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message4]] isEqualToData:message4]);
     XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message3]] isEqualToData:message3]);
     
     XCTAssert([[session decryptMessage:[oppositeSession encryptMessage:message2]] isEqualToData:message2]);
     XCTAssert([[session decryptMessage:[oppositeSession encryptMessage:message4]] isEqualToData:message4]);
-    XCTAssert([[session decryptMessage:[oppositeSession encryptMessage:message6]] isEqualToData:message6]);
-    XCTAssert([[session decryptMessage:[oppositeSession encryptMessage:message3]] isEqualToData:message3]);
-    XCTAssert([[session decryptMessage:[oppositeSession encryptMessage:message5]] isEqualToData:message5]);
-    XCTAssert([[session decryptMessage:[oppositeSession encryptMessage:message1]] isEqualToData:message1]);
     
-    XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message1]] isEqualToData:message1]);
-    XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message2]] isEqualToData:message2]);
+    XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message4]] isEqualToData:message4]);
+    XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message3]] isEqualToData:message3]);
     
     XCTAssert([[session decryptMessage:[oppositeSession encryptMessage:message2]] isEqualToData:message2]);
     XCTAssert([[session decryptMessage:[oppositeSession encryptMessage:message4]] isEqualToData:message4]);
     
     XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message4]] isEqualToData:message4]);
     XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message3]] isEqualToData:message3]);
+    
+    NSMutableArray *encryptedMessages = [NSMutableArray new];
+    for(int i = 0; i < 1000; i++) {
+        [encryptedMessages addObject:[session encryptMessage:message1]];
+    }
+    
+    XCTAssert([[oppositeSession decryptMessage:encryptedMessages.lastObject] isEqualToData:message1]);
+    
+    for(EncryptedMessage *encryptedmessage in encryptedMessages) {
+        XCTAssert([[oppositeSession decryptMessage:encryptedmessage] isEqualToData:message1]);
+    }
 }
 
 @end

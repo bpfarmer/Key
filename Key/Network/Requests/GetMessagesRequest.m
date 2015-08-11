@@ -30,19 +30,30 @@
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         NSLog(@"FEED RESPONSE OBJECT: %@", responseObject);
         NSDictionary *messages = [request base64DecodedDictionary:responseObject];
+        NSMutableArray *userIds = [NSMutableArray new];
+        NSMutableArray *encryptedMessages = [NSMutableArray new];
+        
         for(NSDictionary *msg in messages[kEncryptedMessageRemoteAlias]) {
             EncryptedMessage *encryptedMessage = [EncryptedMessage new];
             [encryptedMessage setValuesForKeysWithDictionary:msg];
-            TOCFuture *futureUser = [KUser asyncFindById:[encryptedMessage.senderId componentsSeparatedByString:@"_"].firstObject];
-            [futureUser thenDo:^(id value) {
-                [FreeKey decryptAndSaveEncryptedMessage:encryptedMessage];
-            }];
+            [encryptedMessages addObject:encryptedMessage];
+            [userIds addObject:[encryptedMessage.senderId componentsSeparatedByString:@"_"].firstObject];
         }
+        
+        NSMutableArray *attachments = [NSMutableArray new];
         for(NSDictionary *attach in messages[kAttachmentAlias]) {
             Attachment *attachment = [Attachment new];
             [attachment setValuesForKeysWithDictionary:attach];
-            [FreeKey decryptAndSaveAttachment:attachment];
+            [attachments addObject:attachment];
         }
+        
+        TOCFuture *futureUsers = [FreeKey prepareSessionsForRecipientIds:userIds];
+        [futureUsers thenDo:^(id value) {
+            for(EncryptedMessage *em in encryptedMessages) {
+                [FreeKey decryptAndSaveEncryptedMessage:em];
+            }
+            [FreeKey decryptAndSaveAttachments:[attachments copy]];
+        }];
     };
     void (^failure)(AFHTTPRequestOperation *operation, NSError *error) = ^(AFHTTPRequestOperation *operation, NSError *error){
         [resultSource trySetFailure:error];

@@ -107,6 +107,7 @@
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
 		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
 		EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD431A6B5C1400973E15 /* KGroup.m */; };
+		EFEF48311B79188700E77113 /* KDeviceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF48301B79188700E77113 /* KDeviceTests.m */; };
 		EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A611AAE19C3006C10D2 /* AES_CBC.m */; };
 		EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A631AAE19C3006C10D2 /* HMAC.m */; };
 		EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A651AAE19C3006C10D2 /* KeyDerivation.m */; };
@@ -321,6 +322,7 @@
 		EFEBDD3A1A6B2C7800973E15 /* KMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KMessage.m; path = Models/KMessage.m; sourceTree = "<group>"; };
 		EFEBDD421A6B5C1400973E15 /* KGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KGroup.h; path = Models/KGroup.h; sourceTree = "<group>"; };
 		EFEBDD431A6B5C1400973E15 /* KGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KGroup.m; path = Models/KGroup.m; sourceTree = "<group>"; };
+		EFEF48301B79188700E77113 /* KDeviceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KDeviceTests.m; path = ModelTests/KDeviceTests.m; sourceTree = "<group>"; };
 		EFF70A601AAE19C3006C10D2 /* AES_CBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES_CBC.h; sourceTree = "<group>"; };
 		EFF70A611AAE19C3006C10D2 /* AES_CBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AES_CBC.m; sourceTree = "<group>"; };
 		EFF70A621AAE19C3006C10D2 /* HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC.h; sourceTree = "<group>"; };
@@ -664,6 +666,7 @@
 		EFC6BEB91A6857D500B0EB8F /* KeyTests */ = {
 			isa = PBXGroup;
 			children = (
+				EFEF482F1B7917C700E77113 /* ModelTests */,
 				EFDDD9BC1B5C2AEF00089124 /* NetworkTests */,
 				EFB225FD1B4AD18800D7E44B /* FreeKeyTests */,
 				EF6B44C31ABDAE1D00B88323 /* HttpManagerTests.m */,
@@ -725,6 +728,14 @@
 				EFEBDD371A68CE9600973E15 /* KUser.m */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		EFEF482F1B7917C700E77113 /* ModelTests */ = {
+			isa = PBXGroup;
+			children = (
+				EFEF48301B79188700E77113 /* KDeviceTests.m */,
+			);
+			name = ModelTests;
 			sourceTree = "<group>";
 		};
 		EFF70A5E1AAE19C3006C10D2 /* FreeKey */ = {
@@ -1126,6 +1137,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */,
+				EFEF48311B79188700E77113 /* KDeviceTests.m in Sources */,
 				EF6B44C21ABCDD3600B88323 /* FreeKeyTestExample.m in Sources */,
 				EF6B44C41ABDAE1D00B88323 /* HttpManagerTests.m in Sources */,
 				EFB226001B4AD20A00D7E44B /* KStorageManagerTests.m in Sources */,

@@ -161,8 +161,6 @@
         [parameterDictionary setObject:obj forKey:[self columnNameFromProperty:key]];
     }];
     
-    //NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@", selectSQL, parameterDictionary);
-    
     return [[KStorageManager sharedManager] querySelectObject:^KDatabaseObject *(FMDatabase *database) {
         FMResultSet *result = [database executeQuery:selectSQL withParameterDictionary:[parameterDictionary copy]];
         if(result.next) {

@@ -39,6 +39,7 @@
 - (TOCFuture *)asyncUpdate;
 - (TOCFuture *)asyncGetFeed;
 + (TOCFuture *)asyncFindById:(NSString *)uniqueId;
++ (TOCFuture *)asyncFindByIds:(NSArray *)uniqueIds;
 
 - (NSString *)displayName;
 - (NSArray *)contacts;

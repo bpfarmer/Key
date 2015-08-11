@@ -19,7 +19,7 @@
 + (TOCFuture *)makeRequestWithSendableMessage:(id<KSendable>)message {
     TOCFutureSource *resultSource = [TOCFutureSource new];
     SendMessageRequest *request = [[SendMessageRequest alloc] initWithSendableMessage:message];
-    NSLog(@"SENDING ENCRYPTED MESSAGE TO SERVER: %@", message);
+
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         [resultSource trySetResult:@YES];
     };
