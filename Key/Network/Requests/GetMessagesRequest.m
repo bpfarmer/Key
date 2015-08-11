@@ -47,7 +47,7 @@
             [attachments addObject:attachment];
         }
         
-        TOCFuture *futureUsers = [KUser asyncFindByIds:userIds];
+        TOCFuture *futureUsers = [FreeKey prepareSessionsForRecipientIds:userIds];
         [futureUsers thenDo:^(id value) {
             for(EncryptedMessage *em in encryptedMessages) {
                 [FreeKey decryptAndSaveEncryptedMessage:em];

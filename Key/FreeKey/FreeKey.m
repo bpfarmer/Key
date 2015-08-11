@@ -49,8 +49,7 @@
     TOCFutureSource *futureDevicesAndSessions = [TOCFutureSource new];
     TOCFuture *futureDevices = [CheckDevicesRequest makeRequestWithUserIds:recipientIds];
     [futureDevices thenDo:^(id value) {
-        [futureDevicesAndSessions trySetResult:[KUser asyncFindByIds:recipientIds]];
-        /*TOCFuture *futureUsers = [KUser asyncFindByIds:recipientIds];
+        TOCFuture *futureUsers = [KUser asyncFindByIds:recipientIds];
         [futureUsers thenDo:^(id value) {
             NSMutableArray *futureSessions = [NSMutableArray new];
             for(NSString *recipientId in recipientIds) {
@@ -59,7 +58,7 @@
                 }
             }
             [futureDevicesAndSessions trySetResult:futureSessions.toc_finallyAll];
-        }];*/
+        }];
     }];
     return futureDevicesAndSessions.future;
 }
@@ -128,12 +127,10 @@
 }
 
 + (void)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage {
-    TOCFuture *futureSession = [self sessionWithReceiverDeviceId:encryptedMessage.senderId];
-    [futureSession thenDo:^(Session *session) {
-        dispatch_async([self sharedQueue], ^{
-            [self decryptAndSaveEncryptedMessage:encryptedMessage session:session];
-        });
-    }];
+    dispatch_async([self sharedQueue], ^{
+        Session *session = [Session findByDictionary:@{@"receiverDeviceId" : encryptedMessage.senderId}];
+        [self decryptAndSaveEncryptedMessage:encryptedMessage session:session];
+    });
 }
 
 + (KDatabaseObject *)decryptAndSaveEncryptedMessage:(EncryptedMessage *)encryptedMessage session:(Session *)session {

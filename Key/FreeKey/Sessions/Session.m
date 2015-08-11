@@ -113,6 +113,10 @@
     [receiverRootChain save];
     _receiverChainId = receiverRootChain.uniqueId;
     
+    NSLog(@"INITIAL ROOT CHAIN SETUP");
+    NSLog(@"SENDER ROOT CHAIN: %@", senderRootChain);
+    NSLog(@"RECEIVER ROOT CHAIN: %@", receiverRootChain);
+    
     [self save];
 }
 
@@ -141,6 +145,8 @@
                                                                               index:senderRootChain.index
                                                                       previousIndex:self.previousIndex];
     [senderRootChain iterateChainKey];
+    
+    NSLog(@"SENDER ROOT CHAIN ITERATED TO: %@", senderRootChain);
     return encryptedMessage;
 }
 
@@ -166,6 +172,7 @@
 
 - (void)processReceiverChain:(EncryptedMessage *)encryptedMessage {
     if([self isNewEphemeral:encryptedMessage.senderRatchetKey]) {
+        NSLog(@"RECEIVING NEW EPHEMERAL KEY");
         [self saveSessionStatesUpToIndex:encryptedMessage.previousIndex];
         RootChain *senderRootChain = [RootChain findById:self.senderChainId];
         self.previousIndex = senderRootChain.index;
@@ -181,6 +188,7 @@
         SessionState *sessionState = [[SessionState alloc] initWithMessageKey:receiverRootChain.messageKey senderRatchetKey:receiverRootChain.theirRatchetKey messageIndex:receiverRootChain.index sessionId:self.uniqueId];
         [sessionState save];
         [receiverRootChain iterateChainKey];
+        NSLog(@"ITERATING RECEIVER ROOT CHAIN: %@", receiverRootChain);
     }
 }
 
@@ -189,6 +197,11 @@
         [self ratchetReceiverRootChain:theirEphemeral];
         [self ratchetSenderRootChain:theirEphemeral];
         [self addReceivedRatchetKey:theirEphemeral];
+        NSLog(@"RATCHETING BOTH CHAINS");
+        RootChain *senderRootChain = [RootChain findById:self.senderChainId];
+        RootChain *receiverRootChain = [RootChain findById:self.receiverChainId];
+        NSLog(@"SENDER ROOT CHAIN: %@", senderRootChain);
+        NSLog(@"RECEIVER ROOT CHAIN: %@", receiverRootChain);
     }
 }
 
@@ -217,6 +230,7 @@
 }
 
 - (void)addReceivedRatchetKey:(NSData *)theirEphemeral {
+    NSLog(@"TRYING TO ADD NEW RATCHET KEY: %@", theirEphemeral);
     NSMutableArray *ratchetKeys = [[NSMutableArray alloc] initWithArray:self.receivedRatchetKeys];
     [ratchetKeys addObject:theirEphemeral];
     self.receivedRatchetKeys = [[NSArray alloc] initWithArray:ratchetKeys];
