@@ -73,9 +73,7 @@
     
 }
 
-- (void)startCamera
-;
-{
+- (void)startCamera {
     if (TARGET_IPHONE_SIMULATOR) {
         _simulatorIsCameraRunning = YES;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -138,10 +136,10 @@
                 [notificationCenter addObserver:self selector:@selector(onVideoError:) name:AVCaptureSessionRuntimeErrorNotification object:self.captureSession];
                 
                 if (!self.captureVideoPreviewLayer) {
+                    self.captureVideoPreviewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
+                    self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                    self.captureVideoPreviewLayer.frame = self.cameraPreviewFeedView.bounds;
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        self.captureVideoPreviewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
-                        self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                        self.captureVideoPreviewLayer.frame = self.cameraPreviewFeedView.bounds;
                         [self.cameraPreviewFeedView.layer insertSublayer:self.captureVideoPreviewLayer atIndex:0];
                     });
                 }
