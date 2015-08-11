@@ -46,12 +46,14 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [contentVC didMoveToParentViewController:self];
     [self addChildViewController:contentVC.contentTC];
     
+    CGRect adminFrame = contentVC.view.frame;
+    adminFrame.origin.x = adminFrame.size.width;
+    
+    
     ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
     [self addChildViewController:shareViewController];
     [self.scrollView addSubview:shareViewController.view];
     
-    CGRect adminFrame = contentVC.view.frame;
-    adminFrame.origin.x = adminFrame.size.width;
     shareViewController.view.frame = adminFrame;
     
     CGRect shareFrame = shareViewController.view.frame;
