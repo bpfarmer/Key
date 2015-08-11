@@ -87,6 +87,14 @@
     return futureUser.future;
 }
 
++ (TOCFuture *)asyncFindByIds:(NSArray *)uniqueIds {
+    NSMutableArray *futureUsers = [NSMutableArray new];
+    for(NSString *uniqueId in uniqueIds) {
+        [futureUsers addObject:[self asyncFindById:uniqueId]];
+    }
+    return futureUsers.toc_finallyAll;
+}
+
 - (void)setupIdentityKey {
     self.identityKey = [Curve25519 generateKeyPair];
     [self setPublicKey:self.identityKey.publicKey];

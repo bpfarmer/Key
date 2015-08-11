@@ -155,12 +155,13 @@
     
     if(![Session verifyMac:mac remotePublicKey:self.receiverPublicKey localPublicKey:self.senderPublicKey macKey:sessionState.messageKey.macKey data:encryptedMessage.serializedData]) {
         NSLog(@"FAILED HMAC VERIFICATION"); //TODO: throw exception
+        return nil;
+    }else {
+        NSData *decryptedData = [AES_CBC decryptCBCMode:cipherText
+                                                withKey:sessionState.messageKey.cipherKey
+                                                 withIV:sessionState.messageKey.iv];
+        return decryptedData;
     }
-    
-    NSData *decryptedData = [AES_CBC decryptCBCMode:cipherText
-                                            withKey:sessionState.messageKey.cipherKey
-                                             withIV:sessionState.messageKey.iv];
-    return decryptedData;
 }
 
 - (void)processReceiverChain:(EncryptedMessage *)encryptedMessage {

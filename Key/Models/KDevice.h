@@ -16,6 +16,7 @@
 
 - (instancetype)initWithUserId:(NSString *)userId deviceId:(NSString *)deviceId isCurrentDevice:(BOOL)isCurrentDevice;
 + (NSArray *)devicesForUserId:(NSString *)userId;
++ (NSArray *)devicesForUserIds:(NSArray *)userIds;
 + (NSArray *)addDeviceForUserId:(NSString *)userId deviceId:(NSString *)deviceId;
 
 @end

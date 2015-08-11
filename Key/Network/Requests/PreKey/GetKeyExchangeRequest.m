@@ -33,8 +33,7 @@
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         NSLog(@"RETRIEVED KEY EXCHANGE: %@", responseObject);
         NSObject *keyExchange = [request createKeyExchangeFromDictionary:[request base64DecodedDictionary:responseObject]];
-        Session *session = [FreeKey processNewKeyExchange:keyExchange localDeviceId:localUser.currentDeviceId localIdentityKey:localUser.identityKey];
-        [resultSource trySetResult:session];
+        [resultSource trySetResult:keyExchange];
     };
     void (^failure)(AFHTTPRequestOperation *operation, NSError *error) = ^(AFHTTPRequestOperation *operation, NSError *error){
         [resultSource trySetFailure:error];
