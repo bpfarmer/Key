@@ -29,7 +29,7 @@ static NSString *TableViewCellIdentifier = @"Posts";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.posts = [KPost all];
+    self.posts = [KPost unread];
     
     self.postsTableView.delegate = self;
     self.postsTableView.dataSource = self;
@@ -45,10 +45,16 @@ static NSString *TableViewCellIdentifier = @"Posts";
                                                object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    self.posts = [KPost unread];
+    [self.postsTableView reloadData];
+}
+
 - (void)databaseModified:(NSNotification *)notification {
     if([notification.object isKindOfClass:[KPost class]]) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             KPost *post = (KPost *)notification.object;
+            NSLog(@"POST TO BE SHOWN: %@", post);
             if(!post.read) {
                 if([post previewImage]) {
                     NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.posts];

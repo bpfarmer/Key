@@ -54,8 +54,9 @@ static NSString *TableViewCellIdentifier = @"Messages";
             for(KThread *thread in self.threads) if([thread.uniqueId isEqualToString:((KThread *)notification.object).uniqueId]) return;
             NSMutableArray *threads = [[NSMutableArray alloc] initWithArray:self.threads];
             [threads addObject:[notification object]];
-            self.threads = [[NSArray alloc] initWithArray:threads];
+            NSArray *newThreads = [threads copy];
             dispatch_async(dispatch_get_main_queue(), ^{
+                self.threads = newThreads;
                 [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.threads.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
             });
         });

@@ -95,10 +95,6 @@
     return [[NSString alloc] initWithString: [docsDir stringByAppendingPathComponent:self.uniqueId]];
 }
 
-- (void)save {
-    [super save];
-}
-
 - (NSData *)previewImage {
     if(!self.preview) {
         NSData *zippedMedia = [NSData dataWithContentsOfFile:self.filePath];
