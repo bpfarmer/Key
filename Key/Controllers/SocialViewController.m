@@ -46,8 +46,10 @@ static NSString *TableViewCellIdentifier = @"Posts";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    self.posts = [KPost unread];
-    [self.postsTableView reloadData];
+    if(self.posts.count != [KPost unread].count) {
+        self.posts = [KPost unread];
+        [self.postsTableView reloadData];
+    }
 }
 
 - (void)databaseModified:(NSNotification *)notification {
@@ -104,8 +106,10 @@ static NSString *TableViewCellIdentifier = @"Posts";
         [self.parentViewController presentViewController:mediaViewController animated:NO completion:^{
             NSMutableArray *posts = [NSMutableArray arrayWithArray:self.posts];
             [posts removeObject:post];
+            post.read = YES;
+            [post save];
             self.posts = posts;
-            [self.postsTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];\
+            [self.postsTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
     }
 }
