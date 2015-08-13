@@ -13,6 +13,7 @@
 #import "KStorageManager.h"
 #import "KMessage.h"
 #import "CollapsingFutures.h"
+#import "KPost.h"
 
 static NSString *TableViewCellIdentifier = @"Contacts";
 
@@ -70,8 +71,21 @@ static NSString *TableViewCellIdentifier = @"Contacts";
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    
-    cell.textLabel.text = ((KUser *)self.contacts[indexPath.row]).displayName;
+    KUser *user = (KUser *)self.contacts[indexPath.row];
+    cell.textLabel.text = user.displayName;
+    KPost *post = [KPost findByDictionary:@{@"authorId" : user.uniqueId}];
+    UIImage *preview;
+    if(post) {
+        preview = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];
+    }else {
+        CGSize size = CGSizeMake(40, 40);
+        UIGraphicsBeginImageContextWithOptions(size, YES, 0);
+        [[UIColor whiteColor] setFill];
+        UIRectFill(CGRectMake(0, 0, size.width, size.height));
+        preview = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    cell.imageView.image = preview;
     return cell;
 }
 
