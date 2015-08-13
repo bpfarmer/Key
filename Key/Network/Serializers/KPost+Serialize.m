@@ -29,7 +29,6 @@
                          authorId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderAuthorId]
                              text:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderText]
                       attachments:[aDecoder decodeObjectOfClass:[NSArray class] forKey:kCoderAttachments]
-                             seen:[aDecoder decodeBoolForKey:kCoderSeen]
                         createdAt:[aDecoder decodeObjectOfClass:[NSDate class] forKey:kCoderCreatedAt]];
 }
 
@@ -37,7 +36,6 @@
     [aCoder encodeObject:self.uniqueId forKey:kCoderUniqueId];
     [aCoder encodeObject:self.authorId forKey:kCoderAuthorId];
     [aCoder encodeObject:self.text forKey:kCoderText];
-    [aCoder encodeBool:self.seen forKey:kCoderSeen];
     [aCoder encodeObject:self.createdAt forKey:kCoderCreatedAt];
 }
 

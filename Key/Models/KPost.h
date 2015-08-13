@@ -8,6 +8,7 @@
 
 #import "KDatabaseObject.h"
 #import "KEncryptable.h"
+#import <UIKit/UIKit.h>
 
 @class KAttachment;
 @class KUser;
@@ -17,18 +18,20 @@
 @property (nonatomic, readonly) NSString *authorId;
 @property (nonatomic, readonly) NSString *text;
 @property (nonatomic) NSString *attachmentIds;
-@property (nonatomic) BOOL seen;
+@property (nonatomic) NSData *preview;
+@property (nonatomic) BOOL read;
 @property (nonatomic, readonly) NSDate *createdAt;
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         authorId:(NSString *)authorId
                             text:(NSString *)text
                       attachments:(NSArray *)attachments
-                            seen:(BOOL)seen
                        createdAt:(NSDate *)createdAt;
 
 - (instancetype)initWithAuthorId:(NSString *)authorId text:(NSString *)text;
 - (NSArray *)attachments;
 - (KUser *)author;
+- (NSData *)previewImage;
++ (NSArray *)unread;
 
 @end

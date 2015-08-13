@@ -2,7 +2,7 @@
 //  registrationViewController.h
 //  Key
 //
-//  Created by Loren on 1/27/15.
+//  Created by Brendan on 1/27/15.
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
