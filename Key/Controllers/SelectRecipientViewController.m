@@ -109,12 +109,14 @@ static NSString *TableViewCellIdentifier = @"Recipients";
                 for(KUser *user in self.selectedRecipients) {
                     [recipientIds addObject:user.uniqueId];
                 }
+                for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
+                    object.parentId = self.post.uniqueId;
+                    [object save];
+                    NSLog(@"OBJECT ATTACHED: %@", object);
+                }
+                NSLog(@"TO POST: %@", self.post);
                 TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:recipientIds];
                 [futureDevices thenDo:^(id value) {
-                    for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
-                        object.parentId = self.post.uniqueId;
-                        [object save];
-                    }
                     [FreeKey sendEncryptableObject:self.post attachableObjects:self.sendableObjects recipientIds:recipientIds];
                 }];
             });

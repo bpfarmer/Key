@@ -39,6 +39,8 @@ static NSString *TableViewCellIdentifier = @"Messages";
     
     [self.threadsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
+    [UIView setAnimationsEnabled:NO];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(databaseModified:)
                                                  name:[KThread notificationChannel]
@@ -46,19 +48,29 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (void)databaseModified:(NSNotification *)notification {
-    if([[notification object] isKindOfClass:[KThread class]]) {
-        for(KThread *thread in self.threads) if([thread.uniqueId isEqualToString:((KThread *)notification.object).uniqueId]) return;
-        NSMutableArray *threads = [[NSMutableArray alloc] initWithArray:self.threads];
-        [threads addObject:[notification object]];
-        self.threads = [[NSArray alloc] initWithArray:threads];
-        [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.threads.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    if([notification.object isKindOfClass:[KThread class]]) {
+        NSLog(@"THREAD: %@, %@", notification.object, ((KThread *)notification.object).displayName);
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            for(KThread *thread in self.threads) if([thread.uniqueId isEqualToString:((KThread *)notification.object).uniqueId]) return;
+            NSMutableArray *threads = [[NSMutableArray alloc] initWithArray:self.threads];
+            [threads addObject:[notification object]];
+            NSArray *newThreads = [threads copy];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.threads = newThreads;
+                [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.threads.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            });
+        });
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
     [[KAccountManager sharedManager].user asyncGetFeed];
+    [self.threadsTableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -86,9 +98,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
     UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
     KThread *thread = self.threads[indexPath.row];
     NSString *read = @"";
-    /*if(!thread.read) {
-        read = @" - UNREAD";
-    }*/
     cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", thread.displayName, read];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;

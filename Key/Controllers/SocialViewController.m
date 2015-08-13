@@ -19,7 +19,6 @@ static NSString *TableViewCellIdentifier = @"Posts";
 
 @interface SocialViewController () <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) IBOutlet UITextView *postTextView;
 @property (nonatomic, strong) IBOutlet UITableView *postsTableView;
 @property (nonatomic) NSArray *posts;
 
@@ -29,18 +28,8 @@ static NSString *TableViewCellIdentifier = @"Posts";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIColor *borderColor = [UIColor colorWithRed:204.0/255.0 green:204.0/255.0 blue:204.0/255.0 alpha:1.0];
     
-    self.postTextView.layer.borderColor = borderColor.CGColor;
-    self.postTextView.layer.borderWidth = 1.0;
-    self.postTextView.layer.cornerRadius = 5.0;
-    
-    self.postTextView.delegate = self;
-    
-    [self.postTextView sizeToFit];
-    [self.postTextView layoutIfNeeded];
-    
-    self.posts = [KPost all];
+    self.posts = [KPost unread];
     
     self.postsTableView.delegate = self;
     self.postsTableView.dataSource = self;
@@ -56,12 +45,30 @@ static NSString *TableViewCellIdentifier = @"Posts";
                                                object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    if(self.posts.count != [KPost unread].count) {
+        self.posts = [KPost unread];
+        [self.postsTableView reloadData];
+    }
+}
+
 - (void)databaseModified:(NSNotification *)notification {
-    if([[notification object] isKindOfClass:[KPost class]]) {
-        NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.posts];
-        [posts addObject:[notification object]];
-        self.posts = [[NSArray alloc] initWithArray:posts];
-        [self.postsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.posts.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    if([notification.object isKindOfClass:[KPost class]]) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            KPost *post = (KPost *)notification.object;
+            NSLog(@"POST TO BE SHOWN: %@", post);
+            if(!post.read) {
+                if([post previewImage]) {
+                    NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.posts];
+                    [posts addObject:[notification object]];
+                    self.posts = [[NSArray alloc] initWithArray:posts];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.postsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.posts.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    });
+                }
+            }
+        });
     }
 }
 
@@ -84,9 +91,9 @@ static NSString *TableViewCellIdentifier = @"Posts";
     UITableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
                                                                       forIndexPath:indexPath];
     
-    NSString *text = post.text;
-    if(text == nil) text = @"Tap to View";
-    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", post.author.username, text];
+    cell.textLabel.text  = [NSString stringWithFormat:@"%@", post.author.username];
+    cell.imageView.image = [UIImage imageWithData:post.previewImage];
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -96,7 +103,14 @@ static NSString *TableViewCellIdentifier = @"Posts";
     if(post) {
         MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
         mediaViewController.post = post;
-        [self.parentViewController presentViewController:mediaViewController animated:NO completion:nil];
+        [self.parentViewController presentViewController:mediaViewController animated:NO completion:^{
+            NSMutableArray *posts = [NSMutableArray arrayWithArray:self.posts];
+            [posts removeObject:post];
+            post.read = YES;
+            [post save];
+            self.posts = posts;
+            [self.postsTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }];
     }
 }
 
