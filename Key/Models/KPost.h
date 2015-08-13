@@ -33,5 +33,6 @@
 - (KUser *)author;
 - (NSData *)previewImage;
 + (NSArray *)unread;
++ (UIImage *)imageWithImage:(UIImage *)image scaledToFillSize:(CGSize)size;
 
 @end

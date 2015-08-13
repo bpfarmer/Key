@@ -92,7 +92,7 @@ static NSString *TableViewCellIdentifier = @"Posts";
                                                                       forIndexPath:indexPath];
     
     cell.textLabel.text  = [NSString stringWithFormat:@"%@", post.author.username];
-    cell.imageView.image = [UIImage imageWithData:post.previewImage];
+    cell.imageView.image = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
