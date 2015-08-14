@@ -84,6 +84,19 @@
     }];
 }
 
++ (NSArray *)findByAuthorId:(NSString *)authorId {
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where author_id = :unique_id", [self tableName]] withParameterDictionary:@{@"unique_id" : authorId}];
+        NSMutableArray *posts = [[NSMutableArray alloc] init];
+        while(result.next) {
+            KPost *post = [[KPost alloc] initWithResultSetRow:result.resultDictionary];
+            [posts addObject:post];
+        }
+        [result close];
+        return [posts copy];
+    }];
+}
+
 + (NSArray *)unsavedPropertyList {
     NSMutableArray *unsavedProperties = [[NSMutableArray alloc] initWithArray:[super unsavedPropertyList]];
     [unsavedProperties addObjectsFromArray:@[@"preview"]];

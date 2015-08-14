@@ -150,6 +150,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
     KThread *thread = self.threads[indexPath.row];
     if(thread) {
         self.homeViewController.selectedThread = thread;
+        dispatch_async(dispatch_get_main_queue(), ^{});
         [self.homeViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
     }
 }

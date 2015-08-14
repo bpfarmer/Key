@@ -14,10 +14,11 @@
 #import "KMessage.h"
 #import "CollapsingFutures.h"
 #import "KPost.h"
+#import "ProfileViewController.h"
 
 static NSString *TableViewCellIdentifier = @"Contacts";
 
-@interface ContactViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface ContactViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *contactsTableView;
 @property (nonatomic, strong) IBOutlet UITextField *contactTextField;
 @property (nonatomic) KUser *currentUser;
@@ -37,12 +38,11 @@ static NSString *TableViewCellIdentifier = @"Contacts";
     self.contactsTableView.scrollEnabled = YES;
     self.contactTextField.delegate = self;
     
-    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
+    UITapGestureRecognizer *tapRec = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)];
+    [tapRec setCancelsTouchesInView:NO];
+    [self.view addGestureRecognizer:tapRec];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(databaseModified:)
-                                                 name:[KUser notificationChannel]
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KUser notificationChannel] object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -86,7 +86,19 @@ static NSString *TableViewCellIdentifier = @"Contacts";
         UIGraphicsEndImageContext();
     }
     cell.imageView.image = preview;
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    KUser *user = (KUser *)self.contacts[indexPath.row];
+    if(user) {
+        ProfileViewController *profileViewController = [[ProfileViewController alloc] initWithNibName:@"ProfileView" bundle:nil];
+        profileViewController.user = user;
+        dispatch_async(dispatch_get_main_queue(), ^{});
+        [self presentViewController:profileViewController animated:NO completion:nil];
+    }
+
 }
 
 - (IBAction)addContact:(id)sender {

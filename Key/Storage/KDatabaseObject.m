@@ -161,6 +161,10 @@
         [conditions addObject:[NSString stringWithFormat:@"%@ = :%@", [self propertyToColumnMapping][key], [self propertyToColumnMapping][key]]];
     }
     NSString *selectSQL = [NSString stringWithFormat:@"select * from %@ where %@", [self tableName], [conditions componentsJoinedByString:@" AND "]];
+    
+    if([[self propertyNames] containsObject:@"createdAt"]) {
+        selectSQL = [NSString stringWithFormat:@"%@ order by created_at desc", selectSQL];
+    }
 
     NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] init];
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -196,7 +200,6 @@
             else [instanceMap setObject:[self valueForKey:obj] forKey:key];
         }
     }];
-    NSLog(@"INSTANCE MAP: %@", instanceMap);
     return instanceMap;
 }
 
@@ -211,7 +214,6 @@
             }else [self setValue:resultSetRow[key] forKey:obj];
         }
     }];
-    NSLog(@"HYDRATED OBJECT: %@", self);
     return self;
 }
 

@@ -111,6 +111,8 @@
 		EFEF48351B7D3A0600E77113 /* InboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF48341B7D3A0600E77113 /* InboxTableViewCell.m */; };
 		EFEF48381B7D8B4E00E77113 /* SubtitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF48371B7D8B4E00E77113 /* SubtitleTableViewCell.m */; };
 		EFEF483B1B7D8BFB00E77113 /* NSDate+TimeAgo.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF483A1B7D8BFB00E77113 /* NSDate+TimeAgo.m */; };
+		EFEF483E1B7D9E3300E77113 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF483D1B7D9E3300E77113 /* ProfileViewController.m */; };
+		EFEF48401B7D9FA400E77113 /* ProfileView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFEF483F1B7D9FA400E77113 /* ProfileView.xib */; };
 		EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A611AAE19C3006C10D2 /* AES_CBC.m */; };
 		EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A631AAE19C3006C10D2 /* HMAC.m */; };
 		EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A651AAE19C3006C10D2 /* KeyDerivation.m */; };
@@ -332,6 +334,9 @@
 		EFEF48371B7D8B4E00E77113 /* SubtitleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SubtitleTableViewCell.m; path = Cells/SubtitleTableViewCell.m; sourceTree = "<group>"; };
 		EFEF48391B7D8BFB00E77113 /* NSDate+TimeAgo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TimeAgo.h"; sourceTree = "<group>"; };
 		EFEF483A1B7D8BFB00E77113 /* NSDate+TimeAgo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+TimeAgo.m"; sourceTree = "<group>"; };
+		EFEF483C1B7D9E3300E77113 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		EFEF483D1B7D9E3300E77113 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		EFEF483F1B7D9FA400E77113 /* ProfileView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ProfileView.xib; path = Views/ProfileView.xib; sourceTree = "<group>"; };
 		EFF70A601AAE19C3006C10D2 /* AES_CBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES_CBC.h; sourceTree = "<group>"; };
 		EFF70A611AAE19C3006C10D2 /* AES_CBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AES_CBC.m; sourceTree = "<group>"; };
 		EFF70A621AAE19C3006C10D2 /* HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC.h; sourceTree = "<group>"; };
@@ -441,6 +446,7 @@
 				EFB4A2A61B5211580042F3DF /* ThreadView.xib */,
 				EFE43D3D1B580F670092CAC5 /* ContentView.xib */,
 				EFE43D451B5837060092CAC5 /* ContactView.xib */,
+				EFEF483F1B7D9FA400E77113 /* ProfileView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -864,6 +870,8 @@
 				EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */,
 				EFB225F01B48C4EF00D7E44B /* MediaViewController.h */,
 				EFB225F11B48C4EF00D7E44B /* MediaViewController.m */,
+				EFEF483C1B7D9E3300E77113 /* ProfileViewController.h */,
+				EFEF483D1B7D9E3300E77113 /* ProfileViewController.m */,
 				EFF70ABB1AAE1CBC006C10D2 /* RegistrationViewController.h */,
 				EFF70ABC1AAE1CBC006C10D2 /* RegistrationViewController.m */,
 				EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */,
@@ -981,6 +989,7 @@
 				EFC6BEAE1A6857D500B0EB8F /* Images.xcassets in Resources */,
 				EFCE585A1B725EFF00B39E39 /* orwell.jpg in Resources */,
 				EF8358241AE02AD800B631AB /* InboxView.xib in Resources */,
+				EFEF48401B7D9FA400E77113 /* ProfileView.xib in Resources */,
 				EFB722751B423DB000E6DF7A /* EditLocationView.xib in Resources */,
 				EFE43D4A1B58482D0092CAC5 /* User.plist in Resources */,
 				EFB4A2A71B5211580042F3DF /* ThreadView.xib in Resources */,
@@ -1139,6 +1148,7 @@
 				EFF70A8E1AAE19C3006C10D2 /* RootChain.m in Sources */,
 				EF6B44A81ABA2F8A00B88323 /* ContactViewController.m in Sources */,
 				EFC1819E1AC3534F00BE8B0B /* RegisterUsernameRequest.m in Sources */,
+				EFEF483E1B7D9E3300E77113 /* ProfileViewController.m in Sources */,
 				EFDDD9C21B5ED1FF00089124 /* Attachment.m in Sources */,
 				EFB225F81B49851000D7E44B /* KLocation+Serialize.m in Sources */,
 				EFEF48351B7D3A0600E77113 /* InboxTableViewCell.m in Sources */,
