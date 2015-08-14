@@ -17,6 +17,7 @@
 #import <UIKit/UIKit.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "NSData+gzip.h"
+#import "NSDate+TimeAgo.h"
 
 @implementation KPost
 
@@ -168,6 +169,10 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
+}
+
+- (NSString *)displayDate {
+    return self.createdAt.formattedAsTimeAgo;
 }
 
 @end

@@ -108,6 +108,9 @@
 		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
 		EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD431A6B5C1400973E15 /* KGroup.m */; };
 		EFEF48311B79188700E77113 /* KDeviceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF48301B79188700E77113 /* KDeviceTests.m */; };
+		EFEF48351B7D3A0600E77113 /* InboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF48341B7D3A0600E77113 /* InboxTableViewCell.m */; };
+		EFEF48381B7D8B4E00E77113 /* SubtitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF48371B7D8B4E00E77113 /* SubtitleTableViewCell.m */; };
+		EFEF483B1B7D8BFB00E77113 /* NSDate+TimeAgo.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF483A1B7D8BFB00E77113 /* NSDate+TimeAgo.m */; };
 		EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A611AAE19C3006C10D2 /* AES_CBC.m */; };
 		EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A631AAE19C3006C10D2 /* HMAC.m */; };
 		EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A651AAE19C3006C10D2 /* KeyDerivation.m */; };
@@ -323,6 +326,12 @@
 		EFEBDD421A6B5C1400973E15 /* KGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KGroup.h; path = Models/KGroup.h; sourceTree = "<group>"; };
 		EFEBDD431A6B5C1400973E15 /* KGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KGroup.m; path = Models/KGroup.m; sourceTree = "<group>"; };
 		EFEF48301B79188700E77113 /* KDeviceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KDeviceTests.m; path = ModelTests/KDeviceTests.m; sourceTree = "<group>"; };
+		EFEF48331B7D3A0600E77113 /* InboxTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InboxTableViewCell.h; path = Cells/InboxTableViewCell.h; sourceTree = "<group>"; };
+		EFEF48341B7D3A0600E77113 /* InboxTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InboxTableViewCell.m; path = Cells/InboxTableViewCell.m; sourceTree = "<group>"; };
+		EFEF48361B7D8B4E00E77113 /* SubtitleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubtitleTableViewCell.h; path = Cells/SubtitleTableViewCell.h; sourceTree = "<group>"; };
+		EFEF48371B7D8B4E00E77113 /* SubtitleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SubtitleTableViewCell.m; path = Cells/SubtitleTableViewCell.m; sourceTree = "<group>"; };
+		EFEF48391B7D8BFB00E77113 /* NSDate+TimeAgo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TimeAgo.h"; sourceTree = "<group>"; };
+		EFEF483A1B7D8BFB00E77113 /* NSDate+TimeAgo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+TimeAgo.m"; sourceTree = "<group>"; };
 		EFF70A601AAE19C3006C10D2 /* AES_CBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES_CBC.h; sourceTree = "<group>"; };
 		EFF70A611AAE19C3006C10D2 /* AES_CBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AES_CBC.m; sourceTree = "<group>"; };
 		EFF70A621AAE19C3006C10D2 /* HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC.h; sourceTree = "<group>"; };
@@ -479,6 +488,8 @@
 				EFB226081B4D6E2E00D7E44B /* NSString+PropertyKVC.m */,
 				EFDDD9B31B595FAC00089124 /* NSData+gzip.h */,
 				EFDDD9B41B595FAC00089124 /* NSData+gzip.m */,
+				EFEF48391B7D8BFB00E77113 /* NSDate+TimeAgo.h */,
+				EFEF483A1B7D8BFB00E77113 /* NSDate+TimeAgo.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -738,6 +749,17 @@
 			name = ModelTests;
 			sourceTree = "<group>";
 		};
+		EFEF48321B7D39DF00E77113 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				EFEF48331B7D3A0600E77113 /* InboxTableViewCell.h */,
+				EFEF48341B7D3A0600E77113 /* InboxTableViewCell.m */,
+				EFEF48361B7D8B4E00E77113 /* SubtitleTableViewCell.h */,
+				EFEF48371B7D8B4E00E77113 /* SubtitleTableViewCell.m */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
 		EFF70A5E1AAE19C3006C10D2 /* FreeKey */ = {
 			isa = PBXGroup;
 			children = (
@@ -814,6 +836,7 @@
 		EFF70AB01AAE1CBC006C10D2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				EFEF48321B7D39DF00E77113 /* Cells */,
 				EF9A744D1B52B60D009689A7 /* Protocols */,
 				EFABC02F1B39EA6B0062B807 /* CameraViewController.h */,
 				EFABC0301B39EA6B0062B807 /* CameraViewController.m */,
@@ -1047,9 +1070,11 @@
 				EFC181AA1AC371C300BE8B0B /* SendPreKeysRequest.m in Sources */,
 				EFB225F21B48C4EF00D7E44B /* MediaViewController.m in Sources */,
 				EFE43D3C1B580CE50092CAC5 /* ContentViewController.m in Sources */,
+				EFEF483B1B7D8BFB00E77113 /* NSDate+TimeAgo.m in Sources */,
 				EFDDD9B51B595FAC00089124 /* NSData+gzip.m in Sources */,
 				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
 				EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */,
+				EFEF48381B7D8B4E00E77113 /* SubtitleTableViewCell.m in Sources */,
 				EFAC97D11B2E171600B4FD0F /* KOutgoingObject.m in Sources */,
 				EFDDD9B81B5AE89700089124 /* LoginRequest.m in Sources */,
 				EF3D09E31AE036EB0044E9F6 /* InboxViewController.m in Sources */,
@@ -1116,6 +1141,7 @@
 				EFC1819E1AC3534F00BE8B0B /* RegisterUsernameRequest.m in Sources */,
 				EFDDD9C21B5ED1FF00089124 /* Attachment.m in Sources */,
 				EFB225F81B49851000D7E44B /* KLocation+Serialize.m in Sources */,
+				EFEF48351B7D3A0600E77113 /* InboxTableViewCell.m in Sources */,
 				EF0F4DC41ABA19DE00BB2AFC /* HomeViewController.m in Sources */,
 				EF4920A41AD762A400A9FE89 /* NSBundle+Messages.m in Sources */,
 				EFB225FB1B4ACC3100D7E44B /* KDatabaseObject.m in Sources */,

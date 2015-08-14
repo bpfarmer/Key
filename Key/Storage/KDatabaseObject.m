@@ -46,7 +46,14 @@
 }
 
 +(NSDictionary *)propertyTypeToColumnTypeMapping {
-    return @{@"NSString" : @"text", @"bool" : @"integer", @"float" : @"real", @"int" : @"integer", @"NSInteger" : @"integer", @"NSNumber" : @"integer", @"NSUInteger" : @"integer"};
+    return @{@"NSString" : @"text",
+             @"bool" : @"integer",
+             @"float" : @"real",
+             @"int" : @"integer",
+             @"NSInteger" : @"integer",
+             @"NSNumber" : @"integer",
+             @"NSUInteger" : @"integer",
+             @"NSDate" : @"integer"};
 }
 
 + (NSArray *)storedPropertyList {
@@ -108,7 +115,6 @@
     NSString *columnKeys = [[self instanceMapping].allKeys componentsJoinedByString:@", "];
     NSString *valueKeys   = [@":" stringByAppendingString:[[self instanceMapping].allKeys componentsJoinedByString:@", :"]];
     NSString *insertOrReplaceSQL = [NSString stringWithFormat:@"insert or replace into %@ (%@) values(%@)", [self.class tableName], columnKeys, valueKeys];
-    //NSLog(@"SAVING WITH SQL: %@ AND PARAMETERS: %@", insertOrReplaceSQL, [self instanceMapping]);
     [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
         [database executeUpdate:insertOrReplaceSQL withParameterDictionary:[self instanceMapping]];
     }];
@@ -184,9 +190,13 @@
         if([self valueForKey:(NSString *)obj]) {
             if([[[self class] columnTypeForProperty:obj] isEqualToString:kColumnTypeBlob] && ![[self valueForKey:obj] isKindOfClass:[NSData class]])
                 [instanceMap setObject:[NSKeyedArchiver archivedDataWithRootObject:[self valueForKey:obj]] forKey:key];
+            else if([[[self class] typeOfPropertyNamed:obj] isEqualToString:NSStringFromClass([NSDate class])]) {
+                [instanceMap setObject:[NSNumber numberWithDouble:[(NSDate *)[self valueForKey:obj] timeIntervalSince1970]] forKey:key];
+            }
             else [instanceMap setObject:[self valueForKey:obj] forKey:key];
         }
     }];
+    NSLog(@"INSTANCE MAP: %@", instanceMap);
     return instanceMap;
 }
 
@@ -196,9 +206,12 @@
         if(![resultSetRow[key] isKindOfClass:[NSNull class]]) {
             if([[[self class] columnTypeForProperty:obj] isEqualToString:kColumnTypeBlob] && ![[[self class] typeOfPropertyNamed:obj] isEqualToString:@"NSData"])
                 [self setValue:[NSKeyedUnarchiver unarchiveObjectWithData:resultSetRow[key]] forKey:obj];
-            else [self setValue:resultSetRow[key] forKey:obj];
+            else if([[[self class] typeOfPropertyNamed:obj] isEqualToString:NSStringFromClass([NSDate class])]) {
+                [self setValue:[NSDate dateWithTimeIntervalSince1970:[resultSetRow[key] doubleValue]] forKey:obj];
+            }else [self setValue:resultSetRow[key] forKey:obj];
         }
     }];
+    NSLog(@"HYDRATED OBJECT: %@", self);
     return self;
 }
 

@@ -24,7 +24,6 @@
 @property (nonatomic) NSString *status;
 @property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *createdAt;
-@property (nonatomic) NSData *attachmentKey;
 
 - (instancetype)initWithAuthorId:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
@@ -33,5 +32,8 @@
                             body:(NSString *)body
                           status:(NSString *)status
                        createdAt:(NSDate *)createdAt;
+
+- (KUser *)author;
+- (NSString *)displayDate;
 
 @end

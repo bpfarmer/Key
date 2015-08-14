@@ -33,5 +33,6 @@
 - (NSArray *)messages;
 - (NSString *)displayName;
 - (BOOL)saved;
+- (KMessage *)latestMessage;
 
 @end

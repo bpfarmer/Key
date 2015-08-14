@@ -34,5 +34,6 @@
 - (NSData *)previewImage;
 + (NSArray *)unread;
 + (UIImage *)imageWithImage:(UIImage *)image scaledToFillSize:(CGSize)size;
+- (NSString *)displayDate;
 
 @end

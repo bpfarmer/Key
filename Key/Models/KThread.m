@@ -80,7 +80,9 @@
         KMessage *latestMessage = [KMessage findById:self.latestMessageId];
         NSComparisonResult dateComparison = [message.createdAt compare:latestMessage.createdAt];
         switch (dateComparison) {
-            case NSOrderedDescending : latestMessage = message; break;
+            case NSOrderedDescending :
+                self.latestMessageId = message.uniqueId;
+                break;
             default : break;
         }
     }else {
@@ -114,6 +116,10 @@
         [result close];
         return [messages copy];
     }];
+}
+
+- (KMessage *)latestMessage {
+    return [KMessage findById:self.latestMessageId];
 }
 
 - (BOOL)saved {

@@ -19,6 +19,7 @@
 #import "DismissAndPresentProtocol.h"
 #import "SelectRecipientViewController.h"
 #import "KDevice.h"
+#import "SubtitleTableViewCell.h"
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
@@ -37,7 +38,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
     
     self.threadsTableView.scrollEnabled = YES;
     
-    [self.threadsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    [self.threadsTableView registerClass:[SubtitleTableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
     [UIView setAnimationsEnabled:NO];
     
@@ -50,15 +51,29 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (void)databaseModified:(NSNotification *)notification {
     if([notification.object isKindOfClass:[KThread class]]) {
         NSLog(@"THREAD: %@, %@", notification.object, ((KThread *)notification.object).displayName);
+        KThread *newThread = (KThread *)notification.object;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            for(KThread *thread in self.threads) if([thread.uniqueId isEqualToString:((KThread *)notification.object).uniqueId]) return;
             NSMutableArray *threads = [[NSMutableArray alloc] initWithArray:self.threads];
-            [threads addObject:[notification object]];
-            NSArray *newThreads = [threads copy];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.threads = newThreads;
-                [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.threads.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-            });
+            NSUInteger updatedIndex = -1;
+            for(KThread *thread in threads)
+                if([thread.uniqueId isEqualToString:newThread.uniqueId]) {
+                    updatedIndex = [threads indexOfObject:thread];
+                }
+            if(updatedIndex == -1) {
+                [threads addObject:newThread];
+                NSArray *newThreads = [threads copy];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.threads = newThreads;
+                    [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.threads.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                });
+            }else {
+                [threads replaceObjectAtIndex:updatedIndex withObject:newThread];
+                NSArray *newThreads = [threads copy];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.threads = newThreads;
+                    [self.threadsTableView reloadData];
+                });
+            }
         });
     }
 }
@@ -95,12 +110,31 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
+    SubtitleTableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
     KThread *thread = self.threads[indexPath.row];
-    NSString *read = @"";
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ %@", thread.displayName, read];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", thread.displayName];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", thread.latestMessage.text];
+    cell.imageView.image = [self imageRead:thread.read];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
+}
+
+- (UIImage *)imageRead:(BOOL)read {
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(7.f, 7.f), NO, 0.0f);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+    
+    CGRect rect = CGRectMake(0, 0, 7, 7);
+   
+    if(!read) CGContextSetFillColorWithColor(ctx, self.view.tintColor.CGColor);
+    else  CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
+    CGContextFillEllipseInRect(ctx, rect);
+    
+    CGContextRestoreGState(ctx);
+    UIImage *blueCircle = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return blueCircle;
 }
 
 - (IBAction)logout:(id)sender {

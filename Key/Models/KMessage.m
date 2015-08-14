@@ -13,6 +13,7 @@
 #import "KAccountManager.h"
 #import "KUser.h"
 #import "Util.h"
+#import "NSDate+TimeAgo.h"
 
 #define kStatusUnsent @"UNSENT"
 
@@ -67,7 +68,7 @@
 
 - (void)save {
     [super save];
-    //[self.thread processLatestMessage:self];
+    [self.thread processLatestMessage:self];
 }
 
 - (KThread *)thread {
@@ -93,6 +94,10 @@
 
 - (BOOL)isMediaMessage {
     return NO;
+}
+
+- (NSString *)displayDate {
+    return self.createdAt.formattedAsTimeAgo;
 }
 
 @end

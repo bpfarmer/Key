@@ -14,6 +14,7 @@
 #import "SelectRecipientViewController.h"
 #import "HomeViewController.h"
 #import "MediaViewController.h"
+#import "SubtitleTableViewCell.h"
 
 static NSString *TableViewCellIdentifier = @"Posts";
 
@@ -35,7 +36,7 @@ static NSString *TableViewCellIdentifier = @"Posts";
     self.postsTableView.dataSource = self;
     self.postsTableView.scrollEnabled = YES;
     
-    [self.postsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    [self.postsTableView registerClass:[SubtitleTableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
     self.currentUser = [KAccountManager sharedManager].user;
     
@@ -88,12 +89,12 @@ static NSString *TableViewCellIdentifier = @"Posts";
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     KPost *post = self.posts[indexPath.row];
     NSLog(@"POST: %@", post);
-    UITableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
+    SubtitleTableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
                                                                       forIndexPath:indexPath];
     
     cell.textLabel.text  = [NSString stringWithFormat:@"%@", post.author.username];
     cell.imageView.image = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];
-    
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", post.displayDate];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
