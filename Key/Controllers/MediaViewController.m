@@ -21,6 +21,8 @@
 @property (nonatomic) IBOutlet UILabel *timerLabel;
 @property (nonatomic) KPhoto *photo;
 @property (nonatomic) KLocation *location;
+@property (nonatomic) int mapZoom;
+@property (nonatomic) CLLocationCoordinate2D coordinate;
 
 @end
 
@@ -79,11 +81,74 @@
     [annotation setCoordinate:location.coordinate];
     [annotation setTitle:self.post.author.username];
     [self.mapView addAnnotation:annotation];
-    MKCoordinateRegion region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(0.1, 0.1));
+    self.coordinate = location.coordinate;
+    self.mapZoom = 1;
+    MKCoordinateRegion region = MKCoordinateRegionMake(self.coordinate, MKCoordinateSpanMake(80.0 , 80.0));
     MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:region];
     [self.mapView setRegion:adjustedRegion animated:YES];
     self.mapView = (MKMapView *)[self addTapGestureRecognizerToView:self.mapView];
+    [self addAddressCaptionWithLocation:location];
     [self.view addSubview:self.mapView];
+}
+
+- (void)addAddressCaptionWithLocation:(CLLocation *)location {
+    UIView *captionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 60, self.view.frame.size.width, 30)];
+    [captionView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5f]];
+    [captionView setOpaque:NO];
+    
+    UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
+    captionLabel.textAlignment = NSTextAlignmentCenter;
+    captionLabel.textColor = [UIColor whiteColor];
+    
+    CLGeocoder *ceo = [[CLGeocoder alloc]init];
+    CLLocation *loc = [[CLLocation alloc]initWithCoordinate:location.coordinate altitude:location.altitude horizontalAccuracy:location.horizontalAccuracy verticalAccuracy:location.verticalAccuracy course:location.course speed:location.speed timestamp:location.timestamp];
+    
+    [ceo reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
+        CLPlacemark *placemark = [placemarks objectAtIndex:0];
+        NSMutableArray *locationComponents = [NSMutableArray new];
+        [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
+        
+        if(placemark.name) [locationComponents addObject:placemark.name];
+        NSArray *addressComponents = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"][1] componentsSeparatedByString:@" "];
+        [locationComponents addObject:[NSString stringWithFormat:@"%@ %@", addressComponents[0], addressComponents[1]]];
+        captionLabel.text = [locationComponents componentsJoinedByString:@", "];
+        [captionView addSubview:captionLabel];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.mapView addSubview:captionView];
+            [self.mapView bringSubviewToFront:captionView];
+        });
+    }];
+}
+
+- (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered {
+    if(self.mapZoom > 0 && self.mapZoom < 5) [NSTimer scheduledTimerWithTimeInterval:1.1 target:self selector:@selector(zoomMapRegion) userInfo:nil repeats:NO];
+    else NSLog(@"MAP ZOOM TERMINATED: %u", self.mapZoom);
+}
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+}
+
+- (double)coordinateSpan:(NSUInteger)mapZoom {
+    NSArray *coordinateSpans = @[[NSNumber numberWithDouble:20.0],
+                                 [NSNumber numberWithDouble:5.0],
+                                 [NSNumber numberWithDouble:0.5],
+                                 [NSNumber numberWithDouble:0.08],
+                                 [NSNumber numberWithDouble:0.03]];
+    if(self.mapZoom < 5) return [[coordinateSpans objectAtIndex:mapZoom] doubleValue];
+    else return [coordinateSpans.lastObject doubleValue];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    self.mapZoom = 0;
+}
+
+- (void)zoomMapRegion {
+    NSLog(@"ZOOMING MAP WITH MAP ZOOM %u", self.mapZoom);
+    MKCoordinateRegion region = MKCoordinateRegionMake(self.coordinate, MKCoordinateSpanMake([self coordinateSpan:self.mapZoom], [self coordinateSpan:self.mapZoom]));
+    MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:region];
+    [self.mapView setRegion:adjustedRegion animated:YES];
+    self.mapZoom = self.mapZoom + 1;
 }
 
 - (void)setupImageViewWithImage:(NSData *)image {

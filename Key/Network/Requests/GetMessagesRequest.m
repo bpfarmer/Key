@@ -28,7 +28,6 @@
     KUser *user = [KUser findById:currentUserId];
     GetMessagesRequest *request = [[GetMessagesRequest alloc] initWithCurrentUserId:user.currentDeviceId];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
-        NSLog(@"FEED RESPONSE OBJECT: %@", responseObject);
         NSDictionary *messages = [request base64DecodedDictionary:responseObject];
         NSMutableArray *userIds = [NSMutableArray new];
         NSMutableArray *encryptedMessages = [NSMutableArray new];

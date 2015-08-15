@@ -16,7 +16,6 @@
 @implementation CheckDevicesRequest
 
 - (instancetype)initWithParameters:(NSDictionary *)parameters {
-    NSLog(@"CHECKING DEVICES WITH PARAMETERS: %@", parameters);
     self = [super initWithHttpMethod:GET endpoint:kUserCheckDevicesEndpoint parameters:[super base64EncodedDictionary:parameters]];
     return self;
 }
@@ -25,7 +24,6 @@
     TOCFutureSource *resultSource = [TOCFutureSource new];
     CheckDevicesRequest *request = [[CheckDevicesRequest alloc] initWithParameters:@{@"users" : userIds}];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
-        NSLog(@"RESPONSE OBJECT: %@", responseObject);
         if([responseObject[@"status"] isEqualToString:@"SUCCESS"]) {
             for(NSDictionary *userDevices in responseObject[@"users"]) {
                 [userDevices enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {

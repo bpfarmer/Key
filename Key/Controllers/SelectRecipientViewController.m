@@ -101,7 +101,6 @@ static NSString *TableViewCellIdentifier = @"Recipients";
                 }];
             });
         }else {
-            NSLog(@"PREPARING TO SEND A POST");
             [self.post save];
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{
@@ -112,9 +111,7 @@ static NSString *TableViewCellIdentifier = @"Recipients";
                 for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
                     object.parentId = self.post.uniqueId;
                     [object save];
-                    NSLog(@"OBJECT ATTACHED: %@", object);
                 }
-                NSLog(@"TO POST: %@", self.post);
                 TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:recipientIds];
                 [futureDevices thenDo:^(id value) {
                     [FreeKey sendEncryptableObject:self.post attachableObjects:self.sendableObjects recipientIds:recipientIds];

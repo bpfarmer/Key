@@ -92,7 +92,6 @@ static NSString *TableViewCellIdentifier = @"Posts";
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     KPost *post = self.posts[indexPath.row];
-    NSLog(@"POST: %@", post);
     SubtitleTableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
                                                                             forIndexPath:indexPath];
     

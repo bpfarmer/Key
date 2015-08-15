@@ -50,7 +50,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)databaseModified:(NSNotification *)notification {
     if([notification.object isKindOfClass:[KThread class]]) {
-        NSLog(@"THREAD: %@, %@", notification.object, ((KThread *)notification.object).displayName);
         KThread *newThread = (KThread *)notification.object;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             NSMutableArray *threads = [[NSMutableArray alloc] initWithArray:self.threads];

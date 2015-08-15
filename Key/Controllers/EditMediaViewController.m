@@ -30,12 +30,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"LOADING DATA");
     self.mediaView.image = [UIImage imageWithData:self.imageData];
     [self.view addSubview:self.overlayView];
     [self.overlayView setBackgroundColor:[UIColor clearColor]];
     [self.view bringSubviewToFront:self.overlayView];
-    NSLog(@"VIEW SHOULD BE LOADED");
     self.ephemeral = NO;
     self.locationEnabled = YES;
     [[KAccountManager sharedManager] refreshCurrentCoordinate];
@@ -63,7 +61,12 @@
     [UIView animateWithDuration:animationDuration animations:^{
         self.captionView.frame = inputViewFrame;
     }];
-    
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    [self toggleCaption];
+    return YES;
 }
 
 - (void)keyboardWillHide:(NSNotification*)note{
@@ -78,11 +81,6 @@
     }];
     
 }
-
-/*- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if ([touch.view isDescendantOfView:self.captionView]) return NO;
-    return YES;
-}*/
 
 - (void)toggleCaption {
     if(!self.captionShowing) {

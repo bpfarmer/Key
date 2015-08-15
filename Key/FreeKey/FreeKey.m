@@ -152,10 +152,8 @@
 + (void)decryptAndSaveAttachment:(Attachment *)attachment {
     AttachmentKey *attachmentKey = [AttachmentKey findById:attachment.attachmentKeyId];
     if(attachmentKey) {
-        NSLog(@"TRYING TO DECRYPT ATTACHMENT: %@", attachment);
         KDatabaseObject *object = [attachmentKey decryptCipherText:attachment.serializedData];
         [object save];
-        NSLog(@"SAVED OBJECT: %@", object);
     }else {
         NSLog(@"COULDN'T FIND ATTACHMENT");
     }

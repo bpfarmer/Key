@@ -120,7 +120,6 @@
 
 - (NSData *)createThumbnailPreview {
     KPhoto *photo = [KPhoto findByDictionary:@{@"parentId" : self.uniqueId}];
-    NSLog(@"RETRIEVED PHOTO: %@", photo);
     if(!photo || !photo.media) return nil;
     
     NSData *media = photo.media;
