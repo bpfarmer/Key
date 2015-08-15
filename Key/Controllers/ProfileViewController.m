@@ -53,8 +53,8 @@ static NSString *TableViewCellIdentifier = @"Posts";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    if(self.posts.count != [KPost unread].count) {
-        self.posts = [KPost unread];
+    if(self.posts.count != [KPost findByAuthorId:self.user.uniqueId].count) {
+        self.posts = [KPost findByAuthorId:self.user.uniqueId];
         [self.postsTableView reloadData];
     }
 }
@@ -108,7 +108,8 @@ static NSString *TableViewCellIdentifier = @"Posts";
     if(post) {
         MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
         mediaViewController.post = post;
-        [self.parentViewController presentViewController:mediaViewController animated:NO completion:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{});
+        [self presentViewController:mediaViewController animated:NO completion:nil];
     }
 }
 

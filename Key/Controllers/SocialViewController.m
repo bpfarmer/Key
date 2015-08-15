@@ -35,29 +35,39 @@ static NSString *TableViewCellIdentifier = @"Posts";
     self.postsTableView.delegate = self;
     self.postsTableView.dataSource = self;
     self.postsTableView.scrollEnabled = YES;
-    
     [self.postsTableView registerClass:[SubtitleTableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
     self.currentUser = [KAccountManager sharedManager].user;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(databaseModified:)
-                                                 name:[KPost notificationChannel]
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KPost notificationChannel] object:nil];
+}
+
++ (dispatch_queue_t)sharedQueue {
+    static dispatch_once_t pred;
+    static dispatch_queue_t sharedDispatchQueue;
+    
+    dispatch_once(&pred, ^{
+        sharedDispatchQueue = dispatch_queue_create("SocialViewQueue", NULL);
+    });
+    
+    return sharedDispatchQueue;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    if(self.posts.count != [KPost unread].count) {
-        self.posts = [KPost unread];
-        [self.postsTableView reloadData];
-    }
+    dispatch_async([self.class sharedQueue], ^{
+        if(self.posts.count != [KPost unread].count) {
+            self.posts = [KPost unread];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.postsTableView reloadData];
+            });
+        }
+    });
 }
 
 - (void)databaseModified:(NSNotification *)notification {
     if([notification.object isKindOfClass:[KPost class]]) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async([self.class sharedQueue], ^{
             KPost *post = (KPost *)notification.object;
-            NSLog(@"POST TO BE SHOWN: %@", post);
             if(!post.read) {
                 if([post previewImage]) {
                     NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.posts];
@@ -88,7 +98,6 @@ static NSString *TableViewCellIdentifier = @"Posts";
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     KPost *post = self.posts[indexPath.row];
-    NSLog(@"POST: %@", post);
     SubtitleTableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
                                                                       forIndexPath:indexPath];
     
@@ -100,19 +109,24 @@ static NSString *TableViewCellIdentifier = @"Posts";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    KPost *post = self.posts[indexPath.row];
-    if(post) {
-        MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
-        mediaViewController.post = post;
-        [self.parentViewController presentViewController:mediaViewController animated:NO completion:^{
+    dispatch_async([self.class sharedQueue], ^{
+        KPost *post = self.posts[indexPath.row];
+        if(post) {
+            MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
+            mediaViewController.post = post;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.parentViewController presentViewController:mediaViewController animated:NO completion:nil];
+            });
             NSMutableArray *posts = [NSMutableArray arrayWithArray:self.posts];
             [posts removeObject:post];
             post.read = YES;
             [post save];
             self.posts = posts;
-            [self.postsTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }];
-    }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.postsTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            });
+        }
+    });
 }
 
 
