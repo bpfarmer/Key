@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditMediaViewController">
             <connections>
+                <outlet property="ephemeralButton" destination="nn4-TV-DDq" id="d4y-Z2-vxI"/>
                 <outlet property="locationButton" destination="rUL-pV-58l" id="vqN-6n-ZU0"/>
                 <outlet property="mediaView" destination="mQa-im-KYz" id="bxq-Ix-DZE"/>
                 <outlet property="overlayView" destination="UU9-b6-HId" id="Vvn-ya-WoJ"/>
@@ -62,6 +63,16 @@
                     </state>
                     <connections>
                         <action selector="didPressPost:" destination="-1" eventType="touchUpInside" id="r8F-Oe-gWG"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nn4-TV-DDq">
+                    <rect key="frame" x="8" y="511" width="98" height="30"/>
+                    <state key="normal" title="Ephemeral Off">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="didPressEphemeral:" destination="-1" eventType="touchUpInside" id="vSO-Jr-RBz"/>
                     </connections>
                 </button>
             </subviews>

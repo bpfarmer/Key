@@ -42,17 +42,15 @@
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         authorId:(NSString *)authorId
                             text:(NSString *)text
-                     attachments:(NSArray *)attachments
-                       createdAt:(NSDate *)createdAt{
+                       createdAt:(NSDate *)createdAt
+                       ephemeral:(BOOL)ephemeral{
     self = [super initWithUniqueId:uniqueId];
     
     if(self) {
         _authorId     = authorId;
         _text         = text;
         _createdAt    = createdAt;
-        NSMutableArray *attachmentIds = [[NSMutableArray alloc] init];
-        for(KDatabaseObject *attachment in attachments) [attachmentIds addObject:attachment.uniqueId];
-        _attachmentIds  = [attachmentIds componentsJoinedByString:@"_"];
+        _ephemeral    = ephemeral;
     }
     return self;
 }
@@ -73,7 +71,7 @@
 
 + (NSArray *)unread {
     return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
-        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where read = 0", [self tableName]]];
+        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where read = 0 order by created_at desc", [self tableName]]];
         NSMutableArray *posts = [[NSMutableArray alloc] init];
         while(result.next) {
             KPost *post = [[KPost alloc] initWithResultSetRow:result.resultDictionary];
@@ -86,7 +84,7 @@
 
 + (NSArray *)findByAuthorId:(NSString *)authorId {
     return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
-        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where author_id = :unique_id", [self tableName]] withParameterDictionary:@{@"unique_id" : authorId}];
+        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where author_id = :unique_id and ephemeral = 0 order by created_at desc", [self tableName]] withParameterDictionary:@{@"unique_id" : authorId}];
         NSMutableArray *posts = [[NSMutableArray alloc] init];
         while(result.next) {
             KPost *post = [[KPost alloc] initWithResultSetRow:result.resultDictionary];

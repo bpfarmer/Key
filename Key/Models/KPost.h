@@ -17,16 +17,17 @@
 
 @property (nonatomic, readonly) NSString *authorId;
 @property (nonatomic, readonly) NSString *text;
-@property (nonatomic) NSString *attachmentIds;
 @property (nonatomic) NSData *preview;
+@property (nonatomic) BOOL ephemeral;
 @property (nonatomic) BOOL read;
 @property (nonatomic, readonly) NSDate *createdAt;
+@property (nonatomic) NSString *attachmentIds;
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         authorId:(NSString *)authorId
                             text:(NSString *)text
-                      attachments:(NSArray *)attachments
-                       createdAt:(NSDate *)createdAt;
+                       createdAt:(NSDate *)createdAt
+                       ephemeral:(BOOL)ephemeral;
 
 - (instancetype)initWithAuthorId:(NSString *)authorId text:(NSString *)text;
 - (NSArray *)attachments;

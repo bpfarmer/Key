@@ -31,7 +31,7 @@ static NSString *TableViewCellIdentifier = @"Contacts";
     [super viewDidLoad];
     
     self.currentUser = [KAccountManager sharedManager].user;
-    self.contacts    = self.currentUser.contacts;
+    self.contacts    = [KUser all];
     self.contactsTableView.dataSource = self;
     self.contactsTableView.delegate = self;
     [self.contactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];

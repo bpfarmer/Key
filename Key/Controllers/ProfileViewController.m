@@ -39,7 +39,9 @@ static NSString *TableViewCellIdentifier = @"Posts";
     
     [self.postsTableView registerClass:[SubtitleTableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
-    self.usernameLabel.text = self.user.username;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.usernameLabel.text = self.user.username;
+    });
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KPost notificationChannel] object:nil];

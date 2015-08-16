@@ -41,9 +41,11 @@ static NSString *TableViewCellIdentifier = @"Recipients";
     self.contactsTableView.delegate = self;
     [self.contactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
     
+    NSLog(@"EPHEMERAL SETTING: %d", self.ephemeral);
     if(![self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
         if(!self.post) {
             self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:nil];
+            self.post.ephemeral = self.ephemeral;
         }
     }
     
@@ -101,6 +103,7 @@ static NSString *TableViewCellIdentifier = @"Recipients";
                 }];
             });
         }else {
+            NSLog(@"POST EPHEMERAL");
             [self.post save];
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{

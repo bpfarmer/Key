@@ -17,6 +17,7 @@
 #define kCoderAttachments @"attachments"
 #define kCoderSeen @"seen"
 #define kCoderCreatedAt @"createdAt"
+#define kCoderEphemeral @"ephemeral"
 
 @implementation KPost(Serialize)
 
@@ -28,8 +29,8 @@
     return [self initWithUniqueId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]
                          authorId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderAuthorId]
                              text:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderText]
-                      attachments:[aDecoder decodeObjectOfClass:[NSArray class] forKey:kCoderAttachments]
-                        createdAt:[aDecoder decodeObjectOfClass:[NSDate class] forKey:kCoderCreatedAt]];
+                        createdAt:[aDecoder decodeObjectOfClass:[NSDate class] forKey:kCoderCreatedAt]
+                        ephemeral:[aDecoder decodeBoolForKey:kCoderEphemeral]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
@@ -37,6 +38,7 @@
     [aCoder encodeObject:self.authorId forKey:kCoderAuthorId];
     [aCoder encodeObject:self.text forKey:kCoderText];
     [aCoder encodeObject:self.createdAt forKey:kCoderCreatedAt];
+    [aCoder encodeBool:self.ephemeral forKey:kCoderEphemeral];
 }
 
 @end

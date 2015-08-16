@@ -16,6 +16,7 @@
 
 @property (nonatomic) IBOutlet UIView *overlayView;
 @property (nonatomic) IBOutlet UIButton *locationButton;
+@property (nonatomic) IBOutlet UIButton *ephemeralButton;
 @property (nonatomic) BOOL locationEnabled;
 @property (nonatomic) BOOL ephemeral;
 @property (nonatomic) BOOL captionShowing;
@@ -61,6 +62,10 @@
     [UIView animateWithDuration:animationDuration animations:^{
         self.captionView.frame = inputViewFrame;
     }];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    return ![touch.view isKindOfClass:[UIButton class]];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -123,6 +128,16 @@
     }
 }
 
+- (IBAction)didPressEphemeral:(id)sender {
+    if(!self.ephemeral) {
+        self.ephemeral = YES;
+        [self.ephemeralButton setTitle:@"Ephemeral On" forState:UIControlStateNormal];
+    }else {
+        self.ephemeral = NO;
+        [self.ephemeralButton setTitle:@"Ephemeral Off" forState:UIControlStateNormal];
+    }
+}
+
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
@@ -153,6 +168,7 @@
         }
         [selectRecipientView setSendableObjects:sendableObjects];
         selectRecipientView.delegate = self;
+        selectRecipientView.ephemeral = self.ephemeral;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentViewController:selectRecipientView animated:NO completion:nil];
         });

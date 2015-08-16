@@ -25,5 +25,6 @@
 @property (nonatomic) KPost *post;
 @property (nonatomic) KUser *currentUser;
 @property (nonatomic) NSString *desiredObject;
+@property (nonatomic) BOOL ephemeral;
 
 @end
