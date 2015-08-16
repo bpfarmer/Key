@@ -83,7 +83,7 @@
     [self.mapView addAnnotation:annotation];
     self.coordinate = location.coordinate;
     self.mapZoom = 1;
-    MKCoordinateRegion region = MKCoordinateRegionMake(self.coordinate, MKCoordinateSpanMake(80.0 , 80.0));
+    MKCoordinateRegion region = MKCoordinateRegionMake(self.coordinate, MKCoordinateSpanMake(60.0, 60.0));
     MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:region];
     [self.mapView setRegion:adjustedRegion animated:YES];
     self.mapView = (MKMapView *)[self addTapGestureRecognizerToView:self.mapView];
@@ -111,7 +111,7 @@
         if(placemark.name) [locationComponents addObject:placemark.name];
         NSArray *addressComponents = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"][1] componentsSeparatedByString:@" "];
         [locationComponents addObject:[NSString stringWithFormat:@"%@ %@", addressComponents[0], addressComponents[1]]];
-        captionLabel.text = [locationComponents componentsJoinedByString:@", "];
+        captionLabel.text = [[locationComponents componentsJoinedByString:@", "] stringByReplacingOccurrencesOfString:@".," withString:@"."];
         [captionView addSubview:captionLabel];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -122,7 +122,7 @@
 }
 
 - (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered {
-    if(self.mapZoom > 0 && self.mapZoom < 5) [NSTimer scheduledTimerWithTimeInterval:1.1 target:self selector:@selector(zoomMapRegion) userInfo:nil repeats:NO];
+    if(self.mapZoom > 0 && self.mapZoom < 4) [NSTimer scheduledTimerWithTimeInterval:1.6 target:self selector:@selector(zoomMapRegion) userInfo:nil repeats:NO];
     else NSLog(@"MAP ZOOM TERMINATED: %u", self.mapZoom);
 }
 
@@ -130,12 +130,11 @@
 }
 
 - (double)coordinateSpan:(NSUInteger)mapZoom {
-    NSArray *coordinateSpans = @[[NSNumber numberWithDouble:20.0],
-                                 [NSNumber numberWithDouble:5.0],
-                                 [NSNumber numberWithDouble:0.5],
-                                 [NSNumber numberWithDouble:0.08],
-                                 [NSNumber numberWithDouble:0.03]];
-    if(self.mapZoom < 5) return [[coordinateSpans objectAtIndex:mapZoom] doubleValue];
+    NSArray *coordinateSpans = @[[NSNumber numberWithDouble:40.0],
+                                 [NSNumber numberWithDouble:10.0],
+                                 [NSNumber numberWithDouble:1.0],
+                                 [NSNumber numberWithDouble:0.05]];
+    if(self.mapZoom < 4) return [[coordinateSpans objectAtIndex:mapZoom] doubleValue];
     else return [coordinateSpans.lastObject doubleValue];
 }
 

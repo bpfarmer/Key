@@ -93,12 +93,21 @@ static NSString *TableViewCellIdentifier = @"Contacts";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     KUser *user = (KUser *)self.contacts[indexPath.row];
     if(user) {
+        [self presentProfileViewControllerForUser:user];
+    }
+}
+
+- (void)presentProfileViewControllerForUser:(KUser *)user {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         ProfileViewController *profileViewController = [[ProfileViewController alloc] initWithNibName:@"ProfileView" bundle:nil];
         profileViewController.user = user;
-        dispatch_async(dispatch_get_main_queue(), ^{});
-        [self presentViewController:profileViewController animated:NO completion:nil];
-    }
-
+        [self addChildViewController:profileViewController];
+        profileViewController.view.frame = self.view.frame;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.view addSubview:profileViewController.view];
+        });
+        [profileViewController didMoveToParentViewController:self];
+    });
 }
 
 - (IBAction)addContact:(id)sender {
@@ -114,6 +123,12 @@ static NSString *TableViewCellIdentifier = @"Contacts";
         }
         self.contactTextField.text = @"";
     }
+}
+
+- (void)dismissProfileViewController:(UIViewController *)controller {
+    [controller willMoveToParentViewController:nil];
+    [controller.view removeFromSuperview];
+    [controller removeFromParentViewController];
 }
 
 - (BOOL)prefersStatusBarHidden {

@@ -12,6 +12,7 @@
 #import "KAccountManager.h"
 #import "SubtitleTableViewCell.h"
 #import "MediaViewController.h"
+#import "ContactViewController.h"
 
 static NSString *TableViewCellIdentifier = @"Posts";
 
@@ -113,7 +114,7 @@ static NSString *TableViewCellIdentifier = @"Posts";
 }
 
 - (IBAction)clickDone:(id)sender {
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [(ContactViewController *)self.parentViewController dismissProfileViewController:self];
 }
 
 

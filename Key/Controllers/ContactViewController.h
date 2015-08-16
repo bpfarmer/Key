@@ -10,4 +10,6 @@
 
 @interface ContactViewController : UIViewController
 
+- (void)dismissProfileViewController:(UIViewController *)controller;
+
 @end
