@@ -12,6 +12,8 @@
 
 @class KAttachment;
 @class KUser;
+@class KLocation;
+@class KPhoto;
 
 @interface KPost : KDatabaseObject <KEncryptable>
 
@@ -37,5 +39,7 @@
 + (NSArray *)findByAuthorId:(NSString *)authorId;
 + (UIImage *)imageWithImage:(UIImage *)image scaledToFillSize:(CGSize)size;
 - (NSString *)displayDate;
+- (KLocation *)location;
+- (KPhoto *)photo;
 
 @end

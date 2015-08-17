@@ -39,23 +39,12 @@
     if(self.post) {
         if(self.post.attachments.count > 0) {
             NSLog(@"SHOULD HAVE ATTACHMENTS");
-            if([self.post.attachments.firstObject isKindOfClass:[KPhoto class]]) {
-                self.photo = (KPhoto *)self.post.attachments.firstObject;
-            }else if([self.post.attachments.firstObject isKindOfClass:[KLocation class]]) {
-                self.location = (KLocation *)self.post.attachments.firstObject;
-            }
-            
-            if(self.post.attachments.count > 1) {
-                if([self.post.attachments.lastObject isKindOfClass:[KPhoto class]]) {
-                    self.photo = (KPhoto *)self.post.attachments.lastObject;
-                }else if([self.post.attachments.lastObject isKindOfClass:[KLocation class]]) {
-                    self.location = (KLocation *)self.post.attachments.lastObject;
-                }
-            }
+            self.photo      = self.post.photo;
+            self.location   = self.post.location;
             if(self.photo) {
                 [self setupImageViewWithImage:self.photo.media];
             }else if(self.location) {
-                [self setupMapViewWithLocation:self.location.location];
+                [self setupMapViewWithLocation:self.location];
             }
         }
     }
@@ -66,67 +55,55 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)setupMapViewWithLocation:(CLLocation *)location {
-    self.location = nil;
-    self.mapView.delegate = self;
-    self.mapView.showsUserLocation = YES;
-    self.mapView.zoomEnabled = NO;
-    self.mapView.scrollEnabled = NO;
-    self.mapView.rotateEnabled = NO;
-    self.mapView.showsPointsOfInterest = NO;
-    self.mapView.showsBuildings = NO;
-    self.mapView.clearsContextBeforeDrawing = YES;
-    self.mapView.centerCoordinate = location.coordinate;
-    MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
-    [annotation setCoordinate:location.coordinate];
-    [annotation setTitle:self.post.author.username];
-    [self.mapView addAnnotation:annotation];
-    self.coordinate = location.coordinate;
-    self.mapZoom = 1;
-    MKCoordinateRegion region = MKCoordinateRegionMake(self.coordinate, MKCoordinateSpanMake(60.0, 60.0));
-    MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:region];
-    [self.mapView setRegion:adjustedRegion animated:YES];
-    self.mapView = (MKMapView *)[self addTapGestureRecognizerToView:self.mapView];
-    [self addAddressCaptionWithLocation:location];
-    [self.view addSubview:self.mapView];
+- (void)setupMapViewWithLocation:(KLocation *)postLocation {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        CLLocation *location = postLocation.location;
+        self.location = nil;
+        self.mapView.delegate = self;
+        self.mapView.showsUserLocation = YES;
+        self.mapView.zoomEnabled = NO;
+        self.mapView.scrollEnabled = NO;
+        self.mapView.rotateEnabled = NO;
+        self.mapView.showsPointsOfInterest = NO;
+        self.mapView.showsBuildings = NO;
+        self.mapView.clearsContextBeforeDrawing = YES;
+        self.mapView.centerCoordinate = location.coordinate;
+        MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
+        [annotation setCoordinate:location.coordinate];
+        [annotation setTitle:self.post.author.username];
+        [self.mapView addAnnotation:annotation];
+        self.coordinate = location.coordinate;
+        self.mapZoom = 1;
+        MKCoordinateRegion region = MKCoordinateRegionMake(self.coordinate, MKCoordinateSpanMake(60.0, 60.0));
+        MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:region];
+        [self.mapView setRegion:adjustedRegion animated:YES];
+        self.mapView = (MKMapView *)[self addTapGestureRecognizerToView:self.mapView];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self addAddressCaptionWithLocation:postLocation];
+            [self.view addSubview:self.mapView];
+        });
+    });
 }
 
-- (void)addAddressCaptionWithLocation:(CLLocation *)location {
-    UIView *captionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 60, self.view.frame.size.width, 30)];
+- (void)addAddressCaptionWithLocation:(KLocation *)location {
+    UIView *captionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 30, self.view.frame.size.width, 30)];
     [captionView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5f]];
     [captionView setOpaque:NO];
     
     UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
     captionLabel.textAlignment = NSTextAlignmentCenter;
     captionLabel.textColor = [UIColor whiteColor];
-    
-    CLGeocoder *ceo = [[CLGeocoder alloc]init];
-    CLLocation *loc = [[CLLocation alloc]initWithCoordinate:location.coordinate altitude:location.altitude horizontalAccuracy:location.horizontalAccuracy verticalAccuracy:location.verticalAccuracy course:location.course speed:location.speed timestamp:location.timestamp];
-    
-    [ceo reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
-        CLPlacemark *placemark = [placemarks objectAtIndex:0];
-        NSMutableArray *locationComponents = [NSMutableArray new];
-        [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
-        
-        if(placemark.name) [locationComponents addObject:placemark.name];
-        NSArray *addressComponents = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"][1] componentsSeparatedByString:@" "];
-        [locationComponents addObject:[NSString stringWithFormat:@"%@ %@", addressComponents[0], addressComponents[1]]];
-        captionLabel.text = [[locationComponents componentsJoinedByString:@", "] stringByReplacingOccurrencesOfString:@".," withString:@"."];
-        [captionView addSubview:captionLabel];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.mapView addSubview:captionView];
-            [self.mapView bringSubviewToFront:captionView];
-        });
-    }];
+    captionLabel.text = location.formattedAddress;
+    [captionView addSubview:captionLabel];
+
+    [self.mapView addSubview:captionView];
+    [self.mapView bringSubviewToFront:captionView];
 }
 
 - (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered {
-    if(self.mapZoom > 0 && self.mapZoom < 4) [NSTimer scheduledTimerWithTimeInterval:1.6 target:self selector:@selector(zoomMapRegion) userInfo:nil repeats:NO];
+    if(self.mapZoom > 0 && self.mapZoom < 4) [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(zoomMapRegion) userInfo:nil repeats:NO];
     else NSLog(@"MAP ZOOM TERMINATED: %u", self.mapZoom);
-}
-
-- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
 }
 
 - (double)coordinateSpan:(NSUInteger)mapZoom {
@@ -180,7 +157,7 @@
 - (void)dismissViews:(UITapGestureRecognizer *)sender {
     [self.imageView removeFromSuperview];
     if(self.location) {
-        [self setupMapViewWithLocation:self.location.location];
+        [self setupMapViewWithLocation:self.location];
     }else {
         [self dismissViewControllerAnimated:NO completion:nil];
     }
@@ -201,16 +178,5 @@
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
     return UIInterfaceOrientationPortrait;
 }
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

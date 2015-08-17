@@ -62,11 +62,17 @@
 
 - (NSArray *)attachments {
     NSMutableArray *attachments = [NSMutableArray new];
-    KPhoto *photo = [KPhoto findByDictionary:@{@"parentId" : self.uniqueId}];
-    if(photo) [attachments addObject:photo];
-    KLocation *location = [KLocation findByDictionary:@{@"parentId" : self.uniqueId}];
-    if(location) [attachments addObject:location];
+    if(self.photo) [attachments addObject:self.photo];
+    if(self.location) [attachments addObject:self.location];
     return [attachments copy];
+}
+
+- (KLocation *)location {
+    return [KLocation findByDictionary:@{@"parentId" : self.uniqueId}];
+}
+
+- (KPhoto *)photo {
+    return [KPhoto findByDictionary:@{@"parentId" : self.uniqueId}];
 }
 
 + (NSArray *)unread {

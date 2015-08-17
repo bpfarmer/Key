@@ -13,6 +13,7 @@
 #import "SubtitleTableViewCell.h"
 #import "MediaViewController.h"
 #import "ContactViewController.h"
+#import "KLocation.h"
 
 static NSString *TableViewCellIdentifier = @"Posts";
 
@@ -66,7 +67,6 @@ static NSString *TableViewCellIdentifier = @"Posts";
     if([notification.object isKindOfClass:[KPost class]]) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             KPost *post = (KPost *)notification.object;
-            NSLog(@"POST TO BE SHOWN: %@", post);
             if([post previewImage]) {
                 NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.posts];
                 [posts addObject:[notification object]];
@@ -98,10 +98,11 @@ static NSString *TableViewCellIdentifier = @"Posts";
     SubtitleTableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
                                                                             forIndexPath:indexPath];
     
-    cell.textLabel.text  = [NSString stringWithFormat:@"%@", post.author.username];
     cell.imageView.image = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", post.displayDate];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", post.displayDate];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    if(post.location)cell.detailTextLabel.text = post.location.shortAddress;
     return cell;
 }
 
