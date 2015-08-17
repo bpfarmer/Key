@@ -50,12 +50,14 @@
 }
 
 - (NSString *)formattedAddress {
-    return [self. address stringByReplacingOccurrencesOfString:@".," withString:@"."];
+    return [self.address stringByReplacingOccurrencesOfString:@".," withString:@"."];
 }
 
 - (NSString *)shortAddress {
     NSArray *addressComponents = [self.address componentsSeparatedByString:@", "];
-    return addressComponents.lastObject;
+    NSMutableArray *shortAddressComponents = [NSMutableArray new];
+    for(NSString *address in [addressComponents reverseObjectEnumerator]) if(shortAddressComponents.count < 2) [shortAddressComponents addObject:address];
+    return [NSString stringWithFormat:@"%@, %@", shortAddressComponents.lastObject, shortAddressComponents.firstObject];
 }
 
 

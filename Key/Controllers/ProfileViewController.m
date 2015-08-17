@@ -56,25 +56,42 @@ static NSString *TableViewCellIdentifier = @"Posts";
     return YES;
 }
 
++ (dispatch_queue_t)sharedQueue {
+    static dispatch_once_t pred;
+    static dispatch_queue_t sharedDispatchQueue;
+    
+    dispatch_once(&pred, ^{
+        sharedDispatchQueue = dispatch_queue_create("ProfileViewQueue", NULL);
+    });
+    
+    return sharedDispatchQueue;
+}
+
 - (void)viewDidAppear:(BOOL)animated {
-    if(self.posts.count != [KPost findByAuthorId:self.user.uniqueId].count) {
-        self.posts = [KPost findByAuthorId:self.user.uniqueId];
-        [self.postsTableView reloadData];
-    }
+    dispatch_async([self.class sharedQueue], ^{
+        if(self.posts.count != [KPost findByAuthorId:self.user.uniqueId].count) {
+            self.posts = [KPost findByAuthorId:self.user.uniqueId];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.postsTableView reloadData];
+            });
+        }
+    });
 }
 
 - (void)databaseModified:(NSNotification *)notification {
     if([notification.object isKindOfClass:[KPost class]]) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async([self.class sharedQueue], ^{
             KPost *post = (KPost *)notification.object;
-            if([post previewImage]) {
-                NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.posts];
-                [posts addObject:[notification object]];
-                self.posts = [[NSArray alloc] initWithArray:posts];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.postsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.posts.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-                });
+            if([post.authorId isEqualToString:self.user.uniqueId] && !post.ephemeral) {
+                if([post previewImage]) {
+                    NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.posts];
+                    [posts addObject:[notification object]];
+                    self.posts = [[NSArray alloc] initWithArray:posts];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.postsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.posts.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    });
+                }
             }
         });
     }
