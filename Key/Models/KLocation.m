@@ -44,7 +44,8 @@
         
         if(placemark.name) [locationComponents addObject:placemark.name];
         NSArray *addressComponents = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"][1] componentsSeparatedByString:@" "];
-        [locationComponents addObject:[NSString stringWithFormat:@"%@ %@", addressComponents[0], addressComponents[1]]];
+        NSLog(@"ADDRESS COMPONENTS: %@", addressComponents);
+        if(addressComponents.count > 1) [locationComponents addObject:[NSString stringWithFormat:@"%@ %@", addressComponents[0], addressComponents[1]]];
         self.address = [locationComponents componentsJoinedByString:@", "];
     }];
 }

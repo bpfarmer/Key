@@ -11,8 +11,6 @@
 #import "HomeViewController.h"
 #import "Attachment.h"
 #import "EditMediaViewController.h"
-#import "EditLocationViewController.h"
-#import "EditPostViewController.h"
 #import "DismissAndPresentProtocol.h"
 #import "QRReadRequest.h"
 
@@ -356,12 +354,6 @@
     editMediaView.imageData = photoData;
     editMediaView.delegate = self;
     [self.parentViewController presentViewController:editMediaView animated:NO completion:nil];
-}
-
-- (IBAction)shareLocation:(id)sender {
-    [self stopCamera];
-    EditLocationViewController *editLocationView = [[EditLocationViewController alloc] initWithNibName:@"EditLocationView" bundle:nil];
-    [self.parentViewController presentViewController:editLocationView animated:NO completion:nil];
 }
 
 - (void)dismissAndPresentViewController:(UIViewController *)viewController {

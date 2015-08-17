@@ -70,15 +70,13 @@
         self.mapView.centerCoordinate = location.coordinate;
         MKPointAnnotation *annotation = [[MKPointAnnotation alloc] init];
         [annotation setCoordinate:location.coordinate];
-        [annotation setTitle:self.post.author.username];
-        [self.mapView addAnnotation:annotation];
         self.coordinate = location.coordinate;
         self.mapZoom = 1;
         MKCoordinateRegion region = MKCoordinateRegionMake(self.coordinate, MKCoordinateSpanMake(60.0, 60.0));
         MKCoordinateRegion adjustedRegion = [self.mapView regionThatFits:region];
         [self.mapView setRegion:adjustedRegion animated:YES];
         self.mapView = (MKMapView *)[self addTapGestureRecognizerToView:self.mapView];
-        
+        [self.mapView addAnnotation:annotation];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self addAddressCaptionWithLocation:postLocation];
             [self.view addSubview:self.mapView];
