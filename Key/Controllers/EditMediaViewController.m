@@ -182,6 +182,8 @@
     }];
 }
 
+- (void)dismissAndPresentThread:(KThread *)thread  {}
+
 
 - (UIView *)getCaptionView {
     self.captionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height / 2.0, self.view.frame.size.width, 30)];
