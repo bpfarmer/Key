@@ -41,34 +41,40 @@ static NSString *TableViewCellIdentifier = @"Threads";
     
     self.scrollView.delegate = self;
     
+    // 4) Finally set the size of the scroll view that contains the frames
+    CGFloat scrollWidth  = 2 * self.view.frame.size.width;
+    CGFloat scrollHeight = self.view.frame.size.height;
+    self.view.frame = CGRectMake(0, 0, scrollWidth, scrollHeight);
+    self.scrollView.frame = self.view.frame;
+    self.scrollView.contentSize = self.view.frame.size;
+    NSLog(@"INITIAL FRAME: %f %f %f %f", self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+    
     [self addChildViewController:contentVC];
     [self.scrollView addSubview:contentVC.contentTC.view];
     [contentVC didMoveToParentViewController:self];
     [self addChildViewController:contentVC.contentTC];
     
+    NSLog(@"CONTENT FRAME: %f %f %f %f", contentVC.view.frame.origin.x, contentVC.view.frame.origin.y, contentVC.view.frame.size.width, contentVC.view.frame.size.height);
+    
     CGRect adminFrame = contentVC.view.frame;
     adminFrame.origin.x = adminFrame.size.width;
     
-    
-    ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
-    [self addChildViewController:shareViewController];
-    [self.scrollView addSubview:shareViewController.view];
-    
-    shareViewController.view.frame = adminFrame;
-    
-    CGRect shareFrame = shareViewController.view.frame;
-    shareFrame.origin.x = shareFrame.size.width;
-    
-    // 4) Finally set the size of the scroll view that contains the frames
-    CGFloat scrollWidth  = 2 * self.view.frame.size.width;
-    CGFloat scrollHeight  = self.view.frame.size.height;
+    NSLog(@"SCROLL FRAME: %f %f %f %f", self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    //self.scrollView.frame = CGRectMake(0, 0, scrollWidth, scrollHeight);
     self.scrollView.contentSize = CGSizeMake(scrollWidth, scrollHeight);
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.bounces = NO;
     
-    //CGFloat newContentOffsetX = (self.view.frame.size.width);
-    //self.scrollView.contentOffset = CGPointMake(newContentOffsetX, 0);
+    ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
+    [self addChildViewController:shareViewController];
+    [self.scrollView addSubview:shareViewController.view];
+    
+    CGRect shareFrame = CGRectMake(adminFrame.size.width, 0, adminFrame.size.width, adminFrame.size.height);
+    shareViewController.view.frame = shareFrame;
+    
+    CGFloat newContentOffsetX = (self.view.frame.size.width);
+    self.scrollView.contentOffset = CGPointMake(newContentOffsetX, 0);
     
     [[KAccountManager sharedManager] initLocationManager];
     [[KAccountManager sharedManager] refreshCurrentCoordinate];

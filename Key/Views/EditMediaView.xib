@@ -16,7 +16,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mQa-im-KYz">
@@ -24,15 +24,36 @@
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="mQa-im-KYz" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="I8p-ji-wHP"/>
+                <constraint firstItem="mQa-im-KYz" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="RV8-l3-sUD"/>
+                <constraint firstAttribute="trailing" secondItem="mQa-im-KYz" secondAttribute="trailing" id="ZjS-pk-SvX"/>
+                <constraint firstAttribute="bottom" secondItem="mQa-im-KYz" secondAttribute="bottom" id="kIP-6W-kpc"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-            <point key="canvasLocation" x="197" y="253"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="I8p-ji-wHP"/>
+                    <exclude reference="RV8-l3-sUD"/>
+                    <exclude reference="ZjS-pk-SvX"/>
+                    <exclude reference="kIP-6W-kpc"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="constraints">
+                    <include reference="I8p-ji-wHP"/>
+                    <include reference="RV8-l3-sUD"/>
+                    <include reference="ZjS-pk-SvX"/>
+                    <include reference="kIP-6W-kpc"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="156" y="263"/>
         </view>
         <view contentMode="scaleToFill" id="UU9-b6-HId">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rUL-pV-58l">
@@ -77,11 +98,38 @@
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="nn4-TV-DDq" firstAttribute="leading" secondItem="UU9-b6-HId" secondAttribute="leading" constant="8" id="Al8-VD-MMa"/>
+                <constraint firstAttribute="bottom" secondItem="p4U-24-NTX" secondAttribute="bottom" constant="8" id="CVZ-Gs-1gz"/>
+                <constraint firstItem="rUL-pV-58l" firstAttribute="leading" secondItem="UU9-b6-HId" secondAttribute="leading" constant="8" id="Ett-pR-vCL"/>
+                <constraint firstAttribute="trailing" secondItem="p4U-24-NTX" secondAttribute="trailing" constant="8" id="UxS-vO-adH"/>
+                <constraint firstItem="rUL-pV-58l" firstAttribute="top" secondItem="nn4-TV-DDq" secondAttribute="bottom" constant="-8" id="fvs-Pn-ZGd"/>
+                <constraint firstAttribute="bottom" secondItem="rUL-pV-58l" secondAttribute="bottom" constant="8" id="tPT-gq-UwI"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="Al8-VD-MMa"/>
+                    <exclude reference="Ett-pR-vCL"/>
+                    <exclude reference="fvs-Pn-ZGd"/>
+                    <exclude reference="tPT-gq-UwI"/>
+                    <exclude reference="CVZ-Gs-1gz"/>
+                    <exclude reference="UxS-vO-adH"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="constraints">
+                    <include reference="Al8-VD-MMa"/>
+                    <include reference="Ett-pR-vCL"/>
+                    <include reference="fvs-Pn-ZGd"/>
+                    <include reference="tPT-gq-UwI"/>
+                    <include reference="CVZ-Gs-1gz"/>
+                    <include reference="UxS-vO-adH"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="617" y="253"/>
         </view>
     </objects>

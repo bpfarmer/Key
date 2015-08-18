@@ -13,7 +13,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="CYT-al-PGf">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MAi-GI-LGz">
@@ -31,6 +31,10 @@
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4AS-nt-7Pg">
+                    <rect key="frame" x="0.0" y="37" width="320" height="485"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="blw-Z2-tsk">
                     <rect key="frame" x="275" y="530" width="37" height="30"/>
                     <state key="normal" title="Done">
@@ -40,18 +44,56 @@
                         <action selector="sendToRecipients:" destination="-1" eventType="touchUpInside" id="PeH-7t-Kuz"/>
                     </connections>
                 </button>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4AS-nt-7Pg">
-                    <rect key="frame" x="0.0" y="37" width="320" height="485"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="MAi-GI-LGz" firstAttribute="leading" secondItem="CYT-al-PGf" secondAttribute="leading" constant="8" id="1oe-mE-GIu"/>
+                <constraint firstItem="MAi-GI-LGz" firstAttribute="top" secondItem="4AS-nt-7Pg" secondAttribute="bottom" constant="8" id="2GY-pg-0wy"/>
+                <constraint firstItem="oOT-KO-Vly" firstAttribute="top" secondItem="CYT-al-PGf" secondAttribute="top" constant="8" id="IwY-Pp-2ae"/>
+                <constraint firstAttribute="bottom" secondItem="blw-Z2-tsk" secondAttribute="bottom" constant="8" id="Ne4-eR-o2H"/>
+                <constraint firstItem="4AS-nt-7Pg" firstAttribute="top" secondItem="oOT-KO-Vly" secondAttribute="bottom" constant="-1" id="Ocj-71-Bfa"/>
+                <constraint firstItem="4AS-nt-7Pg" firstAttribute="leading" secondItem="CYT-al-PGf" secondAttribute="leading" id="TzC-8O-Vqa"/>
+                <constraint firstItem="4AS-nt-7Pg" firstAttribute="top" secondItem="oOT-KO-Vly" secondAttribute="bottom" constant="-1" id="csa-rJ-xCG"/>
+                <constraint firstItem="oOT-KO-Vly" firstAttribute="leading" secondItem="CYT-al-PGf" secondAttribute="leading" constant="8" id="hys-fO-NSj"/>
+                <constraint firstAttribute="trailing" secondItem="blw-Z2-tsk" secondAttribute="trailing" constant="8" id="pry-JV-erm"/>
+                <constraint firstAttribute="trailing" secondItem="4AS-nt-7Pg" secondAttribute="trailing" constant="8" id="rjg-ws-BDe"/>
+                <constraint firstAttribute="bottom" secondItem="MAi-GI-LGz" secondAttribute="bottom" constant="8" id="wK6-AG-QnR"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-            <point key="canvasLocation" x="395" y="418"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="IwY-Pp-2ae"/>
+                    <exclude reference="hys-fO-NSj"/>
+                    <exclude reference="Ocj-71-Bfa"/>
+                    <exclude reference="TzC-8O-Vqa"/>
+                    <exclude reference="csa-rJ-xCG"/>
+                    <exclude reference="rjg-ws-BDe"/>
+                    <exclude reference="1oe-mE-GIu"/>
+                    <exclude reference="2GY-pg-0wy"/>
+                    <exclude reference="wK6-AG-QnR"/>
+                    <exclude reference="Ne4-eR-o2H"/>
+                    <exclude reference="pry-JV-erm"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="constraints">
+                    <include reference="IwY-Pp-2ae"/>
+                    <include reference="hys-fO-NSj"/>
+                    <include reference="Ocj-71-Bfa"/>
+                    <include reference="TzC-8O-Vqa"/>
+                    <include reference="csa-rJ-xCG"/>
+                    <include reference="rjg-ws-BDe"/>
+                    <include reference="1oe-mE-GIu"/>
+                    <include reference="2GY-pg-0wy"/>
+                    <include reference="wK6-AG-QnR"/>
+                    <include reference="Ne4-eR-o2H"/>
+                    <include reference="pry-JV-erm"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="617" y="439"/>
         </view>
     </objects>
 </document>

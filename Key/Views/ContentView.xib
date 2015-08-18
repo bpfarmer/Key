@@ -15,7 +15,6 @@
         <tabBarController id="ebZ-3O-ajF" customClass="ContentTabBarController">
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <tabBar key="tabBar" contentMode="scaleToFill" id="Oho-3a-ovV" customClass="ContentTabBar">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -28,7 +27,7 @@
                         <viewControllerLayoutGuide type="bottom" id="BaB-Jw-lHs"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="5r1-8B-k8t">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -40,7 +39,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Q4M-fR-Hbd"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="eaW-eU-UWP">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
