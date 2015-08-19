@@ -39,6 +39,8 @@
     self.locationEnabled = YES;
     [[KAccountManager sharedManager] refreshCurrentCoordinate];
     
+    self.overlayView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+    
     self.captionShowing = NO;
     
     UITapGestureRecognizer *tapRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleCaption)];
@@ -181,6 +183,8 @@
         else [self dismissViewControllerAnimated:NO completion:nil];
     }];
 }
+
+- (void)dismissAndPresentThread:(KThread *)thread  {}
 
 
 - (UIView *)getCaptionView {

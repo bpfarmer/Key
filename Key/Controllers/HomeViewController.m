@@ -40,36 +40,43 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [[NSBundle mainBundle] loadNibNamed:@"ContentView" owner:contentVC options:nil];
     
     self.scrollView.delegate = self;
-    
-    [self addChildViewController:contentVC];
-    [self.scrollView addSubview:contentVC.contentTC.view];
-    [contentVC didMoveToParentViewController:self];
-    [self addChildViewController:contentVC.contentTC];
-    
-    CGRect adminFrame = contentVC.view.frame;
-    adminFrame.origin.x = adminFrame.size.width;
-    
-    
-    ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
-    [self addChildViewController:shareViewController];
-    [self.scrollView addSubview:shareViewController.view];
-    
-    shareViewController.view.frame = adminFrame;
-    
-    CGRect shareFrame = shareViewController.view.frame;
-    shareFrame.origin.x = shareFrame.size.width;
-    
-    // 4) Finally set the size of the scroll view that contains the frames
-    CGFloat scrollWidth  = 2 * self.view.frame.size.width;
-    CGFloat scrollHeight  = self.view.frame.size.height;
-    self.scrollView.contentSize = CGSizeMake(scrollWidth, scrollHeight);
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.bounces = NO;
+    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+
+    [self.view addSubview:self.scrollView];
     
-    //CGFloat newContentOffsetX = (self.view.frame.size.width);
-    //self.scrollView.contentOffset = CGPointMake(newContentOffsetX, 0);
+    ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
+    [self addChildViewController:shareViewController];
     
+    self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width * 2, [UIScreen mainScreen].bounds.size.height)];
+    [self.scrollView addSubview:self.contentView];
+    
+    [self addChildViewController:contentVC];
+    [self.contentView addSubview:contentVC.contentTC.view];
+    [contentVC didMoveToParentViewController:self];
+    [self addChildViewController:contentVC.contentTC];
+    
+    [self.contentView addSubview:shareViewController.view];
+    
+    /*
+    self.view.layer.borderColor = [[UIColor blackColor] CGColor];
+    self.view.layer.borderWidth = 3;
+    
+    self.scrollView.layer.borderColor = [[UIColor blueColor] CGColor];
+    self.scrollView.layer.borderWidth = 5;
+    
+    contentView.layer.borderColor = [[UIColor greenColor] CGColor];
+    contentView.layer.borderWidth = 7;
+    */
+    
+    [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : self.contentView}]];
+    [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|" options:0 metrics:nil views:@{@"v" : self.contentView}]];
+    
+    self.scrollView.contentSize = CGSizeMake(self.contentView.frame.size.width, self.contentView.frame.size.height);
+
+
     [[KAccountManager sharedManager] initLocationManager];
     [[KAccountManager sharedManager] refreshCurrentCoordinate];
 }

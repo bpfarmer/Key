@@ -20,6 +20,7 @@ static NSString *kShareViewSegue         = @"shareViewSegue";
 @interface HomeViewController : UIViewController <DismissAndPresentProtocol>
 
 @property (nonatomic, strong) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic) KThread *selectedThread;
 
 @property (nonatomic) KUser *currentUser;

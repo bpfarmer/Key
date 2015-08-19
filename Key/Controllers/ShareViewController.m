@@ -1,11 +1,3 @@
-//
-//  ShareViewController.m
-//  Key
-//
-//  Created by Brendan Farmer on 4/14/15.
-//  Copyright (c) 2015 Brendan Farmer. All rights reserved.
-//
-
 #import "ShareViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "HomeViewController.h"
@@ -16,6 +8,8 @@
 
 #define kHomeViewPushSegue @"homeViewPush"
 #define kSocialViewPushSegue @"socialViewPush"
+
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
 @interface ShareViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, DismissAndPresentProtocol, AVCaptureMetadataOutputObjectsDelegate>
 
@@ -43,6 +37,11 @@
     
     self.noCameraInSimulatorMessage.hidden = !TARGET_IPHONE_SIMULATOR;
     self.readQRCode = NO;
+    
+    CGRect frame = [UIScreen mainScreen].bounds;
+    frame.origin.x = frame.size.width;
+    
+    self.view.frame = frame;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -81,15 +80,9 @@
     }
     
     if (!self.cameraPreviewFeedView) {
-        HomeViewController *homeViewController = (HomeViewController *)self.parentViewController;
-        CGRect cameraFrame = self.view.frame;
-        self.cameraPreviewFeedView = [[UIView alloc] initWithFrame:cameraFrame];
-        self.cameraPreviewFeedView.center = homeViewController.scrollView.center;
-        self.cameraPreviewFeedView.backgroundColor = [UIColor blackColor];
-
-        if (![homeViewController.scrollView.subviews containsObject:self.cameraPreviewFeedView]) {
-            UIView *view = (UIView *)homeViewController.scrollView.subviews[1];
-            [view addSubview:self.cameraPreviewFeedView];
+        self.cameraPreviewFeedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+        if (![self.view.subviews containsObject:self.cameraPreviewFeedView]) {
+            [self.view addSubview:self.cameraPreviewFeedView];
         }
     }
     
@@ -122,7 +115,6 @@
                 }
                 
                 AVCaptureMetadataOutput *captureMetadataOutput = [[AVCaptureMetadataOutput alloc] init];
-                NSLog(@"AVAILABLE METADATA OBJECT TYPES: %@", [captureMetadataOutput availableMetadataObjectTypes]);
                 [self.captureSession addOutput:captureMetadataOutput];
                 dispatch_queue_t dispatchQueue;
                 dispatchQueue = dispatch_queue_create("barcodeReaderQueue", NULL);
@@ -133,19 +125,26 @@
                 
                 [notificationCenter addObserver:self selector:@selector(onVideoError:) name:AVCaptureSessionRuntimeErrorNotification object:self.captureSession];
                 
-                if (!self.captureVideoPreviewLayer) {
-                    self.captureVideoPreviewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
-                    self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-                    self.captureVideoPreviewLayer.frame = self.cameraPreviewFeedView.bounds;
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.cameraPreviewFeedView.layer insertSublayer:self.captureVideoPreviewLayer atIndex:0];
-                    });
-                }
+                    if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8")) {
+                        self.captureVideoPreviewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
+                        self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                        self.captureVideoPreviewLayer.frame = self.cameraPreviewFeedView.bounds;
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [self.cameraPreviewFeedView.layer addSublayer:self.captureVideoPreviewLayer];
+                        });
+                    }else {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            self.captureVideoPreviewLayer = [AVCaptureVideoPreviewLayer layerWithSession:self.captureSession];
+                            self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+                            self.captureVideoPreviewLayer.frame = self.cameraPreviewFeedView.bounds;
+                            [self.cameraPreviewFeedView.layer addSublayer:self.captureVideoPreviewLayer];
+                        });
+                    }
             }
             
             // this will block the thread until camera is started up
             [self.captureSession startRunning];
-            
+        
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self cameraStartedRunning];
             });
@@ -214,11 +213,12 @@
         }
         
         [self.stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection
-                                                           completionHandler: ^(CMSampleBufferRef imageSampleBuffer, NSError *error)
-         {
+                                                           completionHandler: ^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
+                                                               if(imageSampleBuffer) {
              NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
              
              [self didTakePhoto:imageData];
+                                                               }
          }];
     });
 }
@@ -231,12 +231,13 @@
     [super viewDidAppear:animated];
     
     [self startCamera];
-    HomeViewController *homeViewController = (HomeViewController *)self.parentViewController;
-    if (![homeViewController.scrollView.subviews containsObject:self.cameraOverlayView]) {
-        UIView *view = (UIView *)homeViewController.scrollView.subviews[1];
-        [view addSubview:self.cameraOverlayView];
+    if (![self.view.subviews containsObject:self.cameraOverlayView]) {
+        CGRect frame = self.cameraOverlayView.frame;
+        frame.size.height = frame.size.height - 85;
+        self.cameraOverlayView.frame = frame;
+        [self.view addSubview:self.cameraOverlayView];
         [self.cameraOverlayView setBackgroundColor:[UIColor clearColor]];
-        [view bringSubviewToFront:self.cameraOverlayView];
+        [self.view bringSubviewToFront:self.cameraOverlayView];
     }
 }
 
@@ -364,13 +365,6 @@
 
 - (IBAction)captureImage:(id)sender {
     [self takePhoto];
-}
-
-- (IBAction)didPressMessages:(id)sender {
-    [self stopCamera];
-    HomeViewController *homeVC = (HomeViewController *)self.parentViewController;
-    CGPoint point = CGPointMake(0, 0);
-    [homeVC.scrollView setContentOffset:point animated:YES];
 }
 
 @end
