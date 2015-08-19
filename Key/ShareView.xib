@@ -19,7 +19,6 @@
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <point key="canvasLocation" x="-149" y="3"/>
         </view>
         <view opaque="NO" contentMode="scaleToFill" id="pxJ-v0-bc0">
