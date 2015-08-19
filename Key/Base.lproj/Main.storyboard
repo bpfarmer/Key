@@ -10,36 +10,25 @@
             <objects>
                 <viewController storyboardIdentifier="LoginViewController" title="LoginViewController" id="KMm-q7-cQ9" customClass="LoginViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="dZT-cO-VGX"/>
-                        <viewControllerLayoutGuide type="bottom" id="bbL-We-EUy"/>
+                        <viewControllerLayoutGuide type="top" id="Y5Q-Uq-Xd8"/>
+                        <viewControllerLayoutGuide type="bottom" id="Xzw-bP-FGO"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="g8e-Y8-nfq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lxL-4x-Hlt">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lxL-4x-Hlt">
                                 <rect key="frame" x="29" y="131" width="262" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="262" id="AQR-en-uvs"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="262" id="EFu-Jk-iQc"/>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="262" id="Lp3-Fz-h8I"/>
-                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="d56-uQ-GH3">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="d56-uQ-GH3">
                                 <rect key="frame" x="29" y="169" width="262" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="262" id="8Iy-mK-Bai"/>
-                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bmo-SX-OBs">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bmo-SX-OBs">
                                 <rect key="frame" x="29" y="207" width="100" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="YFM-yK-PiV"/>
-                                </constraints>
                                 <state key="normal" title="Register">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -47,17 +36,14 @@
                                     <action selector="createNewUser:" destination="KMm-q7-cQ9" eventType="touchUpInside" id="GGF-s2-eaC"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Welcome To Key" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mD3-NE-9fl">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Welcome To Key" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mD3-NE-9fl">
                                 <rect key="frame" x="21" y="88" width="279" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dVD-uJ-fkB">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dVD-uJ-fkB">
                                 <rect key="frame" x="204" y="207" width="100" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="2Y8-B4-Fib"/>
-                                </constraints>
                                 <state key="normal" title="Login">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -67,15 +53,6 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="d56-uQ-GH3" firstAttribute="trailing" secondItem="Bmo-SX-OBs" secondAttribute="trailing" id="09h-d2-SsS"/>
-                            <constraint firstItem="d56-uQ-GH3" firstAttribute="top" secondItem="mD3-NE-9fl" secondAttribute="bottom" constant="71" id="2b7-Ls-cgu"/>
-                            <constraint firstItem="dVD-uJ-fkB" firstAttribute="top" secondItem="d56-uQ-GH3" secondAttribute="bottom" constant="8" id="K56-iZ-qHd"/>
-                            <constraint firstAttribute="centerX" secondItem="lxL-4x-Hlt" secondAttribute="centerX" id="fOV-sr-ACF"/>
-                            <constraint firstItem="Bmo-SX-OBs" firstAttribute="top" secondItem="d56-uQ-GH3" secondAttribute="bottom" constant="8" id="huP-am-5Iu"/>
-                            <constraint firstAttribute="centerX" secondItem="d56-uQ-GH3" secondAttribute="centerX" id="iDS-ym-FgV"/>
-                            <constraint firstItem="dVD-uJ-fkB" firstAttribute="leading" secondItem="d56-uQ-GH3" secondAttribute="leading" id="iaz-mH-oZK"/>
-                        </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
@@ -93,29 +70,24 @@
             <objects>
                 <viewController storyboardIdentifier="HomeViewController" autoresizesArchivedViewToFullSize="NO" id="Kqw-Sh-fTZ" customClass="HomeViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="OxX-8G-sVN"/>
-                        <viewControllerLayoutGuide type="bottom" id="iUh-cC-7fW"/>
+                        <viewControllerLayoutGuide type="top" id="WCN-9h-3eP"/>
+                        <viewControllerLayoutGuide type="bottom" id="F6Q-jq-tQs"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="C4y-Ca-atB">
+                    <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="C4y-Ca-atB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gA6-BN-5tx">
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gA6-BN-5tx">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="gA6-BN-5tx" firstAttribute="leading" secondItem="C4y-Ca-atB" secondAttribute="leading" id="CrF-Ah-gb7"/>
-                            <constraint firstItem="gA6-BN-5tx" firstAttribute="top" secondItem="C4y-Ca-atB" secondAttribute="top" id="RFN-pW-RX1"/>
-                            <constraint firstAttribute="trailing" secondItem="gA6-BN-5tx" secondAttribute="trailing" id="ZJG-Ow-G9j"/>
-                            <constraint firstAttribute="bottom" secondItem="gA6-BN-5tx" secondAttribute="bottom" id="jjY-qd-roh"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Rmg-cc-BfW"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <connections>
                         <outlet property="scrollView" destination="gA6-BN-5tx" id="aGo-5b-BIg"/>
                         <segue destination="qVh-7y-9nV" kind="push" identifier="threadSeguePush" id="Zd3-pg-MKU"/>
@@ -130,8 +102,8 @@
             <objects>
                 <viewController id="qVh-7y-9nV" customClass="ThreadViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="nT3-wg-wtN"/>
-                        <viewControllerLayoutGuide type="bottom" id="TRA-nf-8Zd"/>
+                        <viewControllerLayoutGuide type="top" id="NAn-ee-qQW"/>
+                        <viewControllerLayoutGuide type="bottom" id="21d-Mn-74c"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="0X1-N4-3yu">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
@@ -153,6 +125,7 @@
             <objects>
                 <navigationController storyboardIdentifier="MainNavigationController" automaticallyAdjustsScrollViewInsets="NO" id="iVT-Xi-DZY" customClass="HomeNavigationViewController" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7w7-c0-shX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

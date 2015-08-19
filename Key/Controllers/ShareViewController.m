@@ -138,6 +138,7 @@
                     self.captureVideoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
                     self.captureVideoPreviewLayer.frame = self.cameraPreviewFeedView.bounds;
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        NSLog(@"THIS DOESNT APPEAR TO BE HAPPENING...");
                         [self.cameraPreviewFeedView.layer insertSublayer:self.captureVideoPreviewLayer atIndex:0];
                     });
                 }
@@ -213,13 +214,11 @@
             }
         }
         
-        [self.stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection
-                                                           completionHandler: ^(CMSampleBufferRef imageSampleBuffer, NSError *error)
-         {
+        [self.stillImageOutput captureStillImageAsynchronouslyFromConnection:videoConnection completionHandler: ^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
              NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
              
              [self didTakePhoto:imageData];
-         }];
+        }];
     });
 }
 

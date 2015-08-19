@@ -48,16 +48,12 @@ static NSString *TableViewCellIdentifier = @"Threads";
     CGRect adminFrame = contentVC.view.frame;
     adminFrame.origin.x = adminFrame.size.width;
     
-    //self.scrollView.translatesAutoresizingMaskIntoConstraints = YES;
-    //self.view.translatesAutoresizingMaskIntoConstraints = YES;
-    //contentVC.contentTC.view.translatesAutoresizingMaskIntoConstraints = YES;
-    
     ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
     [self addChildViewController:shareViewController];
     [self.scrollView addSubview:shareViewController.view];
     
     shareViewController.view.frame = adminFrame;
-    //shareViewController.view.translatesAutoresizingMaskIntoConstraints = YES;
+
     
     CGRect shareFrame = shareViewController.view.frame;
     shareFrame.origin.x = shareFrame.size.width;
@@ -82,7 +78,7 @@ static NSString *TableViewCellIdentifier = @"Threads";
     // 4) Finally set the size of the scroll view that contains the frames
     CGFloat scrollWidth  = 2 * self.view.frame.size.width;
     CGFloat scrollHeight  = self.view.frame.size.height;
-    //self.scrollView.contentSize = CGSizeMake(scrollWidth, scrollHeight);
+    self.scrollView.contentSize = CGSizeMake(scrollWidth, scrollHeight);
     self.scrollView.pagingEnabled = YES;
     self.scrollView.showsHorizontalScrollIndicator = NO;
     self.scrollView.bounces = NO;
