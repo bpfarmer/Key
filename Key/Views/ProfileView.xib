@@ -23,9 +23,22 @@
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54f-yr-CGk">
                     <rect key="frame" x="268" y="24" width="37" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="37" id="7vj-a7-Wnw"/>
+                    </constraints>
                     <state key="normal" title="Done">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="7vj-a7-Wnw"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="7vj-a7-Wnw"/>
+                        </mask>
+                    </variation>
                     <connections>
                         <action selector="clickDone:" destination="-1" eventType="touchUpInside" id="Q7V-uP-ud4"/>
                     </connections>
@@ -38,11 +51,39 @@
                 </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="54f-yr-CGk" firstAttribute="top" secondItem="X2s-rs-p49" secondAttribute="top" constant="24" id="1z9-LI-tUe"/>
+                <constraint firstItem="NNh-gt-44E" firstAttribute="top" secondItem="54f-yr-CGk" secondAttribute="bottom" constant="3" id="2n9-gO-Xbg"/>
+                <constraint firstAttribute="bottom" secondItem="NNh-gt-44E" secondAttribute="bottom" constant="8" id="62M-rD-KJ8"/>
+                <constraint firstAttribute="trailing" secondItem="NNh-gt-44E" secondAttribute="trailing" constant="15" id="d1H-Qk-WjI"/>
+                <constraint firstItem="NNh-gt-44E" firstAttribute="leading" secondItem="X2s-rs-p49" secondAttribute="leading" constant="8" id="oge-lh-vhA"/>
+                <constraint firstAttribute="trailing" secondItem="54f-yr-CGk" secondAttribute="trailing" constant="15" id="wPu-EJ-CyI"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-            <point key="canvasLocation" x="1174" y="-78"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="2n9-gO-Xbg"/>
+                    <exclude reference="62M-rD-KJ8"/>
+                    <exclude reference="d1H-Qk-WjI"/>
+                    <exclude reference="oge-lh-vhA"/>
+                    <exclude reference="1z9-LI-tUe"/>
+                    <exclude reference="wPu-EJ-CyI"/>
+                </mask>
+            </variation>
+            <variation key="heightClass=regular-widthClass=compact">
+                <mask key="constraints">
+                    <include reference="2n9-gO-Xbg"/>
+                    <include reference="62M-rD-KJ8"/>
+                    <include reference="d1H-Qk-WjI"/>
+                    <include reference="oge-lh-vhA"/>
+                    <include reference="1z9-LI-tUe"/>
+                    <include reference="wPu-EJ-CyI"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="907" y="-119"/>
         </view>
     </objects>
 </document>

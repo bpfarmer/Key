@@ -91,7 +91,7 @@
         <!--Home View Controller-->
         <scene sceneID="1NY-li-ffi">
             <objects>
-                <viewController storyboardIdentifier="HomeViewController" id="Kqw-Sh-fTZ" customClass="HomeViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeViewController" autoresizesArchivedViewToFullSize="NO" id="Kqw-Sh-fTZ" customClass="HomeViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="OxX-8G-sVN"/>
                         <viewControllerLayoutGuide type="bottom" id="iUh-cC-7fW"/>
@@ -100,16 +100,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gA6-BN-5tx">
+                            <scrollView autoresizesSubviews="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gA6-BN-5tx">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="gA6-BN-5tx" secondAttribute="bottom" id="4j5-Pj-gRp"/>
-                            <constraint firstItem="gA6-BN-5tx" firstAttribute="leading" secondItem="C4y-Ca-atB" secondAttribute="leading" id="5PE-Ug-c2N"/>
-                            <constraint firstAttribute="trailing" secondItem="gA6-BN-5tx" secondAttribute="trailing" id="5hC-nX-N7k"/>
-                            <constraint firstItem="gA6-BN-5tx" firstAttribute="top" secondItem="C4y-Ca-atB" secondAttribute="top" id="8ee-S3-Toi"/>
+                            <constraint firstItem="gA6-BN-5tx" firstAttribute="leading" secondItem="C4y-Ca-atB" secondAttribute="leading" id="CrF-Ah-gb7"/>
+                            <constraint firstItem="gA6-BN-5tx" firstAttribute="top" secondItem="C4y-Ca-atB" secondAttribute="top" id="RFN-pW-RX1"/>
+                            <constraint firstAttribute="trailing" secondItem="gA6-BN-5tx" secondAttribute="trailing" id="ZJG-Ow-G9j"/>
+                            <constraint firstAttribute="bottom" secondItem="gA6-BN-5tx" secondAttribute="bottom" id="jjY-qd-roh"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Rmg-cc-BfW"/>

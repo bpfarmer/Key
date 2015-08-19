@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -17,17 +17,20 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="nId-94-Va0">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="nId-94-Va0">
                     <rect key="frame" x="0.0" y="69" width="320" height="491"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sux-Bx-5qs">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sux-Bx-5qs">
                     <rect key="frame" x="8" y="31" width="258" height="30"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pxa-g1-V0y">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pxa-g1-V0y">
                     <rect key="frame" x="282" y="31" width="30" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="30" id="ffv-m8-E7P"/>
+                    </constraints>
                     <state key="normal" title="Add">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -37,12 +40,27 @@
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Sux-Bx-5qs" firstAttribute="leading" secondItem="Gjh-z9-6Br" secondAttribute="leading" constant="8" id="1ug-JL-8y2"/>
+                <constraint firstItem="nId-94-Va0" firstAttribute="top" secondItem="Sux-Bx-5qs" secondAttribute="bottom" constant="8" id="92A-Dc-FeP"/>
+                <constraint firstItem="nId-94-Va0" firstAttribute="leading" secondItem="Gjh-z9-6Br" secondAttribute="leading" id="B1B-oG-6oj"/>
+                <constraint firstItem="Sux-Bx-5qs" firstAttribute="top" secondItem="Gjh-z9-6Br" secondAttribute="top" constant="31" id="NOa-ia-YR0"/>
+                <constraint firstAttribute="trailing" secondItem="nId-94-Va0" secondAttribute="trailing" id="NZl-zc-eDo"/>
+                <constraint firstAttribute="bottom" secondItem="nId-94-Va0" secondAttribute="bottom" constant="8" id="SXt-Ot-RtQ"/>
+                <constraint firstAttribute="trailing" secondItem="Pxa-g1-V0y" secondAttribute="trailing" constant="8" id="Spi-Op-KcO"/>
+                <constraint firstItem="Pxa-g1-V0y" firstAttribute="leading" secondItem="Sux-Bx-5qs" secondAttribute="trailing" constant="16" id="bAb-H3-hdq"/>
+                <constraint firstItem="Pxa-g1-V0y" firstAttribute="top" secondItem="Gjh-z9-6Br" secondAttribute="top" constant="31" id="xu0-ry-EOv"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <point key="canvasLocation" x="231" y="580"/>
         </view>
     </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

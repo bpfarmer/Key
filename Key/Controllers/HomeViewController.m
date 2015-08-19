@@ -40,7 +40,6 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [[NSBundle mainBundle] loadNibNamed:@"ContentView" owner:contentVC options:nil];
     
     self.scrollView.delegate = self;
-    
     [self addChildViewController:contentVC];
     [self.scrollView addSubview:contentVC.contentTC.view];
     [contentVC didMoveToParentViewController:self];
