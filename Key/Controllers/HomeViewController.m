@@ -28,6 +28,7 @@ static NSString *TableViewCellIdentifier = @"Threads";
 @interface HomeViewController () <CLLocationManagerDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) ShareViewController *shareViewController;
 
 @end
 
@@ -47,8 +48,8 @@ static NSString *TableViewCellIdentifier = @"Threads";
 
     [self.view addSubview:self.scrollView];
     
-    ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
-    [self addChildViewController:shareViewController];
+    self.shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
+    [self addChildViewController:self.shareViewController];
     
     self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width * 2, [UIScreen mainScreen].bounds.size.height)];
     [self.scrollView addSubview:self.contentView];
@@ -58,18 +59,7 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [contentVC didMoveToParentViewController:self];
     [self addChildViewController:contentVC.contentTC];
     
-    [self.contentView addSubview:shareViewController.view];
-    
-    /*
-    self.view.layer.borderColor = [[UIColor blackColor] CGColor];
-    self.view.layer.borderWidth = 3;
-    
-    self.scrollView.layer.borderColor = [[UIColor blueColor] CGColor];
-    self.scrollView.layer.borderWidth = 5;
-    
-    contentView.layer.borderColor = [[UIColor greenColor] CGColor];
-    contentView.layer.borderWidth = 7;
-    */
+    [self.contentView addSubview:self.shareViewController.view];
     
     [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[v]|" options:0 metrics:nil views:@{@"v" : self.contentView}]];
     [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|" options:0 metrics:nil views:@{@"v" : self.contentView}]];
@@ -81,22 +71,25 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [[KAccountManager sharedManager] refreshCurrentCoordinate];
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if(self.shareViewController) {
+        if(!CGRectIntersectsRect(self.scrollView.bounds, self.shareViewController.view.bounds)) {
+            [self.shareViewController cameraOn];
+        }else {
+            [self.shareViewController cameraOff];
+        }
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self reloadInputViews];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
 -(BOOL)shouldAutorotate {
     return NO;
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [self.view endEditing:YES];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.view endEditing:YES];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -142,10 +135,6 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [self dismissViewControllerAnimated:NO completion:^{
         [self presentViewController:viewController animated:YES completion:nil];
     }];
-}
-
-- (BOOL)resignFirstResponder {
-    return YES;
 }
 
 @end

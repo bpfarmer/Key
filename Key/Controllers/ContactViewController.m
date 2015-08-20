@@ -45,6 +45,10 @@ static NSString *TableViewCellIdentifier = @"Contacts";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KUser notificationChannel] object:nil];
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    [textField becomeFirstResponder];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }

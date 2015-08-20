@@ -11,4 +11,7 @@
 
 @interface ShareViewController : UIViewController
 
+- (void)cameraOn;
+- (void)cameraOff;
+
 @end

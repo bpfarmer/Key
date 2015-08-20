@@ -82,11 +82,13 @@
         switch (dateComparison) {
             case NSOrderedDescending :
                 self.latestMessageId = message.uniqueId;
+                self.lastMessageAt   = message.createdAt;
                 break;
             default : break;
         }
     }else {
         self.latestMessageId = message.uniqueId;
+        self.lastMessageAt   = message.createdAt;
     }
     
     [self save];
@@ -103,6 +105,18 @@
     NSMutableArray *recipientIds = [NSMutableArray arrayWithArray:[self.userIds componentsSeparatedByString:@"_"]];
     [recipientIds removeObject:localUser.uniqueId];
     return [recipientIds copy];
+}
+
++ (NSArray *)inbox {
+    NSString *inboxSQL = [NSString stringWithFormat:@"select * from %@ order by last_message_at desc", [KThread tableName]];
+    
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        FMResultSet *result =  [database executeQuery:inboxSQL];
+        NSMutableArray *threads = [[NSMutableArray alloc] init];
+        while(result.next) [threads addObject:[[KThread alloc] initWithResultSetRow:result.resultDictionary]];
+        [result close];
+        return [threads copy];
+    }];
 }
 
 - (NSArray *)messages {

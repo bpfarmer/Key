@@ -70,6 +70,14 @@
     
 }
 
+- (void)cameraOn {
+    [self startCamera];
+}
+
+- (void)cameraOff {
+    [self stopCamera];
+}
+
 - (void)startCamera {
     if (TARGET_IPHONE_SIMULATOR) {
         _simulatorIsCameraRunning = YES;

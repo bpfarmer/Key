@@ -32,7 +32,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.threads = [KThread all];
+    self.threads = [KThread inbox];
     self.threadsTableView.delegate = self;
     self.threadsTableView.dataSource = self;
     
@@ -59,18 +59,24 @@ static NSString *TableViewCellIdentifier = @"Messages";
                     updatedIndex = [threads indexOfObject:thread];
                 }
             if(updatedIndex == -1) {
-                [threads addObject:newThread];
+                [threads insertObject:newThread atIndex:0];
                 NSArray *newThreads = [threads copy];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if(newThreads.count > self.threads.count)
-                    [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.threads.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    if(newThreads.count > self.threads.count) {
+                        self.threads = [newThreads copy];
+                        [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(0) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    }
                 });
             }else {
-                [threads replaceObjectAtIndex:updatedIndex withObject:newThread];
+                [threads removeObjectAtIndex:updatedIndex];
                 NSArray *newThreads = [threads copy];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.threads = newThreads;
-                    [self.threadsTableView reloadData];
+                    [self.threadsTableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(updatedIndex) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    NSMutableArray *updatedThreads = [[NSMutableArray alloc] initWithArray:self.threads];
+                    [updatedThreads insertObject:newThread atIndex:0];
+                    self.threads = [updatedThreads copy];
+                    [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
                 });
             }
         });
@@ -112,9 +118,10 @@ static NSString *TableViewCellIdentifier = @"Messages";
     SubtitleTableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
     KThread *thread = self.threads[indexPath.row];
     cell.textLabel.text = [NSString stringWithFormat:@"%@", thread.displayName];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", thread.latestMessage.text];
+    if(thread.latestMessage) cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", thread.latestMessage.text];
     cell.imageView.image = [self imageRead:thread.read];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    NSLog(@"THREAD LAST MESSAGE AT: %@", thread.lastMessageAt);
     return cell;
 }
 

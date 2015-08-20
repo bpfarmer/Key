@@ -54,6 +54,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self resignFirstResponder];
+    [self.view endEditing:YES];
+}
+
 - (void)keyboardWillShow:(NSNotification*)note{
     NSDictionary *userInfo = note.userInfo;
     CGRect finalKeyboardFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -186,7 +192,8 @@
     }];
 }
 
-- (void)dismissAndPresentThread:(KThread *)thread  {}
+- (void)dismissAndPresentThread:(KThread *)thread  {
+}
 
 
 - (UIView *)getCaptionView {

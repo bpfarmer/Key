@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 
+#import "KStorageManager.h"
 #import "KStorageSchema.h"
 #import "KUser.h"
 #import "KMessage.h"
@@ -45,6 +46,8 @@
     [KPost createTable];
     [KDevice createTable];
     [AttachmentKey createTable];
+    
+    [self updateSchema];
 }
 
 + (void)dropTables {
@@ -64,6 +67,19 @@
     [KPost dropTable];
     [KDevice dropTable];
     [AttachmentKey dropTable];
+}
+
++ (void)updateSchema {
+    [self addColumn:@"last_message_at" toTable:[KThread tableName] withType:@"double"];
+}
+
++ (void)addColumn:(NSString *)column toTable:(NSString *)table withType:(NSString *)type {
+    [[KStorageManager sharedManager].queue inDatabase:^(FMDatabase *db) {
+         if(![db columnExists:column inTableWithName:table]) {
+            [db executeUpdate:[NSString stringWithFormat:@"alter table %@ add column %@ %@", table, column, type]];
+        
+        }
+    }];
 }
 
 
