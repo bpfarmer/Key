@@ -43,7 +43,7 @@
                         <action selector="clickDone:" destination="-1" eventType="touchUpInside" id="Q7V-uP-ud4"/>
                     </connections>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="987-4U-Gtp">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="987-4U-Gtp">
                     <rect key="frame" x="24" y="28" width="42" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -58,6 +58,7 @@
                 <constraint firstAttribute="bottom" secondItem="NNh-gt-44E" secondAttribute="bottom" constant="8" id="62M-rD-KJ8"/>
                 <constraint firstItem="987-4U-Gtp" firstAttribute="leading" secondItem="X2s-rs-p49" secondAttribute="leading" constant="24" id="IfJ-9l-OBc"/>
                 <constraint firstAttribute="trailing" secondItem="NNh-gt-44E" secondAttribute="trailing" constant="15" id="d1H-Qk-WjI"/>
+                <constraint firstItem="NNh-gt-44E" firstAttribute="top" secondItem="54f-yr-CGk" secondAttribute="bottom" constant="3" id="mYb-yD-ehb"/>
                 <constraint firstItem="NNh-gt-44E" firstAttribute="leading" secondItem="X2s-rs-p49" secondAttribute="leading" constant="8" id="oge-lh-vhA"/>
                 <constraint firstAttribute="trailing" secondItem="54f-yr-CGk" secondAttribute="trailing" constant="15" id="wPu-EJ-CyI"/>
             </constraints>
@@ -72,6 +73,7 @@
                     <exclude reference="2n9-gO-Xbg"/>
                     <exclude reference="62M-rD-KJ8"/>
                     <exclude reference="d1H-Qk-WjI"/>
+                    <exclude reference="mYb-yD-ehb"/>
                     <exclude reference="oge-lh-vhA"/>
                     <exclude reference="1z9-LI-tUe"/>
                     <exclude reference="wPu-EJ-CyI"/>
@@ -84,6 +86,7 @@
                     <include reference="2n9-gO-Xbg"/>
                     <include reference="62M-rD-KJ8"/>
                     <include reference="d1H-Qk-WjI"/>
+                    <include reference="mYb-yD-ehb"/>
                     <include reference="oge-lh-vhA"/>
                     <include reference="1z9-LI-tUe"/>
                     <include reference="wPu-EJ-CyI"/>

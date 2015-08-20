@@ -41,7 +41,7 @@
 }
 
 - (IBAction)login:(id)sender {
-    if(![self.usernameText.text isEqualToString:@""] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
+    if(![self.usernameText.text isEqualToString:@""] && ![self.usernameText.text containsString:@" "] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
         KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString]];
         TOCFuture *futureSalt = [LoginRequest makeSaltRequestWithParameters:@{@"username" : user.username}];
         [futureSalt catchDo:^(id failure) {
@@ -70,7 +70,7 @@
 }
 
 - (IBAction)createNewUser:(id)sender {
-    if(![self.usernameText.text isEqualToString:@""]) {
+    if(![self.usernameText.text isEqualToString:@""]  && ![self.usernameText.text containsString:@" "]) {
         TOCFuture *futureUser = [KUser asyncCreateWithUsername:self.usernameText.text password:self.passwordText.text];
         
         [futureUser catchDo:^(id error) {
