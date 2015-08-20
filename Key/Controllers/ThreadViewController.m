@@ -77,6 +77,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
         self.messages = [[NSArray alloc] initWithArray:messages];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
+            [self scrollToBottomAnimated:YES];
         });
     }
 }
@@ -172,7 +173,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
             });
             
             self.inputToolbar.contentView.textView.text = @"";
-            [self scrollToBottomAnimated:YES];
         }
     }
 }
