@@ -75,7 +75,9 @@ static NSString *TableViewCellIdentifier = @"Messages";
         NSMutableArray *messages = [[NSMutableArray alloc] initWithArray:self.messages];
         [messages addObject:[notification object]];
         self.messages = [[NSArray alloc] initWithArray:messages];
-        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
+        });
     }
 }
 
@@ -145,6 +147,10 @@ static NSString *TableViewCellIdentifier = @"Messages";
     }
 }
 
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
 - (void)didPressSendButton:(UIButton *)button
            withMessageText:(NSString *)text
                   senderId:(NSString *)senderId
@@ -175,9 +181,9 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)didPressAccessoryButton:(UIButton *)sender
 {
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Send photo", @"Send location", @"Send video", nil];
+    /*UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Send photo", @"Send location", @"Send video", nil];
     
-    [sheet showFromToolbar:self.inputToolbar];
+    [sheet showFromToolbar:self.inputToolbar];*/
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
