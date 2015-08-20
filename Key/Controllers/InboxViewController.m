@@ -68,16 +68,18 @@ static NSString *TableViewCellIdentifier = @"Messages";
                     }
                 });
             }else {
-                [threads removeObjectAtIndex:updatedIndex];
-                NSArray *newThreads = [threads copy];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.threads = newThreads;
-                    [self.threadsTableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(updatedIndex) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    NSMutableArray *updatedThreads = [[NSMutableArray alloc] initWithArray:self.threads];
-                    [updatedThreads insertObject:newThread atIndex:0];
-                    self.threads = [updatedThreads copy];
-                    [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-                });
+                if([newThread isMoreRecentThan:threads[0]]) {
+                    [threads removeObjectAtIndex:updatedIndex];
+                    NSArray *newThreads = [threads copy];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        self.threads = newThreads;
+                        [self.threadsTableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(updatedIndex) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        NSMutableArray *updatedThreads = [[NSMutableArray alloc] initWithArray:self.threads];
+                        [updatedThreads insertObject:newThread atIndex:0];
+                        self.threads = [updatedThreads copy];
+                        [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    });
+                }
             }
         });
     }

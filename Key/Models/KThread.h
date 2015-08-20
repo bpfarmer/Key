@@ -35,5 +35,6 @@
 - (NSString *)displayName;
 - (BOOL)saved;
 - (KMessage *)latestMessage;
+- (BOOL)isMoreRecentThan:(KThread *)thread;
 
 @end

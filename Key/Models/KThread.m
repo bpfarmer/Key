@@ -77,21 +77,33 @@
     }
     
     if(self.latestMessageId) {
-        KMessage *latestMessage = [KMessage findById:self.latestMessageId];
-        NSComparisonResult dateComparison = [message.createdAt compare:latestMessage.createdAt];
-        switch (dateComparison) {
-            case NSOrderedDescending :
-                self.latestMessageId = message.uniqueId;
-                self.lastMessageAt   = message.createdAt;
-                break;
-            default : break;
+        if([self isMostRecentMessage:message]) {
+            self.lastMessageAt = message.createdAt;
+            self.latestMessageId = message.uniqueId;
+        }else {
+            return;
         }
     }else {
         self.latestMessageId = message.uniqueId;
         self.lastMessageAt   = message.createdAt;
     }
-    
     [self save];
+}
+
+- (BOOL)isMostRecentMessage:(KMessage *)newMessage {
+    NSComparisonResult dateComparison = [newMessage.createdAt compare:self.lastMessageAt];
+    switch (dateComparison) {
+        case NSOrderedDescending : return YES; break;
+        default : return NO; break;
+    }
+}
+
+- (BOOL)isMoreRecentThan:(KThread *)thread {
+    NSComparisonResult dateComparison = [self.lastMessageAt compare:thread.lastMessageAt];
+    switch (dateComparison) {
+        case NSOrderedDescending : return YES; break;
+        default : return NO; break;
+    }
 }
 
 - (NSString *)displayName {

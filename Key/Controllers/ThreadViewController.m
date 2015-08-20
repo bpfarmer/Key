@@ -87,8 +87,11 @@ static NSString *TableViewCellIdentifier = @"Messages";
     
     if(self.thread) {
         self.title = self.thread.displayName;
-        [self.thread setRead:YES];
-        [self.thread save];
+        
+        if(!self.thread.read) {
+            [self.thread setRead:YES];
+            [self.thread save];
+        }
     }
 }
 
