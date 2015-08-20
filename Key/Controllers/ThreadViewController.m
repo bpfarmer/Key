@@ -66,7 +66,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
                                              selector:@selector(databaseModified:)
                                                  name:[KMessage notificationChannel]
                                                object:nil];
-
 }
 
 - (void)databaseModified:(NSNotification *)notification {

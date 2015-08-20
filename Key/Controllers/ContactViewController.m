@@ -73,7 +73,7 @@ static NSString *TableViewCellIdentifier = @"Contacts";
     UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
     KUser *user = (KUser *)self.contacts[indexPath.row];
     cell.textLabel.text = user.displayName;
-    KPost *post = [KPost findByDictionary:@{@"authorId" : user.uniqueId}];
+    KPost *post = [KPost findByDictionary:@{@"authorId" : user.uniqueId, @"ephemeral" : @NO}];
     UIImage *preview;
     if(post) {
         preview = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];

@@ -45,6 +45,9 @@
                             <include reference="odN-L6-qz9"/>
                         </mask>
                     </variation>
+                    <connections>
+                        <action selector="clickDone:" destination="-1" eventType="touchUpInside" id="tbB-E9-zjh"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

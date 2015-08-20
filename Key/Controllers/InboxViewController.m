@@ -62,7 +62,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
                 [threads addObject:newThread];
                 NSArray *newThreads = [threads copy];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.threads = newThreads;
+                    if(newThreads.count > self.threads.count)
                     [self.threadsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.threads.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
                 });
             }else {

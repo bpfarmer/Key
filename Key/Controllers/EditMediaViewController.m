@@ -43,6 +43,8 @@
     
     self.captionShowing = NO;
     
+    self.captionTextField.delegate = self;
+    
     UITapGestureRecognizer *tapRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleCaption)];
     [tapRec setCancelsTouchesInView:NO];
     tapRec.delegate = self;
