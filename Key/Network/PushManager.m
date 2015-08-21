@@ -51,8 +51,11 @@
     return self.userNotificationFutureSource.future;
 }
 
-- (void)sendPushToken:(NSData *)pushToken userId:(NSString *)userId {
-    [SendPushTokenRequest makeRequestWithDeviceToken:pushToken uniqueId:userId];
+- (void)sendPushToken:(NSData *)pushToken user:(KUser *)user {
+    if(user) {
+        if(user.uniqueId) [SendPushTokenRequest makeRequestWithDeviceToken:pushToken uniqueId:user.uniqueId];
+        else if(user.username) [SendPushTokenRequest makeRequestWithDeviceToken:pushToken username:user.username];
+    }
 }
 
 @end

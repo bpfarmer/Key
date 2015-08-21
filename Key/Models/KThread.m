@@ -76,18 +76,22 @@
         self.read = YES;
     }
     
-    if(self.latestMessageId) {
+    NSLog(@"PROCESSING LATEST MESSAGE");
+    if(self.lastMessageAt) {
         if([self isMostRecentMessage:message]) {
             self.lastMessageAt = message.createdAt;
             self.latestMessageId = message.uniqueId;
+            [self save];
+            NSLog(@"SHOULD BE HERE");
         }else {
             return;
         }
     }else {
+        NSLog(@"WHY IS THIS HERE");
         self.latestMessageId = message.uniqueId;
         self.lastMessageAt   = message.createdAt;
+        [self save];
     }
-    [self save];
 }
 
 - (BOOL)isMostRecentMessage:(KMessage *)newMessage {

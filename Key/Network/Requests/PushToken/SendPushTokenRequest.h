@@ -16,4 +16,6 @@
 - (instancetype)initWithDeviceToken:(NSData *)deviceToken uniqueId:(NSString *)uniqueId;
 + (TOCFuture *)makeRequestWithDeviceToken:(NSData *)deviceToken uniqueId:(NSString *)uniqueId;
 
++ (TOCFuture *)makeRequestWithDeviceToken:(NSData *)deviceToken username:(NSString *)username;
+
 @end

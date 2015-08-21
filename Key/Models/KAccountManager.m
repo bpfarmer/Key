@@ -26,16 +26,20 @@
 
 
 - (void)setUser:(KUser *)user {
-    if(self) {
-        _user = user;
-        [self saveToPlist];
-        if(user.uniqueId) {
-            TOCFuture *pushNotificationFuture = [[PushManager sharedManager] registerForRemoteNotifications];
+    _user = user;
+    [self saveToPlist];
+}
+
+- (void)requestPushPermissions {
+    if(self.user) {
+        TOCFuture *pushNotificationFuture = [[PushManager sharedManager] registerForRemoteNotifications];
         
-            [pushNotificationFuture thenDo:^(id value) {
-                [[PushManager sharedManager] sendPushToken:value userId:self.user.uniqueId];
-            }];
-        }
+        [pushNotificationFuture thenDo:^(id value) {
+            if(!self.user.uniqueId) {
+                KUser *foundUser = [KUser findByDictionary:@{@"username" : self.user.username}];
+                if(foundUser) [[PushManager sharedManager] sendPushToken:value user:foundUser];
+            }else [[PushManager sharedManager] sendPushToken:value user:self.user];
+        }];
     }
 }
 

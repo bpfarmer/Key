@@ -13,5 +13,6 @@
 #define kPushTokenAlias    @"push_token"
 #define kPushTokenDeviceToken @"deviceToken"
 #define kPushTokenUniqueId    @"uniqueId"
+#define kPushTokenUsername    @"username"
 
 #endif

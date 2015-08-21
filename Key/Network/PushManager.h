@@ -10,6 +10,7 @@
 
 @class TOCFutureSource;
 @class TOCFuture;
+@class KUser;
 
 @interface PushManager : NSObject
 
@@ -19,7 +20,7 @@
 + (instancetype)sharedManager;
 - (void)respondToRemoteNotification;
 - (TOCFuture *)registerForRemoteNotifications;
-- (void)sendPushToken:(NSData *)pushToken userId:(NSString *)userId;
+- (void)sendPushToken:(NSData *)pushToken user:(KUser *)user;
 
 
 @end
