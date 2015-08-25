@@ -20,26 +20,30 @@
 #import "CheckDevicesRequest.h"
 #import "CollapsingFutures.h"
 
-static NSString *TableViewCellIdentifier = @"Recipients";
-
-@interface SelectRecipientViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface SelectRecipientViewController ()
 
 @property (nonatomic) IBOutlet UITableView *contactsTableView;
 @property (nonatomic) NSArray *selectedRecipients;
-@property (nonatomic) NSArray *contacts;
 
 @end
 
 @implementation SelectRecipientViewController
 
 - (void)viewDidLoad {
+    self.currentUser = [KAccountManager sharedManager].user;
+    self.tableView = self.contactsTableView;
+    self.sectionCriteria = @[@{@"class" : @"KUser",
+                               @"criteria" : @{}}];
+    self.sortedByProperty = @"username";
+    self.sortDescending   = NO;
     [super viewDidLoad];
     
-    self.contacts = [[KAccountManager sharedManager].user contacts];
-    
-    self.contactsTableView.dataSource = self;
-    self.contactsTableView.delegate = self;
-    [self.contactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    NSMutableArray *newData = [NSMutableArray arrayWithArray:self.sectionData];
+    NSMutableArray *newSectionData = [NSMutableArray arrayWithArray:self.sectionData[0]];
+    for(KUser *user in newSectionData) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [newSectionData removeObject:user];
+    [newSectionData insertObject:@"Everyone" atIndex:0];
+    [newData replaceObjectAtIndex:0 withObject:newSectionData];
+    self.sectionData = newData;
     
     NSLog(@"EPHEMERAL SETTING: %d", self.ephemeral);
     if(![self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
@@ -48,43 +52,56 @@ static NSString *TableViewCellIdentifier = @"Recipients";
             self.post.ephemeral = self.ephemeral;
         }
     }
-    
-    self.contactsTableView.allowsMultipleSelection = YES;
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)sender {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section {
-    return self.contacts.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    KUser *user = self.contacts[indexPath.row];
-    UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
-    cell.textLabel.text = [user displayName];
+    NSObject *object = [self objectForIndexPath:indexPath];
+    UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:[self cellIdentifier] forIndexPath:indexPath];
+    if([object isKindOfClass:[NSString class]]) {
+        cell.textLabel.text = (NSString *)object;
+    }else {
+        KUser *user = (KUser *)[self objectForIndexPath:indexPath];
+        cell.textLabel.text = [user displayName];
+    }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    KUser *user = self.contacts[indexPath.row];
-    NSMutableArray *selected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
-    [selected addObject:user];
-    self.selectedRecipients = selected;
+    NSObject *object = [self objectForIndexPath:indexPath];
+    if([object isKindOfClass:[NSString class]]) {
+        for(int i = 0; i < ((NSArray *)self.sectionData[indexPath.section]).count; i++) {
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section] animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [self addObjectToSelectedRecipients:[self objectForIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section]]];
+        }
+    }else [self addObjectToSelectedRecipients:object];
+    NSLog(@"SELECTED RECIPS: %@", self.selectedRecipients);
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    KUser *user = self.contacts[indexPath.row];
-    NSMutableArray *selected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
-    [selected removeObject:user];
-    self.selectedRecipients = selected;
+    NSObject *object = [self objectForIndexPath:indexPath];
+    if([object isKindOfClass:[NSString class]]) {
+        for(int i = 0; i < ((NSArray *)self.sectionData[indexPath.section]).count; i++) {
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section] animated:NO];
+            self.selectedRecipients = @[];
+        }
+    }else {
+        KUser *user = (KUser *)[self objectForIndexPath:indexPath];
+        NSMutableArray *selected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
+        [selected removeObject:user];
+        [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:NO];
+        self.selectedRecipients = selected;
+    }
+    NSLog(@"SELECTED RECIPS: %@", self.selectedRecipients);
+}
+
+- (void)addObjectToSelectedRecipients:(NSObject *)object {
+    if([object isKindOfClass:[KUser class]]) {
+        NSMutableArray *selected = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
+        if(![selected containsObject:object]) {
+            [selected addObject:object];
+            self.selectedRecipients = [selected copy];
+        }
+    }
 }
 
 - (IBAction)sendToRecipients:(id)sender {

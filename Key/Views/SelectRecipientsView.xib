@@ -83,14 +83,38 @@
                         <action selector="didPressCancel:" destination="-1" eventType="touchUpInside" id="fxU-dc-s1W"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5b3-78-RXT">
+                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="MR8-B3-pTN"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="YgK-64-ilw"/>
+                    </constraints>
+                    <state key="normal" title="Persistent: YES">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="MR8-B3-pTN"/>
+                            <exclude reference="YgK-64-ilw"/>
+                        </mask>
+                    </variation>
+                    <variation key="heightClass=regular-widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="MR8-B3-pTN"/>
+                            <include reference="YgK-64-ilw"/>
+                        </mask>
+                    </variation>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="5b3-78-RXT" secondAttribute="trailing" constant="8" id="58k-sV-Ta1"/>
                 <constraint firstAttribute="trailing" secondItem="4AS-nt-7Pg" secondAttribute="trailing" id="8ld-RZ-FT1"/>
                 <constraint firstItem="oOT-KO-Vly" firstAttribute="leading" secondItem="CYT-al-PGf" secondAttribute="leading" constant="8" id="BFc-GJ-dSb"/>
                 <constraint firstItem="MAi-GI-LGz" firstAttribute="top" secondItem="4AS-nt-7Pg" secondAttribute="bottom" constant="8" id="HOd-qr-Len"/>
                 <constraint firstAttribute="bottom" secondItem="blw-Z2-tsk" secondAttribute="bottom" constant="8" id="LwH-xo-FHQ"/>
                 <constraint firstItem="4AS-nt-7Pg" firstAttribute="top" secondItem="oOT-KO-Vly" secondAttribute="bottom" constant="-1" id="OLl-xb-K9q"/>
+                <constraint firstItem="5b3-78-RXT" firstAttribute="top" secondItem="CYT-al-PGf" secondAttribute="top" constant="8" id="SzY-zG-a9T"/>
                 <constraint firstItem="4AS-nt-7Pg" firstAttribute="leading" secondItem="CYT-al-PGf" secondAttribute="leading" id="XEn-Tv-HvD"/>
                 <constraint firstAttribute="trailing" secondItem="blw-Z2-tsk" secondAttribute="trailing" constant="8" id="lY2-RD-Doc"/>
                 <constraint firstItem="oOT-KO-Vly" firstAttribute="top" secondItem="CYT-al-PGf" secondAttribute="top" constant="8" id="sJd-8X-LPN"/>
@@ -103,12 +127,17 @@
             <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
             <variation key="default">
+                <mask key="subviews">
+                    <exclude reference="5b3-78-RXT"/>
+                </mask>
                 <mask key="constraints">
                     <exclude reference="BFc-GJ-dSb"/>
                     <exclude reference="sJd-8X-LPN"/>
                     <exclude reference="8ld-RZ-FT1"/>
                     <exclude reference="OLl-xb-K9q"/>
                     <exclude reference="XEn-Tv-HvD"/>
+                    <exclude reference="58k-sV-Ta1"/>
+                    <exclude reference="SzY-zG-a9T"/>
                     <exclude reference="HOd-qr-Len"/>
                     <exclude reference="sR1-Gi-dGH"/>
                     <exclude reference="zA1-xN-fmM"/>
@@ -117,12 +146,17 @@
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
+                <mask key="subviews">
+                    <include reference="5b3-78-RXT"/>
+                </mask>
                 <mask key="constraints">
                     <include reference="BFc-GJ-dSb"/>
                     <include reference="sJd-8X-LPN"/>
                     <include reference="8ld-RZ-FT1"/>
                     <include reference="OLl-xb-K9q"/>
                     <include reference="XEn-Tv-HvD"/>
+                    <include reference="58k-sV-Ta1"/>
+                    <include reference="SzY-zG-a9T"/>
                     <include reference="HOd-qr-Len"/>
                     <include reference="sR1-Gi-dGH"/>
                     <include reference="zA1-xN-fmM"/>

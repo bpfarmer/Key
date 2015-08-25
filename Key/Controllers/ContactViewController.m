@@ -33,6 +33,14 @@
     self.sortDescending   = NO;
     [super viewDidLoad];
     self.contactTextField.delegate = self;
+    
+    NSMutableArray *data = [NSMutableArray arrayWithArray:self.sectionData];
+    NSMutableArray *sectionData = [NSMutableArray arrayWithArray:self.sectionData[0]];
+    for(KUser *user in sectionData) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [sectionData removeObject:user];
+    [sectionData insertObject:self.currentUser atIndex:0];
+    [data replaceObjectAtIndex:0 withObject:sectionData];
+    self.sectionData = data;
+    
     UITapGestureRecognizer *tapRec = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)];
     [tapRec setCancelsTouchesInView:NO];
     [self.view addGestureRecognizer:tapRec];
@@ -45,7 +53,8 @@
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:[self cellIdentifier] forIndexPath:indexPath];
     KUser *user = (KUser *)[self objectForIndexPath:indexPath];
-    cell.textLabel.text = user.displayName;
+    if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) cell.textLabel.text = @"Me";
+    else cell.textLabel.text = user.displayName;
     KPost *post = [KPost findByDictionary:@{@"authorId" : user.uniqueId, @"ephemeral" : @NO, @"attachmentCount" : [NSNumber numberWithInteger:0]}];
     UIImage *preview;
     if(post) {
