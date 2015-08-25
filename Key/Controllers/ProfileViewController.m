@@ -27,8 +27,9 @@
 - (void)viewDidLoad {
     self.tableView = self.postsTableView;
     self.sectionCriteria = @[@{@"class" : @"KPost",
-                               @"criteria" : @{@"authorId" : self.user.uniqueId, @"ephemeral" : @NO}}];
+                               @"criteria" : @{@"authorId" : self.user.uniqueId, @"ephemeral" : @NO, @"attachmentCount" : [NSNumber numberWithInteger:0]}}];
     self.sortedByProperty = @"createdAt";
+    self.sortDescending   = YES;
     [super viewDidLoad];
     self.usernameLabel.text = self.user.username;
 }

@@ -26,7 +26,7 @@
 - (instancetype)initWithResultSetRow:(NSDictionary *)resultSetRow;
 + (instancetype)findById:(id)uniqueId;
 + (instancetype)findByDictionary:(NSDictionary *)dictionary;
-+ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary;
++ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary orderBy:(NSString *)orderProperty descending:(BOOL)descending;
 + (NSArray *)all;
 + (NSArray *)storedPropertyList;
 + (NSArray *)unsavedPropertyList;

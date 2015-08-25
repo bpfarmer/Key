@@ -154,7 +154,7 @@
 
 }
 
-+ (NSString *)sqlStatementForDictionary:(NSDictionary *)dictionary {
++ (NSString *)sqlStatementForDictionary:(NSDictionary *)dictionary orderBy:(NSString *)orderProperty descending:(BOOL)descending {
     NSMutableArray *conditions = [[NSMutableArray alloc] init];
     for(NSString *key in [dictionary allKeys]) {
         if(![[self storedPropertyList] containsObject:key]) return nil;
@@ -164,13 +164,17 @@
     
     if(![conditions isEqualToArray:@[]]) selectSQL = [NSString stringWithFormat:@"%@ where %@", selectSQL, [conditions componentsJoinedByString:@" AND "]];
     
-    if([self dateProperty]) selectSQL = [NSString stringWithFormat:@"%@ order by %@ desc", selectSQL, [self columnNameFromProperty:[self dateProperty]]];
+    if(orderProperty) {
+        selectSQL = [NSString stringWithFormat:@"%@ order by %@", selectSQL, [self columnNameFromProperty:orderProperty]];
+        if(descending) selectSQL = [NSString stringWithFormat:@"%@ desc", selectSQL];
+        else selectSQL = [NSString stringWithFormat:@"%@ asc", selectSQL];
+    }
     
     return selectSQL;
 }
 
 + (instancetype)findByDictionary:(NSDictionary *)dictionary {
-    NSString *selectSQL = [self sqlStatementForDictionary:dictionary];
+    NSString *selectSQL = [self sqlStatementForDictionary:dictionary orderBy:[self dateProperty] descending:YES];
     
     NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] init];
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -187,14 +191,15 @@
     }];
 }
 
-+ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary {
-    NSString *selectSQL = [self sqlStatementForDictionary:dictionary];
+
++ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary orderBy:(NSString *)orderProperty descending:(BOOL)descending {
+    NSString *selectSQL = [self sqlStatementForDictionary:dictionary orderBy:orderProperty descending:descending];
     
     NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] init];
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [parameterDictionary setObject:obj forKey:[self columnNameFromProperty:key]];
     }];
-
+    
     return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
         NSMutableArray *results = [NSMutableArray new];
         FMResultSet *result = [database executeQuery:selectSQL withParameterDictionary:[parameterDictionary copy]];
