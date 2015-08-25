@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSArray *sectionCriteria;
 @property (nonatomic, strong) NSArray *sectionData;
 @property (nonatomic) NSString *sortedByProperty;
+@property (nonatomic) BOOL sortDescending;
 
 - (KDatabaseObject *)objectForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)cellIdentifier;

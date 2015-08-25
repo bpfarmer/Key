@@ -95,14 +95,12 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    dispatch_async([self.class sharedQueue], ^{
-        KThread *thread = (KThread *)[self objectForIndexPath:indexPath];
-        if(thread) {
-            self.homeViewController.selectedThread = thread;
-            dispatch_async(dispatch_get_main_queue(), ^{});
-            [self.homeViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
-        }
-    });
+    KThread *thread = (KThread *)[self objectForIndexPath:indexPath];
+    if(thread) {
+        self.homeViewController.selectedThread = thread;
+        dispatch_async(dispatch_get_main_queue(), ^{});
+        [self.homeViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
+    }
 }
 
 - (NSString *)cellIdentifier {

@@ -27,6 +27,7 @@
     self.sectionCriteria = @[@{@"class" : @"KPost",
                                @"criteria" : @{@"ephemeral" : @NO, @"attachmentCount" : [NSNumber numberWithInteger:0]}}];
     self.sortedByProperty = @"createdAt";
+    self.sortDescending   = YES;
     [super viewDidLoad];
     
     self.currentUser = [KAccountManager sharedManager].user;

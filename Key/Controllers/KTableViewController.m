@@ -25,7 +25,7 @@
     NSMutableArray *newSectionData = [NSMutableArray new];
     NSEnumerator *sectionCriteriaEnumerator = [self.sectionCriteria objectEnumerator];
     for(NSDictionary *sectionDictionary in sectionCriteriaEnumerator) {
-        [newSectionData addObject:[NSClassFromString(sectionDictionary[@"class"]) findAllByDictionary:sectionDictionary[@"criteria"]]];
+        [newSectionData addObject:[NSClassFromString(sectionDictionary[@"class"]) findAllByDictionary:sectionDictionary[@"criteria"] orderBy:self.sortedByProperty descending:self.sortDescending]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[NSClassFromString(sectionDictionary[@"class"]) notificationChannel] object:nil];
     };
     self.sectionData = [newSectionData copy];
@@ -45,13 +45,10 @@
 - (void)databaseModified:(NSNotification *)notification {
     dispatch_async([[self class] sharedQueue], ^{
         KDatabaseObject *object = (KDatabaseObject *)notification.object;
-        NSLog(@"NEW OBJECT: %@", object);
         [self.sectionCriteria enumerateObjectsUsingBlock:^(id obj, NSUInteger sectionId, BOOL *stop) {
             NSDictionary *sectionDictionary = (NSDictionary *)obj;
             NSDictionary *criteriaDictionary = (NSDictionary *)sectionDictionary[@"criteria"];
-            NSLog(@"SECTION DICTIONARY: %@, CRITERIA DICTIONARY: %@", sectionDictionary, criteriaDictionary);
             if([object isKindOfClass:NSClassFromString(sectionDictionary[@"class"])]) {
-                NSLog(@"CORRECTLY RECOGNIZED CLASS");
                 __block BOOL matchesCriteria = YES;
                 [criteriaDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                     if(![[object valueForKey:key] isEqual:obj]) {
@@ -59,7 +56,6 @@
                         *stop = YES;
                     }
                 }];
-                NSLog(@"CRITERIA MATCHING: %d", matchesCriteria);
                 if(matchesCriteria) {
                     __block NSUInteger updatedIndex = -1;
                     NSArray *currentCells = (NSArray *)self.sectionData[sectionId];
@@ -74,14 +70,10 @@
                     NSArray *newSectionData;
                     if(updatedIndex != -1) {
                         [updatedCells removeObjectAtIndex:updatedIndex];
-                        NSLog(@"UPDATED CELLS: %@", updatedCells);
                         if(updatedCells.count > 0)[updatedData replaceObjectAtIndex:sectionId withObject:updatedCells];
                         else [updatedData replaceObjectAtIndex:sectionId withObject:@[]];
-                        NSLog(@"UPDATED DATA: %@", updatedData);
                         self.sectionData = [updatedData copy];
-                        NSLog(@"NEW SECTION DATA: %@", newSectionData);
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            NSLog(@"UPDATED CELLS: %@", self.sectionData);
                             [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(updatedIndex) inSection:sectionId]] withRowAnimation:UITableViewRowAnimationAutomatic];
                         });
                     }

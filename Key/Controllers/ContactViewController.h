@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KTableViewController.h"
 
-@interface ContactViewController : UIViewController
+@interface ContactViewController : KTableViewController
 
 - (void)dismissProfileViewController:(UIViewController *)controller;
 
