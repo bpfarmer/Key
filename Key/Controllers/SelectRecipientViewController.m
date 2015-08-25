@@ -24,6 +24,7 @@
 
 @property (nonatomic) IBOutlet UITableView *contactsTableView;
 @property (nonatomic) NSArray *selectedRecipients;
+@property (nonatomic, strong) IBOutlet UIButton *persistenceButton;
 
 @end
 
@@ -37,6 +38,8 @@
     self.sortedByProperty = @"username";
     self.sortDescending   = NO;
     [super viewDidLoad];
+    
+    self.ephemeral = NO;
     
     NSMutableArray *newData = [NSMutableArray arrayWithArray:self.sectionData];
     NSMutableArray *newSectionData = [NSMutableArray arrayWithArray:self.sectionData[0]];
@@ -74,7 +77,6 @@
             [self addObjectToSelectedRecipients:[self objectForIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section]]];
         }
     }else [self addObjectToSelectedRecipients:object];
-    NSLog(@"SELECTED RECIPS: %@", self.selectedRecipients);
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -91,7 +93,6 @@
         [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:NO];
         self.selectedRecipients = selected;
     }
-    NSLog(@"SELECTED RECIPS: %@", self.selectedRecipients);
 }
 
 - (void)addObjectToSelectedRecipients:(NSObject *)object {
@@ -139,6 +140,16 @@
             });
             [self.delegate dismissAndPresentViewController:nil];
         }
+    }
+}
+
+- (IBAction)didPressEphemeral:(id)sender {
+    if(!self.ephemeral) {
+        self.ephemeral = YES;
+        [self.persistenceButton setTitle:@"Persistent: NO" forState:UIControlStateNormal];
+    }else {
+        self.ephemeral = NO;
+        [self.persistenceButton setTitle:@"Persistent: YES" forState:UIControlStateNormal];
     }
 }
 

@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectRecipientViewController">
             <connections>
                 <outlet property="contactsTableView" destination="4AS-nt-7Pg" id="Mrt-pj-7At"/>
+                <outlet property="persistenceButton" destination="5b3-78-RXT" id="8Q3-CC-Hef"/>
                 <outlet property="view" destination="CYT-al-PGf" id="kO0-7p-7JI"/>
             </connections>
         </placeholder>
@@ -104,6 +105,9 @@
                             <include reference="YgK-64-ilw"/>
                         </mask>
                     </variation>
+                    <connections>
+                        <action selector="didPressEphemeral:" destination="-1" eventType="touchUpInside" id="mUK-lR-rHu"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -131,13 +135,13 @@
                     <exclude reference="5b3-78-RXT"/>
                 </mask>
                 <mask key="constraints">
+                    <exclude reference="58k-sV-Ta1"/>
+                    <exclude reference="SzY-zG-a9T"/>
                     <exclude reference="BFc-GJ-dSb"/>
                     <exclude reference="sJd-8X-LPN"/>
                     <exclude reference="8ld-RZ-FT1"/>
                     <exclude reference="OLl-xb-K9q"/>
                     <exclude reference="XEn-Tv-HvD"/>
-                    <exclude reference="58k-sV-Ta1"/>
-                    <exclude reference="SzY-zG-a9T"/>
                     <exclude reference="HOd-qr-Len"/>
                     <exclude reference="sR1-Gi-dGH"/>
                     <exclude reference="zA1-xN-fmM"/>
@@ -150,13 +154,13 @@
                     <include reference="5b3-78-RXT"/>
                 </mask>
                 <mask key="constraints">
+                    <include reference="58k-sV-Ta1"/>
+                    <include reference="SzY-zG-a9T"/>
                     <include reference="BFc-GJ-dSb"/>
                     <include reference="sJd-8X-LPN"/>
                     <include reference="8ld-RZ-FT1"/>
                     <include reference="OLl-xb-K9q"/>
                     <include reference="XEn-Tv-HvD"/>
-                    <include reference="58k-sV-Ta1"/>
-                    <include reference="SzY-zG-a9T"/>
                     <include reference="HOd-qr-Len"/>
                     <include reference="sR1-Gi-dGH"/>
                     <include reference="zA1-xN-fmM"/>

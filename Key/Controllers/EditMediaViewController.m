@@ -18,7 +18,6 @@
 @property (nonatomic) IBOutlet UIButton *locationButton;
 @property (nonatomic) IBOutlet UIButton *ephemeralButton;
 @property (nonatomic) BOOL locationEnabled;
-@property (nonatomic) BOOL ephemeral;
 @property (nonatomic) BOOL captionShowing;
 @property (nonatomic) UITextField *captionTextField;
 @property (nonatomic) UIView *captionView;
@@ -35,7 +34,6 @@
     [self.view addSubview:self.overlayView];
     [self.overlayView setBackgroundColor:[UIColor clearColor]];
     [self.view bringSubviewToFront:self.overlayView];
-    self.ephemeral = NO;
     self.locationEnabled = YES;
     [[KAccountManager sharedManager] refreshCurrentCoordinate];
     
@@ -138,16 +136,6 @@
     }
 }
 
-- (IBAction)didPressEphemeral:(id)sender {
-    if(!self.ephemeral) {
-        self.ephemeral = YES;
-        [self.ephemeralButton setTitle:@"Ephemeral On" forState:UIControlStateNormal];
-    }else {
-        self.ephemeral = NO;
-        [self.ephemeralButton setTitle:@"Ephemeral Off" forState:UIControlStateNormal];
-    }
-}
-
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
@@ -172,13 +160,12 @@
         if(![self.captionTextField.text isEqual:@""]) {
             self.imageData = [self renderImageWithCaption];
         }
-        [sendableObjects addObject:[[KPhoto alloc] initWithMedia:self.imageData ephemeral:self.ephemeral]];
+        [sendableObjects addObject:[[KPhoto alloc] initWithMedia:self.imageData]];
         if(self.locationEnabled) {
             [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
         }
         [selectRecipientView setSendableObjects:sendableObjects];
         selectRecipientView.delegate = self;
-        selectRecipientView.ephemeral = self.ephemeral;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentViewController:selectRecipientView animated:NO completion:nil];
         });

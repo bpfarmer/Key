@@ -12,12 +12,11 @@
 
 @implementation KPhoto
 
-- (instancetype)initWithMedia:(NSData *)media ephemeral:(BOOL)ephemeral {
+- (instancetype)initWithMedia:(NSData *)media {
     self = [super initWithUniqueId:[self.class generateUniqueId]];
     
     if(self) {
         _media = media;
-        _ephemeral = ephemeral;
     }
     
     return self;

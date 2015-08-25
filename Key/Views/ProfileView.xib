@@ -24,7 +24,7 @@
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="987-4U-Gtp">
                     <rect key="frame" x="24" y="28" width="42" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dq3-nd-9nk">
@@ -71,6 +71,8 @@
                     <exclude reference="Dq3-nd-9nk"/>
                 </mask>
                 <mask key="constraints">
+                    <exclude reference="Ux0-Yq-9dk"/>
+                    <exclude reference="bM5-cS-FuN"/>
                     <exclude reference="0aN-nR-hAi"/>
                     <exclude reference="IZO-GW-PCF"/>
                     <exclude reference="IfJ-9l-OBc"/>
@@ -78,8 +80,6 @@
                     <exclude reference="d1H-Qk-WjI"/>
                     <exclude reference="n9Z-im-GyH"/>
                     <exclude reference="oge-lh-vhA"/>
-                    <exclude reference="Ux0-Yq-9dk"/>
-                    <exclude reference="bM5-cS-FuN"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -87,6 +87,8 @@
                     <include reference="Dq3-nd-9nk"/>
                 </mask>
                 <mask key="constraints">
+                    <include reference="Ux0-Yq-9dk"/>
+                    <include reference="bM5-cS-FuN"/>
                     <include reference="0aN-nR-hAi"/>
                     <include reference="IZO-GW-PCF"/>
                     <include reference="IfJ-9l-OBc"/>
@@ -94,8 +96,6 @@
                     <include reference="d1H-Qk-WjI"/>
                     <include reference="n9Z-im-GyH"/>
                     <include reference="oge-lh-vhA"/>
-                    <include reference="Ux0-Yq-9dk"/>
-                    <include reference="bM5-cS-FuN"/>
                 </mask>
             </variation>
             <point key="canvasLocation" x="907" y="-119"/>

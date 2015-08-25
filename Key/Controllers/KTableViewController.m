@@ -71,13 +71,8 @@
                     NSArray *newSectionData;
                     if(updatedIndex != -1) {
                         [updatedCells removeObjectAtIndex:updatedIndex];
-                        if(updatedCells.count > 0)[updatedData replaceObjectAtIndex:sectionId withObject:updatedCells];
-                        else [updatedData replaceObjectAtIndex:sectionId withObject:@[]];
-                        self.sectionData = [updatedData copy];
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(updatedIndex) inSection:sectionId]] withRowAnimation:UITableViewRowAnimationAutomatic];
-                        });
                     }
+                    
                     __block NSInteger newCellId = 0;
                     if(self.sortedByProperty) {
                         [updatedCells enumerateObjectsUsingBlock:^(id cell, NSUInteger replaceCellId, BOOL *stop) {
@@ -93,7 +88,11 @@
                     newSectionData = [updatedData copy];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         self.sectionData = newSectionData;
-                        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:newCellId inSection:sectionId]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        if(updatedIndex != -1) {
+                            [self.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:updatedIndex inSection:sectionId] toIndexPath:[NSIndexPath indexPathForRow:newCellId inSection:sectionId]];
+                        }else {
+                            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:newCellId inSection:sectionId]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                        }
                     });
                 }
             }
