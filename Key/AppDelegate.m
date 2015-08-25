@@ -27,6 +27,7 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 
     if([KAccountManager sharedManager].user || [[KAccountManager sharedManager] setUserFromPlist]) {
+        [[PushManager sharedManager] requestPermissionsForUser:[KAccountManager sharedManager].user];
         UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MainNavigationController"];
         [self.window setRootViewController:navigationController];
     }else {

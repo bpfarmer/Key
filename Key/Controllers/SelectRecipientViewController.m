@@ -44,7 +44,7 @@ static NSString *TableViewCellIdentifier = @"Recipients";
     NSLog(@"EPHEMERAL SETTING: %d", self.ephemeral);
     if(![self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
         if(!self.post) {
-            self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId text:nil];
+            self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId];
             self.post.ephemeral = self.ephemeral;
         }
     }
@@ -103,7 +103,6 @@ static NSString *TableViewCellIdentifier = @"Recipients";
                 }];
             });
         }else {
-            NSLog(@"POST EPHEMERAL");
             [self.post save];
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{
@@ -113,6 +112,7 @@ static NSString *TableViewCellIdentifier = @"Recipients";
                 }
                 for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
                     object.parentId = self.post.uniqueId;
+                    //if([object isKindOfClass:[KPhoto class]]) [self.post incrementAttachmentCount];
                     [object save];
                 }
                 TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:recipientIds];

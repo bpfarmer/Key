@@ -21,6 +21,6 @@
 - (void)respondToRemoteNotification;
 - (TOCFuture *)registerForRemoteNotifications;
 - (void)sendPushToken:(NSData *)pushToken user:(KUser *)user;
-
+- (void)requestPermissionsForUser:(KUser *)user;
 
 @end

@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KTableViewController.h"
 
 @class KUser;
 
-@interface ProfileViewController : UIViewController
+@interface ProfileViewController : KTableViewController
 
 @property (nonatomic) KUser *user;
 

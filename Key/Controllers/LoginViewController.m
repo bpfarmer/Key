@@ -61,6 +61,7 @@
                     [remoteUser setupKeysForDevice];
                 }
                 [[KAccountManager sharedManager] setUser:[KUser findById:remoteUser.uniqueId]];
+                [[PushManager sharedManager] requestPermissionsForUser:[KAccountManager sharedManager].user];
                 [self showHome];
             }];
         }];
@@ -84,6 +85,7 @@
                 [user setupKeysForDevice];
                 NSLog(@"CURRENT DEVICE :%@", user.currentDeviceId);
             });
+            [[PushManager sharedManager] requestPermissionsForUser:[KAccountManager sharedManager].user];
             [self showHome];
         }];
     }

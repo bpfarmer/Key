@@ -51,6 +51,14 @@
     return self.userNotificationFutureSource.future;
 }
 
+- (void)requestPermissionsForUser:(KUser *)user {
+    TOCFuture *pushNotificationFuture = [self registerForRemoteNotifications];
+    
+    [pushNotificationFuture thenDo:^(id value) {
+        [[PushManager sharedManager] sendPushToken:value user:user];
+    }];
+}
+
 - (void)sendPushToken:(NSData *)pushToken user:(KUser *)user {
     if(user) {
         if(user.uniqueId) [SendPushTokenRequest makeRequestWithDeviceToken:pushToken uniqueId:user.uniqueId];

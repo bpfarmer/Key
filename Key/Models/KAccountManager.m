@@ -30,19 +30,6 @@
     [self saveToPlist];
 }
 
-- (void)requestPushPermissions {
-    if(self.user) {
-        TOCFuture *pushNotificationFuture = [[PushManager sharedManager] registerForRemoteNotifications];
-        
-        [pushNotificationFuture thenDo:^(id value) {
-            if(!self.user.uniqueId) {
-                KUser *foundUser = [KUser findByDictionary:@{@"username" : self.user.username}];
-                if(foundUser) [[PushManager sharedManager] sendPushToken:value user:foundUser];
-            }else [[PushManager sharedManager] sendPushToken:value user:self.user];
-        }];
-    }
-}
-
 - (TOCFuture *)asyncGetFeed {
     if(self.user) {
         return self.user.asyncGetFeed;

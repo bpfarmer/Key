@@ -154,18 +154,24 @@
 
 }
 
-+ (instancetype)findByDictionary:(NSDictionary *)dictionary {
++ (NSString *)sqlStatementForDictionary:(NSDictionary *)dictionary {
     NSMutableArray *conditions = [[NSMutableArray alloc] init];
     for(NSString *key in [dictionary allKeys]) {
         if(![[self storedPropertyList] containsObject:key]) return nil;
         [conditions addObject:[NSString stringWithFormat:@"%@ = :%@", [self propertyToColumnMapping][key], [self propertyToColumnMapping][key]]];
     }
-    NSString *selectSQL = [NSString stringWithFormat:@"select * from %@ where %@", [self tableName], [conditions componentsJoinedByString:@" AND "]];
+    NSString *selectSQL = [NSString stringWithFormat:@"select * from %@", [self tableName]];
     
-    if([[self propertyNames] containsObject:@"createdAt"]) {
-        selectSQL = [NSString stringWithFormat:@"%@ order by created_at desc", selectSQL];
-    }
+    if(![conditions isEqualToArray:@[]]) selectSQL = [NSString stringWithFormat:@"%@ where %@", selectSQL, [conditions componentsJoinedByString:@" AND "]];
+    
+    if([self dateProperty]) selectSQL = [NSString stringWithFormat:@"%@ order by %@ desc", selectSQL, [self columnNameFromProperty:[self dateProperty]]];
+    
+    return selectSQL;
+}
 
++ (instancetype)findByDictionary:(NSDictionary *)dictionary {
+    NSString *selectSQL = [self sqlStatementForDictionary:dictionary];
+    
     NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] init];
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [parameterDictionary setObject:obj forKey:[self columnNameFromProperty:key]];
@@ -178,6 +184,26 @@
             [result close];
             return object;
         }else return nil;
+    }];
+}
+
++ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary {
+    NSString *selectSQL = [self sqlStatementForDictionary:dictionary];
+    
+    NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] init];
+    [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [parameterDictionary setObject:obj forKey:[self columnNameFromProperty:key]];
+    }];
+
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        NSMutableArray *results = [NSMutableArray new];
+        FMResultSet *result = [database executeQuery:selectSQL withParameterDictionary:[parameterDictionary copy]];
+        while(result.next) {
+            KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
+            [results addObject:object];
+        }
+        [result close];
+        return [results copy];
     }];
 }
 
@@ -207,7 +233,7 @@
     self = [super init];
     [[[self class] columnToPropertyMapping] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if(![resultSetRow[key] isKindOfClass:[NSNull class]]) {
-            if([[[self class] columnTypeForProperty:obj] isEqualToString:kColumnTypeBlob] && ![[[self class] typeOfPropertyNamed:obj] isEqualToString:@"NSData"])
+            if([[[self class] columnTypeForProperty:obj] isEqualToString:kColumnTypeBlob] && ![[[self class] typeOfPropertyNamed:obj] isEqualToString:@"NSData"] && [resultSetRow[key] isKindOfClass:[NSData class]])
                 [self setValue:[NSKeyedUnarchiver unarchiveObjectWithData:resultSetRow[key]] forKey:obj];
             else if([[[self class] typeOfPropertyNamed:obj] isEqualToString:NSStringFromClass([NSDate class])]) {
                 [self setValue:[NSDate dateWithTimeIntervalSince1970:[resultSetRow[key] doubleValue]] forKey:obj];
@@ -223,6 +249,22 @@
 
 + (NSString *)generateUniqueId {
     return [[NSUUID UUID] UUIDString];
+}
+
++ (BOOL)compareProperty:(NSString *)name object1:(KDatabaseObject *)object1 object2:(KDatabaseObject *)object2 {
+    if(![object1 isKindOfClass:[object2 class]]) return NO;
+    
+    NSComparisonResult comparison = [[object1 valueForKey:name] compare:[object2 valueForKey:name]];
+    switch (comparison) {
+        case NSOrderedDescending : return YES; break;
+        default : return NO; break;
+    }
+}
+
++ (NSString *)dateProperty {
+    if([self hasPropertyNamed:@"updatedAt"]) return @"updatedAt";
+    else if([self hasPropertyNamed:@"createdAt"]) return @"createdAt";
+    else return nil;
 }
 
 @end

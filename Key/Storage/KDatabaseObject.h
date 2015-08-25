@@ -26,7 +26,7 @@
 - (instancetype)initWithResultSetRow:(NSDictionary *)resultSetRow;
 + (instancetype)findById:(id)uniqueId;
 + (instancetype)findByDictionary:(NSDictionary *)dictionary;
-//+ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary;
++ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary;
 + (NSArray *)all;
 + (NSArray *)storedPropertyList;
 + (NSArray *)unsavedPropertyList;
@@ -36,5 +36,6 @@
 + (NSDictionary *)propertyTypeToColumnTypeMapping;
 + (NSString *)notificationChannel;
 + (NSString *)generateUniqueId;
++ (BOOL)compareProperty:(NSString *)name object1:(KDatabaseObject *)object1 object2:(KDatabaseObject *)object2;
 
 @end

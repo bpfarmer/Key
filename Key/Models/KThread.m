@@ -77,9 +77,9 @@
     }
     
     NSLog(@"PROCESSING LATEST MESSAGE");
-    if(self.lastMessageAt) {
+    if(self.updatedAt) {
         if([self isMostRecentMessage:message]) {
-            self.lastMessageAt = message.createdAt;
+            self.updatedAt = message.createdAt;
             self.latestMessageId = message.uniqueId;
             [self save];
             NSLog(@"SHOULD BE HERE");
@@ -89,13 +89,13 @@
     }else {
         NSLog(@"WHY IS THIS HERE");
         self.latestMessageId = message.uniqueId;
-        self.lastMessageAt   = message.createdAt;
+        self.updatedAt   = message.createdAt;
         [self save];
     }
 }
 
 - (BOOL)isMostRecentMessage:(KMessage *)newMessage {
-    NSComparisonResult dateComparison = [newMessage.createdAt compare:self.lastMessageAt];
+    NSComparisonResult dateComparison = [newMessage.createdAt compare:self.updatedAt];
     switch (dateComparison) {
         case NSOrderedDescending : return YES; break;
         default : return NO; break;
@@ -103,7 +103,7 @@
 }
 
 - (BOOL)isMoreRecentThan:(KThread *)thread {
-    NSComparisonResult dateComparison = [self.lastMessageAt compare:thread.lastMessageAt];
+    NSComparisonResult dateComparison = [self.updatedAt compare:thread.updatedAt];
     switch (dateComparison) {
         case NSOrderedDescending : return YES; break;
         default : return NO; break;
@@ -124,7 +124,7 @@
 }
 
 + (NSArray *)inbox {
-    NSString *inboxSQL = [NSString stringWithFormat:@"select * from %@ order by last_message_at desc", [KThread tableName]];
+    NSString *inboxSQL = [NSString stringWithFormat:@"select * from %@ order by updated_at desc", [KThread tableName]];
     
     return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
         FMResultSet *result =  [database executeQuery:inboxSQL];

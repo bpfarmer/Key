@@ -71,6 +71,8 @@
 
 + (void)updateSchema {
     [self addColumn:@"last_message_at" toTable:[KThread tableName] withType:@"double"];
+    [self addColumn:@"updated_at" toTable:[KThread tableName] withType:@"double"];
+    [self addColumn:@"attachment_count" toTable:[KPost tableName] withType:@"integer"];
 }
 
 + (void)addColumn:(NSString *)column toTable:(NSString *)table withType:(NSString *)type {
