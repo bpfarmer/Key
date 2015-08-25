@@ -20,6 +20,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.scrollEnabled = YES;
+    self.tableView.allowsMultipleSelection = YES;
     [self.tableView registerClass:[SubtitleTableViewCell class] forCellReuseIdentifier:[self cellIdentifier]];
     
     NSMutableArray *newSectionData = [NSMutableArray new];
@@ -112,8 +113,8 @@
     return nil;
 }
 
-- (KDatabaseObject *)objectForIndexPath:(NSIndexPath *)indexPath {
-    return (KDatabaseObject *)((NSArray *)self.sectionData[indexPath.section])[indexPath.row];
+- (NSObject *)objectForIndexPath:(NSIndexPath *)indexPath {
+    return ((NSArray *)self.sectionData[indexPath.section])[indexPath.row];
 }
 
 - (void)didReceiveMemoryWarning {

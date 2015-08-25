@@ -22,8 +22,8 @@
 @property (nonatomic) NSString *threadId;
 @property (nonatomic) NSString *body;
 @property (nonatomic) NSString *status;
-@property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *createdAt;
+@property (nonatomic) NSDate *readAt;
 
 - (instancetype)initWithAuthorId:(NSString *)authorId threadId:(NSString *)threadId body:(NSString *)body;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId

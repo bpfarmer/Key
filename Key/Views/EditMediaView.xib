@@ -7,7 +7,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditMediaViewController">
             <connections>
-                <outlet property="ephemeralButton" destination="nn4-TV-DDq" id="d4y-Z2-vxI"/>
                 <outlet property="locationButton" destination="rUL-pV-58l" id="vqN-6n-ZU0"/>
                 <outlet property="mediaView" destination="mQa-im-KYz" id="bxq-Ix-DZE"/>
                 <outlet property="overlayView" destination="UU9-b6-HId" id="Vvn-ya-WoJ"/>
@@ -76,19 +75,6 @@
                         <action selector="didPressPost:" destination="-1" eventType="touchUpInside" id="r8F-Oe-gWG"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nn4-TV-DDq">
-                    <rect key="frame" x="8" y="511" width="98" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="98" id="zjo-FN-T5T"/>
-                    </constraints>
-                    <state key="normal" title="Ephemeral Off">
-                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="didPressEphemeral:" destination="-1" eventType="touchUpInside" id="vSO-Jr-RBz"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
@@ -96,8 +82,6 @@
                 <constraint firstItem="rUL-pV-58l" firstAttribute="leading" secondItem="UU9-b6-HId" secondAttribute="leading" constant="8" id="G2g-fJ-bpJ"/>
                 <constraint firstAttribute="trailing" secondItem="p4U-24-NTX" secondAttribute="trailing" constant="8" id="LRb-Pv-rsk"/>
                 <constraint firstAttribute="bottom" secondItem="p4U-24-NTX" secondAttribute="bottom" constant="8" id="lgy-mh-ee0"/>
-                <constraint firstItem="nn4-TV-DDq" firstAttribute="leading" secondItem="UU9-b6-HId" secondAttribute="leading" constant="8" id="moO-lp-eay"/>
-                <constraint firstItem="rUL-pV-58l" firstAttribute="top" secondItem="nn4-TV-DDq" secondAttribute="bottom" constant="-11" id="unK-e4-hTL"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>

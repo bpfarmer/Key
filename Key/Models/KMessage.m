@@ -41,12 +41,12 @@
     self = [super init];
     
     if(self) {
+        [self setUniqueId:[self generateUniqueId]];
         _authorId = authorId;
         _threadId = threadId;
         _body     = body;
         _createdAt = [NSDate date];
-        [self setUniqueId:[self generateUniqueId]];
-        _read     = YES;
+        _readAt     = [NSDate date];
     }
     
     return self;
