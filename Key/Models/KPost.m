@@ -22,18 +22,16 @@
 @implementation KPost
 
 - (KUser *)author {
-    return [KUser findById:self.authorId];//[[KStorageManager sharedManager] objectForKey:self.authorId inCollection:[KUser collection]];
+    return [KUser findById:self.authorId];
 }
 
-- (instancetype)initWithAuthorId:(NSString *)authorId text:(NSString *)text {
+- (instancetype)initWithAuthorId:(NSString *)authorId {
     self = [super init];
     
     if(self) {
-        _authorId = authorId;
-        _text     = text;
-        _createdAt     = [NSDate date];
-        _read     = NO;
-        [self setUniqueId:[self generateUniqueId]];
+        _authorId        = authorId;
+        _createdAt       = [NSDate date];
+        _read            = NO;
     }
     
     return self;
@@ -43,14 +41,16 @@
                         authorId:(NSString *)authorId
                             text:(NSString *)text
                        createdAt:(NSDate *)createdAt
-                       ephemeral:(BOOL)ephemeral{
+                       ephemeral:(BOOL)ephemeral
+                 attachmentCount:(NSInteger)attachmentCount{
     self = [super initWithUniqueId:uniqueId];
     
     if(self) {
-        _authorId     = authorId;
-        _text         = text;
-        _createdAt    = createdAt;
-        _ephemeral    = ephemeral;
+        _authorId        = authorId;
+        _text            = text;
+        _createdAt       = createdAt;
+        _ephemeral       = ephemeral;
+        _attachmentCount = attachmentCount;
     }
     return self;
 }
@@ -126,6 +126,10 @@
     KPhoto *photo = [KPhoto findByDictionary:@{@"parentId" : self.uniqueId}];
     if(!photo || !photo.media) return nil;
     
+    NSData *zippedMedia = [NSData dataWithContentsOfFile:self.filePath];
+    self.preview = [zippedMedia gunzippedData];
+    if(self.preview) return self.preview;
+    
     NSData *media = photo.media;
     
     CGImageRef        previewImage = NULL;
@@ -157,8 +161,6 @@
     CFRelease(thumbnailSize);
     CFRelease(options);
     CFRelease(fullsizeImageSource);
-    //CFRelease(keys);
-    //CFRelease(values);
     
     // Make sure the thumbnail image exists before continuing.
     if(previewImage == NULL) {
@@ -167,6 +169,7 @@
     
     self.preview = UIImagePNGRepresentation([UIImage imageWithCGImage:previewImage]);
     [self.preview.gzippedData writeToFile:self.filePath atomically:YES];
+    [self decrementAttachmentCount];
     CFRelease(previewImage);
     return self.preview;
 }
@@ -189,6 +192,16 @@
 
 - (NSString *)displayDate {
     return self.createdAt.formattedAsTimeAgo;
+}
+
+- (void)incrementAttachmentCount {
+    self.attachmentCount = self.attachmentCount + 1;
+    [self save];
+}
+
+- (void)decrementAttachmentCount {
+    if(self.attachmentCount > 0) self.attachmentCount = self.attachmentCount - 1;
+    [self save];
 }
 
 @end

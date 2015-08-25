@@ -15,86 +15,22 @@
 #import "ContactViewController.h"
 #import "KLocation.h"
 
-static NSString *TableViewCellIdentifier = @"Posts";
-
-@interface ProfileViewController () <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface ProfileViewController () <UITextViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView *postsTableView;
 @property (nonatomic, strong) IBOutlet UILabel *usernameLabel;
-@property (nonatomic) NSArray *posts;
 
 @end
 
 @implementation ProfileViewController
 
 - (void)viewDidLoad {
+    self.tableView = self.postsTableView;
+    self.sectionCriteria = @[@{@"class" : @"KPost",
+                               @"criteria" : @{@"authorId" : self.user.uniqueId, @"ephemeral" : @NO}}];
+    self.sortedByProperty = @"createdAt";
     [super viewDidLoad];
-    
-    self.posts = [KPost findByAuthorId:self.user.uniqueId];
-    
-    NSLog(@"POSTS RETURNED: %@", self.posts);
-    
-    self.postsTableView.delegate = self;
-    self.postsTableView.dataSource = self;
-    self.postsTableView.scrollEnabled = YES;
-    
-    [self.postsTableView registerClass:[SubtitleTableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.usernameLabel.text = self.user.username;
-    });
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KPost notificationChannel] object:nil];
-}
-
-- (BOOL)shouldAutorotate {
-    return NO;
-}
-
-- (BOOL)prefersStatusBarHidden {
-    return YES;
-}
-
-+ (dispatch_queue_t)sharedQueue {
-    static dispatch_once_t pred;
-    static dispatch_queue_t sharedDispatchQueue;
-    
-    dispatch_once(&pred, ^{
-        sharedDispatchQueue = dispatch_queue_create("ProfileViewQueue", NULL);
-    });
-    
-    return sharedDispatchQueue;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    dispatch_async([self.class sharedQueue], ^{
-        if(self.posts.count != [KPost findByAuthorId:self.user.uniqueId].count) {
-            self.posts = [KPost findByAuthorId:self.user.uniqueId];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.postsTableView reloadData];
-            });
-        }
-    });
-}
-
-- (void)databaseModified:(NSNotification *)notification {
-    if([notification.object isKindOfClass:[KPost class]]) {
-        dispatch_async([self.class sharedQueue], ^{
-            KPost *post = (KPost *)notification.object;
-            if([post.authorId isEqualToString:self.user.uniqueId] && !post.ephemeral) {
-                if([post previewImage]) {
-                    NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.posts];
-                    [posts addObject:[notification object]];
-                    self.posts = [[NSArray alloc] initWithArray:posts];
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self.postsTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.posts.count - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    });
-                }
-            }
-        });
-    }
+    self.usernameLabel.text = self.user.username;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -102,18 +38,9 @@ static NSString *TableViewCellIdentifier = @"Posts";
 }
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)sender {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)sender numberOfRowsInSection:(NSInteger)section {
-    return self.posts.count;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    KPost *post = self.posts[indexPath.row];
-    SubtitleTableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
-                                                                            forIndexPath:indexPath];
+    KPost *post = (KPost *)[self objectForIndexPath:indexPath];
+    SubtitleTableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:[self cellIdentifier] forIndexPath:indexPath];
     
     cell.imageView.image = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];
     cell.textLabel.text = [NSString stringWithFormat:@"%@", post.displayDate];
@@ -124,7 +51,7 @@ static NSString *TableViewCellIdentifier = @"Posts";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    KPost *post = self.posts[indexPath.row];
+    KPost *post = (KPost *)[self objectForIndexPath:indexPath];
     if(post) {
         MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
         mediaViewController.post = post;

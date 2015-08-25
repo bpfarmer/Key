@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "KTableViewController.h"
 
-@interface InboxViewController : UIViewController
+@interface InboxViewController : KTableViewController
 
 @end

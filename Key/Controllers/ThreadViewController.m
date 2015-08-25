@@ -66,7 +66,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
                                              selector:@selector(databaseModified:)
                                                  name:[KMessage notificationChannel]
                                                object:nil];
-
 }
 
 - (void)databaseModified:(NSNotification *)notification {
@@ -77,6 +76,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
         self.messages = [[NSArray alloc] initWithArray:messages];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
+            [self scrollToBottomAnimated:YES];
         });
     }
 }
@@ -87,8 +87,11 @@ static NSString *TableViewCellIdentifier = @"Messages";
     
     if(self.thread) {
         self.title = self.thread.displayName;
-        [self.thread setRead:YES];
-        [self.thread save];
+        
+        if(!self.thread.read) {
+            [self.thread setRead:YES];
+            [self.thread save];
+        }
     }
 }
 
@@ -172,7 +175,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
             });
             
             self.inputToolbar.contentView.textView.text = @"";
-            [self scrollToBottomAnimated:YES];
         }
     }
 }

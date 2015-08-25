@@ -41,7 +41,7 @@
 }
 
 - (IBAction)login:(id)sender {
-    if(![self.usernameText.text isEqualToString:@""] && ![self.usernameText.text containsString:@" "] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
+    if(![self.usernameText.text isEqualToString:@""] /*&& ![self.passwordText.text isEqualToString:@""]*/) {
         KUser *user = [[KUser alloc] initWithUsername:[self.usernameText.text lowercaseString]];
         TOCFuture *futureSalt = [LoginRequest makeSaltRequestWithParameters:@{@"username" : user.username}];
         [futureSalt catchDo:^(id failure) {
@@ -61,6 +61,7 @@
                     [remoteUser setupKeysForDevice];
                 }
                 [[KAccountManager sharedManager] setUser:[KUser findById:remoteUser.uniqueId]];
+                [[PushManager sharedManager] requestPermissionsForUser:[KAccountManager sharedManager].user];
                 [self showHome];
             }];
         }];
@@ -70,20 +71,21 @@
 }
 
 - (IBAction)createNewUser:(id)sender {
-    if(![self.usernameText.text isEqualToString:@""]  && ![self.usernameText.text containsString:@" "]) {
+    if(![self.usernameText.text isEqualToString:@""]) {
         TOCFuture *futureUser = [KUser asyncCreateWithUsername:self.usernameText.text password:self.passwordText.text];
         
         [futureUser catchDo:^(id error) {
             NSLog(@"There was an error (%@) creating the user.", error);
         }];
         [futureUser thenDo:^(KUser *user) {
-            [[KAccountManager sharedManager] setUser:user];
             [[KStorageManager sharedManager] setDatabaseWithName:user.username];
             [user save];
+            [[KAccountManager sharedManager] setUser:user];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [user setupKeysForDevice];
                 NSLog(@"CURRENT DEVICE :%@", user.currentDeviceId);
             });
+            [[PushManager sharedManager] requestPermissionsForUser:[KAccountManager sharedManager].user];
             [self showHome];
         }];
     }
@@ -98,15 +100,5 @@
 - (BOOL)prefersStatusBarHidden {
     return YES;
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

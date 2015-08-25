@@ -26,17 +26,8 @@
 
 
 - (void)setUser:(KUser *)user {
-    if(self) {
-        _user = user;
-        [self saveToPlist];
-        if(user.uniqueId) {
-            TOCFuture *pushNotificationFuture = [[PushManager sharedManager] registerForRemoteNotifications];
-        
-            [pushNotificationFuture thenDo:^(id value) {
-                [[PushManager sharedManager] sendPushToken:value userId:self.user.uniqueId];
-            }];
-        }
-    }
+    _user = user;
+    [self saveToPlist];
 }
 
 - (TOCFuture *)asyncGetFeed {

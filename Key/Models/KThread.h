@@ -18,7 +18,7 @@
 @property (nonatomic) NSString *userIds;
 @property (nonatomic) NSString *latestMessageId;
 @property (nonatomic) BOOL read;
-//@property (nonatomic) NSDate *lastMessageAt;
+@property (nonatomic) NSDate *updatedAt;
 //@property (nonatomic) NSDate *archivedAt;
 
 - (instancetype)initWithUsers:(NSArray *)user;
@@ -30,9 +30,11 @@
 
 - (void)processLatestMessage:(KMessage *)message;
 - (NSArray *)recipientIds;
+//+ (NSArray *)inbox;
 - (NSArray *)messages;
 - (NSString *)displayName;
 - (BOOL)saved;
 - (KMessage *)latestMessage;
+- (BOOL)isMoreRecentThan:(KThread *)thread;
 
 @end

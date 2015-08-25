@@ -76,20 +76,38 @@
         self.read = YES;
     }
     
-    if(self.latestMessageId) {
-        KMessage *latestMessage = [KMessage findById:self.latestMessageId];
-        NSComparisonResult dateComparison = [message.createdAt compare:latestMessage.createdAt];
-        switch (dateComparison) {
-            case NSOrderedDescending :
-                self.latestMessageId = message.uniqueId;
-                break;
-            default : break;
+    NSLog(@"PROCESSING LATEST MESSAGE");
+    if(self.updatedAt) {
+        if([self isMostRecentMessage:message]) {
+            self.updatedAt = message.createdAt;
+            self.latestMessageId = message.uniqueId;
+            [self save];
+            NSLog(@"SHOULD BE HERE");
+        }else {
+            return;
         }
     }else {
+        NSLog(@"WHY IS THIS HERE");
         self.latestMessageId = message.uniqueId;
+        self.updatedAt   = message.createdAt;
+        [self save];
     }
-    
-    [self save];
+}
+
+- (BOOL)isMostRecentMessage:(KMessage *)newMessage {
+    NSComparisonResult dateComparison = [newMessage.createdAt compare:self.updatedAt];
+    switch (dateComparison) {
+        case NSOrderedDescending : return YES; break;
+        default : return NO; break;
+    }
+}
+
+- (BOOL)isMoreRecentThan:(KThread *)thread {
+    NSComparisonResult dateComparison = [self.updatedAt compare:thread.updatedAt];
+    switch (dateComparison) {
+        case NSOrderedDescending : return YES; break;
+        default : return NO; break;
+    }
 }
 
 - (NSString *)displayName {
@@ -103,6 +121,18 @@
     NSMutableArray *recipientIds = [NSMutableArray arrayWithArray:[self.userIds componentsSeparatedByString:@"_"]];
     [recipientIds removeObject:localUser.uniqueId];
     return [recipientIds copy];
+}
+
++ (NSArray *)inbox {
+    NSString *inboxSQL = [NSString stringWithFormat:@"select * from %@ order by updated_at desc", [KThread tableName]];
+    
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        FMResultSet *result =  [database executeQuery:inboxSQL];
+        NSMutableArray *threads = [[NSMutableArray alloc] init];
+        while(result.next) [threads addObject:[[KThread alloc] initWithResultSetRow:result.resultDictionary]];
+        [result close];
+        return [threads copy];
+    }];
 }
 
 - (NSArray *)messages {

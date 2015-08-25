@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KTableViewController.h"
 
 @class KUser;
 @class KPost;
 
-@interface SocialViewController : UIViewController
+@interface SocialViewController : KTableViewController
 
 @property (nonatomic) KUser *currentUser;
 @property (nonatomic) KPost *currentPost;

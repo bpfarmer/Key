@@ -7,6 +7,7 @@
 //
 
 #import "KLocation.h"
+#import "KPost.h"
 
 @implementation KLocation
 
@@ -29,6 +30,7 @@
         _location     = location;
         _parentId     = parentId;
         _address      = address;
+        [[KPost findById:self.parentId] decrementAttachmentCount];
     }
     return self;
 }

@@ -23,12 +23,11 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
     [[PushManager sharedManager] registerForRemoteNotifications];
-    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
 
     if([KAccountManager sharedManager].user || [[KAccountManager sharedManager] setUserFromPlist]) {
+        [[PushManager sharedManager] requestPermissionsForUser:[KAccountManager sharedManager].user];
         UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MainNavigationController"];
         [self.window setRootViewController:navigationController];
     }else {

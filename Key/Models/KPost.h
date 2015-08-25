@@ -23,23 +23,27 @@
 @property (nonatomic) BOOL ephemeral;
 @property (nonatomic) BOOL read;
 @property (nonatomic, readonly) NSDate *createdAt;
-@property (nonatomic) NSString *attachmentIds;
+@property (nonatomic) NSInteger attachmentCount;
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         authorId:(NSString *)authorId
                             text:(NSString *)text
                        createdAt:(NSDate *)createdAt
-                       ephemeral:(BOOL)ephemeral;
+                       ephemeral:(BOOL)ephemeral
+                 attachmentCount:(NSInteger)attachmentCount;
 
-- (instancetype)initWithAuthorId:(NSString *)authorId text:(NSString *)text;
+- (instancetype)initWithAuthorId:(NSString *)authorId;
 - (NSArray *)attachments;
 - (KUser *)author;
 - (NSData *)previewImage;
+- (NSData *)createThumbnailPreview;
 + (NSArray *)unread;
 + (NSArray *)findByAuthorId:(NSString *)authorId;
 + (UIImage *)imageWithImage:(UIImage *)image scaledToFillSize:(CGSize)size;
 - (NSString *)displayDate;
 - (KLocation *)location;
 - (KPhoto *)photo;
+- (void)incrementAttachmentCount;
+- (void)decrementAttachmentCount;
 
 @end

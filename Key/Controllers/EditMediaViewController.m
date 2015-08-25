@@ -43,6 +43,8 @@
     
     self.captionShowing = NO;
     
+    self.captionTextField.delegate = self;
+    
     UITapGestureRecognizer *tapRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toggleCaption)];
     [tapRec setCancelsTouchesInView:NO];
     tapRec.delegate = self;
@@ -50,6 +52,12 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self resignFirstResponder];
+    [self.view endEditing:YES];
 }
 
 - (void)keyboardWillShow:(NSNotification*)note{
@@ -184,7 +192,8 @@
     }];
 }
 
-- (void)dismissAndPresentThread:(KThread *)thread  {}
+- (void)dismissAndPresentThread:(KThread *)thread  {
+}
 
 
 - (UIView *)getCaptionView {

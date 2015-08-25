@@ -8,6 +8,7 @@
 
 #import "KPhoto.h"
 #import "NSData+gzip.h"
+#import "KPost.h"
 
 @implementation KPhoto
 
@@ -38,12 +39,17 @@
         _media = media;
         _ephemeral = ephemeral;
         _parentId  = parentId;
+        [[KPost findById:parentId] createThumbnailPreview];
     }
     
     return self;
 }
 
 - (void)save {
+    if([self.uniqueId isEqualToString:@""]) {
+        [[KPost findById:self.parentId] createThumbnailPreview];
+        NSLog(@"SHOULD BE CREATING THUMBNAIL PREVIEW");
+    }
     [super save];
     NSData *zippedMedia = self.media.gzippedData;
     [zippedMedia writeToFile:self.filePath atomically:YES];

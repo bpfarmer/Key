@@ -37,11 +37,9 @@
 - (TOCFuture *)registerForRemoteNotifications {
     self.userNotificationFutureSource = [TOCFutureSource new];
     
-    UIUserNotificationType types = UIUserNotificationTypeBadge |
-    UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+    UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
     
-    UIUserNotificationSettings *mySettings =
-    [UIUserNotificationSettings settingsForTypes:types categories:nil];
+    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
     
     if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         [[UIApplication sharedApplication] registerUserNotificationSettings:mySettings];
@@ -53,8 +51,19 @@
     return self.userNotificationFutureSource.future;
 }
 
-- (void)sendPushToken:(NSData *)pushToken userId:(NSString *)userId {
-    [SendPushTokenRequest makeRequestWithDeviceToken:pushToken uniqueId:userId];
+- (void)requestPermissionsForUser:(KUser *)user {
+    TOCFuture *pushNotificationFuture = [self registerForRemoteNotifications];
+    
+    [pushNotificationFuture thenDo:^(id value) {
+        [[PushManager sharedManager] sendPushToken:value user:user];
+    }];
+}
+
+- (void)sendPushToken:(NSData *)pushToken user:(KUser *)user {
+    if(user) {
+        if(user.uniqueId) [SendPushTokenRequest makeRequestWithDeviceToken:pushToken uniqueId:user.uniqueId];
+        else if(user.username) [SendPushTokenRequest makeRequestWithDeviceToken:pushToken username:user.username];
+    }
 }
 
 @end
