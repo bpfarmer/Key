@@ -144,6 +144,10 @@
                 for(NSString *recipientId in recipientIds) {
                     ObjectRecipient *or = [[ObjectRecipient alloc] initWithType:NSStringFromClass([self.post class]) objectId:self.post.uniqueId recipientId:recipientId];
                     [or save];
+                    if(![KThread findWithUserIds:@[recipientId, self.currentUser.uniqueId]]) {
+                        KThread *thread = [[KThread alloc] initWithUsers:@[recipientId, self.currentUser.uniqueId]];
+                        [thread save];
+                    }
                 }
             });
             [self.delegate dismissAndPresentViewController:nil];

@@ -48,6 +48,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
     
     self.messages = @[];
     
+    NSLog(@"MESSAGE COUNT: %@", [KMessage findAllByDictionary:@{@"threadId" : self.thread.uniqueId}]);
     if(self.thread && self.thread.saved) {
         NSMutableArray *messages = [NSMutableArray arrayWithArray:self.thread.messages];
         [messages addObjectsFromArray:self.thread.posts];
@@ -234,36 +235,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (void)dismissAndPresentThread:(KThread *)thread  {
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == actionSheet.cancelButtonIndex) {
-        return;
-    }
-    
-    switch (buttonIndex) {
-        case 0:
-            //[self.demoData addPhotoMediaMessage];
-            break;
-            
-        case 1:
-        {
-            __weak UICollectionView *weakView = self.collectionView;
-            
-            /*[self.demoData addLocationMediaMessageCompletion:^{
-                [weakView reloadData];
-            }];*/
-        }
-            break;
-            
-        case 2:
-            //[self.demoData addVideoMediaMessage];
-            break;
-    }
-    
-    [JSQSystemSoundPlayer jsq_playMessageSentSound];
-    
-    [self finishSendingMessageAnimated:YES];
 }
 
 - (IBAction)didPressBack:(id)sender {

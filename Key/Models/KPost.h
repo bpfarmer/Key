@@ -9,13 +9,14 @@
 #import "KDatabaseObject.h"
 #import "KEncryptable.h"
 #import <UIKit/UIKit.h>
+#import "KThreadable.h"
 
 @class KAttachment;
 @class KUser;
 @class KLocation;
 @class KPhoto;
 
-@interface KPost : KDatabaseObject <KEncryptable>
+@interface KPost : KDatabaseObject <KEncryptable, KThreadable>
 
 @property (nonatomic, readonly) NSString *authorId;
 @property (nonatomic, readonly) NSString *text;

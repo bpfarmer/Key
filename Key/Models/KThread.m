@@ -70,7 +70,7 @@
                              read:NO];
 }
 
-- (void)processLatestMessage:(KMessage *)message {
+- (void)processLatestMessage:(KDatabaseObject <KThreadable> *)message {
     KUser *currentUser = [KAccountManager sharedManager].user;
     if(![message.authorId isEqualToString:currentUser.uniqueId]) {
         self.read = NO;
@@ -78,25 +78,16 @@
         self.read = YES;
     }
     
-    NSLog(@"PROCESSING LATEST MESSAGE");
-    if(self.updatedAt) {
-        if([self isMostRecentMessage:message]) {
-            self.updatedAt = message.createdAt;
-            self.latestMessageId = message.uniqueId;
-            [self save];
-            NSLog(@"SHOULD BE HERE");
-        }else {
-            return;
-        }
-    }else {
-        NSLog(@"WHY IS THIS HERE");
-        self.latestMessageId = message.uniqueId;
-        self.updatedAt   = message.createdAt;
+    if(!self.updatedAt) self.updatedAt = [NSDate dateWithTimeIntervalSince1970:0];
+    
+    if([self isMostRecentMessage:message]) {
+        self.updatedAt       = message.createdAt;
+        self.latestMessageId = [NSString stringWithFormat:@"%@_%@", NSStringFromClass(message.class), message.uniqueId];
         [self save];
     }
 }
 
-- (BOOL)isMostRecentMessage:(KMessage *)newMessage {
+- (BOOL)isMostRecentMessage:(KDatabaseObject <KThreadable> *)newMessage {
     NSComparisonResult dateComparison = [newMessage.createdAt compare:self.updatedAt];
     switch (dateComparison) {
         case NSOrderedDescending : return YES; break;
@@ -137,6 +128,21 @@
     }];
 }
 
++ (KThread *)findWithUserIds:(NSArray *)userIds {
+    NSString *combination1 = [NSString stringWithFormat:@"%@_%@", userIds.firstObject, userIds.lastObject];
+    NSString *combination2 = [NSString stringWithFormat:@"%@_%@", userIds.lastObject, userIds.firstObject];
+    
+    NSString *selectSQL = [NSString stringWithFormat:@"select * from %@ where user_ids = ? or user_ids = ?", [self tableName]];
+    
+    return (KThread *)[[KStorageManager sharedManager] querySelectObject:^KDatabaseObject *(FMDatabase *database) {
+        FMResultSet *result =  [database executeQuery:selectSQL withArgumentsInArray:@[combination1, combination2]];
+        KThread *thread;
+        if(result.next) thread = [[KThread alloc] initWithResultSetRow:result.resultDictionary];
+        [result close];
+        return thread;
+    }];
+}
+
 - (NSArray *)messages {
     return [KMessage findAllByDictionary:@{@"threadId" : self.uniqueId} orderBy:@"createdAt" descending:NO];
 }
@@ -159,8 +165,16 @@
     }];
 }
 
-- (KMessage *)latestMessage {
-    return [KMessage findById:self.latestMessageId];
+- (NSString *)latestMessageText {
+    if(!self.latestMessageId) return @"";
+    KDatabaseObject <KThreadable> *message = self.latestMessage;
+    if([message isKindOfClass:[KPost class]]) return @"New Photo";
+    else return ((KMessage *)message).text;
+}
+
+- (KDatabaseObject <KThreadable> *)latestMessage {
+    NSArray *latestMessageComponents = [self.latestMessageId componentsSeparatedByString:@"_"];
+    return [NSClassFromString(latestMessageComponents.firstObject) findById:latestMessageComponents.lastObject];
 }
 
 - (BOOL)saved {

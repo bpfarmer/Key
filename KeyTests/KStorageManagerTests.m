@@ -35,11 +35,4 @@
     XCTAssert(manager.database.close);
 }
 
-- (void)testUpdateQuery {
-    NSString *sql = @"create table testing";
-    [[KStorageManager sharedManager] queryUpdate:^(FMDatabase *database) {
-        [database executeUpdate:sql];
-    }];
-}
-
 @end

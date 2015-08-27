@@ -61,7 +61,7 @@
     SubtitleTableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:[self cellIdentifier] forIndexPath:indexPath];
     KThread *thread = (KThread *)[self objectForIndexPath:indexPath];
     cell.textLabel.text = [NSString stringWithFormat:@"%@", thread.displayName];
-    if(thread.latestMessage) cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", thread.latestMessage.text];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", thread.latestMessageText];
     cell.imageView.image = [self imageRead:thread.read];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;

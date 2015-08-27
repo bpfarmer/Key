@@ -23,13 +23,8 @@
         _senderBaseKey         = senderBaseKey;
         _isAlice               = isAlice;
     }
-    
-    NSLog(@"THEIR BASE KEY: %@", receiverBasePublicKey);
-    NSLog(@"OUR BASE KEY: %@", senderBaseKey.publicKey);
-    NSLog(@"THEIR PUBLIC KEY: %@", receiverPublicKey);
-    NSLog(@"OUR PUBLIC KEY: %@", senderIdentityKey.publicKey);
-    return self;
 
+    return self;
 }
 
 - (void)setRolesWithFirstKey:(NSData *)firstKey secondKey:(NSData *)secondKey {

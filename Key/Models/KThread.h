@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "KDatabaseObject.h"
 #import "KEncryptable.h"
+#import "KThreadable.h"
 
 @class KMessage;
 
@@ -19,7 +20,6 @@
 @property (nonatomic) NSString *latestMessageId;
 @property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *updatedAt;
-//@property (nonatomic) NSDate *archivedAt;
 
 - (instancetype)initWithUsers:(NSArray *)user;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
@@ -28,7 +28,7 @@
                  latestMessageId:(NSString *)latestMessageId
                             read:(BOOL)read;
 
-- (void)processLatestMessage:(KMessage *)message;
+- (void)processLatestMessage:(KDatabaseObject <KThreadable> *)message;
 - (NSArray *)recipientIds;
 //+ (NSArray *)inbox;
 - (NSArray *)messages;
@@ -36,6 +36,8 @@
 - (NSString *)displayName;
 - (BOOL)saved;
 - (KMessage *)latestMessage;
+- (NSString *)latestMessageText;
 - (BOOL)isMoreRecentThan:(KThread *)thread;
++ (KThread *)findWithUserIds:(NSArray *)userIds;
 
 @end

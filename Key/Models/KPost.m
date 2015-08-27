@@ -18,6 +18,8 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "NSData+gzip.h"
 #import "NSDate+TimeAgo.h"
+#import "KThread.h"
+#import "KAccountManager.h"
 
 @implementation KPost
 
@@ -55,8 +57,17 @@
     
     if(self) {
         _authorId        = authorId;
-        if(threadId) _threadId = threadId;
-        else _threadId = authorId;
+        if(threadId) {
+            _threadId = threadId;
+        }else {
+            NSArray *userIds = @[authorId, [KAccountManager sharedManager].user.uniqueId];
+            KThread *thread = [KThread findWithUserIds:userIds];
+            if(!thread) {
+                thread = [[KThread alloc] initWithUsers:userIds];
+                [thread save];
+            }
+            _threadId = thread.uniqueId;
+        }
         _text            = text;
         _createdAt       = createdAt;
         _ephemeral       = ephemeral;
@@ -65,6 +76,11 @@
     }
     
     return self;
+}
+
+- (void)save {
+    [super save];
+    [self.thread processLatestMessage:self];
 }
 
 - (NSString *)generateUniqueId {
@@ -225,6 +241,10 @@
 - (void)decrementAttachmentCount {
     if(self.attachmentCount > 0) self.attachmentCount = self.attachmentCount - 1;
     [self save];
+}
+
+- (KThread *)thread {
+    return [KThread findById:self.threadId];
 }
 
 @end

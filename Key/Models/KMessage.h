@@ -9,6 +9,7 @@
 #import "KDatabaseObject.h"
 #import "KEncryptable.h"
 #import "JSQMessageData.h"
+#import "KThreadable.h"
 
 @class KUser;
 @class KGroup;
@@ -16,7 +17,7 @@
 @class KThread;
 @class KAttachment;
 
-@interface KMessage : KDatabaseObject <JSQMessageData>
+@interface KMessage : KDatabaseObject <JSQMessageData, KThreadable>
 
 @property (nonatomic) NSString *authorId;
 @property (nonatomic) NSString *threadId;

@@ -41,7 +41,6 @@
     self = [super init];
     
     if(self) {
-        [self setUniqueId:[self generateUniqueId]];
         _authorId = authorId;
         _threadId = threadId;
         _body     = body;
@@ -50,12 +49,6 @@
     }
     
     return self;
-}
-
-- (NSString *)generateUniqueId {
-    NSString *uniqueId = [NSString stringWithFormat:@"%@_%lu", [KMessage tableName], (unsigned long)[self messageHash]];
-    
-    return uniqueId;
 }
 
 - (NSUInteger)messageHash {
