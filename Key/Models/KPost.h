@@ -19,20 +19,25 @@
 
 @property (nonatomic, readonly) NSString *authorId;
 @property (nonatomic, readonly) NSString *text;
+@property (nonatomic) NSString *threadId;
 @property (nonatomic) NSData *preview;
 @property (nonatomic) BOOL ephemeral;
 @property (nonatomic) BOOL read;
 @property (nonatomic, readonly) NSDate *createdAt;
+@property (nonatomic) NSString *attachmentIds;
 @property (nonatomic) NSInteger attachmentCount;
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         authorId:(NSString *)authorId
+                        threadId:(NSString *)threadId
                             text:(NSString *)text
                        createdAt:(NSDate *)createdAt
                        ephemeral:(BOOL)ephemeral
+                   attachmentIds:(NSString *)attachmentIds
                  attachmentCount:(NSInteger)attachmentCount;
 
 - (instancetype)initWithAuthorId:(NSString *)authorId;
+- (instancetype)initWithAuthorId:(NSString *)authorId threadId:(NSString *)threadId;
 - (NSArray *)attachments;
 - (KUser *)author;
 - (NSData *)previewImage;
@@ -43,7 +48,9 @@
 - (NSString *)displayDate;
 - (KLocation *)location;
 - (KPhoto *)photo;
-- (void)incrementAttachmentCount;
+- (void)addAttachment:(KDatabaseObject *)attachment;
 - (void)decrementAttachmentCount;
+- (void)incrementAttachmentCount;
+
 
 @end

@@ -13,6 +13,8 @@
 #import "FreeKey.h"
 #import "KAccountManager.h"
 #import "KMessage.h"
+#import "KPost.h"
+#import "ObjectRecipient.h"
 
 @implementation KThread
 
@@ -136,16 +138,18 @@
 }
 
 - (NSArray *)messages {
-    NSString *messagesInThreadSQL = [NSString stringWithFormat:@"select * from %@ where thread_id = :thread_id", [KMessage tableName]];
-    NSDictionary *parameters = @{@"thread_id" : self.uniqueId};
-    
-    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
-        FMResultSet *result =  [database executeQuery:messagesInThreadSQL withParameterDictionary:parameters];
-        NSMutableArray *messages = [[NSMutableArray alloc] init];
-        while(result.next) [messages addObject:[[KMessage alloc] initWithResultSetRow:result.resultDictionary]];
-        [result close];
-        return [messages copy];
-    }];
+    return [KMessage findAllByDictionary:@{@"threadId" : self.uniqueId} orderBy:@"createdAt" descending:NO];
+}
+
+- (NSArray *)posts {
+    NSMutableArray *posts = [NSMutableArray arrayWithArray:[KPost findAllByDictionary:@{@"threadId" : self.uniqueId} orderBy:@"createdAt" descending:NO]];
+    NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"type" : NSStringFromClass([KPost class]), @"recipientId" : self.recipientIds.firstObject}];
+    NSLog(@"OBJECT RECIPIENTS: %@", objectRecipients);
+    NSMutableArray *postIds = [NSMutableArray new];
+    for(ObjectRecipient *or in objectRecipients) [postIds addObject:or.objectId];
+    NSLog(@"POST IDS: %@", postIds);
+    [posts addObjectsFromArray:[KPost findAllByIds:[postIds copy]]];
+    return [posts copy];
 }
 
 - (KMessage *)latestMessage {

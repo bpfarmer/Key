@@ -11,6 +11,10 @@
 #import "KPhoto.h"
 #import "KLocation.h"
 #import "KAccountManager.h"
+#import "KThread.h"
+#import "KPost.h"
+#import "FreeKey.h"
+#import "CollapsingFutures.h"
 
 @interface EditMediaViewController () <DismissAndPresentProtocol, UIGestureRecognizerDelegate, UITextFieldDelegate>
 
@@ -154,21 +158,47 @@
 
 - (IBAction)didPressPost:(id)sender {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        SelectRecipientViewController *selectRecipientView = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
-        NSMutableArray *sendableObjects = [[NSMutableArray alloc] init];
-        
-        if(![self.captionTextField.text isEqual:@""]) {
-            self.imageData = [self renderImageWithCaption];
+        if(!self.thread) {
+            SelectRecipientViewController *selectRecipientView = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
+            NSMutableArray *sendableObjects = [[NSMutableArray alloc] init];
+            
+            if(![self.captionTextField.text isEqual:@""]) {
+                self.imageData = [self renderImageWithCaption];
+            }
+            [sendableObjects addObject:[[KPhoto alloc] initWithMedia:self.imageData]];
+            if(self.locationEnabled) {
+                [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
+            }
+            [selectRecipientView setSendableObjects:sendableObjects];
+            selectRecipientView.delegate = self;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self presentViewController:selectRecipientView animated:NO completion:nil];
+            });
+        }else {
+            NSMutableArray *sendableObjects = [[NSMutableArray alloc] init];
+            if(![self.captionTextField.text isEqual:@""]) {
+                self.imageData = [self renderImageWithCaption];
+            }
+            [sendableObjects addObject:[[KPhoto alloc] initWithMedia:self.imageData]];
+            if(self.locationEnabled) {
+                [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
+            }
+            NSLog(@"CURRENT COORDINATE: %@", [KAccountManager sharedManager].currentCoordinate);
+            
+            KPost *post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId threadId:self.thread.uniqueId];
+            [post save];
+            for(KDatabaseObject <KAttachable> *object in sendableObjects) {
+                object.parentId = post.uniqueId;
+                NSLog(@"OBJECT TO SAVE: %@", object);
+                //if([object isKindOfClass:[KPhoto class]]) [post incrementAttachmentCount];
+                [object save];
+            }
+            TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:self.thread.recipientIds];
+            [futureDevices thenDo:^(id value) {
+                [FreeKey sendEncryptableObject:post attachableObjects:sendableObjects recipientIds:self.thread.recipientIds];
+            }];
+            [self dismissViewControllerAnimated:NO completion:nil];
         }
-        [sendableObjects addObject:[[KPhoto alloc] initWithMedia:self.imageData]];
-        if(self.locationEnabled) {
-            [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
-        }
-        [selectRecipientView setSendableObjects:sendableObjects];
-        selectRecipientView.delegate = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self presentViewController:selectRecipientView animated:NO completion:nil];
-        });
     });
 }
 

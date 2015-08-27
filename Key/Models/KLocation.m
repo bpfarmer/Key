@@ -42,10 +42,10 @@
     [ceo reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
         CLPlacemark *placemark = [placemarks objectAtIndex:0];
         NSMutableArray *locationComponents = [NSMutableArray new];
-        [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"] componentsJoinedByString:@", "];
         
         if(placemark.name) [locationComponents addObject:placemark.name];
-        NSArray *addressComponents = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"][1] componentsSeparatedByString:@" "];
+        NSArray *addressComponents;
+        if(((NSArray *)[placemark.addressDictionary valueForKey:@"FormattedAddressLines"]).count > 1 ) addressComponents = [[placemark.addressDictionary valueForKey:@"FormattedAddressLines"][1] componentsSeparatedByString:@" "];
         NSLog(@"ADDRESS COMPONENTS: %@", addressComponents);
         if(addressComponents.count > 1) [locationComponents addObject:[NSString stringWithFormat:@"%@ %@", addressComponents[0], addressComponents[1]]];
         self.address = [locationComponents componentsJoinedByString:@", "];

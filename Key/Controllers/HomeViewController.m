@@ -65,8 +65,7 @@ static NSString *TableViewCellIdentifier = @"Threads";
     [self.scrollView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[v]|" options:0 metrics:nil views:@{@"v" : self.contentView}]];
     
     self.scrollView.contentSize = CGSizeMake(self.contentView.frame.size.width, self.contentView.frame.size.height);
-
-
+    
     [[KAccountManager sharedManager] initLocationManager];
     [[KAccountManager sharedManager] refreshCurrentCoordinate];
 }

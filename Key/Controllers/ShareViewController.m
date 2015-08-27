@@ -21,6 +21,7 @@
 @property (nonatomic) AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
 @property (nonatomic) BOOL flashOn;
 @property (nonatomic) BOOL readQRCode;
+@property (nonatomic, strong) IBOutlet UIButton *backButton;
 
 @property (nonatomic) UILabel *noCameraInSimulatorMessage;
 
@@ -42,7 +43,12 @@
     frame.origin.x = frame.size.width;
     
     self.view.frame = frame;
+    
+    if(!self.thread) self.backButton.hidden = YES;
+    
 }
+
+
 
 - (void)viewWillDisappear:(BOOL)animated {
     [self stopCamera];
@@ -54,7 +60,7 @@
         CGFloat labelHeight = 60;
         _noCameraInSimulatorMessage = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x - labelWidth/2.0f, self.view.bounds.size.height - 75 - labelHeight, labelWidth, labelHeight)];
         _noCameraInSimulatorMessage.numberOfLines = 0; // wrap
-        _noCameraInSimulatorMessage.text = @"No camera in the simulator...";
+        //_noCameraInSimulatorMessage.text = @"No camera in the simulator...";
         _noCameraInSimulatorMessage.textColor = [UIColor whiteColor];
         _noCameraInSimulatorMessage.backgroundColor = [UIColor clearColor];
         _noCameraInSimulatorMessage.hidden = YES;
@@ -237,7 +243,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     [self startCamera];
     if (![self.view.subviews containsObject:self.cameraOverlayView]) {
         CGRect frame = self.cameraOverlayView.frame;
@@ -347,6 +353,10 @@
     }
 }
 
+- (IBAction)didPressBack:(id)sender {
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
+
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
     if (metadataObjects != nil && [metadataObjects count] > 0 && !self.readQRCode) {
         AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
@@ -359,10 +369,15 @@
 
 - (void)didTakePhoto:(NSData *)photoData {
     [self stopCamera];
-    EditMediaViewController *editMediaView = [[EditMediaViewController alloc] initWithNibName:@"EditMediaView" bundle:nil];
-    editMediaView.imageData = photoData;
-    editMediaView.delegate = self;
-    [self.parentViewController presentViewController:editMediaView animated:NO completion:nil];
+    EditMediaViewController *editMediaView  = [[EditMediaViewController alloc] initWithNibName:@"EditMediaView" bundle:nil];
+    editMediaView.imageData                 = photoData;
+    editMediaView.delegate                  = self;
+    editMediaView.thread                    = self.thread;
+    self.thread                             = nil;
+    if(self.parentViewController)
+        [self.parentViewController presentViewController:editMediaView animated:NO completion:nil];
+    else
+        [self.delegate dismissAndPresentViewController:editMediaView];
 }
 
 - (void)dismissAndPresentViewController:(UIViewController *)viewController {

@@ -41,6 +41,7 @@
             NSLog(@"SHOULD HAVE ATTACHMENTS");
             self.photo      = self.post.photo;
             self.location   = self.post.location;
+            NSLog(@"LOCATION: %@", self.location);
             if(self.photo) {
                 [self setupImageViewWithImage:self.photo.media];
             }else if(self.location) {

@@ -16,13 +16,18 @@
 #import "JSQMessagesAvatarImageFactory.h"
 #import "CheckDevicesRequest.h"
 #import "CollapsingFutures.h"
+#import "ShareViewController.h"
+#import "DismissAndPresentProtocol.h"
+#import "KPost.h"
+#import "MediaViewController.h"
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
-@interface ThreadViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ThreadViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, DismissAndPresentProtocol>
 @property (nonatomic, strong) UITextField *recipientTextField;
 @property (nonatomic) UIView *titleView;
 @property (nonatomic) NSArray *messages;
+@property (nonatomic) NSArray *posts;
 @property (nonatomic, strong) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic, weak)   UIView *navView;
 @end
@@ -41,18 +46,18 @@ static NSString *TableViewCellIdentifier = @"Messages";
     self.senderId = currentUser.uniqueId;
     
     self.messages = @[];
+    self.posts    = @[];
     
     if(self.thread && self.thread.saved) {
         self.messages = self.thread.messages;
+        self.posts    = self.thread.posts;
     }
     
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
     JSQMessagesBubbleImageFactory *bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
-    self.incomingBubbleImageData =
-    [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
-    self.outgoingBubbleImageData =
-    [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleBlueColor]];
+    self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
+    self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleBlueColor]];
     
     self.showLoadEarlierMessagesHeader = NO;
     
@@ -60,12 +65,9 @@ static NSString *TableViewCellIdentifier = @"Messages";
     self.navigationItem.titleView = self.recipientTextField;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
-    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
+    //[self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(databaseModified:)
-                                                 name:[KMessage notificationChannel]
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KMessage notificationChannel] object:nil];
 }
 
 - (void)databaseModified:(NSNotification *)notification {
@@ -106,7 +108,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.messages.count;
+    return self.messages.count + self.posts.count;
 }
 
 - (id <JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -132,21 +134,47 @@ static NSString *TableViewCellIdentifier = @"Messages";
         cell.textView.textColor = [UIColor whiteColor];
     }
     
+    if(indexPath.row > self.messages.count) {
+        cell.messageBubbleImageView.image = [UIImage imageWithData:[self postAtIndexPath:indexPath].previewImage];
+    }
+
+    
     return cell;
 }
 
 
 - (id<JSQMessageData>)messageAtIndexPath:(NSIndexPath *)indexPath {
-    return self.messages[indexPath.row];
+    if(indexPath.row < self.messages.count)
+        return self.messages[indexPath.row];
+    else {
+        KPost *post = [self postAtIndexPath:indexPath];
+        JSQPhotoMediaItem *photoItem = [[JSQPhotoMediaItem alloc] initWithImage:[UIImage imageWithData:post.previewImage]];
+        return [JSQMessage messageWithSenderId:post.authorId displayName:post.author.username media:photoItem];
+    }
+}
+                                        
+- (KPost *)postAtIndexPath:(NSIndexPath *)indexPath {
+    return self.posts[indexPath.row - self.messages.count];
 }
 
+
 - (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
-    KMessage *message = (KMessage *)[self messageAtIndexPath:indexPath];
-    NSString *userInitial = [[message.senderDisplayName substringToIndex:1] uppercaseString];
-    if (![message.senderId isEqualToString:self.senderId]) {
-        return [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:userInitial backgroundColor:[UIColor jsq_messageBubbleLightGrayColor] textColor:[UIColor whiteColor] font:[UIFont boldSystemFontOfSize:14.0]diameter:28];
-    }else {
-        return nil;
+    if(indexPath.row < self.messages.count) {
+        KMessage *message = (KMessage *)[self messageAtIndexPath:indexPath];
+        NSString *userInitial = [[message.senderDisplayName substringToIndex:1] uppercaseString];
+        if (![message.senderId isEqualToString:self.senderId]) {
+            return [JSQMessagesAvatarImageFactory avatarImageWithUserInitials:userInitial backgroundColor:[UIColor jsq_messageBubbleLightGrayColor] textColor:[UIColor whiteColor] font:[UIFont boldSystemFontOfSize:14.0]diameter:28];
+        }
+    }
+    return nil;
+}
+
+- (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath {
+    [super collectionView:collectionView didTapMessageBubbleAtIndexPath:indexPath];
+    if(indexPath.row >= self.messages.count) {
+        MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
+        mediaViewController.post = [self postAtIndexPath:indexPath];
+        [self presentViewController:mediaViewController animated:NO completion:nil];
     }
 }
 
@@ -154,18 +182,13 @@ static NSString *TableViewCellIdentifier = @"Messages";
     return YES;
 }
 
-- (void)didPressSendButton:(UIButton *)button
-           withMessageText:(NSString *)text
-                  senderId:(NSString *)senderId
-         senderDisplayName:(NSString *)senderDisplayName
-                      date:(NSDate *)date {
+- (void)didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date {
     if (text.length > 0) {
         [JSQSystemSoundPlayer jsq_playMessageSentSound];
         
         if(self.thread.uniqueId) {
             KMessage *message = [[KMessage alloc] initWithAuthorId:[KAccountManager sharedManager].user.uniqueId threadId:self.thread.uniqueId body:text];
             [message save];
-            NSLog(@"GETTING READY TO SEND MESSAGE: %@", message);
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{
                 TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:self.thread.recipientIds];
@@ -181,15 +204,24 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 
 
-- (void)didPressAccessoryButton:(UIButton *)sender
-{
-    /*UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Send photo", @"Send location", @"Send video", nil];
-    
-    [sheet showFromToolbar:self.inputToolbar];*/
+- (void)didPressAccessoryButton:(UIButton *)sender {
+    ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];
+    shareViewController.thread = self.thread;
+    shareViewController.delegate = self;
+    [self presentViewController:shareViewController animated:NO completion:nil];
 }
 
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
+- (void)dismissAndPresentViewController:(UIViewController *)viewController {
+    [self dismissViewControllerAnimated:NO completion:^{
+        if(viewController != nil) [self presentViewController:viewController animated:NO completion:nil];
+        else [self dismissViewControllerAnimated:NO completion:nil];
+    }];
+}
+
+- (void)dismissAndPresentThread:(KThread *)thread  {
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == actionSheet.cancelButtonIndex) {
         return;
     }
@@ -223,8 +255,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField*)aTextField
-{
+- (BOOL)textFieldShouldReturn:(UITextField*)aTextField {
     [aTextField resignFirstResponder];
     return YES;
 }

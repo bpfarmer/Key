@@ -37,21 +37,33 @@
     return self;
 }
 
-- (instancetype)initWithUniqueId:(NSString *)uniqueId
-                        authorId:(NSString *)authorId
-                            text:(NSString *)text
-                       createdAt:(NSDate *)createdAt
-                       ephemeral:(BOOL)ephemeral
-                 attachmentCount:(NSInteger)attachmentCount{
+- (instancetype)initWithAuthorId:(NSString *)authorId threadId:(NSString *)threadId {
+    self = [super init];
+    
+    if(self) {
+        _authorId        = authorId;
+        _threadId        = threadId;
+        _createdAt       = [NSDate date];
+        _read            = NO;
+    }
+    
+    return self;
+}
+
+- (instancetype)initWithUniqueId:(NSString *)uniqueId authorId:(NSString *)authorId threadId:(NSString *)threadId text:(NSString *)text createdAt:(NSDate *)createdAt ephemeral:(BOOL)ephemeral attachmentIds:(NSString *)attachmentIds attachmentCount:(NSInteger)attachmentCount{
     self = [super initWithUniqueId:uniqueId];
     
     if(self) {
         _authorId        = authorId;
+        if(threadId) _threadId = threadId;
+        else _threadId = authorId;
         _text            = text;
         _createdAt       = createdAt;
         _ephemeral       = ephemeral;
+        _attachmentIds   = attachmentIds;
         _attachmentCount = attachmentCount;
     }
+    
     return self;
 }
 
@@ -62,17 +74,22 @@
 
 - (NSArray *)attachments {
     NSMutableArray *attachments = [NSMutableArray new];
-    if(self.photo) [attachments addObject:self.photo];
-    if(self.location) [attachments addObject:self.location];
+    for(NSString *attachmentId in [self.attachmentIds componentsSeparatedByString:@"__"]) {
+        NSString *className = [attachmentId componentsSeparatedByString:@"_"].firstObject;
+        NSString *uniqueId  = [attachmentId componentsSeparatedByString:@"_"].lastObject;
+        [attachments addObject:[NSClassFromString(className) findById:uniqueId]];
+    }
     return [attachments copy];
 }
 
 - (KLocation *)location {
-    return [KLocation findByDictionary:@{@"parentId" : self.uniqueId}];
+    for(KDatabaseObject *attachment in self.attachments) if([attachment isKindOfClass:[KLocation class]]) return (KLocation *) attachment;
+    return nil;
 }
 
 - (KPhoto *)photo {
-    return [KPhoto findByDictionary:@{@"parentId" : self.uniqueId}];
+    for(KDatabaseObject *attachment in self.attachments) if([attachment isKindOfClass:[KPhoto class]]) return (KPhoto *) attachment;
+    return nil;
 }
 
 + (NSArray *)unread {
@@ -192,6 +209,12 @@
 
 - (NSString *)displayDate {
     return self.createdAt.formattedAsTimeAgo;
+}
+
+- (void)addAttachment:(KDatabaseObject *)attachment {
+    NSMutableArray *attachments = [NSMutableArray arrayWithArray:[self.attachmentIds componentsSeparatedByString:@"__"]];
+    [attachments addObject:[NSString stringWithFormat:@"%@_%@", NSStringFromClass(attachment.class), attachment.uniqueId]];
+    self.attachmentIds = [attachments componentsJoinedByString:@"__"];
 }
 
 - (void)incrementAttachmentCount {

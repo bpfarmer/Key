@@ -25,6 +25,7 @@
 #import "KPost.h"
 #import "KDevice.h"
 #import "AttachmentKey.h"
+#import "ObjectRecipient.h"
 
 @implementation KStorageSchema
 
@@ -46,6 +47,7 @@
     [KPost createTable];
     [KDevice createTable];
     [AttachmentKey createTable];
+    [ObjectRecipient createTable];
     
     [self updateSchema];
 }

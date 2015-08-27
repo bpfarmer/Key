@@ -19,6 +19,7 @@
 #import "KAttachable.h"
 #import "CheckDevicesRequest.h"
 #import "CollapsingFutures.h"
+#import "ObjectRecipient.h"
 
 @interface SelectRecipientViewController ()
 
@@ -52,6 +53,7 @@
     if(![self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
         if(!self.post) {
             self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId];
+            self.post.uniqueId = [KPost generateUniqueId];
             self.post.ephemeral = self.ephemeral;
         }
     }
@@ -121,7 +123,6 @@
                 }];
             });
         }else {
-            [self.post save];
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{
                 NSMutableArray *recipientIds = [[NSMutableArray alloc] init];
@@ -129,14 +130,21 @@
                     [recipientIds addObject:user.uniqueId];
                 }
                 for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
-                    object.parentId = self.post.uniqueId;
                     //if([object isKindOfClass:[KPhoto class]]) [self.post incrementAttachmentCount];
+                    [object setParentId:self.post.uniqueId];
                     [object save];
+                    [self.post addAttachment:object];
                 }
+                [self.post save];
                 TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:recipientIds];
                 [futureDevices thenDo:^(id value) {
                     [FreeKey sendEncryptableObject:self.post attachableObjects:self.sendableObjects recipientIds:recipientIds];
                 }];
+                
+                for(NSString *recipientId in recipientIds) {
+                    ObjectRecipient *or = [[ObjectRecipient alloc] initWithType:NSStringFromClass([self.post class]) objectId:self.post.uniqueId recipientId:recipientId];
+                    [or save];
+                }
             });
             [self.delegate dismissAndPresentViewController:nil];
         }

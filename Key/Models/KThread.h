@@ -32,6 +32,7 @@
 - (NSArray *)recipientIds;
 //+ (NSArray *)inbox;
 - (NSArray *)messages;
+- (NSArray *)posts;
 - (NSString *)displayName;
 - (BOOL)saved;
 - (KMessage *)latestMessage;

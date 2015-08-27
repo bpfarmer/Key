@@ -154,7 +154,7 @@
 
 }
 
-+ (NSString *)sqlStatementForDictionary:(NSDictionary *)dictionary orderBy:(NSString *)orderProperty descending:(BOOL)descending {
++ (NSString *)sqlStatementForDictionary:(NSDictionary *)dictionary {
     NSMutableArray *conditions = [[NSMutableArray alloc] init];
     for(NSString *key in [dictionary allKeys]) {
         if(![[self storedPropertyList] containsObject:key]) return nil;
@@ -163,6 +163,12 @@
     NSString *selectSQL = [NSString stringWithFormat:@"select * from %@", [self tableName]];
     
     if(![conditions isEqualToArray:@[]]) selectSQL = [NSString stringWithFormat:@"%@ where %@", selectSQL, [conditions componentsJoinedByString:@" AND "]];
+    
+    return selectSQL;
+}
+
++ (NSString *)sqlStatementForDictionary:(NSDictionary *)dictionary orderBy:(NSString *)orderProperty descending:(BOOL)descending {
+    NSString *selectSQL = [self sqlStatementForDictionary:dictionary];
     
     if(orderProperty) {
         selectSQL = [NSString stringWithFormat:@"%@ order by %@", selectSQL, [self columnNameFromProperty:orderProperty]];
@@ -203,6 +209,59 @@
     return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
         NSMutableArray *results = [NSMutableArray new];
         FMResultSet *result = [database executeQuery:selectSQL withParameterDictionary:[parameterDictionary copy]];
+        while(result.next) {
+            KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
+            [results addObject:object];
+        }
+        [result close];
+        return [results copy];
+    }];
+}
+
++ (NSArray *)findAllByDictionary:(NSDictionary *)dictionary {
+    NSString *selectSQL = [self sqlStatementForDictionary:dictionary];
+    
+    NSMutableDictionary *parameterDictionary = [[NSMutableDictionary alloc] init];
+    [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [parameterDictionary setObject:obj forKey:[self columnNameFromProperty:key]];
+    }];
+    
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        NSMutableArray *results = [NSMutableArray new];
+        FMResultSet *result = [database executeQuery:selectSQL withParameterDictionary:[parameterDictionary copy]];
+        while(result.next) {
+            KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
+            [results addObject:object];
+        }
+        [result close];
+        return [results copy];
+    }];
+}
+
++ (NSArray *)findAllByIds:(NSArray *)ids {
+    if(!(ids.count > 1)) return @[];
+    NSString *selectSQL = [self sqlStatementForDictionary:@{}];
+    NSMutableArray *questionMarks = [NSMutableArray new];
+    [ids enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [questionMarks addObject:@"?"];
+    }];
+    selectSQL = [NSString stringWithFormat:@"%@ where unique_id in (%@)", selectSQL, [questionMarks componentsJoinedByString:@" , "]];
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        NSMutableArray *results = [NSMutableArray new];
+        FMResultSet *result = [database executeQuery:selectSQL withArgumentsInArray:ids];
+        while(result.next) {
+            KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
+            [results addObject:object];
+        }
+        [result close];
+        return [results copy];
+    }];
+}
+
++ (NSArray *)findAllBySQL:(NSString *)sql parameterDictionary:(NSDictionary *)parameterDictionary {
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        NSMutableArray *results = [NSMutableArray new];
+        FMResultSet *result = [database executeQuery:sql withParameterDictionary:parameterDictionary];
         while(result.next) {
             KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
             [results addObject:object];

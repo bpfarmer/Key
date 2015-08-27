@@ -108,6 +108,7 @@
 		EFEF483B1B7D8BFB00E77113 /* NSDate+TimeAgo.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF483A1B7D8BFB00E77113 /* NSDate+TimeAgo.m */; };
 		EFEF483E1B7D9E3300E77113 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF483D1B7D9E3300E77113 /* ProfileViewController.m */; };
 		EFEF48401B7D9FA400E77113 /* ProfileView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFEF483F1B7D9FA400E77113 /* ProfileView.xib */; };
+		EFF2033C1B8E908F00487F7C /* ObjectRecipient.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF2033B1B8E908F00487F7C /* ObjectRecipient.m */; };
 		EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A611AAE19C3006C10D2 /* AES_CBC.m */; };
 		EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A631AAE19C3006C10D2 /* HMAC.m */; };
 		EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A651AAE19C3006C10D2 /* KeyDerivation.m */; };
@@ -323,6 +324,8 @@
 		EFEF483C1B7D9E3300E77113 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		EFEF483D1B7D9E3300E77113 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		EFEF483F1B7D9FA400E77113 /* ProfileView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ProfileView.xib; path = Views/ProfileView.xib; sourceTree = "<group>"; };
+		EFF2033A1B8E908F00487F7C /* ObjectRecipient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectRecipient.h; path = Models/ObjectRecipient.h; sourceTree = "<group>"; };
+		EFF2033B1B8E908F00487F7C /* ObjectRecipient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjectRecipient.m; path = Models/ObjectRecipient.m; sourceTree = "<group>"; };
 		EFF70A601AAE19C3006C10D2 /* AES_CBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES_CBC.h; sourceTree = "<group>"; };
 		EFF70A611AAE19C3006C10D2 /* AES_CBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AES_CBC.m; sourceTree = "<group>"; };
 		EFF70A621AAE19C3006C10D2 /* HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC.h; sourceTree = "<group>"; };
@@ -725,6 +728,8 @@
 				EFCD01D71A83E651005065B2 /* KThread.m */,
 				EFEBDD361A68CE9600973E15 /* KUser.h */,
 				EFEBDD371A68CE9600973E15 /* KUser.m */,
+				EFF2033A1B8E908F00487F7C /* ObjectRecipient.h */,
+				EFF2033B1B8E908F00487F7C /* ObjectRecipient.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1060,6 +1065,7 @@
 				EFDDD9B81B5AE89700089124 /* LoginRequest.m in Sources */,
 				EF3D09E31AE036EB0044E9F6 /* InboxViewController.m in Sources */,
 				EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */,
+				EFF2033C1B8E908F00487F7C /* ObjectRecipient.m in Sources */,
 				EF524AE51AAE239800F3B9AF /* NSData+keyVersionByte.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EFE43D411B5818110092CAC5 /* ContentTabBarController.m in Sources */,
