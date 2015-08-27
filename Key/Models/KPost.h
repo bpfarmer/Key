@@ -18,14 +18,14 @@
 
 @interface KPost : KDatabaseObject <KEncryptable, KThreadable>
 
-@property (nonatomic, readonly) NSString *authorId;
+@property (nonatomic) NSString *authorId;
 @property (nonatomic, readonly) NSString *text;
 @property (nonatomic) NSString *threadId;
 @property (nonatomic) NSData *preview;
 @property (nonatomic) BOOL ephemeral;
 @property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *readAt;
-@property (nonatomic, readonly) NSDate *createdAt;
+@property (nonatomic) NSDate *createdAt;
 @property (nonatomic) NSString *attachmentIds;
 @property (nonatomic) NSInteger attachmentCount;
 

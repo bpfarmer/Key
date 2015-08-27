@@ -34,9 +34,10 @@
     [super viewDidLoad];
     self.contactTextField.delegate = self;
     
+    
     NSMutableArray *data = [NSMutableArray arrayWithArray:self.sectionData];
     NSMutableArray *sectionData = [NSMutableArray arrayWithArray:self.sectionData[0]];
-    for(KUser *user in sectionData) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [sectionData removeObject:user];
+    for(KUser *user in self.sectionData[0]) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [sectionData removeObject:user];
     [sectionData insertObject:self.currentUser atIndex:0];
     [data replaceObjectAtIndex:0 withObject:sectionData];
     self.sectionData = data;

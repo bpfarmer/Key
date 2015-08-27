@@ -76,31 +76,44 @@ static NSString *TableViewCellIdentifier = @"Messages";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KPost notificationChannel] object:nil];
 }
 
++ (dispatch_queue_t)sharedQueue {
+    static dispatch_once_t pred;
+    static dispatch_queue_t sharedDispatchQueue;
+    
+    dispatch_once(&pred, ^{
+        sharedDispatchQueue = dispatch_queue_create("ThreadViewQueue", NULL);
+    });
+    
+    return sharedDispatchQueue;
+}
+
 - (void)databaseModified:(NSNotification *)notification {
-    if([notification.object isKindOfClass:[KMessage class]]) {
-        if(![((KMessage *)notification.object).threadId isEqualToString:self.thread.uniqueId]) return;
-        NSMutableArray *messages = [[NSMutableArray alloc] initWithArray:self.messages];
-        [messages addObject:[notification object]];
-        self.messages = [messages copy];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
-            [self scrollToBottomAnimated:YES];
-        });
-    }else if([notification.object isKindOfClass:[KPost class]]) {
-        KPost *post = (KPost *)notification.object;
-        if(post.attachmentCount == 0) return;
-        if(![post.threadId isEqualToString:self.thread.uniqueId]) {
-            if(![ObjectRecipient findByDictionary:@{@"objectId" : post.uniqueId, @"type" : NSStringFromClass(post.class), @"recipientId" : self.thread.recipientIds.firstObject}]) return;
+    dispatch_async([self.class sharedQueue], ^{
+        if([notification.object isKindOfClass:[KMessage class]]) {
+            if(![((KMessage *)notification.object).threadId isEqualToString:self.thread.uniqueId]) return;
+            NSMutableArray *messages = [[NSMutableArray alloc] initWithArray:self.messages];
+            [messages addObject:[notification object]];
+            self.messages = [messages copy];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
+                [self scrollToBottomAnimated:YES];
+            });
+        }else if([notification.object isKindOfClass:[KPost class]]) {
+            KPost *post = (KPost *)notification.object;
+            if(post.attachmentCount == 0) return;
+            if(![post.threadId isEqualToString:self.thread.uniqueId]) {
+                if(![ObjectRecipient findByDictionary:@{@"objectId" : post.uniqueId, @"type" : NSStringFromClass(post.class), @"recipientId" : self.thread.recipientIds.firstObject}]) return;
+            }
+            for(KDatabaseObject *object in self.messages) if([object.uniqueId isEqualToString:post.uniqueId]) return;
+            NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.messages];
+            [posts addObject:post];
+            self.messages = [posts copy];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
+                [self scrollToBottomAnimated:YES];
+            });
         }
-        for(KDatabaseObject *object in self.messages) if([object.uniqueId isEqualToString:post.uniqueId]) return;
-        NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.messages];
-        [posts addObject:post];
-        self.messages = [posts copy];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
-            [self scrollToBottomAnimated:YES];
-        });
-    }
+    });
 }
 
 

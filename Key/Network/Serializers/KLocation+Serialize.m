@@ -9,9 +9,10 @@
 #import "KLocation+Serialize.h"
 
 #define kCoderLocation @"location"
-#define kCoderUserUniqueId @"userUniqueId"
+#define kCoderAuthorId @"authorId"
 #define kCoderParentId @"parentId"
 #define kCoderAddress @"address"
+#define kCoderUniqueId @"uniqueId"
 
 @implementation KLocation(Serialize)
 
@@ -20,11 +21,16 @@
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
-    return [self initWithUserUniqueId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUserUniqueId] location:[aDecoder decodeObjectOfClass:[CLLocation class] forKey:kCoderLocation] parentId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderParentId] address:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderAddress]];
+    return [self initWithUniqueId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]
+                         authorId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderAuthorId]
+                         location:[aDecoder decodeObjectOfClass:[CLLocation class] forKey:kCoderLocation]
+                         parentId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderParentId]
+                          address:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderAddress]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:self.userUniqueId forKey:kCoderUserUniqueId];
+    [aCoder encodeObject:self.uniqueId forKey:kCoderUniqueId];
+    [aCoder encodeObject:self.authorId forKey:kCoderAuthorId];
     [aCoder encodeObject:self.location forKey:kCoderLocation];
     [aCoder encodeObject:self.parentId forKey:kCoderParentId];
     [aCoder encodeObject:self.address forKey:kCoderAddress];

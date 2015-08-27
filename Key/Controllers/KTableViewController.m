@@ -44,7 +44,7 @@
 }
 
 - (void)databaseModified:(NSNotification *)notification {
-    dispatch_async([[self class] sharedQueue], ^{
+    dispatch_async([self.class sharedQueue], ^{
         KDatabaseObject *object = (KDatabaseObject *)notification.object;
         [self.sectionCriteria enumerateObjectsUsingBlock:^(id obj, NSUInteger sectionId, BOOL *stop) {
             NSDictionary *sectionDictionary = (NSDictionary *)obj;
@@ -62,8 +62,10 @@
                     NSArray *currentCells = (NSArray *)self.sectionData[sectionId];
                     [currentCells enumerateObjectsUsingBlock:^(id obj, NSUInteger cellId, BOOL *stop) {
                         KDatabaseObject *currentObject = (KDatabaseObject *)obj;
-                        if([object.uniqueId isEqualToString:currentObject.uniqueId]) updatedIndex = cellId;
-                        *stop = YES;
+                        if([object.uniqueId isEqualToString:currentObject.uniqueId]) {
+                            updatedIndex = cellId;
+                            *stop = YES;
+                        }
                     }];
                     
                     NSMutableArray *updatedData  = [[NSMutableArray alloc] initWithArray:self.sectionData];
@@ -75,7 +77,7 @@
                     
                     __block NSInteger newCellId = 0;
                     if(self.sortedByProperty) {
-                        [updatedCells enumerateObjectsUsingBlock:^(id cell, NSUInteger replaceCellId, BOOL *stop) {
+                        [self.sectionData[sectionId] enumerateObjectsUsingBlock:^(id cell, NSUInteger replaceCellId, BOOL *stop) {
                             KDatabaseObject *compareObject = (KDatabaseObject *)cell;
                             if([KDatabaseObject compareProperty:self.sortedByProperty object1:object object2:compareObject]) {
                                 newCellId = replaceCellId;

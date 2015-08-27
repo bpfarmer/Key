@@ -63,7 +63,7 @@
             NSArray *userIds = @[authorId, [KAccountManager sharedManager].user.uniqueId];
             KThread *thread = [KThread findWithUserIds:userIds];
             if(!thread) {
-                thread = [[KThread alloc] initWithUsers:userIds];
+                thread = [[KThread alloc] initWithUsers:@[[KUser findById:authorId], [KAccountManager sharedManager].user]];
                 [thread save];
             }
             _threadId = thread.uniqueId;
@@ -93,7 +93,8 @@
     for(NSString *attachmentId in [self.attachmentIds componentsSeparatedByString:@"__"]) {
         NSString *className = [attachmentId componentsSeparatedByString:@"_"].firstObject;
         NSString *uniqueId  = [attachmentId componentsSeparatedByString:@"_"].lastObject;
-        [attachments addObject:[NSClassFromString(className) findById:uniqueId]];
+        KDatabaseObject *object = [NSClassFromString(className) findById:uniqueId];
+        if(object) [attachments addObject:object];
     }
     return [attachments copy];
 }

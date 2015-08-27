@@ -11,22 +11,22 @@
 
 @implementation KLocation
 
-- (instancetype)initWithUserUniqueId:(NSString *)userUniqueId location:(CLLocation *)location {
+- (instancetype)initWithAuthorId:(NSString *)authorId location:(CLLocation *)location {
     self = [super init];
     
     if(self) {
-        _userUniqueId = userUniqueId;
+        _authorId     = authorId;
         _location     = location;
         [self setCaption];
     }
     return self;
 }
 
-- (instancetype)initWithUserUniqueId:(NSString *)userUniqueId location:(CLLocation *)location parentId:(NSString *)parentId address:(NSString *)address{
-    self = [super init];
+- (instancetype)initWithUniqueId:(NSString *)uniqueId authorId:(NSString *)authorId location:(CLLocation *)location parentId:(NSString *)parentId address:(NSString *)address {
+    self = [super initWithUniqueId:uniqueId];
     
     if(self) {
-        _userUniqueId = userUniqueId;
+        _authorId     = authorId;
         _location     = location;
         _parentId     = parentId;
         _address      = address;

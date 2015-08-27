@@ -44,10 +44,11 @@
     
     NSMutableArray *newData = [NSMutableArray arrayWithArray:self.sectionData];
     NSMutableArray *newSectionData = [NSMutableArray arrayWithArray:self.sectionData[0]];
-    for(KUser *user in newSectionData) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [newSectionData removeObject:user];
+    for(KUser *user in self.sectionData[0]) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [newSectionData removeObject:user];
     [newSectionData insertObject:@"Everyone" atIndex:0];
     [newData replaceObjectAtIndex:0 withObject:newSectionData];
     self.sectionData = newData;
+    
     
     NSLog(@"EPHEMERAL SETTING: %d", self.ephemeral);
     if(![self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
@@ -58,6 +59,7 @@
         }
     }
 }
+
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSObject *object = [self objectForIndexPath:indexPath];
@@ -129,6 +131,14 @@
                 for(KUser *user in self.selectedRecipients) {
                     [recipientIds addObject:user.uniqueId];
                 }
+                for(NSString *recipientId in recipientIds) {
+                    ObjectRecipient *or = [[ObjectRecipient alloc] initWithType:NSStringFromClass([self.post class]) objectId:self.post.uniqueId recipientId:recipientId];
+                    [or save];
+                    if(![KThread findWithUserIds:@[recipientId, self.currentUser.uniqueId]]) {
+                        KThread *thread = [[KThread alloc] initWithUsers:@[[KUser findById:recipientId], self.currentUser]];
+                        [thread save];
+                    }
+                }
                 for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
                     [object setParentId:self.post.uniqueId];
                     if([object isKindOfClass:[KPhoto class]]) [self.post incrementAttachmentCount];
@@ -140,15 +150,6 @@
                 [futureDevices thenDo:^(id value) {
                     [FreeKey sendEncryptableObject:self.post attachableObjects:self.sendableObjects recipientIds:recipientIds];
                 }];
-                
-                for(NSString *recipientId in recipientIds) {
-                    ObjectRecipient *or = [[ObjectRecipient alloc] initWithType:NSStringFromClass([self.post class]) objectId:self.post.uniqueId recipientId:recipientId];
-                    [or save];
-                    if(![KThread findWithUserIds:@[recipientId, self.currentUser.uniqueId]]) {
-                        KThread *thread = [[KThread alloc] initWithUsers:@[recipientId, self.currentUser.uniqueId]];
-                        [thread save];
-                    }
-                }
             });
             [self.delegate dismissAndPresentViewController:nil];
         }

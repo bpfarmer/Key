@@ -25,6 +25,7 @@
         [userIds addObject:user.uniqueId];
         [usernames addObject:user.username];
     }
+    
     KThread *oldThread = [KThread findByDictionary:@{@"name" : [usernames componentsJoinedByString:@", "]}];
     if(oldThread) {
         self = oldThread;
@@ -33,6 +34,9 @@
     
     self = [super init];
     if (self) {
+        [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            return [obj1 compare:obj2];
+        }];
         _userIds = [userIds componentsJoinedByString:@"_"];
         _name = [usernames componentsJoinedByString:@", "];
     }
@@ -129,18 +133,12 @@
 }
 
 + (KThread *)findWithUserIds:(NSArray *)userIds {
-    NSString *combination1 = [NSString stringWithFormat:@"%@_%@", userIds.firstObject, userIds.lastObject];
-    NSString *combination2 = [NSString stringWithFormat:@"%@_%@", userIds.lastObject, userIds.firstObject];
-    
-    NSString *selectSQL = [NSString stringWithFormat:@"select * from %@ where user_ids = ? or user_ids = ?", [self tableName]];
-    
-    return (KThread *)[[KStorageManager sharedManager] querySelectObject:^KDatabaseObject *(FMDatabase *database) {
-        FMResultSet *result =  [database executeQuery:selectSQL withArgumentsInArray:@[combination1, combination2]];
-        KThread *thread;
-        if(result.next) thread = [[KThread alloc] initWithResultSetRow:result.resultDictionary];
-        [result close];
-        return thread;
+    NSMutableArray *sortableUserIds = [NSMutableArray arrayWithArray:userIds];
+    [sortableUserIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
     }];
+    
+    return [self findByDictionary:@{@"userIds" : [sortableUserIds componentsJoinedByString:@"_"]}];
 }
 
 - (NSArray *)messages {

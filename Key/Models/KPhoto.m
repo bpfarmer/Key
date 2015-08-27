@@ -31,8 +31,8 @@
     return self;
 }
 
-- (instancetype)initWithMedia:(NSData *)media ephemeral:(BOOL)ephemeral parentId:(NSString *)parentId {
-    self = [super initWithUniqueId:[self.class generateUniqueId]];
+- (instancetype)initWithUniqueId:(NSString *)uniqueId media:(NSData *)media ephemeral:(BOOL)ephemeral parentId:(NSString *)parentId {
+    self = [super initWithUniqueId:uniqueId];
     
     if(self) {
         _media = media;

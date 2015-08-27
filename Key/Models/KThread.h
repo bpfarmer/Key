@@ -37,7 +37,7 @@
 - (BOOL)saved;
 - (KMessage *)latestMessage;
 - (NSString *)latestMessageText;
-- (BOOL)isMoreRecentThan:(KThread *)thread;
 + (KThread *)findWithUserIds:(NSArray *)userIds;
+- (BOOL)isMoreRecentThan:(KThread *)thread;
 
 @end

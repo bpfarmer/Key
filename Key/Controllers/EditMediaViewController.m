@@ -169,7 +169,7 @@
             }
             [sendableObjects addObject:[[KPhoto alloc] initWithMedia:self.imageData]];
             if(self.locationEnabled) {
-                [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
+                [sendableObjects addObject:[[KLocation alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
             }
             [selectRecipientView setSendableObjects:sendableObjects];
             selectRecipientView.delegate = self;
@@ -180,7 +180,7 @@
             NSMutableArray *sendableObjects = [[NSMutableArray alloc] init];
             if(![self.captionTextField.text isEqual:@""]) self.imageData = [self renderImageWithCaption];
             [sendableObjects addObject:[[KPhoto alloc] initWithMedia:self.imageData]];
-            if(self.locationEnabled) [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
+            if(self.locationEnabled) [sendableObjects addObject:[[KLocation alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
             
             KPost *post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId threadId:self.thread.uniqueId];
             post.ephemeral = YES;
