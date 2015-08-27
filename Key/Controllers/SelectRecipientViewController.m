@@ -130,8 +130,8 @@
                     [recipientIds addObject:user.uniqueId];
                 }
                 for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
-                    //if([object isKindOfClass:[KPhoto class]]) [self.post incrementAttachmentCount];
                     [object setParentId:self.post.uniqueId];
+                    if([object isKindOfClass:[KPhoto class]]) [self.post incrementAttachmentCount];
                     [object save];
                     [self.post addAttachment:object];
                 }

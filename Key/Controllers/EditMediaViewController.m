@@ -176,28 +176,27 @@
             });
         }else {
             NSMutableArray *sendableObjects = [[NSMutableArray alloc] init];
-            if(![self.captionTextField.text isEqual:@""]) {
-                self.imageData = [self renderImageWithCaption];
-            }
+            if(![self.captionTextField.text isEqual:@""]) self.imageData = [self renderImageWithCaption];
             [sendableObjects addObject:[[KPhoto alloc] initWithMedia:self.imageData]];
-            if(self.locationEnabled) {
-                [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
-            }
-            NSLog(@"CURRENT COORDINATE: %@", [KAccountManager sharedManager].currentCoordinate);
+            if(self.locationEnabled) [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
             
             KPost *post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId threadId:self.thread.uniqueId];
-            [post save];
             for(KDatabaseObject <KAttachable> *object in sendableObjects) {
-                object.parentId = post.uniqueId;
-                NSLog(@"OBJECT TO SAVE: %@", object);
-                //if([object isKindOfClass:[KPhoto class]]) [post incrementAttachmentCount];
+                [object setParentId:post.uniqueId];
+                if([object isKindOfClass:[KPhoto class]]) [post incrementAttachmentCount];
                 [object save];
+                [post addAttachment:object];
             }
+            [post save];
+            
             TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:self.thread.recipientIds];
             [futureDevices thenDo:^(id value) {
                 [FreeKey sendEncryptableObject:post attachableObjects:sendableObjects recipientIds:self.thread.recipientIds];
             }];
-            [self dismissViewControllerAnimated:NO completion:nil];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self dismissViewControllerAnimated:NO completion:nil];
+            });
         }
     });
 }

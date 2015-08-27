@@ -140,7 +140,7 @@
 }
 
 - (NSData *)createThumbnailPreview {
-    KPhoto *photo = [KPhoto findByDictionary:@{@"parentId" : self.uniqueId}];
+    KPhoto *photo = self.photo;
     if(!photo || !photo.media) return nil;
     
     NSData *zippedMedia = [NSData dataWithContentsOfFile:self.filePath];
