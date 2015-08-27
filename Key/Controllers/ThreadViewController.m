@@ -20,6 +20,7 @@
 #import "DismissAndPresentProtocol.h"
 #import "KPost.h"
 #import "MediaViewController.h"
+#import "ObjectRecipient.h"
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
@@ -46,11 +47,14 @@ static NSString *TableViewCellIdentifier = @"Messages";
     self.senderId = currentUser.uniqueId;
     
     self.messages = @[];
-    self.posts    = @[];
     
     if(self.thread && self.thread.saved) {
-        self.messages = self.thread.messages;
-        self.posts    = self.thread.posts;
+        NSMutableArray *messages = [NSMutableArray arrayWithArray:self.thread.messages];
+        [messages addObjectsFromArray:self.thread.posts];
+        [messages sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [[obj1 createdAt] compare:[obj2 createdAt]];
+        }];
+        self.messages = [messages copy];
     }
     
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
@@ -68,6 +72,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
     //[self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KMessage notificationChannel] object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KPost notificationChannel] object:nil];
 }
 
 - (void)databaseModified:(NSNotification *)notification {
@@ -75,7 +80,21 @@ static NSString *TableViewCellIdentifier = @"Messages";
         if(![((KMessage *)notification.object).threadId isEqualToString:self.thread.uniqueId]) return;
         NSMutableArray *messages = [[NSMutableArray alloc] initWithArray:self.messages];
         [messages addObject:[notification object]];
-        self.messages = [[NSArray alloc] initWithArray:messages];
+        self.messages = [messages copy];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
+            [self scrollToBottomAnimated:YES];
+        });
+    }else if([notification.object isKindOfClass:[KPost class]]) {
+        KPost *post = (KPost *)notification.object;
+        if(post.attachmentCount == 0) return;
+        if(![post.threadId isEqualToString:self.thread.uniqueId]) {
+            if(![ObjectRecipient findByDictionary:@{@"objectId" : post.uniqueId, @"type" : NSStringFromClass(post.class), @"recipientId" : self.thread.recipientIds.firstObject}]) return;
+        }
+        for(KDatabaseObject *object in self.messages) if([object.uniqueId isEqualToString:post.uniqueId]) return;
+        NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.messages];
+        [posts addObject:post];
+        self.messages = [posts copy];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:(self.messages.count - 1) inSection:0]]];
             [self scrollToBottomAnimated:YES];
@@ -108,7 +127,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.messages.count + self.posts.count;
+    return self.messages.count;
 }
 
 - (id <JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -134,8 +153,8 @@ static NSString *TableViewCellIdentifier = @"Messages";
         cell.textView.textColor = [UIColor whiteColor];
     }
     
-    if(indexPath.row > self.messages.count) {
-        cell.messageBubbleImageView.image = [UIImage imageWithData:[self postAtIndexPath:indexPath].previewImage];
+    if([self.messages[indexPath.row] isKindOfClass:[KPost class]]) {
+        cell.messageBubbleImageView.image = [UIImage imageWithData:((KPost *)self.messages[indexPath.row]).previewImage];
     }
 
     
@@ -144,17 +163,13 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 
 - (id<JSQMessageData>)messageAtIndexPath:(NSIndexPath *)indexPath {
-    if(indexPath.row < self.messages.count)
+    if([self.messages[indexPath.row] isKindOfClass:[KMessage class]])
         return self.messages[indexPath.row];
     else {
-        KPost *post = [self postAtIndexPath:indexPath];
+        KPost *post = self.messages[indexPath.row];
         JSQPhotoMediaItem *photoItem = [[JSQPhotoMediaItem alloc] initWithImage:[UIImage imageWithData:post.previewImage]];
         return [JSQMessage messageWithSenderId:post.authorId displayName:post.author.username media:photoItem];
     }
-}
-                                        
-- (KPost *)postAtIndexPath:(NSIndexPath *)indexPath {
-    return self.posts[indexPath.row - self.messages.count];
 }
 
 
@@ -171,9 +186,9 @@ static NSString *TableViewCellIdentifier = @"Messages";
 
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath {
     [super collectionView:collectionView didTapMessageBubbleAtIndexPath:indexPath];
-    if(indexPath.row >= self.messages.count) {
+    if([self.messages[indexPath.row] isKindOfClass:[KPost class]]) {
         MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
-        mediaViewController.post = [self postAtIndexPath:indexPath];
+        mediaViewController.post = (KPost *)self.messages[indexPath.row];
         [self presentViewController:mediaViewController animated:NO completion:nil];
     }
 }

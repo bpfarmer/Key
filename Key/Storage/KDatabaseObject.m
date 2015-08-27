@@ -258,19 +258,6 @@
     }];
 }
 
-+ (NSArray *)findAllBySQL:(NSString *)sql parameterDictionary:(NSDictionary *)parameterDictionary {
-    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
-        NSMutableArray *results = [NSMutableArray new];
-        FMResultSet *result = [database executeQuery:sql withParameterDictionary:parameterDictionary];
-        while(result.next) {
-            KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
-            [results addObject:object];
-        }
-        [result close];
-        return [results copy];
-    }];
-}
-
 - (instancetype)initWithUniqueId:(NSString *)uniqueId {
     self = [super init];
     if(self) _uniqueId = uniqueId;

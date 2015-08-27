@@ -142,14 +142,21 @@
 }
 
 - (NSArray *)posts {
-    NSMutableArray *posts = [NSMutableArray arrayWithArray:[KPost findAllByDictionary:@{@"threadId" : self.uniqueId} orderBy:@"createdAt" descending:NO]];
     NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"type" : NSStringFromClass([KPost class]), @"recipientId" : self.recipientIds.firstObject}];
-    NSLog(@"OBJECT RECIPIENTS: %@", objectRecipients);
-    NSMutableArray *postIds = [NSMutableArray new];
-    for(ObjectRecipient *or in objectRecipients) [postIds addObject:or.objectId];
-    NSLog(@"POST IDS: %@", postIds);
-    [posts addObjectsFromArray:[KPost findAllByIds:[postIds copy]]];
-    return [posts copy];
+    NSMutableArray *postIds = [NSMutableArray arrayWithObject:self.uniqueId];
+    NSMutableArray *questionMarks = [NSMutableArray new];
+    for(ObjectRecipient *or in objectRecipients) {
+        [postIds addObject:or.objectId];
+        [questionMarks addObject:@"?"];
+    }
+    NSString *selectSQL = [NSString stringWithFormat:@"select * from %@ where thread_id = :thread_id or unique_id in (%@)", [KPost tableName], [questionMarks componentsJoinedByString:@" , "]];
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        FMResultSet *result =  [database executeQuery:selectSQL withArgumentsInArray:postIds];
+        NSMutableArray *posts = [[NSMutableArray alloc] init];
+        while(result.next) [posts addObject:[[KPost alloc] initWithResultSetRow:result.resultDictionary]];
+        [result close];
+        return [posts copy];
+    }];
 }
 
 - (KMessage *)latestMessage {

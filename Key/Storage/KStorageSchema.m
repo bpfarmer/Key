@@ -77,6 +77,7 @@
     [self addColumn:@"attachment_count" toTable:[KPost tableName] withType:@"integer"];
     [self addColumn:@"thread_id" toTable:[KPost tableName] withType:@"string"];
     [self addColumn:@"read_at" toTable:[KMessage tableName] withType:@"double"];
+    [self addColumn:@"read_at" toTable:[KPost tableName] withType:@"double"];
 }
 
 + (void)addColumn:(NSString *)column toTable:(NSString *)table withType:(NSString *)type {

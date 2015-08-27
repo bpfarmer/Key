@@ -28,7 +28,6 @@
 + (instancetype)findByDictionary:(NSDictionary *)dictionary;
 + (NSArray *)findAllByDictionary:(NSDictionary *)dictionary;
 + (NSArray *)findAllByDictionary:(NSDictionary *)dictionary orderBy:(NSString *)orderProperty descending:(BOOL)descending;
-+ (NSArray *)findAllBySQL:(NSString *)sql parameterDictionary:(NSDictionary *)parameterDictionary;
 + (NSArray *)findAllByIds:(NSArray *)ids;
 + (NSArray *)all;
 + (NSArray *)storedPropertyList;

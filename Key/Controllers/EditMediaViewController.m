@@ -157,6 +157,8 @@
 }
 
 - (IBAction)didPressPost:(id)sender {
+    [self.view endEditing:YES];
+    self.captionTextField.textAlignment = NSTextAlignmentCenter;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if(!self.thread) {
             SelectRecipientViewController *selectRecipientView = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
@@ -181,6 +183,7 @@
             if(self.locationEnabled) [sendableObjects addObject:[[KLocation alloc] initWithUserUniqueId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
             
             KPost *post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId threadId:self.thread.uniqueId];
+            post.ephemeral = YES;
             for(KDatabaseObject <KAttachable> *object in sendableObjects) {
                 [object setParentId:post.uniqueId];
                 if([object isKindOfClass:[KPhoto class]]) [post incrementAttachmentCount];
