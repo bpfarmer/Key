@@ -113,17 +113,10 @@
     if(self.selectedRecipients.count > 0) {
         if([self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
             KThread *thread = [self setupThread];
+            [thread save];
             ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
             threadViewController.thread = thread;
             [self.delegate dismissAndPresentThread:thread];
-            dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-            dispatch_async(queue, ^{
-                [thread save];
-                TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:thread.recipientIds];
-                [futureDevices thenDo:^(id value) {
-                    [FreeKey sendEncryptableObject:thread recipientIds:thread.recipientIds];
-                }];
-            });
         }else {
             dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
             dispatch_async(queue, ^{
@@ -134,10 +127,6 @@
                 for(NSString *recipientId in recipientIds) {
                     ObjectRecipient *or = [[ObjectRecipient alloc] initWithType:NSStringFromClass([self.post class]) objectId:self.post.uniqueId recipientId:recipientId];
                     [or save];
-                    if(![KThread findWithUserIds:@[recipientId, self.currentUser.uniqueId]]) {
-                        KThread *thread = [[KThread alloc] initWithUsers:@[[KUser findById:recipientId], self.currentUser]];
-                        [thread save];
-                    }
                 }
                 for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
                     [object setParentId:self.post.uniqueId];

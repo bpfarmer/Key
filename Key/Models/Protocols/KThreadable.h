@@ -8,9 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class KThread;
+
 @protocol KThreadable
 
 @property (nonatomic) NSString *authorId;
 @property (nonatomic) NSDate   *createdAt;
+@property (nonatomic) NSString *threadId;
 
 @end

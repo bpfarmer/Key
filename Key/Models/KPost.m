@@ -20,6 +20,7 @@
 #import "NSDate+TimeAgo.h"
 #import "KThread.h"
 #import "KAccountManager.h"
+#import "ObjectRecipient.h"
 
 @implementation KPost
 
@@ -27,24 +28,23 @@
     return [KUser findById:self.authorId];
 }
 
+- (KThread *)thread {
+    if(self.threadId) {
+        KThread *thread = [KThread findById:self.threadId];
+        if(!thread) {
+            thread = [[KThread alloc] initWithUserIds:[self.threadId componentsSeparatedByString:@"_"]];
+            [thread save];
+        }
+        return thread;
+    }
+    return nil;
+}
+
 - (instancetype)initWithAuthorId:(NSString *)authorId {
     self = [super init];
     
     if(self) {
         _authorId        = authorId;
-        _createdAt       = [NSDate date];
-        _read            = NO;
-    }
-    
-    return self;
-}
-
-- (instancetype)initWithAuthorId:(NSString *)authorId threadId:(NSString *)threadId {
-    self = [super init];
-    
-    if(self) {
-        _authorId        = authorId;
-        _threadId        = threadId;
         _createdAt       = [NSDate date];
         _read            = NO;
     }
@@ -60,13 +60,11 @@
         if(threadId) {
             _threadId = threadId;
         }else {
-            NSArray *userIds = @[authorId, [KAccountManager sharedManager].user.uniqueId];
-            KThread *thread = [KThread findWithUserIds:userIds];
-            if(!thread) {
-                thread = [[KThread alloc] initWithUsers:@[[KUser findById:authorId], [KAccountManager sharedManager].user]];
-                [thread save];
-            }
-            _threadId = thread.uniqueId;
+            NSMutableArray *userIds = [NSMutableArray arrayWithArray:@[authorId, [KAccountManager sharedManager].user.uniqueId]];
+            [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+                return [obj1 compare:obj2];
+            }];
+            _threadId = [userIds componentsJoinedByString:@"_"];
         }
         _text            = text;
         _createdAt       = createdAt;
@@ -80,7 +78,42 @@
 
 - (void)save {
     [super save];
-    [self.thread processLatestMessage:self];
+    [self processForThread];
+}
+
+- (void)processForThread {
+    if(self.threadId) [[KThread findById:self.threadId] processLatestMessage:self];
+    else {
+        if([self.authorId isEqualToString:[KAccountManager sharedManager].user.uniqueId]) {
+            NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"objectId" : self.uniqueId, @"type" : NSStringFromClass(self.class)}];
+            for(ObjectRecipient *or in objectRecipients) {
+                NSMutableArray *userIds = [NSMutableArray arrayWithObjects:or.recipientId, self.authorId, nil];
+                [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+                    return [obj1 compare:obj2];
+                }];
+                KThread *thread = [KThread findById:[userIds componentsJoinedByString:@"_"]];
+                if(!thread) {
+                    thread = [[KThread alloc] initWithUserIds:userIds];
+                    [thread save];
+                }
+                [thread processLatestMessage:self];
+            }
+        }else {
+            NSMutableArray *userIds = [NSMutableArray arrayWithObjects:self.authorId, [KAccountManager sharedManager].user.uniqueId, nil];
+            [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+                return [obj1 compare:obj2];
+            }];
+            NSLog(@"TRYING TO FIND THREAD WITH: %@", userIds);
+            KThread *thread = [KThread findById:[userIds componentsJoinedByString:@"_"]];
+            if(!thread) {
+                NSLog(@"TRYING TO FIND THREAD WITH: %@", userIds);
+                thread = [[KThread alloc] initWithUserIds:userIds];
+                [thread save];
+            }
+            [thread processLatestMessage:self];
+        }
+    }
+    
 }
 
 - (NSString *)generateUniqueId {
@@ -242,10 +275,6 @@
 - (void)decrementAttachmentCount {
     if(self.attachmentCount > 0) self.attachmentCount = self.attachmentCount - 1;
     [self save];
-}
-
-- (KThread *)thread {
-    return [KThread findById:self.threadId];
 }
 
 @end

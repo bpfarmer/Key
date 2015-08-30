@@ -15,6 +15,7 @@
 #import "KPost.h"
 #import "FreeKey.h"
 #import "CollapsingFutures.h"
+#import "ObjectRecipient.h"
 
 @interface EditMediaViewController () <DismissAndPresentProtocol, UIGestureRecognizerDelegate, UITextFieldDelegate>
 
@@ -182,15 +183,15 @@
             [sendableObjects addObject:[[KPhoto alloc] initWithMedia:self.imageData]];
             if(self.locationEnabled) [sendableObjects addObject:[[KLocation alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate]];
             
-            KPost *post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId threadId:self.thread.uniqueId];
+            KPost *post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId];
+            post.threadId = self.thread.uniqueId;
             post.ephemeral = YES;
-            for(KDatabaseObject <KAttachable> *object in sendableObjects) {
-                [object setParentId:post.uniqueId];
-                if([object isKindOfClass:[KPhoto class]]) [post incrementAttachmentCount];
-                [object save];
-                [post addAttachment:object];
-            }
             [post save];
+            
+            for(NSString *recipientId in self.thread.recipientIds) {
+                ObjectRecipient *or = [[ObjectRecipient alloc] initWithType:NSStringFromClass([post class]) objectId:post.uniqueId recipientId:recipientId];
+                [or save];
+            }
             
             TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:self.thread.recipientIds];
             [futureDevices thenDo:^(id value) {

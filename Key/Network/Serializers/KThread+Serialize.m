@@ -24,7 +24,6 @@
 - (id)initWithCoder:(NSCoder *)decoder {
     
     return [self initWithUniqueId:[decoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]
-                          userIds:[decoder decodeObjectOfClass:[NSArray class] forKey:kCoderUserIds]
                              name:[decoder decodeObjectOfClass:[NSString class] forKey:kCoderName]
                   latestMessageId:[decoder decodeObjectOfClass:[KMessage class] forKey:kCoderLatestMessage]
                              read:[decoder decodeBoolForKey:kCoderRead]];
@@ -32,7 +31,6 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder {
     [encoder encodeObject:self.uniqueId forKey:kCoderUniqueId];
-    [encoder encodeObject:self.userIds forKey:kCoderUserIds];
     [encoder encodeObject:self.name forKey:kCoderName];
     [encoder encodeObject:self.latestMessageId forKey:kCoderLatestMessage];
     [encoder encodeBool:self.read forKey:kCoderRead];

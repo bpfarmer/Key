@@ -39,7 +39,6 @@
                  attachmentCount:(NSInteger)attachmentCount;
 
 - (instancetype)initWithAuthorId:(NSString *)authorId;
-- (instancetype)initWithAuthorId:(NSString *)authorId threadId:(NSString *)threadId;
 - (NSArray *)attachments;
 - (KUser *)author;
 - (NSData *)previewImage;

@@ -16,14 +16,13 @@
 @interface KThread : KDatabaseObject <KEncryptable>
 
 @property (nonatomic) NSString *name;
-@property (nonatomic) NSString *userIds;
 @property (nonatomic) NSString *latestMessageId;
 @property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *updatedAt;
 
 - (instancetype)initWithUsers:(NSArray *)user;
+- (instancetype)initWithUserIds:(NSArray *)userIds;
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
-                         userIds:(NSString *)userIds
                             name:(NSString *)name
                  latestMessageId:(NSString *)latestMessageId
                             read:(BOOL)read;
@@ -39,5 +38,6 @@
 - (NSString *)latestMessageText;
 + (KThread *)findWithUserIds:(NSArray *)userIds;
 - (BOOL)isMoreRecentThan:(KThread *)thread;
+- (NSString *)userIds;
 
 @end

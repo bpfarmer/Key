@@ -44,6 +44,8 @@
 }
 
 - (void)databaseModified:(NSNotification *)notification {
+    NSLog(@"NEW OBJECT: %@", notification.object);
+    NSLog(@"CURRENT OBJECTS: %@", self.sectionData);
     dispatch_async([self.class sharedQueue], ^{
         KDatabaseObject *object = (KDatabaseObject *)notification.object;
         [self.sectionCriteria enumerateObjectsUsingBlock:^(id obj, NSUInteger sectionId, BOOL *stop) {

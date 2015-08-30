@@ -25,7 +25,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [[PushManager sharedManager] registerForRemoteNotifications];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-
+    UIViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    [self.window setRootViewController:loginViewController];
+    
     if([KAccountManager sharedManager].user || [[KAccountManager sharedManager] setUserFromPlist]) {
         [[PushManager sharedManager] requestPermissionsForUser:[KAccountManager sharedManager].user];
         UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"MainNavigationController"];

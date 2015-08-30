@@ -90,7 +90,8 @@
     [[KStorageManager sharedManager] resignDatabase];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle: nil];
     LoginViewController *loginView = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-    [self presentViewController:loginView animated:YES completion:nil];
+    [[UIApplication sharedApplication].keyWindow setRootViewController:loginView];
+    [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 

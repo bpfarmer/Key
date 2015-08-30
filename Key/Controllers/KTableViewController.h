@@ -12,9 +12,9 @@
 
 @interface KTableViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, strong) NSArray *sectionCriteria;
-@property (nonatomic, strong) NSArray *sectionData;
+@property (nonatomic) UITableView *tableView;
+@property (nonatomic) NSArray *sectionCriteria;
+@property (nonatomic) NSArray *sectionData;
 @property (nonatomic) NSString *sortedByProperty;
 @property (nonatomic) BOOL sortDescending;
 

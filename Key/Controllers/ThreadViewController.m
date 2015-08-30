@@ -48,7 +48,9 @@ static NSString *TableViewCellIdentifier = @"Messages";
     
     self.messages = @[];
     
-    NSLog(@"MESSAGE COUNT: %@", [KMessage findAllByDictionary:@{@"threadId" : self.thread.uniqueId}]);
+    NSLog(@"THREAD ID: %@", self.thread.uniqueId);
+    for(KPost *post in [KPost all]) NSLog(@"POST THREAD ID: %@", post.threadId);
+    
     if(self.thread && self.thread.saved) {
         NSMutableArray *messages = [NSMutableArray arrayWithArray:self.thread.messages];
         [messages addObjectsFromArray:self.thread.posts];

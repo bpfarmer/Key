@@ -65,7 +65,7 @@
 }
 
 - (KThread *)thread {
-    return [KThread findById:self.threadId];
+    return [[KThread alloc] initWithUserIds:[self.threadId componentsSeparatedByString:@"_"]];
 }
 
 - (NSString *)text {

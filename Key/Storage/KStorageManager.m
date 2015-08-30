@@ -17,7 +17,6 @@
 #import "KStorageSchema.h"
 
 NSString *const KUIDatabaseConnectionDidUpdateNotification = @"KUIDatabaseConnectionDidUpdateNotification";
-//TODO: Note that these are a single queue right now
 NSString *const kDatabaseWriteQueue = @"dbWriteQueue";
 NSString *const kDatabaseReadQueue  = @"dbWriteQueue";
 

@@ -15,6 +15,7 @@
 #import "KMessage.h"
 #import "KPost.h"
 #import "ObjectRecipient.h"
+#import "CollapsingFutures.h"
 
 @implementation KThread
 
@@ -26,52 +27,43 @@
         [usernames addObject:user.username];
     }
     
-    KThread *oldThread = [KThread findByDictionary:@{@"name" : [usernames componentsJoinedByString:@", "]}];
+    [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    KThread *oldThread = [KThread findById:[userIds componentsJoinedByString:@"_"]];
     if(oldThread) {
         self = oldThread;
         return self;
     }
     
-    self = [super init];
+    self = [super initWithUniqueId:[userIds componentsJoinedByString:@"_"]];
     if (self) {
-        [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-            return [obj1 compare:obj2];
-        }];
-        _userIds = [userIds componentsJoinedByString:@"_"];
         _name = [usernames componentsJoinedByString:@", "];
     }
     return self;
 }
 
-- (instancetype)initWithUniqueId:(NSString *)uniqueId
-                         userIds:(NSString *)userIds
-                            name:(NSString *)name
-                 latestMessageId:(NSString *)latestMessageId
-                            read:(BOOL)read {
-    
+- (instancetype)initWithUserIds:(NSArray *)userIds {
+    KThread *oldThread = [KThread findById:[userIds componentsJoinedByString:@"_"]];
+    if(oldThread) return oldThread;
+    self = [super initWithUniqueId:[userIds componentsJoinedByString:@"_"]];
+    NSMutableArray *usernames = [NSMutableArray new];
+    for(NSString *userId in userIds) {
+        [usernames addObject:[KUser findById:userId].username];
+    }
+    _name = [usernames componentsJoinedByString:@", "];
+    return self;
+}
+
+- (instancetype)initWithUniqueId:(NSString *)uniqueId name:(NSString *)name latestMessageId:(NSString *)latestMessageId read:(BOOL)read {
     self = [super initWithUniqueId:uniqueId];
     if (self) {
-        _name = name;
-        _userIds            = userIds;
+        _name               = name;
         _latestMessageId    = latestMessageId;
         _read               = read;
     }
     return self;
-}
-
-- (instancetype)initWithRemoteId:(NSString *)threadId {
-    NSArray *userIds = [threadId componentsSeparatedByString:@"_"];
-    [userIds enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        KUser *user = [KUser findById:obj];
-        if(!user) {
-            [KUser asyncRetrieveWithUniqueId:obj];
-        }
-    }];
-    return [self initWithUniqueId:threadId
-                          userIds:[userIds componentsJoinedByString:@"_"]
-                             name:nil
-                  latestMessageId:nil
-                             read:NO];
 }
 
 - (void)processLatestMessage:(KDatabaseObject <KThreadable> *)message {
@@ -113,6 +105,10 @@
     return [names componentsJoinedByString:@", "];
 }
 
+- (NSString *)userIds {
+    return self.uniqueId;
+}
+
 - (NSArray *)recipientIds {
     KUser *localUser = [KAccountManager sharedManager].user;
     NSMutableArray *recipientIds = [NSMutableArray arrayWithArray:[self.userIds componentsSeparatedByString:@"_"]];
@@ -138,7 +134,7 @@
         return [obj1 compare:obj2];
     }];
     
-    return [self findByDictionary:@{@"userIds" : [sortableUserIds componentsJoinedByString:@"_"]}];
+    return [self findById:[sortableUserIds componentsJoinedByString:@"_"]];
 }
 
 - (NSArray *)messages {
