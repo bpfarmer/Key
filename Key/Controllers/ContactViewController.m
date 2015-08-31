@@ -34,17 +34,18 @@
     [super viewDidLoad];
     self.contactTextField.delegate = self;
     
-    
-    NSMutableArray *data = [NSMutableArray arrayWithArray:self.sectionData];
-    NSMutableArray *sectionData = [NSMutableArray arrayWithArray:self.sectionData[0]];
-    for(KUser *user in self.sectionData[0]) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [sectionData removeObject:user];
-    [sectionData insertObject:self.currentUser atIndex:0];
-    [data replaceObjectAtIndex:0 withObject:sectionData];
-    self.sectionData = data;
-    
     UITapGestureRecognizer *tapRec = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)];
     [tapRec setCancelsTouchesInView:NO];
     [self.view addGestureRecognizer:tapRec];
+}
+
+- (NSArray *)modifySectionData:(NSArray *)sectionData {
+    NSMutableArray *data = [NSMutableArray arrayWithArray:sectionData];
+    NSMutableArray *newSectionData = [NSMutableArray arrayWithArray:sectionData[0]];
+    for(KUser *user in sectionData[0]) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [newSectionData removeObject:user];
+    [newSectionData insertObject:self.currentUser atIndex:0];
+    [data replaceObjectAtIndex:0 withObject:sectionData];
+    return [data copy];
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {

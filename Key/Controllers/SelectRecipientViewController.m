@@ -42,15 +42,6 @@
     
     self.ephemeral = NO;
     
-    NSMutableArray *newData = [NSMutableArray arrayWithArray:self.sectionData];
-    NSMutableArray *newSectionData = [NSMutableArray arrayWithArray:self.sectionData[0]];
-    for(KUser *user in self.sectionData[0]) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [newSectionData removeObject:user];
-    [newSectionData insertObject:@"Everyone" atIndex:0];
-    [newData replaceObjectAtIndex:0 withObject:newSectionData];
-    self.sectionData = newData;
-    
-    
-    NSLog(@"EPHEMERAL SETTING: %d", self.ephemeral);
     if(![self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
         if(!self.post) {
             self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId];
@@ -58,6 +49,15 @@
             self.post.ephemeral = self.ephemeral;
         }
     }
+}
+
+- (NSArray *)modifySectionData:(NSArray *)sectionData {
+    NSMutableArray *newData = [NSMutableArray arrayWithArray:sectionData];
+    NSMutableArray *newSectionData = [NSMutableArray arrayWithArray:sectionData[0]];
+    for(KUser *user in sectionData[0]) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [newSectionData removeObject:user];
+    [newSectionData insertObject:@"Everyone" atIndex:0];
+    [newData replaceObjectAtIndex:0 withObject:newSectionData];
+    return [newData copy];
 }
 
 

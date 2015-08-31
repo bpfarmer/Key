@@ -21,5 +21,6 @@
 - (KDatabaseObject *)objectForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)cellIdentifier;
 + (dispatch_queue_t)sharedQueue;
+- (NSArray *)modifySectionData:(NSArray *)sectionData;
 
 @end

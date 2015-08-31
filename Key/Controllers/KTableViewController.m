@@ -23,13 +23,15 @@
     self.tableView.allowsMultipleSelection = YES;
     [self.tableView registerClass:[SubtitleTableViewCell class] forCellReuseIdentifier:[self cellIdentifier]];
     
-    NSMutableArray *newSectionData = [NSMutableArray new];
-    NSEnumerator *sectionCriteriaEnumerator = [self.sectionCriteria objectEnumerator];
-    for(NSDictionary *sectionDictionary in sectionCriteriaEnumerator) {
-        [newSectionData addObject:[NSClassFromString(sectionDictionary[@"class"]) findAllByDictionary:sectionDictionary[@"criteria"] orderBy:self.sortedByProperty descending:self.sortDescending]];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[NSClassFromString(sectionDictionary[@"class"]) notificationChannel] object:nil];
-    };
-    self.sectionData = [newSectionData copy];
+    dispatch_async([self.class sharedQueue], ^{
+        NSMutableArray *newSectionData = [NSMutableArray new];
+        NSEnumerator *sectionCriteriaEnumerator = [self.sectionCriteria objectEnumerator];
+        for(NSDictionary *sectionDictionary in sectionCriteriaEnumerator) {
+            [newSectionData addObject:[NSClassFromString(sectionDictionary[@"class"]) findAllByDictionary:sectionDictionary[@"criteria"] orderBy:self.sortedByProperty descending:self.sortDescending]];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[NSClassFromString(sectionDictionary[@"class"]) notificationChannel] object:nil];
+        };
+        self.sectionData = [self modifySectionData:[newSectionData copy]];
+    });
 }
 
 + (dispatch_queue_t)sharedQueue {
@@ -41,6 +43,10 @@
     });
     
     return sharedDispatchQueue;
+}
+
+- (NSArray *)modifySectionData:(NSArray *)sectionData {
+    return sectionData;
 }
 
 - (void)databaseModified:(NSNotification *)notification {
@@ -61,8 +67,7 @@
                 }];
                 if(matchesCriteria) {
                     __block NSUInteger updatedIndex = -1;
-                    NSArray *currentCells = (NSArray *)self.sectionData[sectionId];
-                    [currentCells enumerateObjectsUsingBlock:^(id obj, NSUInteger cellId, BOOL *stop) {
+                    [(NSArray *)self.sectionData[sectionId] enumerateObjectsUsingBlock:^(id obj, NSUInteger cellId, BOOL *stop) {
                         KDatabaseObject *currentObject = (KDatabaseObject *)obj;
                         if([object.uniqueId isEqualToString:currentObject.uniqueId]) {
                             updatedIndex = cellId;

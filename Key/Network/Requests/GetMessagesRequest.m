@@ -19,7 +19,8 @@
 @implementation GetMessagesRequest
 
 - (instancetype)initWithCurrentUserId:(NSString *)currentUserId {
-    NSDictionary *parameters = @{kMessageCurrentUserId : currentUserId};
+    NSDictionary *parameters;
+    if(currentUserId) parameters = @{kMessageCurrentUserId : currentUserId};
     return [super initWithHttpMethod:GET endpoint:kFeedEndpoint parameters:parameters];
 }
 
