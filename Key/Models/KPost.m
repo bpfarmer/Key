@@ -82,8 +82,11 @@
 }
 
 - (void)processForThread {
-    if(self.threadId) [[KThread findById:self.threadId] processLatestMessage:self];
-    else {
+    if(self.threadId) {
+        KThread *thread = [KThread findById:self.threadId];
+        if(!thread) thread = [[KThread alloc] initWithUserIds:[self.threadId componentsSeparatedByString:@"_"]];
+        [thread processLatestMessage:self];
+    }else {
         if([self.authorId isEqualToString:[KAccountManager sharedManager].user.uniqueId]) {
             NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"objectId" : self.uniqueId}];
             for(ObjectRecipient *or in objectRecipients) {
@@ -103,10 +106,8 @@
             [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
                 return [obj1 compare:obj2];
             }];
-            NSLog(@"TRYING TO FIND THREAD WITH: %@", userIds);
             KThread *thread = [KThread findById:[userIds componentsJoinedByString:@"_"]];
             if(!thread) {
-                NSLog(@"TRYING TO FIND THREAD WITH: %@", userIds);
                 thread = [[KThread alloc] initWithUserIds:userIds];
                 [thread save];
             }

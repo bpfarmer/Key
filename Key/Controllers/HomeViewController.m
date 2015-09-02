@@ -37,8 +37,8 @@ static NSString *TableViewCellIdentifier = @"Threads";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    for(KThread *thread in [KThread all]) [thread remove];
-    for(KPost *post in [KPost all]) [post remove];
+    //for(KThread *thread in [KThread all]) [thread remove];
+    //for(KPost *post in [KPost all]) [post remove];
     ContentViewController *contentVC = [ContentViewController new];
     [[NSBundle mainBundle] loadNibNamed:@"ContentView" owner:contentVC options:nil];
     

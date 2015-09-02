@@ -113,10 +113,11 @@ static NSString *TableViewCellIdentifier = @"Messages";
                 [self scrollToBottomAnimated:YES];
             });
         }else if([notification.object isKindOfClass:[KPost class]]) {
+            NSLog(@"POST: %@", notification.object);
             KPost *post = (KPost *)notification.object;
-            if(post.attachmentCount == 0) return;
+            //if(post.attachmentCount == 0) return;
             if(![post.threadId isEqualToString:self.thread.uniqueId]) {
-                if(![ObjectRecipient findByDictionary:@{@"objectId" : post.uniqueId, @"type" : NSStringFromClass(post.class), @"recipientId" : self.thread.recipientIds.firstObject}]) return;
+                if(![ObjectRecipient findByDictionary:@{@"objectId" : post.uniqueId, @"recipientId" : self.thread.recipientIds.firstObject}]) return;
             }
             for(KDatabaseObject *object in self.messages) if([object.uniqueId isEqualToString:post.uniqueId]) return;
             NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.messages];
@@ -244,8 +245,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
         }
     }
 }
-
-
 
 - (void)didPressAccessoryButton:(UIButton *)sender {
     ShareViewController *shareViewController = [[ShareViewController alloc] initWithNibName:@"ShareView" bundle:nil];

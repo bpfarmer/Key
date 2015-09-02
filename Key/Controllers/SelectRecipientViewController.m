@@ -105,9 +105,8 @@
         if(self.selectedRecipients.count > 1) {
             NSMutableArray *selectedRecipientIds = [NSMutableArray new];
             for(KDatabaseObject *recipient in self.selectedRecipients) [selectedRecipientIds addObject:recipient.uniqueId];
-            [self.sendableObject sendToRecipientIds:selectedRecipientIds withAttachableObjects:self.attachableObjects];
             [self.sendableObject save];
-            NSLog(@"CREATED OBJECT: %@", self.sendableObject);
+            [self.sendableObject sendToRecipientIds:selectedRecipientIds withAttachableObjects:self.attachableObjects];
             if(self.sendingDelegate) [self.sendingDelegate setSendableObject:self.sendableObject];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.delegate dismissAndPresentViewController:nil];

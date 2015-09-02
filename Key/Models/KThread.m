@@ -26,11 +26,7 @@
 }
 
 - (instancetype)initWithUserIds:(NSArray *)userIds {
-    NSMutableArray *users = [NSMutableArray new];
-    for(NSString *userId in [userIds objectEnumerator]) {
-        [users addObject:[KUser findById:userId]];
-    }
-    [self addRecipients:[users copy]];
+    [self addRecipientIds:userIds];
     if([KThread findById:self.uniqueId]) return [KThread findById:self.uniqueId];
     return self;
 }
@@ -43,6 +39,11 @@
         _read               = read;
     }
     return self;
+}
+
+- (void)save {
+    if(!self.name || !self.uniqueId) return;
+    [super save];
 }
 
 - (void)addRecipients:(NSArray *)recipients {
@@ -79,9 +80,13 @@
     
     if(!self.updatedAt) self.updatedAt = [NSDate dateWithTimeIntervalSince1970:0];
     
+    NSLog(@"UPDATED AT: %@", self.updatedAt);
+    
     if([self isMostRecentMessage:message]) {
+        NSLog(@"CORRECTLY DETERMINED LATEST MESSAGE");
         self.updatedAt       = message.createdAt;
         self.latestMessageId = message.uniqueId;
+        NSLog(@"LATEST MESSAGE ID: %@", self.latestMessageId);
         [self save];
     }
 }
@@ -171,7 +176,7 @@
 
 - (KDatabaseObject <KThreadable> *)latestMessage {
     NSArray *latestMessageComponents = [self.latestMessageId componentsSeparatedByString:@"_"];
-    return [NSClassFromString(latestMessageComponents.firstObject) findById:latestMessageComponents.lastObject];
+    return [NSClassFromString(latestMessageComponents.firstObject) findById:self.latestMessageId];
 }
 
 - (BOOL)saved {
