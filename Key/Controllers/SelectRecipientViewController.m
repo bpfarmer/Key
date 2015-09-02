@@ -103,7 +103,9 @@
 - (IBAction)sendToRecipients:(id)sender {
     dispatch_async([self.class sharedQueue], ^{
         if(self.selectedRecipients.count > 1) {
-            [self.sendableObject sendToRecipients:self.selectedRecipients withAttachableObjects:self.attachableObjects];
+            NSMutableArray *selectedRecipientIds = [NSMutableArray new];
+            for(KDatabaseObject *recipient in self.selectedRecipients) [selectedRecipientIds addObject:recipient.uniqueId];
+            [self.sendableObject sendToRecipientIds:selectedRecipientIds withAttachableObjects:self.attachableObjects];
             [self.sendableObject save];
             NSLog(@"CREATED OBJECT: %@", self.sendableObject);
             if(self.sendingDelegate) [self.sendingDelegate setSendableObject:self.sendableObject];

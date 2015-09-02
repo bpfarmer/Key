@@ -116,9 +116,9 @@
     
 }
 
-- (void)addRecipients:(NSArray *)recipients {
-    for(KDatabaseObject *recipient in recipients) {
-        if(![recipient.uniqueId isEqualToString:[KAccountManager sharedManager].user.uniqueId]) [[[ObjectRecipient alloc] initWithObjectId:self.uniqueId recipientId:recipient.uniqueId] save];
+- (void)addRecipientIds:(NSArray *)recipientIds {
+    for(NSString *recipientId in recipientIds) {
+        if(![recipientId isEqualToString:[KAccountManager sharedManager].user.uniqueId]) [[[ObjectRecipient alloc] initWithObjectId:self.uniqueId recipientId:recipientId] save];
     }
 }
 
@@ -133,7 +133,7 @@
     NSMutableArray *attachments = [NSMutableArray new];
     for(NSString *attachmentId in [self.attachmentIds componentsSeparatedByString:@"__"]) {
         NSString *className = [attachmentId componentsSeparatedByString:@"_"].firstObject;
-        NSString *uniqueId  = [attachmentId componentsSeparatedByString:@"_"].lastObject;
+        NSString *uniqueId  = attachmentId;
         KDatabaseObject *object = [NSClassFromString(className) findById:uniqueId];
         if(object) [attachments addObject:object];
     }

@@ -124,28 +124,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] notificationChannel] object:self userInfo:nil];
 }
 
-- (void)addRecipients:(NSArray *)recipients {
-    return;
-}
-
-- (NSArray *)recipientIds {
-    return @[];
-}
-
-- (void)sendToRecipients:(NSArray *)recipients withAttachableObjects:(NSArray *)attachableObjects {
-    [self addRecipients:recipients];
-    [self sendWithAttachableObjects:attachableObjects];
-}
-
-- (void)sendWithAttachableObjects:(NSArray *)attachableObjects {
-    TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:self.recipientIds];
-    [futureDevices thenDo:^(id value) {
-        [FreeKey sendEncryptableObject:self attachableObjects:attachableObjects recipientIds:self.recipientIds];
-    }];
-
-}
-
-
 + (NSString *)notificationChannel {
     return [NSString stringWithFormat:@"%@UpdateChannel", [self tableName]];
 }
@@ -340,5 +318,30 @@
     else if([self hasPropertyNamed:@"createdAt"]) return @"createdAt";
     else return nil;
 }
+
+- (void)addRecipientIds:(NSArray *)recipients {
+    return;
+}
+
+- (NSArray *)recipientIds {
+    return @[];
+}
+
+- (void)sendToRecipientIds:(NSArray *)recipientIds withAttachableObjects:(NSArray *)attachableObjects {
+    [self addRecipientIds:recipientIds];
+    for(KDatabaseObject *attachment in attachableObjects){
+        [attachment save];
+    }
+    [self sendWithAttachableObjects:attachableObjects];
+}
+
+- (void)sendWithAttachableObjects:(NSArray *)attachableObjects {
+    TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:self.recipientIds];
+    [futureDevices thenDo:^(id value) {
+        [FreeKey sendEncryptableObject:self attachableObjects:attachableObjects recipientIds:self.recipientIds];
+    }];
+    
+}
+
 
 @end

@@ -20,9 +20,9 @@
 + (NSString *)tableName;
 - (void)save;
 - (void)remove;
-- (void)addRecipients:(NSArray *)recipients;
+- (void)addRecipientIds:(NSArray *)recipientIds;
 - (NSArray *)recipientIds;
-- (void)sendToRecipients:(NSArray *)recipients withAttachableObjects:(NSArray *)attachableObjects;
+- (void)sendToRecipientIds:(NSArray *)recipientIds withAttachableObjects:(NSArray *)attachableObjects;
 - (void)sendWithAttachableObjects:(NSArray *)attachableObjects;
 + (void)createTable;
 + (void)dropTable;

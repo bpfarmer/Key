@@ -46,19 +46,23 @@
 }
 
 - (void)addRecipients:(NSArray *)recipients {
-    NSMutableArray *userIds = [[NSMutableArray alloc] init];
-    NSMutableArray *usernames = [[NSMutableArray alloc] init];
-    for(KUser *user in recipients) {
-        [userIds addObject:user.uniqueId];
-        [usernames addObject:user.username];
-    }
+    NSMutableArray *recipientIds  = [NSMutableArray new];
+    for(KDatabaseObject *recipient in recipients) [recipientIds addObject:recipient.uniqueId];
+    [self addRecipientIds:[recipientIds copy]];
+}
+
+- (void)addRecipientIds:(NSArray *)recipientIds {
+    NSMutableArray *userIds    = [NSMutableArray arrayWithArray:recipientIds];
+    NSMutableArray *usernames  = [NSMutableArray new];
     
     [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
         return [obj1 compare:obj2];
     }];
     
+    for(NSString *recipientId in userIds) [usernames addObject:[KUser findById:recipientId].username];
+    
     self.uniqueId = [userIds componentsJoinedByString:@"_"];
-    self.name = [usernames componentsJoinedByString:@", "];
+    self.name     = [usernames componentsJoinedByString:@", "];
 }
 
 - (void)sendWithAttachableObjects:(NSArray *)attachableObjects {
@@ -141,7 +145,7 @@
 }
 
 - (NSArray *)posts {
-    NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"type" : NSStringFromClass([KPost class]), @"recipientId" : self.recipientIds.firstObject}];
+    NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"recipientId" : self.recipientIds.firstObject}];
     NSMutableArray *postIds = [NSMutableArray arrayWithObject:self.uniqueId];
     NSMutableArray *questionMarks = [NSMutableArray new];
     for(ObjectRecipient *or in objectRecipients) {
@@ -168,10 +172,6 @@
 - (KDatabaseObject <KThreadable> *)latestMessage {
     NSArray *latestMessageComponents = [self.latestMessageId componentsSeparatedByString:@"_"];
     return [NSClassFromString(latestMessageComponents.firstObject) findById:latestMessageComponents.lastObject];
-}
-
-- (void)sendToRecipientsWithAttachableObjects:(NSArray *)attachableObjects {
-    return;
 }
 
 - (BOOL)saved {

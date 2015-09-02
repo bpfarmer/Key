@@ -175,7 +175,7 @@
         }else {
             post.threadId = self.thread.uniqueId;
             post.ephemeral = YES;
-            [post sendToRecipients:self.thread.recipientIds withAttachableObjects:attachableObjects];
+            [post sendToRecipientIds:self.thread.recipientIds withAttachableObjects:attachableObjects];
             [post save];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self dismissViewControllerAnimated:NO completion:nil];
