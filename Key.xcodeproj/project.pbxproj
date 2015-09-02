@@ -327,6 +327,7 @@
 		EFF2033A1B8E908F00487F7C /* ObjectRecipient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectRecipient.h; path = Models/ObjectRecipient.h; sourceTree = "<group>"; };
 		EFF2033B1B8E908F00487F7C /* ObjectRecipient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjectRecipient.m; path = Models/ObjectRecipient.m; sourceTree = "<group>"; };
 		EFF2033D1B8F757600487F7C /* KThreadable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThreadable.h; path = Models/Protocols/KThreadable.h; sourceTree = "<group>"; };
+		EFF203421B94A7E800487F7C /* NeedsRecipientsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NeedsRecipientsProtocol.h; path = Key/Models/Protocols/NeedsRecipientsProtocol.h; sourceTree = SOURCE_ROOT; };
 		EFF70A601AAE19C3006C10D2 /* AES_CBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES_CBC.h; sourceTree = "<group>"; };
 		EFF70A611AAE19C3006C10D2 /* AES_CBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AES_CBC.m; sourceTree = "<group>"; };
 		EFF70A621AAE19C3006C10D2 /* HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC.h; sourceTree = "<group>"; };
@@ -580,6 +581,7 @@
 			isa = PBXGroup;
 			children = (
 				EF9A744E1B52B639009689A7 /* DismissAndPresentProtocol.h */,
+				EFF203421B94A7E800487F7C /* NeedsRecipientsProtocol.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";

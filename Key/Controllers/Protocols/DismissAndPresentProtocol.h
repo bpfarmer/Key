@@ -13,6 +13,5 @@
 @protocol DismissAndPresentProtocol <NSObject>
 
 - (void)dismissAndPresentViewController:(UIViewController *)viewController;
-- (void)dismissAndPresentThread:(KThread *)thread;
 
 @end

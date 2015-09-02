@@ -21,10 +21,12 @@
 #import "KPost.h"
 #import "MediaViewController.h"
 #import "ObjectRecipient.h"
+#import "SelectRecipientViewController.h"
+#import "NeedsRecipientsProtocol.h"
 
 static NSString *TableViewCellIdentifier = @"Messages";
 
-@interface ThreadViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, DismissAndPresentProtocol>
+@interface ThreadViewController () <UITextFieldDelegate, UICollectionViewDataSource, UICollectionViewDelegate, DismissAndPresentProtocol, NeedsRecipientsProtocol>
 @property (nonatomic, strong) UITextField *recipientTextField;
 @property (nonatomic) UIView *titleView;
 @property (nonatomic) NSArray *messages;
@@ -48,16 +50,15 @@ static NSString *TableViewCellIdentifier = @"Messages";
     
     self.messages = @[];
     
-    NSLog(@"THREAD ID: %@", self.thread.uniqueId);
-    for(KPost *post in [KPost all]) NSLog(@"POST THREAD ID: %@", post.threadId);
-    
-    if(self.thread && self.thread.saved) {
-        NSMutableArray *messages = [NSMutableArray arrayWithArray:self.thread.messages];
-        [messages addObjectsFromArray:self.thread.posts];
-        [messages sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return [[obj1 createdAt] compare:[obj2 createdAt]];
-        }];
-        self.messages = [messages copy];
+    if(!self.thread && !self.thread.uniqueId) {
+        self.thread = [[KThread alloc] init];
+        SelectRecipientViewController *selectVC = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
+        selectVC.sendableObject  = self.thread;
+        selectVC.sendingDelegate = self;
+        selectVC.delegate = self;
+        [self presentViewController:selectVC animated:NO completion:nil];
+    }else {
+        [self loadMessages];
     }
     
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
@@ -76,6 +77,17 @@ static NSString *TableViewCellIdentifier = @"Messages";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KMessage notificationChannel] object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KPost notificationChannel] object:nil];
+}
+
+- (void)loadMessages {
+    if(self.thread && self.thread.uniqueId) {
+        NSMutableArray *messages = [NSMutableArray arrayWithArray:self.thread.messages];
+        [messages addObjectsFromArray:self.thread.posts];
+        [messages sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            return [[obj1 createdAt] compare:[obj2 createdAt]];
+        }];
+        self.messages = [messages copy];
+    }
 }
 
 + (dispatch_queue_t)sharedQueue {
@@ -122,7 +134,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
-    if(self.thread) {
+    if(self.thread && self.thread.uniqueId) {
         self.title = self.thread.displayName;
         
         if(!self.thread.read) {
@@ -245,11 +257,12 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (void)dismissAndPresentViewController:(UIViewController *)viewController {
     [self dismissViewControllerAnimated:NO completion:^{
         if(viewController != nil) [self presentViewController:viewController animated:NO completion:nil];
-        else [self dismissViewControllerAnimated:NO completion:nil];
     }];
 }
 
-- (void)dismissAndPresentThread:(KThread *)thread  {
+- (void)setSendableObject:(KDatabaseObject *)object {
+    self.thread = (KThread *)object;
+    [self loadMessages];
 }
 
 - (IBAction)didPressBack:(id)sender {

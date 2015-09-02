@@ -10,10 +10,9 @@
 
 @interface ObjectRecipient : KDatabaseObject
 
-@property (nonatomic) NSString *type;
 @property (nonatomic) NSString *objectId;
 @property (nonatomic) NSString *recipientId;
 
-- (instancetype)initWithType:(NSString *)type objectId:(NSString *)objectId recipientId:(NSString *)recipientId;
+- (instancetype)initWithObjectId:(NSString *)objectId recipientId:(NSString *)recipientId;
 
 @end

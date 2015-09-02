@@ -20,39 +20,18 @@
 @implementation KThread
 
 - (instancetype)initWithUsers:(NSArray *)users {
-    NSMutableArray *userIds = [[NSMutableArray alloc] init];
-    NSMutableArray *usernames = [[NSMutableArray alloc] init];
-    for(KUser *user in users) {
-        [userIds addObject:user.uniqueId];
-        [usernames addObject:user.username];
-    }
-    
-    [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-        return [obj1 compare:obj2];
-    }];
-    
-    KThread *oldThread = [KThread findById:[userIds componentsJoinedByString:@"_"]];
-    if(oldThread) {
-        self = oldThread;
-        return self;
-    }
-    
-    self = [super initWithUniqueId:[userIds componentsJoinedByString:@"_"]];
-    if (self) {
-        _name = [usernames componentsJoinedByString:@", "];
-    }
+    [self addRecipients:users];
+    if([KThread findById:self.uniqueId]) return [KThread findById:self.uniqueId];
     return self;
 }
 
 - (instancetype)initWithUserIds:(NSArray *)userIds {
-    KThread *oldThread = [KThread findById:[userIds componentsJoinedByString:@"_"]];
-    if(oldThread) return oldThread;
-    self = [super initWithUniqueId:[userIds componentsJoinedByString:@"_"]];
-    NSMutableArray *usernames = [NSMutableArray new];
-    for(NSString *userId in userIds) {
-        [usernames addObject:[KUser findById:userId].username];
+    NSMutableArray *users = [NSMutableArray new];
+    for(NSString *userId in [userIds objectEnumerator]) {
+        [users addObject:[KUser findById:userId]];
     }
-    _name = [usernames componentsJoinedByString:@", "];
+    [self addRecipients:[users copy]];
+    if([KThread findById:self.uniqueId]) return [KThread findById:self.uniqueId];
     return self;
 }
 
@@ -64,6 +43,26 @@
         _read               = read;
     }
     return self;
+}
+
+- (void)addRecipients:(NSArray *)recipients {
+    NSMutableArray *userIds = [[NSMutableArray alloc] init];
+    NSMutableArray *usernames = [[NSMutableArray alloc] init];
+    for(KUser *user in recipients) {
+        [userIds addObject:user.uniqueId];
+        [usernames addObject:user.username];
+    }
+    
+    [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    self.uniqueId = [userIds componentsJoinedByString:@"_"];
+    self.name = [usernames componentsJoinedByString:@", "];
+}
+
+- (void)sendWithAttachableObjects:(NSArray *)attachableObjects {
+    return;
 }
 
 - (void)processLatestMessage:(KDatabaseObject <KThreadable> *)message {
@@ -78,7 +77,7 @@
     
     if([self isMostRecentMessage:message]) {
         self.updatedAt       = message.createdAt;
-        self.latestMessageId = [NSString stringWithFormat:@"%@_%@", NSStringFromClass(message.class), message.uniqueId];
+        self.latestMessageId = message.uniqueId;
         [self save];
     }
 }
@@ -169,6 +168,10 @@
 - (KDatabaseObject <KThreadable> *)latestMessage {
     NSArray *latestMessageComponents = [self.latestMessageId componentsSeparatedByString:@"_"];
     return [NSClassFromString(latestMessageComponents.firstObject) findById:latestMessageComponents.lastObject];
+}
+
+- (void)sendToRecipientsWithAttachableObjects:(NSArray *)attachableObjects {
+    return;
 }
 
 - (BOOL)saved {

@@ -17,7 +17,10 @@
 #pragma mark AESCBC Mode
 
 +(NSData*)encryptCBCMode:(NSData*)data withKey:(NSData*)key withIV:(NSData*)iv{
-
+    NSAssert(data, @"Missing data to encrypt");
+    NSAssert([key length] == 32, @"AES key should be 256 bits");
+    NSAssert([iv  length] == 16, @"AES-CBC IV should be 128 bits");
+    
     size_t bufferSize           = [data length] + kCCBlockSizeAES128;
     void* buffer                = malloc(bufferSize);
     

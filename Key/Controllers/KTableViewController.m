@@ -50,10 +50,9 @@
 }
 
 - (void)databaseModified:(NSNotification *)notification {
-    NSLog(@"NEW OBJECT: %@", notification.object);
-    NSLog(@"CURRENT OBJECTS: %@", self.sectionData);
     dispatch_async([self.class sharedQueue], ^{
         KDatabaseObject *object = (KDatabaseObject *)notification.object;
+        NSLog(@"RECEIVED OBJECT: %@", object);
         [self.sectionCriteria enumerateObjectsUsingBlock:^(id obj, NSUInteger sectionId, BOOL *stop) {
             NSDictionary *sectionDictionary = (NSDictionary *)obj;
             NSDictionary *criteriaDictionary = (NSDictionary *)sectionDictionary[@"criteria"];
@@ -66,8 +65,8 @@
                     }
                 }];
                 if(matchesCriteria) {
-                    __block NSUInteger updatedIndex = -1;
-                    [(NSArray *)self.sectionData[sectionId] enumerateObjectsUsingBlock:^(id obj, NSUInteger cellId, BOOL *stop) {
+                    __block NSInteger updatedIndex = -1;
+                    [((NSArray *)self.sectionData[sectionId]) enumerateObjectsUsingBlock:^(id obj, NSUInteger cellId, BOOL *stop) {
                         KDatabaseObject *currentObject = (KDatabaseObject *)obj;
                         if([object.uniqueId isEqualToString:currentObject.uniqueId]) {
                             updatedIndex = cellId;
@@ -77,7 +76,6 @@
                     
                     NSMutableArray *updatedData  = [[NSMutableArray alloc] initWithArray:self.sectionData];
                     NSMutableArray *updatedCells = [[NSMutableArray alloc] initWithArray:self.sectionData[sectionId]];
-                    NSArray *newSectionData;
                     if(updatedIndex != -1) {
                         [updatedCells removeObjectAtIndex:updatedIndex];
                     }
@@ -92,13 +90,18 @@
                             }
                         }];
                     }
+                    
                     [updatedCells insertObject:object atIndex:newCellId];
                     [updatedData replaceObjectAtIndex:sectionId withObject:updatedCells];
-                    newSectionData = [updatedData copy];
+                    self.sectionData = [updatedData copy];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        self.sectionData = newSectionData;
+                        while(self.tableView.numberOfSections <= sectionId) [self.tableView insertSections:[NSIndexSet indexSetWithIndex:self.tableView.numberOfSections] withRowAnimation:UITableViewRowAnimationAutomatic];
                         if(updatedIndex != -1) {
-                            [self.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:updatedIndex inSection:sectionId] toIndexPath:[NSIndexPath indexPathForRow:newCellId inSection:sectionId]];
+                            if(updatedIndex != newCellId) {
+                                [self.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:updatedIndex inSection:sectionId] toIndexPath:[NSIndexPath indexPathForRow:newCellId inSection:sectionId]];
+                            }else {
+                                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:updatedIndex inSection:sectionId]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                            }
                         }else {
                             [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:newCellId inSection:sectionId]] withRowAnimation:UITableViewRowAnimationAutomatic];
                         }

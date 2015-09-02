@@ -51,10 +51,8 @@
 }
 
 - (IBAction)didPressNewMessage:(id)sender {
-    SelectRecipientViewController *selectRecipientView = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
-    selectRecipientView.desiredObject = kSelectRecipientsForMessage;
-    selectRecipientView.delegate = self.homeViewController;
-    [self.homeViewController presentViewController:selectRecipientView animated:YES completion:nil];
+    self.homeViewController.selectedThread = nil;
+    [self.homeViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -99,7 +97,6 @@
     KThread *thread = (KThread *)[self objectForIndexPath:indexPath];
     if(thread) {
         self.homeViewController.selectedThread = thread;
-        dispatch_async(dispatch_get_main_queue(), ^{});
         [self.homeViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
     }
 }

@@ -10,11 +10,10 @@
 
 @implementation ObjectRecipient
 
-- (instancetype)initWithType:(NSString *)type objectId:(NSString *)objectId recipientId:(NSString *)recipientId {
+- (instancetype)initWithObjectId:(NSString *)objectId recipientId:(NSString *)recipientId {
     self = [super init];
     
     if(self) {
-        _type        = type;
         _objectId    = objectId;
         _recipientId = recipientId;
     }

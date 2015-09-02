@@ -44,7 +44,7 @@
     NSMutableArray *newSectionData = [NSMutableArray arrayWithArray:sectionData[0]];
     for(KUser *user in sectionData[0]) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [newSectionData removeObject:user];
     [newSectionData insertObject:self.currentUser atIndex:0];
-    [data replaceObjectAtIndex:0 withObject:sectionData];
+    [data replaceObjectAtIndex:0 withObject:newSectionData];
     return [data copy];
 }
 

@@ -34,21 +34,12 @@
 - (void)viewDidLoad {
     self.currentUser = [KAccountManager sharedManager].user;
     self.tableView = self.contactsTableView;
-    self.sectionCriteria = @[@{@"class" : @"KUser",
-                               @"criteria" : @{}}];
+    self.sectionCriteria = @[@{@"class" : @"KUser", @"criteria" : @{}}];
     self.sortedByProperty = @"username";
     self.sortDescending   = NO;
     [super viewDidLoad];
-    
     self.ephemeral = NO;
-    
-    if(![self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
-        if(!self.post) {
-            self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId];
-            self.post.uniqueId = [KPost generateUniqueId];
-            self.post.ephemeral = self.ephemeral;
-        }
-    }
+    self.selectedRecipients = @[self.currentUser];
 }
 
 - (NSArray *)modifySectionData:(NSArray *)sectionData {
@@ -110,39 +101,17 @@
 }
 
 - (IBAction)sendToRecipients:(id)sender {
-    if(self.selectedRecipients.count > 0) {
-        if([self.desiredObject isEqualToString:kSelectRecipientsForMessage]) {
-            KThread *thread = [self setupThread];
-            [thread save];
-            ThreadViewController *threadViewController = [[ThreadViewController alloc] initWithNibName:@"ThreadView" bundle:nil];
-            threadViewController.thread = thread;
-            [self.delegate dismissAndPresentThread:thread];
-        }else {
-            dispatch_queue_t queue = dispatch_queue_create([kEncryptObjectQueue cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-            dispatch_async(queue, ^{
-                NSMutableArray *recipientIds = [[NSMutableArray alloc] init];
-                for(KUser *user in self.selectedRecipients) {
-                    [recipientIds addObject:user.uniqueId];
-                }
-                for(NSString *recipientId in recipientIds) {
-                    ObjectRecipient *or = [[ObjectRecipient alloc] initWithType:NSStringFromClass([self.post class]) objectId:self.post.uniqueId recipientId:recipientId];
-                    [or save];
-                }
-                for(KDatabaseObject <KAttachable> *object in self.sendableObjects) {
-                    [object setParentId:self.post.uniqueId];
-                    if([object isKindOfClass:[KPhoto class]]) [self.post incrementAttachmentCount];
-                    [object save];
-                    [self.post addAttachment:object];
-                }
-                [self.post save];
-                TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:recipientIds];
-                [futureDevices thenDo:^(id value) {
-                    [FreeKey sendEncryptableObject:self.post attachableObjects:self.sendableObjects recipientIds:recipientIds];
-                }];
+    dispatch_async([self.class sharedQueue], ^{
+        if(self.selectedRecipients.count > 1) {
+            [self.sendableObject sendToRecipients:self.selectedRecipients withAttachableObjects:self.attachableObjects];
+            [self.sendableObject save];
+            NSLog(@"CREATED OBJECT: %@", self.sendableObject);
+            if(self.sendingDelegate) [self.sendingDelegate setSendableObject:self.sendableObject];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate dismissAndPresentViewController:nil];
             });
-            [self.delegate dismissAndPresentViewController:nil];
         }
-    }
+    });
 }
 
 - (IBAction)didPressEphemeral:(id)sender {
@@ -158,15 +127,6 @@
 - (IBAction)didPressCancel:(id)sender {
     [self dismissViewControllerAnimated:NO completion:nil];
 }
-
-- (KThread *)setupThread {
-    if(self.selectedRecipients.count == 0) return nil;
-    NSMutableArray *users = [[NSMutableArray alloc] initWithArray:self.selectedRecipients];
-    [users addObject:[KAccountManager sharedManager].user];
-    KThread *thread = [[KThread alloc] initWithUsers:users];
-    return thread;
-}
-
 
 -(BOOL)prefersStatusBarHidden {
     return YES;

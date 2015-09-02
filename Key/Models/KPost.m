@@ -85,7 +85,7 @@
     if(self.threadId) [[KThread findById:self.threadId] processLatestMessage:self];
     else {
         if([self.authorId isEqualToString:[KAccountManager sharedManager].user.uniqueId]) {
-            NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"objectId" : self.uniqueId, @"type" : NSStringFromClass(self.class)}];
+            NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"objectId" : self.uniqueId}];
             for(ObjectRecipient *or in objectRecipients) {
                 NSMutableArray *userIds = [NSMutableArray arrayWithObjects:or.recipientId, self.authorId, nil];
                 [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
@@ -116,9 +116,17 @@
     
 }
 
-- (NSString *)generateUniqueId {
-    NSUInteger uniqueHash = self.authorId.hash ^ (NSUInteger) [self.createdAt timeIntervalSince1970] ^ self.text.hash;
-    return [NSString stringWithFormat:@"%@_%lu", [KPost tableName], (unsigned long)uniqueHash];
+- (void)addRecipients:(NSArray *)recipients {
+    for(KDatabaseObject *recipient in recipients) {
+        if(![recipient.uniqueId isEqualToString:[KAccountManager sharedManager].user.uniqueId]) [[[ObjectRecipient alloc] initWithObjectId:self.uniqueId recipientId:recipient.uniqueId] save];
+    }
+}
+
+- (NSArray *)recipientIds {
+    NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"objectId" : self.uniqueId}];
+    NSMutableArray *recipientIds = [NSMutableArray new];
+    for(ObjectRecipient *or in [objectRecipients objectEnumerator]) [recipientIds addObject:or.recipientId];
+    return [recipientIds copy];
 }
 
 - (NSArray *)attachments {
@@ -263,7 +271,7 @@
 
 - (void)addAttachment:(KDatabaseObject *)attachment {
     NSMutableArray *attachments = [NSMutableArray arrayWithArray:[self.attachmentIds componentsSeparatedByString:@"__"]];
-    [attachments addObject:[NSString stringWithFormat:@"%@_%@", NSStringFromClass(attachment.class), attachment.uniqueId]];
+    [attachments addObject:attachment.uniqueId];
     self.attachmentIds = [attachments componentsJoinedByString:@"__"];
 }
 

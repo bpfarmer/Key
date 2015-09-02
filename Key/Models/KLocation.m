@@ -12,7 +12,7 @@
 @implementation KLocation
 
 - (instancetype)initWithAuthorId:(NSString *)authorId location:(CLLocation *)location {
-    self = [super init];
+    self = [super initWithUniqueId:[KLocation generateUniqueId]];
     
     if(self) {
         _authorId     = authorId;

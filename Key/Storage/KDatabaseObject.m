@@ -9,6 +9,8 @@
 #import "KDatabaseObject.h"
 #import "KStorageManager.h"
 #import <objc/runtime.h>
+#import "FreeKey.h"
+#import "CollapsingFutures.h"
 
 #define kMappingUniqueId @"uniqueId"
 #define kMappingPrimaryKeyId @"primaryKeyId"
@@ -122,6 +124,28 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:[[self class] notificationChannel] object:self userInfo:nil];
 }
 
+- (void)addRecipients:(NSArray *)recipients {
+    return;
+}
+
+- (NSArray *)recipientIds {
+    return @[];
+}
+
+- (void)sendToRecipients:(NSArray *)recipients withAttachableObjects:(NSArray *)attachableObjects {
+    [self addRecipients:recipients];
+    [self sendWithAttachableObjects:attachableObjects];
+}
+
+- (void)sendWithAttachableObjects:(NSArray *)attachableObjects {
+    TOCFuture *futureDevices = [FreeKey prepareSessionsForRecipientIds:self.recipientIds];
+    [futureDevices thenDo:^(id value) {
+        [FreeKey sendEncryptableObject:self attachableObjects:attachableObjects recipientIds:self.recipientIds];
+    }];
+
+}
+
+
 + (NSString *)notificationChannel {
     return [NSString stringWithFormat:@"%@UpdateChannel", [self tableName]];
 }
@@ -142,7 +166,6 @@
     if(!uniqueId) return nil;
     NSDictionary *parameterDictionary = @{@"unique_id" : uniqueId};
     NSString *findByUniqueIdSQL = [NSString stringWithFormat:@"select * from %@ where unique_id=:unique_id", [[self class] tableName]];
-    //NSLog(@"FINDING WITH SQL: %@ AND PARAMETERS: %@",findByUniqueIdSQL, parameterDictionary);
     return [[KStorageManager sharedManager] querySelectObject:^KDatabaseObject *(FMDatabase *database) {
         FMResultSet *result = [database executeQuery:findByUniqueIdSQL withParameterDictionary:parameterDictionary];
         if(result.next) {
@@ -299,7 +322,7 @@
 }
 
 + (NSString *)generateUniqueId {
-    return [[NSUUID UUID] UUIDString];
+    return [NSString stringWithFormat:@"%@_%@", NSStringFromClass(self.class), [[NSUUID UUID] UUIDString]];
 }
 
 + (BOOL)compareProperty:(NSString *)name object1:(KDatabaseObject *)object1 object2:(KDatabaseObject *)object2 {
