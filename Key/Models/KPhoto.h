@@ -11,11 +11,10 @@
 
 @interface KPhoto : KDatabaseObject <KAttachable>
 
-@property (nonatomic, readonly) BOOL ephemeral;
 @property (nonatomic) NSData *media;
 @property (nonatomic) NSString *parentId;
 
 - (instancetype)initWithMedia:(NSData *)media;
-- (instancetype)initWithUniqueId:(NSString *)uniqueId media:(NSData *)media ephemeral:(BOOL)ephemeral parentId:(NSString *)parentId;
+- (instancetype)initWithUniqueId:(NSString *)uniqueId media:(NSData *)media parentId:(NSString *)parentId;
 
 @end

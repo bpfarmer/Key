@@ -11,7 +11,6 @@
 #import "KUser.h"
 #import "KMessage.h"
 #import "KThread.h"
-#import "KGroup.h"
 #import "Session.h"
 #import "RootChain.h"
 #import "SessionState.h"
@@ -32,7 +31,6 @@
     [KUser createTable];
     [KMessage createTable];
     [KThread createTable];
-    [KGroup createTable];
     [Session createTable];
     [SessionState createTable];
     [RootChain createTable];
@@ -54,7 +52,6 @@
     [KUser dropTable];
     [KMessage dropTable];
     [KThread dropTable];
-    [KGroup dropTable];
     [Session dropTable];
     [SessionState dropTable];
     [RootChain dropTable];

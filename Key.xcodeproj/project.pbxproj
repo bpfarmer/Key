@@ -104,7 +104,6 @@
 		EFE5667D1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667B1AF1883E00FB1142 /* SelectRecipientViewController.m */; };
 		EFEBDD381A68CE9600973E15 /* KUser.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD371A68CE9600973E15 /* KUser.m */; };
 		EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD3A1A6B2C7800973E15 /* KMessage.m */; };
-		EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEBDD431A6B5C1400973E15 /* KGroup.m */; };
 		EFEF48311B79188700E77113 /* KDeviceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF48301B79188700E77113 /* KDeviceTests.m */; };
 		EFEF48351B7D3A0600E77113 /* InboxTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF48341B7D3A0600E77113 /* InboxTableViewCell.m */; };
 		EFEF48381B7D8B4E00E77113 /* SubtitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF48371B7D8B4E00E77113 /* SubtitleTableViewCell.m */; };
@@ -323,8 +322,6 @@
 		EFEBDD371A68CE9600973E15 /* KUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KUser.m; path = Models/KUser.m; sourceTree = "<group>"; };
 		EFEBDD391A6B2C7800973E15 /* KMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KMessage.h; path = Models/KMessage.h; sourceTree = "<group>"; };
 		EFEBDD3A1A6B2C7800973E15 /* KMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KMessage.m; path = Models/KMessage.m; sourceTree = "<group>"; };
-		EFEBDD421A6B5C1400973E15 /* KGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KGroup.h; path = Models/KGroup.h; sourceTree = "<group>"; };
-		EFEBDD431A6B5C1400973E15 /* KGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KGroup.m; path = Models/KGroup.m; sourceTree = "<group>"; };
 		EFEF48301B79188700E77113 /* KDeviceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KDeviceTests.m; path = ModelTests/KDeviceTests.m; sourceTree = "<group>"; };
 		EFEF48331B7D3A0600E77113 /* InboxTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InboxTableViewCell.h; path = Cells/InboxTableViewCell.h; sourceTree = "<group>"; };
 		EFEF48341B7D3A0600E77113 /* InboxTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InboxTableViewCell.m; path = Cells/InboxTableViewCell.m; sourceTree = "<group>"; };
@@ -736,8 +733,6 @@
 				EF973FA41A7E8F5200D92A9E /* KAccountManager.m */,
 				EFDDD9B91B5C1D4B00089124 /* KDevice.h */,
 				EFDDD9BA1B5C1D4B00089124 /* KDevice.m */,
-				EFEBDD421A6B5C1400973E15 /* KGroup.h */,
-				EFEBDD431A6B5C1400973E15 /* KGroup.m */,
 				EFB722831B45E57700E6DF7A /* KLocation.h */,
 				EFB722841B45E57700E6DF7A /* KLocation.m */,
 				EFEBDD391A6B2C7800973E15 /* KMessage.h */,
@@ -1110,7 +1105,6 @@
 				EFE43D441B581C840092CAC5 /* ContentTabBar.m in Sources */,
 				EFC181A71AC3719800BE8B0B /* GetMessagesRequest.m in Sources */,
 				EF524ADC1AAE238600F3B9AF /* KStorageManager.m in Sources */,
-				EFEBDD441A6B5C1400973E15 /* KGroup.m in Sources */,
 				EF524AE91AAE247800F3B9AF /* NSData+Base64.m in Sources */,
 				EFEBDD3B1A6B2C7800973E15 /* KMessage.m in Sources */,
 				EFF70A8B1AAE19C3006C10D2 /* MasterKey.m in Sources */,

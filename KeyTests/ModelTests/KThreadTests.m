@@ -58,6 +58,8 @@
     post = [[KPost alloc] initWithUniqueId:@"KPost_2" authorId:@"1" threadId:@"KThread_1" text:@"Test Text 2" createdAt:[NSDate date] ephemeral:NO attachmentIds:nil attachmentCount:1];
     [thread processLatestMessage:post];
     XCTAssert([thread.latestMessageId isEqualToString:post.uniqueId]);
+    [post save];
+    XCTAssert([thread.latestMessage.uniqueId isEqualToString:post.uniqueId]);
     post = [[KPost alloc] initWithUniqueId:@"KPost_3" authorId:@"1" threadId:@"KThread_1" text:@"Test Text 3" createdAt:[NSDate dateWithTimeIntervalSinceNow:0] ephemeral:NO attachmentIds:nil attachmentCount:1];
     XCTAssert(![thread.latestMessageId isEqualToString:post.uniqueId]);
 }
@@ -87,7 +89,6 @@
     [post addRecipientIds:@[@"2"]];
     [post save];
     XCTAssert(thread.posts.count == 2);
-    
     post = [[KPost alloc] initWithAuthorId:@"2"];
     [post save];
     XCTAssert(thread.posts.count == 3);

@@ -10,6 +10,8 @@
 #import <MapKit/MapKit.h>
 #import "KAttachable.h"
 
+@class TOCFuture;
+
 @interface KLocation : KDatabaseObject <KAttachable>
 
 @property (nonatomic, readonly) NSString *authorId;
@@ -23,4 +25,6 @@
 
 - (NSString *)shortAddress;
 - (NSString *)formattedAddress;
++ (TOCFuture *)addressFromLocation:(CLLocation *)location;
+
 @end

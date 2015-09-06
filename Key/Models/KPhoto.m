@@ -31,12 +31,11 @@
     return self;
 }
 
-- (instancetype)initWithUniqueId:(NSString *)uniqueId media:(NSData *)media ephemeral:(BOOL)ephemeral parentId:(NSString *)parentId {
+- (instancetype)initWithUniqueId:(NSString *)uniqueId media:(NSData *)media parentId:(NSString *)parentId {
     self = [super initWithUniqueId:uniqueId];
     
     if(self) {
         _media = media;
-        _ephemeral = ephemeral;
         _parentId  = parentId;
         KPost *parentPost = [KPost findById:parentId];
         if(parentPost) [parentPost processSavedAttachment:self];

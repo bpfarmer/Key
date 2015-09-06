@@ -23,14 +23,12 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     return [self initWithUniqueId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderUniqueId]
                             media:[[aDecoder decodeObjectOfClass:[NSData class] forKey:kCoderMedia] gunzippedData]
-                        ephemeral:[aDecoder decodeBoolForKey:kCoderEphemeral]
                          parentId:[aDecoder decodeObjectOfClass:[NSString class] forKey:kCoderParentId]];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:self.uniqueId forKey:kCoderUniqueId];
     [aCoder encodeObject:self.media.gzippedData forKey:kCoderMedia];
-    [aCoder encodeBool:self.ephemeral forKey:kCoderEphemeral];
     [aCoder encodeObject:self.parentId forKey:kCoderParentId];
 }
 

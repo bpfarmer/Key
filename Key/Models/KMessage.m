@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Brendan Farmer. All rights reserved.
 //
 #import "KMessage.h"
-#import "KGroup.h"
 #import "KUser.h"
 #import "KThread.h"
 #import "KStorageManager.h"
@@ -33,6 +32,8 @@
         _body     = body;
         _status   = status;
         _createdAt = createdAt;
+        
+        if(![KThread findById:self.threadId]) [[[KThread alloc] initWithUniqueId:self.threadId] save];
     }
     return self;
 }
@@ -65,7 +66,7 @@
 }
 
 - (KThread *)thread {
-    return [[KThread alloc] initWithUserIds:[self.threadId componentsSeparatedByString:@"_"]];
+    return [KThread findById:self.threadId];
 }
 
 - (NSString *)text {
