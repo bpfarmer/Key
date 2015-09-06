@@ -10,11 +10,13 @@
 #import "KEncryptable.h"
 #import <UIKit/UIKit.h>
 #import "KThreadable.h"
+#import "KAttachable.h"
 
 @class KAttachment;
 @class KUser;
 @class KLocation;
 @class KPhoto;
+@class KThread;
 
 @interface KPost : KDatabaseObject <KEncryptable, KThreadable>
 
@@ -27,7 +29,6 @@
 @property (nonatomic) NSDate *readAt;
 @property (nonatomic) NSDate *createdAt;
 @property (nonatomic) NSString *attachmentIds;
-@property (nonatomic) NSInteger attachmentCount;
 
 - (instancetype)initWithUniqueId:(NSString *)uniqueId
                         authorId:(NSString *)authorId
@@ -39,19 +40,17 @@
                  attachmentCount:(NSInteger)attachmentCount;
 
 - (instancetype)initWithAuthorId:(NSString *)authorId;
-- (NSArray *)attachments;
 - (KUser *)author;
 - (NSData *)previewImage;
-- (NSData *)createThumbnailPreview;
 + (NSArray *)unread;
 + (NSArray *)findByAuthorId:(NSString *)authorId;
 + (UIImage *)imageWithImage:(UIImage *)image scaledToFillSize:(CGSize)size;
 - (NSString *)displayDate;
-- (KLocation *)location;
-- (KPhoto *)photo;
+- (NSArray *)threads;
+- (NSArray *)attachments;
+- (NSArray *)attachmentsOfType:(NSString *)type;
 - (void)addAttachment:(KDatabaseObject *)attachment;
-- (void)decrementAttachmentCount;
-- (void)incrementAttachmentCount;
+- (void)processSavedAttachment:(KDatabaseObject <KAttachable> *)attachment;
 
 
 @end

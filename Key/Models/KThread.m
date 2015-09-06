@@ -14,7 +14,7 @@
 #import "KAccountManager.h"
 #import "KMessage.h"
 #import "KPost.h"
-#import "ObjectRecipient.h"
+#import "KObjectRecipient.h"
 #import "CollapsingFutures.h"
 
 @implementation KThread
@@ -37,33 +37,55 @@
         _name               = name;
         _latestMessageId    = latestMessageId;
         _read               = read;
+        for(NSString *userId in self.userIds) [KUser asyncFindById:userId];
     }
     return self;
 }
 
+- (instancetype)initWithUniqueId:(NSString *)uniqueId {
+    NSArray *components = [uniqueId componentsSeparatedByString:@"_"];
+    if(components.count > 1) return [self initWithUserIds:[components subarrayWithRange:NSMakeRange(1, components.count - 1)]];
+    else return [super initWithUniqueId:uniqueId];
+}
+
 - (void)save {
-    if(!self.name || !self.uniqueId) return;
+    if(!self.uniqueId) return;
     [super save];
 }
 
 - (void)addRecipients:(NSArray *)recipients {
     NSMutableArray *recipientIds  = [NSMutableArray new];
-    for(KDatabaseObject *recipient in recipients) [recipientIds addObject:recipient.uniqueId];
+    for(KDatabaseObject *recipient in recipients) if(![recipientIds containsObject:recipient.uniqueId]) [recipientIds addObject:recipient.uniqueId];
     [self addRecipientIds:[recipientIds copy]];
 }
 
 - (void)addRecipientIds:(NSArray *)recipientIds {
-    NSMutableArray *userIds    = [NSMutableArray arrayWithArray:recipientIds];
+    NSMutableArray *userIds    = [NSMutableArray arrayWithArray:self.recipientIds];
+    for(NSString *recipientId in recipientIds) if(![userIds containsObject:recipientId]) [userIds addObject:recipientId];
     NSMutableArray *usernames  = [NSMutableArray new];
-    
     [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
         return [obj1 compare:obj2];
     }];
-    
-    for(NSString *recipientId in userIds) [usernames addObject:[KUser findById:recipientId].username];
-    
-    self.uniqueId = [userIds componentsJoinedByString:@"_"];
+    for(NSString *recipientId in userIds) {
+        KUser *user =[ KUser findById:recipientId];
+        if(user)[usernames addObject:user.username];
+        else [[KUser asyncFindById:recipientId] thenDo:^(KUser *newUser) {
+            [self updateNameWithUser:newUser];
+        }];
+    }
+    self.uniqueId = [KThread uniqueIdFromUserIds:userIds];
     self.name     = [usernames componentsJoinedByString:@", "];
+}
+
+- (void)updateNameWithUser:(KUser *)user {
+    NSMutableArray *nameComponents = [NSMutableArray arrayWithArray:[self.name componentsSeparatedByString:@", "]];
+    if(![nameComponents containsObject:user.username]) [nameComponents addObject:user.username];
+    self.name = [nameComponents componentsJoinedByString:@", "];
+    [self save];
+}
+
++ (NSString *)uniqueIdFromUserIds:(NSArray *)userIds {
+    return [NSString stringWithFormat:@"%@_%@", NSStringFromClass([KThread class]), [userIds componentsJoinedByString:@"_"]];
 }
 
 - (void)sendWithAttachableObjects:(NSArray *)attachableObjects {
@@ -80,13 +102,9 @@
     
     if(!self.updatedAt) self.updatedAt = [NSDate dateWithTimeIntervalSince1970:0];
     
-    NSLog(@"UPDATED AT: %@", self.updatedAt);
-    
     if([self isMostRecentMessage:message]) {
-        NSLog(@"CORRECTLY DETERMINED LATEST MESSAGE");
         self.updatedAt       = message.createdAt;
         self.latestMessageId = message.uniqueId;
-        NSLog(@"LATEST MESSAGE ID: %@", self.latestMessageId);
         [self save];
     }
 }
@@ -113,27 +131,17 @@
     return [names componentsJoinedByString:@", "];
 }
 
-- (NSString *)userIds {
-    return self.uniqueId;
+- (NSArray *)userIds {
+    NSArray *components = [self.uniqueId componentsSeparatedByString:@"_"];
+    if(components.count > 1) return [components subarrayWithRange:NSMakeRange(1, components.count - 1)];
+    return nil;
 }
 
 - (NSArray *)recipientIds {
     KUser *localUser = [KAccountManager sharedManager].user;
-    NSMutableArray *recipientIds = [NSMutableArray arrayWithArray:[self.userIds componentsSeparatedByString:@"_"]];
+    NSMutableArray *recipientIds = [NSMutableArray arrayWithArray:self.userIds];
     [recipientIds removeObject:localUser.uniqueId];
     return [recipientIds copy];
-}
-
-+ (NSArray *)inbox {
-    NSString *inboxSQL = [NSString stringWithFormat:@"select * from %@ order by updated_at desc", [KThread tableName]];
-    
-    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
-        FMResultSet *result =  [database executeQuery:inboxSQL];
-        NSMutableArray *threads = [[NSMutableArray alloc] init];
-        while(result.next) [threads addObject:[[KThread alloc] initWithResultSetRow:result.resultDictionary]];
-        [result close];
-        return [threads copy];
-    }];
 }
 
 + (KThread *)findWithUserIds:(NSArray *)userIds {
@@ -150,16 +158,18 @@
 }
 
 - (NSArray *)posts {
-    NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"recipientId" : self.recipientIds.firstObject}];
-    NSMutableArray *postIds = [NSMutableArray arrayWithObject:self.uniqueId];
+    NSArray *objectRecipients = @[];
+    NSMutableArray *threadAndPostIds = [NSMutableArray arrayWithObject:self.uniqueId];
     NSMutableArray *questionMarks = [NSMutableArray new];
-    for(ObjectRecipient *or in objectRecipients) {
-        [postIds addObject:or.objectId];
+    if(self.recipientIds.count == 1) objectRecipients = [KObjectRecipient findAllByDictionary:@{@"recipientId" : self.recipientIds.firstObject}];
+    for(KObjectRecipient *or in objectRecipients) {
+        [threadAndPostIds addObject:or.objectId];
         [questionMarks addObject:@"?"];
     }
+    NSLog(@"PARAMETERS: %@", threadAndPostIds);
     NSString *selectSQL = [NSString stringWithFormat:@"select * from %@ where thread_id = :thread_id or unique_id in (%@)", [KPost tableName], [questionMarks componentsJoinedByString:@" , "]];
     return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
-        FMResultSet *result =  [database executeQuery:selectSQL withArgumentsInArray:postIds];
+        FMResultSet *result =  [database executeQuery:selectSQL withArgumentsInArray:threadAndPostIds];
         NSMutableArray *posts = [[NSMutableArray alloc] init];
         while(result.next) [posts addObject:[[KPost alloc] initWithResultSetRow:result.resultDictionary]];
         [result close];
@@ -182,4 +192,5 @@
 - (BOOL)saved {
     return ([KThread findById:self.uniqueId] != nil);
 }
+
 @end

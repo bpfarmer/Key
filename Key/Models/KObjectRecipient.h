@@ -1,5 +1,5 @@
 //
-//  ObjectRecipient.h
+//  KObjectRecipient.h
 //  Key
 //
 //  Created by Brendan Farmer on 8/26/15.
@@ -8,7 +8,7 @@
 
 #import "KDatabaseObject.h"
 
-@interface ObjectRecipient : KDatabaseObject
+@interface KObjectRecipient : KDatabaseObject
 
 @property (nonatomic) NSString *objectId;
 @property (nonatomic) NSString *recipientId;

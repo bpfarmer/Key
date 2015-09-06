@@ -11,6 +11,7 @@
 #import <objc/runtime.h>
 #import "FreeKey.h"
 #import "CollapsingFutures.h"
+#import "KObjectRecipient.h"
 
 #define kMappingUniqueId @"uniqueId"
 #define kMappingPrimaryKeyId @"primaryKeyId"
@@ -240,7 +241,7 @@
 }
 
 + (NSArray *)findAllByIds:(NSArray *)ids {
-    if(!(ids.count > 1)) return @[];
+    if(ids.count == 0) return @[];
     NSString *selectSQL = [self sqlStatementForDictionary:@{}];
     NSMutableArray *questionMarks = [NSMutableArray new];
     [ids enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -300,7 +301,11 @@
 }
 
 + (NSString *)generateUniqueId {
-    return [NSString stringWithFormat:@"%@_%@", NSStringFromClass(self.class), [[NSUUID UUID] UUIDString]];
+    return [[NSUUID UUID] UUIDString];
+}
+
++ (NSString *)generateUniqueIdWithClass {
+    return [NSString stringWithFormat:@"%@_%@", NSStringFromClass([self class]), [[NSUUID UUID] UUIDString]];
 }
 
 + (BOOL)compareProperty:(NSString *)name object1:(KDatabaseObject *)object1 object2:(KDatabaseObject *)object2 {
@@ -319,12 +324,15 @@
     else return nil;
 }
 
-- (void)addRecipientIds:(NSArray *)recipients {
-    return;
+- (void)addRecipientIds:(NSArray *)recipientIds {
+    for(NSString *recipientId in recipientIds) [[[KObjectRecipient alloc] initWithObjectId:self.uniqueId recipientId:recipientId] save];
 }
 
 - (NSArray *)recipientIds {
-    return @[];
+    NSMutableArray *recipientIds = [NSMutableArray arrayWithArray:@[]];
+    NSArray *objectRecipients = [KObjectRecipient findAllByDictionary:@{@"objectId" : self.uniqueId}];
+    for(KObjectRecipient *or in [objectRecipients objectEnumerator]) [recipientIds addObject:or.recipientId];
+    return [recipientIds copy];
 }
 
 - (void)sendToRecipientIds:(NSArray *)recipientIds withAttachableObjects:(NSArray *)attachableObjects {

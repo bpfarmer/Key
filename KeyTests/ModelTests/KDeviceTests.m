@@ -12,6 +12,7 @@
 #import "KDevice.h"
 #import "KStorageManager.h"
 #import "KAccountManager.h"
+#import "KStorageSchema.h"
 #import "CollapsingFutures.h"
 
 @interface KDeviceTests : XCTestCase
@@ -21,15 +22,13 @@
 @implementation KDeviceTests
 
 - (void)setUp {
-    NSString *testDB = @"testDB";
     [super setUp];
-    KStorageManager *manager = [KStorageManager sharedManager];
-    [manager setDatabaseWithName:testDB];
-    [KDevice createTable];
 }
 
 - (void)tearDown {
     [super tearDown];
+    [KStorageSchema dropTables];
+    
 }
 
 - (void)testDropTable {

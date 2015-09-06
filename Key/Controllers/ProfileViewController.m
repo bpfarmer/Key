@@ -47,7 +47,8 @@
     cell.textLabel.text = [NSString stringWithFormat:@"%@", post.displayDate];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    if(post.location)cell.detailTextLabel.text = post.location.shortAddress;
+    NSArray *locations = [post attachmentsOfType:NSStringFromClass([KLocation class])];
+    if(locations.count > 0) cell.detailTextLabel.text = ((KLocation *)locations.firstObject).shortAddress;
     return cell;
 }
 

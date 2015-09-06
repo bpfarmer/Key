@@ -48,8 +48,6 @@
     
 }
 
-
-
 - (void)viewWillDisappear:(BOOL)animated {
     [self stopCamera];
 }
@@ -202,7 +200,7 @@
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if (TARGET_IPHONE_SIMULATOR) {
-            NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"orwell" ofType:@"jpg"];
+            NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"beach" ofType:@"jpg"];
             NSLog(@"IMAGE PATH: %@", imagePath);
             NSData *img = [NSData dataWithContentsOfFile:imagePath];
             [self didTakePhoto:img];

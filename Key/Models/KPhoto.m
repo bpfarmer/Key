@@ -13,7 +13,7 @@
 @implementation KPhoto
 
 - (instancetype)initWithMedia:(NSData *)media {
-    self = [super initWithUniqueId:[self.class generateUniqueId]];
+    self = [super initWithUniqueId:[self.class generateUniqueIdWithClass]];
     
     if(self) {
         _media = media;
@@ -38,20 +38,17 @@
         _media = media;
         _ephemeral = ephemeral;
         _parentId  = parentId;
-        [[KPost findById:parentId] createThumbnailPreview];
+        KPost *parentPost = [KPost findById:parentId];
+        if(parentPost) [parentPost processSavedAttachment:self];
     }
     
     return self;
 }
 
 - (void)save {
-    if([self.uniqueId isEqualToString:@""]) {
-        [[KPost findById:self.parentId] createThumbnailPreview];
-        NSLog(@"SHOULD BE CREATING THUMBNAIL PREVIEW");
-    }
-    [super save];
     NSData *zippedMedia = self.media.gzippedData;
     [zippedMedia writeToFile:self.filePath atomically:YES];
+    [super save];
 }
 
 + (NSArray *)unsavedPropertyList {

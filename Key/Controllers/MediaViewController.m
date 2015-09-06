@@ -39,9 +39,12 @@
     if(self.post) {
         self.post = [KPost findById:self.post.uniqueId];
         NSLog(@"ATTACHMENT IDS: %@", self.post.attachmentIds);
+        NSLog(@"EPHEMERAL: %hhd", self.post.ephemeral);
         if(self.post.attachments.count > 0) {
-            self.photo      = self.post.photo;
-            self.location   = self.post.location;
+            for(KDatabaseObject <KAttachable> *attachment in self.post.attachments) {
+                if([attachment isKindOfClass:[KPhoto class]]) self.photo = (KPhoto *)attachment;
+                else if([attachment isKindOfClass:[KLocation class]]) self.location = (KLocation *)attachment;
+            }
             if(self.photo) {
                 [self setupImageViewWithImage:self.photo.media];
             }else if(self.location) {

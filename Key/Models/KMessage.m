@@ -93,4 +93,8 @@
     return self.createdAt.formattedAsTimeAgo;
 }
 
++ (NSString *)generateUniqueId {
+    return [self generateUniqueIdWithClass];
+}
+
 @end

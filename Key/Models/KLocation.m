@@ -12,7 +12,7 @@
 @implementation KLocation
 
 - (instancetype)initWithAuthorId:(NSString *)authorId location:(CLLocation *)location {
-    self = [super initWithUniqueId:[KLocation generateUniqueId]];
+    self = [super initWithUniqueId:[KLocation generateUniqueIdWithClass]];
     
     if(self) {
         _authorId     = authorId;
@@ -30,7 +30,6 @@
         _location     = location;
         _parentId     = parentId;
         _address      = address;
-        [[KPost findById:self.parentId] decrementAttachmentCount];
     }
     return self;
 }
@@ -63,5 +62,12 @@
     return [NSString stringWithFormat:@"%@, %@", shortAddressComponents.lastObject, shortAddressComponents.firstObject];
 }
 
+- (void)save {
+    [super save];
+}
+
+- (KPost *)post {
+    return [KPost findById:self.parentId];
+}
 
 @end

@@ -20,28 +20,12 @@
 #import "NSDate+TimeAgo.h"
 #import "KThread.h"
 #import "KAccountManager.h"
-#import "ObjectRecipient.h"
+#import "KObjectRecipient.h"
 
 @implementation KPost
 
-- (KUser *)author {
-    return [KUser findById:self.authorId];
-}
-
-- (KThread *)thread {
-    if(self.threadId) {
-        KThread *thread = [KThread findById:self.threadId];
-        if(!thread) {
-            thread = [[KThread alloc] initWithUserIds:[self.threadId componentsSeparatedByString:@"_"]];
-            [thread save];
-        }
-        return thread;
-    }
-    return nil;
-}
-
 - (instancetype)initWithAuthorId:(NSString *)authorId {
-    self = [super init];
+    self = [super initWithUniqueId:[KPost generateUniqueIdWithClass]];
     
     if(self) {
         _authorId        = authorId;
@@ -57,23 +41,75 @@
     
     if(self) {
         _authorId        = authorId;
-        if(threadId) {
-            _threadId = threadId;
-        }else {
-            NSMutableArray *userIds = [NSMutableArray arrayWithArray:@[authorId, [KAccountManager sharedManager].user.uniqueId]];
-            [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-                return [obj1 compare:obj2];
-            }];
-            _threadId = [userIds componentsJoinedByString:@"_"];
-        }
+        _threadId        = threadId;
         _text            = text;
         _createdAt       = createdAt;
         _ephemeral       = ephemeral;
         _attachmentIds   = attachmentIds;
-        _attachmentCount = attachmentCount;
     }
-    
     return self;
+}
+
+- (instancetype)initWithResultSetRow:(NSDictionary *)resultSetRow {
+    self = [super initWithResultSetRow:resultSetRow];
+    if(self) {
+        NSData *zippedMedia = [NSData dataWithContentsOfFile:self.filePath];
+        _preview = [zippedMedia gunzippedData];
+    }
+    return self;
+}
+
+
+- (KUser *)author {
+    return [KUser findById:self.authorId];
+}
+
+- (void)addRecipientIds:(NSArray *)recipientIds {
+    for(NSString *recipientId in recipientIds)
+        if(![recipientId isEqualToString:self.authorId])
+            [[[KObjectRecipient alloc] initWithObjectId:self.uniqueId recipientId:recipientId] save];
+}
+
+- (NSArray *)threadIds {
+    NSMutableArray *threadIds = [NSMutableArray new];
+    if(self.threadId) {
+        [threadIds addObject:self.threadId];
+    }else {
+        NSMutableArray *userIds = [NSMutableArray new];
+        if([self.authorId isEqualToString:[KAccountManager sharedManager].user.uniqueId]) {
+            NSArray *objectRecipients = [KObjectRecipient findAllByDictionary:@{@"objectId" : self.uniqueId}];
+            for(KObjectRecipient *or in objectRecipients) {
+                userIds = [NSMutableArray arrayWithObjects:or.recipientId, self.authorId, nil];
+                [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+                    return [obj1 compare:obj2];
+                }];
+                [threadIds addObject:[KThread uniqueIdFromUserIds:userIds]];
+            }
+        }else {
+            userIds = [NSMutableArray arrayWithObjects:self.authorId, [KAccountManager sharedManager].user.uniqueId, nil];
+            [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+                return [obj1 compare:obj2];
+            }];
+            if(!self.threadId) {
+                self.threadId = [KThread uniqueIdFromUserIds:userIds];
+                [super save];
+            }
+            [threadIds addObject:self.threadId];
+        }
+    }
+    return [threadIds copy];
+}
+
+- (NSArray *)threads {
+    NSMutableArray *threads = [NSMutableArray new];
+    for(NSString *threadId in self.threadIds) {
+        [threads addObject:[KThread findById:threadId]];
+    }
+    return [threads copy];
+}
+
+- (void)setupThreads {
+    for(NSString *threadId in self.threadIds) if(![KThread findById:threadId]) [[[KThread alloc] initWithUniqueId:threadId] save];
 }
 
 - (void)save {
@@ -82,78 +118,13 @@
 }
 
 - (void)processForThread {
-    if(self.threadId) {
-        KThread *thread = [KThread findById:self.threadId];
-        if(!thread) thread = [[KThread alloc] initWithUserIds:[self.threadId componentsSeparatedByString:@"_"]];
-        [thread processLatestMessage:self];
-    }else {
-        if([self.authorId isEqualToString:[KAccountManager sharedManager].user.uniqueId]) {
-            NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"objectId" : self.uniqueId}];
-            for(ObjectRecipient *or in objectRecipients) {
-                NSMutableArray *userIds = [NSMutableArray arrayWithObjects:or.recipientId, self.authorId, nil];
-                [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-                    return [obj1 compare:obj2];
-                }];
-                KThread *thread = [KThread findById:[userIds componentsJoinedByString:@"_"]];
-                if(!thread) {
-                    thread = [[KThread alloc] initWithUserIds:userIds];
-                    [thread save];
-                }
-                [thread processLatestMessage:self];
-            }
-        }else {
-            NSMutableArray *userIds = [NSMutableArray arrayWithObjects:self.authorId, [KAccountManager sharedManager].user.uniqueId, nil];
-            [userIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-                return [obj1 compare:obj2];
-            }];
-            KThread *thread = [KThread findById:[userIds componentsJoinedByString:@"_"]];
-            if(!thread) {
-                thread = [[KThread alloc] initWithUserIds:userIds];
-                [thread save];
-            }
-            [thread processLatestMessage:self];
-        }
-    }
-    
-}
-
-- (void)addRecipientIds:(NSArray *)recipientIds {
-    for(NSString *recipientId in recipientIds) {
-        if(![recipientId isEqualToString:[KAccountManager sharedManager].user.uniqueId]) [[[ObjectRecipient alloc] initWithObjectId:self.uniqueId recipientId:recipientId] save];
-    }
-}
-
-- (NSArray *)recipientIds {
-    NSArray *objectRecipients = [ObjectRecipient findAllByDictionary:@{@"objectId" : self.uniqueId}];
-    NSMutableArray *recipientIds = [NSMutableArray new];
-    for(ObjectRecipient *or in [objectRecipients objectEnumerator]) [recipientIds addObject:or.recipientId];
-    return [recipientIds copy];
-}
-
-- (NSArray *)attachments {
-    NSMutableArray *attachments = [NSMutableArray new];
-    for(NSString *attachmentId in [self.attachmentIds componentsSeparatedByString:@"__"]) {
-        NSString *className = [attachmentId componentsSeparatedByString:@"_"].firstObject;
-        NSString *uniqueId  = attachmentId;
-        KDatabaseObject *object = [NSClassFromString(className) findById:uniqueId];
-        if(object) [attachments addObject:object];
-    }
-    return [attachments copy];
-}
-
-- (KLocation *)location {
-    for(KDatabaseObject *attachment in self.attachments) if([attachment isKindOfClass:[KLocation class]]) return (KLocation *) attachment;
-    return nil;
-}
-
-- (KPhoto *)photo {
-    for(KDatabaseObject *attachment in self.attachments) if([attachment isKindOfClass:[KPhoto class]]) return (KPhoto *) attachment;
-    return nil;
+    [self setupThreads];
+    for(KThread *thread in self.threads) [thread processLatestMessage:self];
 }
 
 + (NSArray *)unread {
     return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
-        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where read = 0 order by created_at desc", [self tableName]]];
+        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where read = 0 AND author_id <> :user_id order by created_at desc", [self tableName]] withParameterDictionary:@{@"user_id" : [KAccountManager sharedManager].user.uniqueId}];
         NSMutableArray *posts = [[NSMutableArray alloc] init];
         while(result.next) {
             KPost *post = [[KPost alloc] initWithResultSetRow:result.resultDictionary];
@@ -190,23 +161,20 @@
 }
 
 - (NSData *)previewImage {
-    if(!self.preview) {
-        NSData *zippedMedia = [NSData dataWithContentsOfFile:self.filePath];
-        self.preview = [zippedMedia gunzippedData];
-        if(!self.preview) return [self createThumbnailPreview];
-    }
+    if(!self.preview) return [self createThumbnailPreviewWithData:nil];
     return self.preview;
 }
 
-- (NSData *)createThumbnailPreview {
-    KPhoto *photo = self.photo;
-    if(!photo || !photo.media) return nil;
+- (NSData *)createThumbnailPreviewWithData:(NSData *)imageData {
+    if(!imageData) {
+        KPhoto *photo = (KPhoto *)[self attachmentsOfType:NSStringFromClass([KPhoto class])].firstObject;
+        if(!photo || !photo.media) return nil;
+        imageData = photo.media;
+    }
     
     NSData *zippedMedia = [NSData dataWithContentsOfFile:self.filePath];
     self.preview = [zippedMedia gunzippedData];
     if(self.preview) return self.preview;
-    
-    NSData *media = photo.media;
     
     CGImageRef        previewImage = NULL;
     CFDictionaryRef   options = NULL;
@@ -216,7 +184,7 @@
     
     int imageSize = 40;
     
-    CGImageSourceRef fullsizeImageSource = CGImageSourceCreateWithData((CFDataRef)media, NULL);
+    CGImageSourceRef fullsizeImageSource = CGImageSourceCreateWithData((CFDataRef)imageData, NULL);
     if(fullsizeImageSource == NULL) {
         fprintf(stderr, "Image source is NULL.");
     }
@@ -245,7 +213,6 @@
     
     self.preview = UIImagePNGRepresentation([UIImage imageWithCGImage:previewImage]);
     [self.preview.gzippedData writeToFile:self.filePath atomically:YES];
-    [self decrementAttachmentCount];
     CFRelease(previewImage);
     return self.preview;
 }
@@ -270,20 +237,50 @@
     return self.createdAt.formattedAsTimeAgo;
 }
 
-- (void)addAttachment:(KDatabaseObject *)attachment {
+- (void)addAttachment:(KDatabaseObject <KAttachable> *)attachment {
     NSMutableArray *attachments = [NSMutableArray arrayWithArray:[self.attachmentIds componentsSeparatedByString:@"__"]];
     [attachments addObject:attachment.uniqueId];
     self.attachmentIds = [attachments componentsJoinedByString:@"__"];
+    attachment.parentId = self.uniqueId;
+    [attachment save];
+    [self processSavedAttachment:attachment];
 }
 
-- (void)incrementAttachmentCount {
-    self.attachmentCount = self.attachmentCount + 1;
-    [self save];
+- (void)processSavedAttachment:(KDatabaseObject<KAttachable> *)attachment {
+    if([attachment isKindOfClass:[KPhoto class]]) {
+        [self createThumbnailPreviewWithData:((KPhoto *)attachment).media];
+        [self save];
+    }
 }
 
-- (void)decrementAttachmentCount {
-    if(self.attachmentCount > 0) self.attachmentCount = self.attachmentCount - 1;
-    [self save];
++ (NSString *)generateUniqueId {
+    return [self generateUniqueIdWithClass];
 }
+
+- (NSArray *)attachments {
+    NSMutableArray *attachments = [NSMutableArray new];
+    for(NSString *attachmentId in [self.attachmentIds componentsSeparatedByString:@"__"]) {
+        NSString *className = [attachmentId componentsSeparatedByString:@"_"].firstObject;
+        NSString *uniqueId  = attachmentId;
+        KDatabaseObject *object = [NSClassFromString(className) findById:uniqueId];
+        if(object) [attachments addObject:object];
+    }
+    return [attachments copy];
+}
+
+- (NSArray *)attachmentsOfType:(NSString *)type {
+    NSMutableArray *ids = [NSMutableArray new];
+    for(NSString *attachmentId in [self.attachmentIds componentsSeparatedByString:@"__"]) {
+        if([[attachmentId componentsSeparatedByString:@"_"].firstObject isEqualToString:type])
+            [ids addObject:attachmentId];
+    }
+    return [NSClassFromString(type) findAllByIds:ids];
+}
+
+- (void)remove {
+    [super remove];
+    for(KDatabaseObject *attachment in self.attachments) [attachment remove];
+}
+
 
 @end

@@ -29,7 +29,6 @@
 
 - (void)processLatestMessage:(KDatabaseObject <KThreadable> *)message;
 - (NSArray *)recipientIds;
-//+ (NSArray *)inbox;
 - (NSArray *)messages;
 - (NSArray *)posts;
 - (NSString *)displayName;
@@ -38,6 +37,7 @@
 - (NSString *)latestMessageText;
 + (KThread *)findWithUserIds:(NSArray *)userIds;
 - (BOOL)isMoreRecentThan:(KThread *)thread;
-- (NSString *)userIds;
+- (NSArray *)userIds;
++ (NSString *)uniqueIdFromUserIds:(NSArray *)userIds;
 
 @end

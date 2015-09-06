@@ -15,6 +15,10 @@
 		EF01717A1ADF083700AFCBA4 /* KPost+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0171791ADF083700AFCBA4 /* KPost+Serialize.m */; };
 		EF0F4DBE1AB8D3BA00BB2AFC /* PushManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F4DBD1AB8D3BA00BB2AFC /* PushManager.m */; };
 		EF0F4DC41ABA19DE00BB2AFC /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F4DC31ABA19DE00BB2AFC /* HomeViewController.m */; };
+		EF0F9DF51B9A1FF500E835E9 /* KPhotoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F9DF41B9A1FF500E835E9 /* KPhotoTests.m */; };
+		EF0F9DF71B9A200A00E835E9 /* KMessageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F9DF61B9A200A00E835E9 /* KMessageTests.m */; };
+		EF0F9DF91B9A202000E835E9 /* KUserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F9DF81B9A202000E835E9 /* KUserTests.m */; };
+		EF0F9DFC1B9A23C000E835E9 /* KTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0F9DFB1B9A23C000E835E9 /* KTestHelper.m */; };
 		EF2CDEAE1AB48C3F001E2F20 /* KUser+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEAD1AB48C3F001E2F20 /* KUser+Serialize.m */; };
 		EF2CDEB11AB48CB6001E2F20 /* KMessage+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EF2CDEB01AB48CB6001E2F20 /* KMessage+Serialize.m */; };
 		EF3D09E31AE036EB0044E9F6 /* InboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EF3D09E21AE036EB0044E9F6 /* InboxViewController.m */; };
@@ -50,7 +54,6 @@
 		EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */; };
 		EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E27E1ACB2BB9002583E2 /* SendPushTokenRequest.m */; };
 		EFABC0281B39BEA50062B807 /* MediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFABC0271B39BEA50062B807 /* MediaView.xib */; };
-		EFAC97D11B2E171600B4FD0F /* KOutgoingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EFAC97D01B2E171600B4FD0F /* KOutgoingObject.m */; };
 		EFB225EF1B48853800D7E44B /* SelectRecipientViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */; };
 		EFB225F21B48C4EF00D7E44B /* MediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225F11B48C4EF00D7E44B /* MediaViewController.m */; };
 		EFB225F51B4984F200D7E44B /* KPhoto+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225F41B4984F200D7E44B /* KPhoto+Serialize.m */; };
@@ -108,7 +111,12 @@
 		EFEF483B1B7D8BFB00E77113 /* NSDate+TimeAgo.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF483A1B7D8BFB00E77113 /* NSDate+TimeAgo.m */; };
 		EFEF483E1B7D9E3300E77113 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFEF483D1B7D9E3300E77113 /* ProfileViewController.m */; };
 		EFEF48401B7D9FA400E77113 /* ProfileView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFEF483F1B7D9FA400E77113 /* ProfileView.xib */; };
-		EFF2033C1B8E908F00487F7C /* ObjectRecipient.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF2033B1B8E908F00487F7C /* ObjectRecipient.m */; };
+		EFF2033C1B8E908F00487F7C /* KObjectRecipient.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF2033B1B8E908F00487F7C /* KObjectRecipient.m */; };
+		EFF203441B98C42C00487F7C /* stowe.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EFF203431B98C42C00487F7C /* stowe.jpg */; };
+		EFF203461B98C4DE00487F7C /* beach.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EFF203451B98C4DE00487F7C /* beach.jpg */; };
+		EFF203481B9A1D4800487F7C /* KThreadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF203471B9A1D4800487F7C /* KThreadTests.m */; };
+		EFF2034A1B9A1D5400487F7C /* KPostTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF203491B9A1D5400487F7C /* KPostTests.m */; };
+		EFF2034C1B9A1D6900487F7C /* KLocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF2034B1B9A1D6900487F7C /* KLocationTests.m */; };
 		EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A611AAE19C3006C10D2 /* AES_CBC.m */; };
 		EFF70A871AAE19C3006C10D2 /* HMAC.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A631AAE19C3006C10D2 /* HMAC.m */; };
 		EFF70A881AAE19C3006C10D2 /* KeyDerivation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFF70A651AAE19C3006C10D2 /* KeyDerivation.m */; };
@@ -156,6 +164,11 @@
 		EF0F4DBD1AB8D3BA00BB2AFC /* PushManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PushManager.m; path = Network/PushManager.m; sourceTree = "<group>"; };
 		EF0F4DC21ABA19DE00BB2AFC /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		EF0F4DC31ABA19DE00BB2AFC /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		EF0F9DF41B9A1FF500E835E9 /* KPhotoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPhotoTests.m; path = ModelTests/KPhotoTests.m; sourceTree = "<group>"; };
+		EF0F9DF61B9A200A00E835E9 /* KMessageTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KMessageTests.m; path = ModelTests/KMessageTests.m; sourceTree = "<group>"; };
+		EF0F9DF81B9A202000E835E9 /* KUserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KUserTests.m; path = ModelTests/KUserTests.m; sourceTree = "<group>"; };
+		EF0F9DFA1B9A23C000E835E9 /* KTestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KTestHelper.h; sourceTree = "<group>"; };
+		EF0F9DFB1B9A23C000E835E9 /* KTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KTestHelper.m; sourceTree = "<group>"; };
 		EF2CDEAC1AB48C3F001E2F20 /* KUser+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KUser+Serialize.h"; path = "Network/Serializers/KUser+Serialize.h"; sourceTree = "<group>"; };
 		EF2CDEAD1AB48C3F001E2F20 /* KUser+Serialize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "KUser+Serialize.m"; path = "Network/Serializers/KUser+Serialize.m"; sourceTree = "<group>"; };
 		EF2CDEAF1AB48CB6001E2F20 /* KMessage+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KMessage+Serialize.h"; path = "Network/Serializers/KMessage+Serialize.h"; sourceTree = "<group>"; };
@@ -226,8 +239,6 @@
 		EF99E2811ACB2D1F002583E2 /* PushTokenRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushTokenRequest.h; sourceTree = "<group>"; };
 		EF9A744E1B52B639009689A7 /* DismissAndPresentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DismissAndPresentProtocol.h; path = Protocols/DismissAndPresentProtocol.h; sourceTree = "<group>"; };
 		EFABC0271B39BEA50062B807 /* MediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediaView.xib; sourceTree = "<group>"; };
-		EFAC97CF1B2E171600B4FD0F /* KOutgoingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KOutgoingObject.h; sourceTree = "<group>"; };
-		EFAC97D01B2E171600B4FD0F /* KOutgoingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KOutgoingObject.m; sourceTree = "<group>"; };
 		EFB225F01B48C4EF00D7E44B /* MediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaViewController.h; sourceTree = "<group>"; };
 		EFB225F11B48C4EF00D7E44B /* MediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaViewController.m; sourceTree = "<group>"; };
 		EFB225F31B4984F200D7E44B /* KPhoto+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KPhoto+Serialize.h"; path = "Network/Serializers/KPhoto+Serialize.h"; sourceTree = "<group>"; };
@@ -324,10 +335,15 @@
 		EFEF483C1B7D9E3300E77113 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		EFEF483D1B7D9E3300E77113 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		EFEF483F1B7D9FA400E77113 /* ProfileView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ProfileView.xib; path = Views/ProfileView.xib; sourceTree = "<group>"; };
-		EFF2033A1B8E908F00487F7C /* ObjectRecipient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectRecipient.h; path = Models/ObjectRecipient.h; sourceTree = "<group>"; };
-		EFF2033B1B8E908F00487F7C /* ObjectRecipient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjectRecipient.m; path = Models/ObjectRecipient.m; sourceTree = "<group>"; };
+		EFF2033A1B8E908F00487F7C /* KObjectRecipient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KObjectRecipient.h; path = Models/KObjectRecipient.h; sourceTree = "<group>"; };
+		EFF2033B1B8E908F00487F7C /* KObjectRecipient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KObjectRecipient.m; path = Models/KObjectRecipient.m; sourceTree = "<group>"; };
 		EFF2033D1B8F757600487F7C /* KThreadable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KThreadable.h; path = Models/Protocols/KThreadable.h; sourceTree = "<group>"; };
 		EFF203421B94A7E800487F7C /* NeedsRecipientsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NeedsRecipientsProtocol.h; path = Key/Models/Protocols/NeedsRecipientsProtocol.h; sourceTree = SOURCE_ROOT; };
+		EFF203431B98C42C00487F7C /* stowe.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = stowe.jpg; path = Key/Resources/Images/stowe.jpg; sourceTree = "<group>"; };
+		EFF203451B98C4DE00487F7C /* beach.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = beach.jpg; path = Key/Resources/Images/beach.jpg; sourceTree = "<group>"; };
+		EFF203471B9A1D4800487F7C /* KThreadTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KThreadTests.m; path = ModelTests/KThreadTests.m; sourceTree = "<group>"; };
+		EFF203491B9A1D5400487F7C /* KPostTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KPostTests.m; path = ModelTests/KPostTests.m; sourceTree = "<group>"; };
+		EFF2034B1B9A1D6900487F7C /* KLocationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KLocationTests.m; path = ModelTests/KLocationTests.m; sourceTree = "<group>"; };
 		EFF70A601AAE19C3006C10D2 /* AES_CBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AES_CBC.h; sourceTree = "<group>"; };
 		EFF70A611AAE19C3006C10D2 /* AES_CBC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AES_CBC.m; sourceTree = "<group>"; };
 		EFF70A621AAE19C3006C10D2 /* HMAC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMAC.h; sourceTree = "<group>"; };
@@ -680,6 +696,8 @@
 				EFB225FF1B4AD20A00D7E44B /* KStorageManagerTests.m */,
 				EFB226021B4CCC5500D7E44B /* KDatabaseObjectTests.m */,
 				EF855DD61B65656F006DEAE8 /* Info.plist */,
+				EF0F9DFA1B9A23C000E835E9 /* KTestHelper.h */,
+				EF0F9DFB1B9A23C000E835E9 /* KTestHelper.m */,
 			);
 			path = KeyTests;
 			sourceTree = "<group>";
@@ -696,6 +714,8 @@
 		EFCE58581B725EA200B39E39 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				EFF203451B98C4DE00487F7C /* beach.jpg */,
+				EFF203431B98C42C00487F7C /* stowe.jpg */,
 				EFCE58591B725EFF00B39E39 /* orwell.jpg */,
 			);
 			name = Images;
@@ -722,8 +742,6 @@
 				EFB722841B45E57700E6DF7A /* KLocation.m */,
 				EFEBDD391A6B2C7800973E15 /* KMessage.h */,
 				EFEBDD3A1A6B2C7800973E15 /* KMessage.m */,
-				EFAC97CF1B2E171600B4FD0F /* KOutgoingObject.h */,
-				EFAC97D01B2E171600B4FD0F /* KOutgoingObject.m */,
 				EFB722801B45E53800E6DF7A /* KPhoto.h */,
 				EFB722811B45E53800E6DF7A /* KPhoto.m */,
 				EF01716F1ADF07BB00AFCBA4 /* KPost.h */,
@@ -732,8 +750,8 @@
 				EFCD01D71A83E651005065B2 /* KThread.m */,
 				EFEBDD361A68CE9600973E15 /* KUser.h */,
 				EFEBDD371A68CE9600973E15 /* KUser.m */,
-				EFF2033A1B8E908F00487F7C /* ObjectRecipient.h */,
-				EFF2033B1B8E908F00487F7C /* ObjectRecipient.m */,
+				EFF2033A1B8E908F00487F7C /* KObjectRecipient.h */,
+				EFF2033B1B8E908F00487F7C /* KObjectRecipient.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -742,6 +760,12 @@
 			isa = PBXGroup;
 			children = (
 				EFEF48301B79188700E77113 /* KDeviceTests.m */,
+				EFF2034B1B9A1D6900487F7C /* KLocationTests.m */,
+				EF0F9DF61B9A200A00E835E9 /* KMessageTests.m */,
+				EF0F9DF41B9A1FF500E835E9 /* KPhotoTests.m */,
+				EFF203491B9A1D5400487F7C /* KPostTests.m */,
+				EFF203471B9A1D4800487F7C /* KThreadTests.m */,
+				EF0F9DF81B9A202000E835E9 /* KUserTests.m */,
 			);
 			name = ModelTests;
 			sourceTree = "<group>";
@@ -967,12 +991,14 @@
 				EFABC0281B39BEA50062B807 /* MediaView.xib in Resources */,
 				EF8358261AE02AED00B631AB /* ShareView.xib in Resources */,
 				EFB722731B42360300E6DF7A /* EditMediaView.xib in Resources */,
+				EFF203461B98C4DE00487F7C /* beach.jpg in Resources */,
 				EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */,
 				EFC6BEAE1A6857D500B0EB8F /* Images.xcassets in Resources */,
 				EFCE585A1B725EFF00B39E39 /* orwell.jpg in Resources */,
 				EF8358241AE02AD800B631AB /* InboxView.xib in Resources */,
 				EFEF48401B7D9FA400E77113 /* ProfileView.xib in Resources */,
 				EFE43D4A1B58482D0092CAC5 /* User.plist in Resources */,
+				EFF203441B98C42C00487F7C /* stowe.jpg in Resources */,
 				EFB4A2A71B5211580042F3DF /* ThreadView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1065,11 +1091,10 @@
 				EFF70A861AAE19C3006C10D2 /* AES_CBC.m in Sources */,
 				EF524B0A1AB0DE4300F3B9AF /* HttpManager.m in Sources */,
 				EFEF48381B7D8B4E00E77113 /* SubtitleTableViewCell.m in Sources */,
-				EFAC97D11B2E171600B4FD0F /* KOutgoingObject.m in Sources */,
 				EFDDD9B81B5AE89700089124 /* LoginRequest.m in Sources */,
 				EF3D09E31AE036EB0044E9F6 /* InboxViewController.m in Sources */,
 				EF524AEC1AAE24B400F3B9AF /* NSString+Base64.m in Sources */,
-				EFF2033C1B8E908F00487F7C /* ObjectRecipient.m in Sources */,
+				EFF2033C1B8E908F00487F7C /* KObjectRecipient.m in Sources */,
 				EF524AE51AAE239800F3B9AF /* NSData+keyVersionByte.m in Sources */,
 				EFEBDD381A68CE9600973E15 /* KUser.m in Sources */,
 				EFE43D411B5818110092CAC5 /* ContentTabBarController.m in Sources */,
@@ -1150,16 +1175,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF0F9DF51B9A1FF500E835E9 /* KPhotoTests.m in Sources */,
 				EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */,
 				EFEF48311B79188700E77113 /* KDeviceTests.m in Sources */,
 				EF6B44C21ABCDD3600B88323 /* FreeKeyTestExample.m in Sources */,
+				EF0F9DF91B9A202000E835E9 /* KUserTests.m in Sources */,
 				EF6B44C41ABDAE1D00B88323 /* HttpManagerTests.m in Sources */,
 				EFB226001B4AD20A00D7E44B /* KStorageManagerTests.m in Sources */,
+				EF0F9DF71B9A200A00E835E9 /* KMessageTests.m in Sources */,
 				EFC6BEBD1A6857D500B0EB8F /* KeyTests.m in Sources */,
 				EFE5667D1AF1883E00FB1142 /* SelectRecipientViewController.m in Sources */,
+				EFF203481B9A1D4800487F7C /* KThreadTests.m in Sources */,
+				EFF2034C1B9A1D6900487F7C /* KLocationTests.m in Sources */,
 				EFB226031B4CCC5500D7E44B /* KDatabaseObjectTests.m in Sources */,
 				EF524B071AAF330A00F3B9AF /* SessionTests.m in Sources */,
 				EF524B051AAF330A00F3B9AF /* FreeKeyTests.m in Sources */,
+				EF0F9DFC1B9A23C000E835E9 /* KTestHelper.m in Sources */,
+				EFF2034A1B9A1D5400487F7C /* KPostTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

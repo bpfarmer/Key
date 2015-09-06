@@ -15,7 +15,6 @@
 #import "Session.h"
 #import "RootChain.h"
 #import "SessionState.h"
-#import "KOutgoingObject.h"
 #import "KPhoto.h"
 #import "KLocation.h"
 #import "PreKey.h"
@@ -25,7 +24,7 @@
 #import "KPost.h"
 #import "KDevice.h"
 #import "AttachmentKey.h"
-#import "ObjectRecipient.h"
+#import "KObjectRecipient.h"
 
 @implementation KStorageSchema
 
@@ -37,7 +36,6 @@
     [Session createTable];
     [SessionState createTable];
     [RootChain createTable];
-    [KOutgoingObject createTable];
     [KPhoto createTable];
     [KLocation createTable];
     [PreKey createTable];
@@ -47,7 +45,7 @@
     [KPost createTable];
     [KDevice createTable];
     [AttachmentKey createTable];
-    [ObjectRecipient createTable];
+    [KObjectRecipient createTable];
     
     [self updateSchema];
 }
@@ -60,7 +58,6 @@
     [Session dropTable];
     [SessionState dropTable];
     [RootChain dropTable];
-    [KOutgoingObject dropTable];
     [KPhoto dropTable];
     [KLocation dropTable];
     [PreKeyExchange dropTable];
@@ -69,6 +66,7 @@
     [KPost dropTable];
     [KDevice dropTable];
     [AttachmentKey dropTable];
+    [KObjectRecipient dropTable];
 }
 
 + (void)updateSchema {

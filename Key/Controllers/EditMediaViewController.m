@@ -15,7 +15,7 @@
 #import "KPost.h"
 #import "FreeKey.h"
 #import "CollapsingFutures.h"
-#import "ObjectRecipient.h"
+#import "KObjectRecipient.h"
 #import "NeedsRecipientsProtocol.h"
 
 @interface EditMediaViewController () <DismissAndPresentProtocol, UIGestureRecognizerDelegate, UITextFieldDelegate, NeedsRecipientsProtocol>
@@ -166,7 +166,6 @@
             SelectRecipientViewController *selectRecipientView = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
             [selectRecipientView setSendableObject:post];
             [selectRecipientView setAttachableObjects:attachableObjects];
-            for(KDatabaseObject *object in attachableObjects) NSLog(@"ATTACHABLE OBJECT CLASS: %@", NSStringFromClass(object.class));
             selectRecipientView.delegate = self;
             selectRecipientView.sendingDelegate = self;
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -197,11 +196,9 @@
     [attachableObjects addObject:[[KPhoto alloc] initWithMedia:self.imageData]];
     if(self.locationEnabled) {
         KLocation *location = [[KLocation alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId location:[KAccountManager sharedManager].currentCoordinate];
-        [location save];
         [attachableObjects addObject:location];
     }
     for(KDatabaseObject <KAttachable> *object in attachableObjects) {
-        [object setParentId:post.uniqueId];
         [post addAttachment:object];
     }
     return [attachableObjects copy];

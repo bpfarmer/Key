@@ -42,6 +42,7 @@
 + (NSDictionary *)propertyTypeToColumnTypeMapping;
 + (NSString *)notificationChannel;
 + (NSString *)generateUniqueId;
++ (NSString *)generateUniqueIdWithClass;
 + (BOOL)compareProperty:(NSString *)name object1:(KDatabaseObject *)object1 object2:(KDatabaseObject *)object2;
 
 @end

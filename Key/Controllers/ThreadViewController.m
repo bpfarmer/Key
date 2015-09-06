@@ -20,7 +20,7 @@
 #import "DismissAndPresentProtocol.h"
 #import "KPost.h"
 #import "MediaViewController.h"
-#import "ObjectRecipient.h"
+#import "KObjectRecipient.h"
 #import "SelectRecipientViewController.h"
 #import "NeedsRecipientsProtocol.h"
 
@@ -117,7 +117,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
             KPost *post = (KPost *)notification.object;
             //if(post.attachmentCount == 0) return;
             if(![post.threadId isEqualToString:self.thread.uniqueId]) {
-                if(![ObjectRecipient findByDictionary:@{@"objectId" : post.uniqueId, @"recipientId" : self.thread.recipientIds.firstObject}]) return;
+                if(![KObjectRecipient findByDictionary:@{@"objectId" : post.uniqueId, @"recipientId" : self.thread.recipientIds.firstObject}]) return;
             }
             for(KDatabaseObject *object in self.messages) if([object.uniqueId isEqualToString:post.uniqueId]) return;
             NSMutableArray *posts = [[NSMutableArray alloc] initWithArray:self.messages];

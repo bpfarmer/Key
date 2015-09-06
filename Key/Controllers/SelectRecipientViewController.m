@@ -19,7 +19,7 @@
 #import "KAttachable.h"
 #import "CheckDevicesRequest.h"
 #import "CollapsingFutures.h"
-#import "ObjectRecipient.h"
+#import "KObjectRecipient.h"
 
 @interface SelectRecipientViewController ()
 
