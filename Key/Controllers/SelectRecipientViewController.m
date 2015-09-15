@@ -46,7 +46,7 @@
     NSMutableArray *newData = [NSMutableArray arrayWithArray:sectionData];
     NSMutableArray *newSectionData = [NSMutableArray arrayWithArray:sectionData[0]];
     for(KUser *user in sectionData[0]) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [newSectionData removeObject:user];
-    [newSectionData insertObject:@"Everyone" atIndex:0];
+    if(!self.sendingDelegate) [newSectionData insertObject:@"Everyone" atIndex:0];
     [newData replaceObjectAtIndex:0 withObject:newSectionData];
     return [newData copy];
 }
@@ -105,7 +105,7 @@
         if(self.selectedRecipients.count > 1) {
             NSMutableArray *selectedRecipientIds = [NSMutableArray new];
             for(KDatabaseObject *recipient in self.selectedRecipients) [selectedRecipientIds addObject:recipient.uniqueId];
-            [self.sendableObject save];
+            if(![self.sendableObject isKindOfClass:[KThread class]]) [self setThreadIdWithRecipientIds:selectedRecipientIds];
             [self.sendableObject sendToRecipientIds:selectedRecipientIds withAttachableObjects:self.attachableObjects];
             if(self.sendingDelegate) [self.sendingDelegate setSendableObject:self.sendableObject];
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -113,6 +113,13 @@
             });
         }
     });
+}
+
+- (void)setThreadIdWithRecipientIds:(NSArray *)recipientIds {
+    if(recipientIds.count > 1) {
+        KThread *thread = [KThread findById:[KThread uniqueIdFromUserIds:recipientIds]];
+        if(thread) self.sendableObject.threadId = thread.uniqueId;
+    }
 }
 
 - (IBAction)didPressEphemeral:(id)sender {
@@ -126,6 +133,9 @@
 }
 
 - (IBAction)didPressCancel:(id)sender {
+    if(self.sendingDelegate) {
+        [self.sendingDelegate didCancel];
+    }
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 

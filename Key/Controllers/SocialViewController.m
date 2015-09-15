@@ -24,10 +24,10 @@
 
 - (void)viewDidLoad {
     self.tableView = self.postsTableView;
-    self.sectionCriteria = @[@{@"class" : @"KPost",
-                               @"criteria" : @{@"attachmentCount" : [NSNumber numberWithInteger:0]}}];
-    self.sortedByProperty = @"createdAt";
-    self.sortDescending   = YES;
+    NSString *where = @"ephemeral = 0 and (read_at > :yesterday or read_at is null) order by read_at asc, created_at asc";
+    self.sectionCriteria = @[@{@"class" : @"KPost", @"where" : where, @"parameters" : @{@"yesterday" : [NSNumber numberWithDouble:[[NSDate dateWithTimeIntervalSinceNow:(-60*60*24)] timeIntervalSinceReferenceDate]]}}];
+    self.sortedByProperty = @"readAt";
+    self.sortDescending   = NO;
     [super viewDidLoad];
     
     self.currentUser = [KAccountManager sharedManager].user;
@@ -35,6 +35,13 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (BOOL)object:(KDatabaseObject *)object matchesCriteriaforSection:(NSUInteger)sectionId {
+    if(![object isKindOfClass:[KPost class]]) return NO;
+    KPost *post = (KPost *)object;
+    if(post.ephemeral) return NO;
+    return YES;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {

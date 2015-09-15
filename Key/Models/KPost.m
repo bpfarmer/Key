@@ -30,7 +30,6 @@
     if(self) {
         _authorId        = authorId;
         _createdAt       = [NSDate date];
-        _read            = NO;
     }
     
     return self;
@@ -124,7 +123,7 @@
 
 + (NSArray *)unread {
     return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
-        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where read = 0 AND author_id <> :user_id order by created_at desc", [self tableName]] withParameterDictionary:@{@"user_id" : [KAccountManager sharedManager].user.uniqueId}];
+        FMResultSet *result = [database executeQuery:[NSString stringWithFormat:@"select * from %@ where read_at is null AND author_id <> :user_id order by created_at desc", [self tableName]] withParameterDictionary:@{@"user_id" : [KAccountManager sharedManager].user.uniqueId}];
         NSMutableArray *posts = [[NSMutableArray alloc] init];
         while(result.next) {
             KPost *post = [[KPost alloc] initWithResultSetRow:result.resultDictionary];

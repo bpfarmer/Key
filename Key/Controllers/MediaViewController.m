@@ -38,6 +38,9 @@
     
     if(self.post) {
         self.post = [KPost findById:self.post.uniqueId];
+        [self.post setReadAt:[NSDate date]];
+        [self.post save];
+        NSLog(@"POST READ AT: %@", self.post.readAt);
         NSLog(@"ATTACHMENT IDS: %@", self.post.attachmentIds);
         NSLog(@"EPHEMERAL: %hhd", self.post.ephemeral);
         if(self.post.attachments.count > 0) {

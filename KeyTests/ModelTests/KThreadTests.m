@@ -94,6 +94,10 @@
     XCTAssert(thread.posts.count == 3);
 }
 
+- (void)testUniqueIdSorting {
+    NSArray *userIds = @[@"3", @"2", @"1"];
+    XCTAssert([[KThread uniqueIdFromUserIds:userIds] isEqualToString:@"KThread_1_2_3"]);
+}
 
 
 

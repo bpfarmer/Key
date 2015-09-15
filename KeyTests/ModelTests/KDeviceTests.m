@@ -14,6 +14,7 @@
 #import "KAccountManager.h"
 #import "KStorageSchema.h"
 #import "CollapsingFutures.h"
+#import "KTestHelper.h"
 
 @interface KDeviceTests : XCTestCase
 
@@ -23,12 +24,12 @@
 
 - (void)setUp {
     [super setUp];
+    [KTestHelper setup];
 }
 
 - (void)tearDown {
     [super tearDown];
-    [KStorageSchema dropTables];
-    
+    [KTestHelper tearDown];
 }
 
 - (void)testDropTable {

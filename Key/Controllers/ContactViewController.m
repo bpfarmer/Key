@@ -57,14 +57,14 @@
     KUser *user = (KUser *)[self objectForIndexPath:indexPath];
     if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) cell.textLabel.text = @"Me";
     else cell.textLabel.text = user.displayName;
-    KPost *post = [KPost findByDictionary:@{@"authorId" : user.uniqueId, @"ephemeral" : @NO, @"attachmentCount" : [NSNumber numberWithInteger:0]}];
+    /*KPost *post = [KPost findByDictionary:@{@"authorId" : user.uniqueId, @"ephemeral" : @NO}];
     UIImage *preview;
     if(post) {
         preview = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];
     }else {
         preview = [self whiteImage];
     }
-    cell.imageView.image = preview;
+    cell.imageView.image = preview;*/
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     return cell;
 }
@@ -83,7 +83,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     KUser *user = (KUser *)[self objectForIndexPath:indexPath];
     if(user) {
-        [self presentProfileViewControllerForUser:user];
+        //[self presentProfileViewControllerForUser:user];
     }
 }
 

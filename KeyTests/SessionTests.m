@@ -192,7 +192,7 @@
     XCTAssert([[oppositeSession decryptMessage:[session encryptMessage:message3]] isEqualToData:message3]);
     
     NSMutableArray *encryptedMessages = [NSMutableArray new];
-    for(int i = 0; i < 1000; i++) {
+    for(int i = 0; i < 300; i++) {
         [encryptedMessages addObject:[session encryptMessage:message1]];
     }
     

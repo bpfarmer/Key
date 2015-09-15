@@ -18,7 +18,7 @@
 #import "KObjectRecipient.h"
 #import "NeedsRecipientsProtocol.h"
 
-@interface EditMediaViewController () <DismissAndPresentProtocol, UIGestureRecognizerDelegate, UITextFieldDelegate, NeedsRecipientsProtocol>
+@interface EditMediaViewController () <DismissAndPresentProtocol, UIGestureRecognizerDelegate, UITextFieldDelegate>
 
 @property (nonatomic) IBOutlet UIView *overlayView;
 @property (nonatomic) IBOutlet UIButton *locationButton;
@@ -167,7 +167,6 @@
             [selectRecipientView setSendableObject:post];
             [selectRecipientView setAttachableObjects:attachableObjects];
             selectRecipientView.delegate = self;
-            selectRecipientView.sendingDelegate = self;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self presentViewController:selectRecipientView animated:NO completion:nil];
             });
@@ -181,10 +180,6 @@
             });
         }
     });
-}
-
-- (void)setSendableObject:(KDatabaseObject *)object {
-    
 }
 
 - (NSArray *)setupAttachableObjectsForPost:(KPost *)post {

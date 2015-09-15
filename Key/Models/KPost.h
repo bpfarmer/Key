@@ -25,7 +25,6 @@
 @property (nonatomic) NSString *threadId;
 @property (nonatomic) NSData *preview;
 @property (nonatomic) BOOL ephemeral;
-@property (nonatomic) BOOL read;
 @property (nonatomic) NSDate *readAt;
 @property (nonatomic) NSDate *createdAt;
 @property (nonatomic) NSString *attachmentIds;

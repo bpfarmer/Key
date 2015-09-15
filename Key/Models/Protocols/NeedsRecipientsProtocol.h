@@ -13,5 +13,6 @@
 @protocol NeedsRecipientsProtocol <NSObject>
 
 - (void)setSendableObject:(KDatabaseObject *)object;
+- (void)didCancel;
 
 @end

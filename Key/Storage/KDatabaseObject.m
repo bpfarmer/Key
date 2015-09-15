@@ -159,25 +159,27 @@
 + (NSString *)sqlStatementForDictionary:(NSDictionary *)dictionary {
     NSMutableArray *conditions = [[NSMutableArray alloc] init];
     for(NSString *key in [dictionary allKeys]) {
-        if(![[self storedPropertyList] containsObject:key]) return nil;
-        [conditions addObject:[NSString stringWithFormat:@"%@ = :%@", [self propertyToColumnMapping][key], [self propertyToColumnMapping][key]]];
+        if(![[self storedPropertyList] containsObject:key] && ![key isEqualToString:@"or"]) return nil;
+        
+        NSString *comparator = @"=";
+        NSArray *comparators = @[@"=", @">", @"<", @"<>", @">=", @"<=", @"is"];
+        if([dictionary[key] isKindOfClass:[NSArray class]] && [comparators containsObject:((NSArray *)dictionary[key]).firstObject]) comparator = ((NSArray *)dictionary[key]).firstObject;
+        [conditions addObject:[NSString stringWithFormat:@"%@ %@ :%@", [self propertyToColumnMapping][key], comparator, [self propertyToColumnMapping][key]]];
     }
     NSString *selectSQL = [NSString stringWithFormat:@"select * from %@", [self tableName]];
     
-    if(![conditions isEqualToArray:@[]]) selectSQL = [NSString stringWithFormat:@"%@ where %@", selectSQL, [conditions componentsJoinedByString:@" AND "]];
+    if(![conditions isEqualToArray:@[]]) selectSQL = [NSString stringWithFormat:@"%@ where (%@)", selectSQL, [conditions componentsJoinedByString:@") AND ("]];
     
     return selectSQL;
 }
 
 + (NSString *)sqlStatementForDictionary:(NSDictionary *)dictionary orderBy:(NSString *)orderProperty descending:(BOOL)descending {
     NSString *selectSQL = [self sqlStatementForDictionary:dictionary];
-    
     if(orderProperty) {
         selectSQL = [NSString stringWithFormat:@"%@ order by %@", selectSQL, [self columnNameFromProperty:orderProperty]];
         if(descending) selectSQL = [NSString stringWithFormat:@"%@ desc", selectSQL];
         else selectSQL = [NSString stringWithFormat:@"%@ asc", selectSQL];
     }
-    
     return selectSQL;
 }
 
@@ -260,6 +262,20 @@
     }];
 }
 
++ (NSArray *)findAllWhere:(NSString *)where parameters:(NSDictionary *)parameters {
+    NSString *selectSQL = [NSString stringWithFormat:@"select * from %@ where %@", [self tableName], where];
+    return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
+        NSMutableArray *results = [NSMutableArray new];
+        FMResultSet *result = [database executeQuery:selectSQL withParameterDictionary:parameters];
+        while(result.next) {
+            KDatabaseObject *object = [[self alloc] initWithResultSetRow:result.resultDictionary];
+            [results addObject:object];
+        }
+        [result close];
+        return [results copy];
+    }];
+}
+
 - (instancetype)initWithUniqueId:(NSString *)uniqueId {
     self = [super init];
     if(self) _uniqueId = uniqueId;
@@ -314,6 +330,7 @@
     NSComparisonResult comparison = [[object1 valueForKey:name] compare:[object2 valueForKey:name]];
     switch (comparison) {
         case NSOrderedDescending : return YES; break;
+        case NSOrderedSame : return YES; break;
         default : return NO; break;
     }
 }
@@ -336,6 +353,7 @@
 }
 
 - (void)sendToRecipientIds:(NSArray *)recipientIds withAttachableObjects:(NSArray *)attachableObjects {
+    [self save];
     [self addRecipientIds:recipientIds];
     for(KDatabaseObject *attachment in attachableObjects){
         [attachment save];

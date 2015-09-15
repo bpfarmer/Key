@@ -49,7 +49,6 @@
 }
 
 - (void)save {
-    if(!self.uniqueId) return;
     [super save];
 }
 
@@ -85,7 +84,11 @@
 }
 
 + (NSString *)uniqueIdFromUserIds:(NSArray *)userIds {
-    return [NSString stringWithFormat:@"%@_%@", NSStringFromClass([KThread class]), [userIds componentsJoinedByString:@"_"]];
+    NSMutableArray *sortableUserIds = [NSMutableArray arrayWithArray:userIds];
+    [sortableUserIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    return [NSString stringWithFormat:@"%@_%@", NSStringFromClass([KThread class]), [sortableUserIds componentsJoinedByString:@"_"]];
 }
 
 - (void)sendWithAttachableObjects:(NSArray *)attachableObjects {
@@ -166,7 +169,6 @@
         [threadAndPostIds addObject:or.objectId];
         [questionMarks addObject:@"?"];
     }
-    NSLog(@"PARAMETERS: %@", threadAndPostIds);
     NSString *selectSQL = [NSString stringWithFormat:@"select * from %@ where thread_id = :thread_id or unique_id in (%@)", [KPost tableName], [questionMarks componentsJoinedByString:@" , "]];
     return [[KStorageManager sharedManager] querySelectObjects:^NSArray *(FMDatabase *database) {
         FMResultSet *result =  [database executeQuery:selectSQL withArgumentsInArray:threadAndPostIds];

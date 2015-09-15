@@ -18,6 +18,8 @@
     if(self) {
         _authorId     = authorId;
         _location     = location;
+        _address      = @"";
+        [self setupAddress];
     }
     return self;
 }
@@ -32,6 +34,13 @@
         _address      = address;
     }
     return self;
+}
+
+- (void)setupAddress {
+    [[self.class addressFromLocation:self.location] thenDo:^(NSString *address) {
+        self.address = address;
+        [self save];
+    }];
 }
 
 + (TOCFuture *)addressFromLocation:(CLLocation *)location {

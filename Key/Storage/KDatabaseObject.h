@@ -33,6 +33,7 @@
 + (NSArray *)findAllByDictionary:(NSDictionary *)dictionary;
 + (NSArray *)findAllByDictionary:(NSDictionary *)dictionary orderBy:(NSString *)orderProperty descending:(BOOL)descending;
 + (NSArray *)findAllByIds:(NSArray *)ids;
++ (NSArray *)findAllWhere:(NSString *)where parameters:(NSDictionary *)parameters;
 + (NSArray *)all;
 + (NSArray *)storedPropertyList;
 + (NSArray *)unsavedPropertyList;

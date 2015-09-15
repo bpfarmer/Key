@@ -37,7 +37,6 @@
 - (void)testCreationWithAuthor {
     KPost *post = [[KPost alloc] initWithAuthorId:@"1"];
     XCTAssert([post.authorId isEqualToString:@"1"]);
-    XCTAssert(!post.read);
     XCTAssert([post.createdAt compare:[NSDate date]] == -1);
     XCTAssert([post.createdAt compare:[[NSDate date] dateByAddingTimeInterval:-60]] == 1);
 }
@@ -45,7 +44,6 @@
 - (void)testCreationWithProperties {
     NSDate *date = [NSDate date];
     KPost *post = [[KPost alloc] initWithUniqueId:@"KPost_1" authorId:@"1" threadId:@"KThread_1" text:nil createdAt:date ephemeral:NO attachmentIds:nil attachmentCount:1];
-    XCTAssert(!post.read);
     XCTAssert(!post.ephemeral);
     XCTAssert([post.authorId isEqualToString:@"1"]);
     XCTAssert([post.uniqueId isEqualToString:@"KPost_1"]);
@@ -108,12 +106,13 @@
     KPost *post = [[KPost alloc] initWithAuthorId:@"1"];
     [post save];
     post = [[KPost alloc] initWithAuthorId:@"2"];
-    post.read = YES;
+    [post setReadAt:[NSDate date]];
     [post save];
     post = [[KPost alloc] initWithAuthorId:@"2"];
     [post save];
     post = [[KPost alloc] initWithAuthorId:@"2"];
     [post save];
+    NSLog(@"POSTS UNREAD: %@", [KPost unread]);
     XCTAssert([KPost unread].count == 2);
 }
 
@@ -163,6 +162,10 @@
     XCTAssert([location.parentId isEqualToString:post.uniqueId]);
     XCTAssert([[post.attachmentIds componentsSeparatedByString:@"__"].firstObject isEqualToString:location.uniqueId]);
     XCTAssert(post.attachments.count == 1);
+}
+
+- (void)testConformsToProtocol {
+    XCTAssert([KPost conformsToProtocol:@protocol(KThreadable)]);
 }
 
 

@@ -33,6 +33,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
 @property (nonatomic) NSArray *posts;
 @property (nonatomic, strong) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic, weak)   UIView *navView;
+@property (nonatomic) BOOL cancelled;
 @end
 
 @interface UINavigationItem(){
@@ -67,6 +68,7 @@ static NSString *TableViewCellIdentifier = @"Messages";
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleLightGrayColor]];
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor jsq_messageBubbleBlueColor]];
     
+    self.cancelled = NO;
     self.showLoadEarlierMessagesHeader = NO;
     
     self.titleView = self.navigationItem.titleView;
@@ -113,7 +115,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
                 [self scrollToBottomAnimated:YES];
             });
         }else if([notification.object isKindOfClass:[KPost class]]) {
-            NSLog(@"POST: %@", notification.object);
             KPost *post = (KPost *)notification.object;
             //if(post.attachmentCount == 0) return;
             if(![post.threadId isEqualToString:self.thread.uniqueId]) {
@@ -135,13 +136,17 @@ static NSString *TableViewCellIdentifier = @"Messages";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
-    if(self.thread && self.thread.uniqueId) {
-        self.title = self.thread.displayName;
-        
-        if(!self.thread.read) {
-            [self.thread setRead:YES];
-            [self.thread save];
+    if(!self.cancelled) {
+        if(self.thread && self.thread.uniqueId) {
+            self.title = self.thread.displayName;
+            
+            if(!self.thread.read) {
+                [self.thread setRead:YES];
+                [self.thread save];
+            }
         }
+    }else {
+        [self.navigationController popViewControllerAnimated:NO];
     }
 }
 
@@ -264,8 +269,8 @@ static NSString *TableViewCellIdentifier = @"Messages";
     [self loadMessages];
 }
 
-- (IBAction)didPressBack:(id)sender {
-    [self dismissViewControllerAnimated:NO completion:nil];
+- (void)didCancel {
+    self.cancelled = YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField*)aTextField {

@@ -22,5 +22,6 @@
 - (NSString *)cellIdentifier;
 + (dispatch_queue_t)sharedQueue;
 - (NSArray *)modifySectionData:(NSArray *)sectionData;
+- (BOOL)object:(KDatabaseObject *)object matchesCriteriaforSection:(NSUInteger)sectionId;
 
 @end

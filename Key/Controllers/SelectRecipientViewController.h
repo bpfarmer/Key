@@ -11,6 +11,7 @@
 #import "DismissAndPresentProtocol.h"
 #import "KTableViewController.h"
 #import "NeedsRecipientsProtocol.h"
+#import "KThreadable.h"
 
 @class KPost;
 @class KUser;
@@ -25,7 +26,7 @@
 @property (nonatomic, weak) id <DismissAndPresentProtocol> delegate;
 @property (nonatomic, weak) id <NeedsRecipientsProtocol> sendingDelegate;
 @property (nonatomic) KUser *currentUser;
-@property (nonatomic) KDatabaseObject *sendableObject;
+@property (nonatomic) KDatabaseObject <KThreadable> *sendableObject;
 @property (nonatomic) NSArray *attachableObjects;
 @property (nonatomic) BOOL ephemeral;
 

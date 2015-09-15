@@ -12,30 +12,34 @@
 #import "KStorageManager.h"
 #import "KAccountManager.h"
 #import "CollapsingFutures.h"
+#import "KPost.h"
+#import "KTestHelper.h"
 
 @interface KDatabaseObjectTests : XCTestCase
+
+@end
+
+@interface KDatabaseObject (Testing)
+
++ (NSString *)sqlStatementForDictionary:(NSDictionary *)dictionary;
 
 @end
 
 @implementation KDatabaseObjectTests
 
 - (void)setUp {
-    NSString *testDB = @"testDB";
     [super setUp];
-    KStorageManager *manager = [KStorageManager sharedManager];
-    [manager setDatabaseWithName:testDB];
-    [KUser createTable];
+    [KTestHelper setup];
 }
 
 - (void)tearDown {
     [super tearDown];
+    [KTestHelper tearDown];
 }
 
 - (void)testDropTable {
     [KUser dropTable];
 }
-
-
 
 - (void)testPropertyNames {
     NSLog(@"NEW PROPERTY NAME LIST: %@", [KUser propertyNames]);
@@ -104,6 +108,39 @@
     XCTAssert([userIds containsObject:@"1"]);
     XCTAssert([userIds containsObject:@"2"]);
     XCTAssert([userIds containsObject:@"3"]);
+}
+
+- (void)testSQLStatement {
+    NSString *statement = [KPost sqlStatementForDictionary:@{@"uniqueId" : @"123"}];
+    XCTAssert([statement isEqualToString:@"select * from k_post where (unique_id = :unique_id)"]);
+    statement = [KPost sqlStatementForDictionary:@{@"uniqueId" : @[@">", @"123"]}];
+    XCTAssert([statement isEqualToString:@"select * from k_post where (unique_id > :unique_id)"]);
+    statement = [KPost sqlStatementForDictionary:@{@"uniqueId" : @[@"<", @"123"]}];
+    XCTAssert([statement isEqualToString:@"select * from k_post where (unique_id < :unique_id)"]);
+    statement = [KPost sqlStatementForDictionary:@{@"uniqueId" : @[@">=", @"123"]}];
+    XCTAssert([statement isEqualToString:@"select * from k_post where (unique_id >= :unique_id)"]);
+    statement = [KPost sqlStatementForDictionary:@{@"uniqueId" : @[@"<=", @"123"]}];
+    XCTAssert([statement isEqualToString:@"select * from k_post where (unique_id <= :unique_id)"]);
+    statement = [KPost sqlStatementForDictionary:@{@"uniqueId" : @[@"<>", @"123"]}];
+    XCTAssert([statement isEqualToString:@"select * from k_post where (unique_id <> :unique_id)"]);
+    statement = [KPost sqlStatementForDictionary:@{@"uniqueId" : @[@"=", @"123"]}];
+    XCTAssert([statement isEqualToString:@"select * from k_post where (unique_id = :unique_id)"]);
+    NSString *readAtCriterion = [NSString stringWithFormat:@"%f or read_at is null", [[NSDate dateWithTimeIntervalSinceNow:(-60*60*24)] timeIntervalSinceReferenceDate]];
+    statement = [KPost sqlStatementForDictionary:@{@"ephemeral" : @NO, @"readAt" : @[@">", readAtCriterion]}];
+    [KPost findByDictionary:@{@"ephemeral" : @NO, @"readAt" : @[@">", readAtCriterion]}];
+    NSLog(@"READ AT CRITERION: %@", statement);
+}
+
+- (void)testFindAllWhere {
+    KPost *post = [[KPost alloc] initWithAuthorId:@"1"];
+    [post save];
+    post = [[KPost alloc] initWithAuthorId:@"2"];
+    [post save];
+    post = [[KPost alloc] initWithAuthorId:@"3"];
+    [post save];
+    
+    NSArray *posts = [KPost findAllWhere:@"author_id = :author1 or author_id = :author2 or author_id = :author3" parameters:@{@"author1" : @"1", @"author2" : @"2", @"author3" : @"3"}];
+    XCTAssert(posts.count == 3);
 }
 
 @end

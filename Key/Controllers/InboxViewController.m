@@ -32,6 +32,7 @@
     self.sectionCriteria = @[@{@"class" : @"KThread",
                                @"criteria" : @{}}];
     self.sortedByProperty = @"updatedAt";
+    self.sortDescending = YES;
     [super viewDidLoad];
     [UIView setAnimationsEnabled:NO];
 }
@@ -43,7 +44,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [[KAccountManager sharedManager].user asyncGetFeed];
-    [self.threadsTableView reloadData];
+    for(KThread *thread in [KThread all]) {
+        NSLog(@"THREAD NAME: %@ UPDATED AT: %@", [thread name], thread.updatedAt);
+    }
 }
 
 - (void)didReceiveMemoryWarning {

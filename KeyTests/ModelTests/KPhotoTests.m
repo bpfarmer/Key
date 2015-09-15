@@ -12,6 +12,7 @@
 #import "KStorageManager.h"
 #import "KAccountManager.h"
 #import "CollapsingFutures.h"
+#import "KTestHelper.h"
 
 @interface KPhotoTests : XCTestCase
 
@@ -21,10 +22,12 @@
 
 - (void)setUp {
     [super setUp];
+    [KTestHelper setup];
 }
 
 - (void)tearDown {
     [super tearDown];
+    [KTestHelper tearDown];
 }
 
 - (void)testInit {
