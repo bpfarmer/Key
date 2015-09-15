@@ -48,6 +48,29 @@
     return [data copy];
 }
 
+- (NSInteger)destinationCellIdInSectionId:(NSUInteger)sectionId object:(KDatabaseObject *)object {
+    __block NSInteger newCellId = -1;
+    if(self.sortedByProperty) {
+        [self.sectionData[sectionId] enumerateObjectsUsingBlock:^(id cell, NSUInteger replaceCellId, BOOL *stop) {
+            KDatabaseObject *compareObject = (KDatabaseObject *)cell;
+            if(![compareObject.uniqueId isEqualToString:self.currentUser.uniqueId]) {
+                if(self.sortDescending) {
+                    if([KDatabaseObject compareProperty:self.sortedByProperty object1:object object2:compareObject]) {
+                        newCellId = replaceCellId;
+                        *stop = YES;
+                    }
+                }else {
+                    if(![KDatabaseObject compareProperty:self.sortedByProperty object1:object object2:compareObject]) {
+                        newCellId = replaceCellId;
+                        *stop = YES;
+                    }
+                }
+            }
+        }];
+    }
+    return newCellId;
+}
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     [textField becomeFirstResponder];
 }

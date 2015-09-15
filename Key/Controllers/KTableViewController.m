@@ -73,48 +73,18 @@
         KDatabaseObject *object = (KDatabaseObject *)notification.object;
         [self.sectionCriteria enumerateObjectsUsingBlock:^(id obj, NSUInteger sectionId, BOOL *stop) {
             if([self object:object matchesCriteriaforSection:sectionId]) {
-                __block NSInteger updatedIndex = -1;
-                [((NSArray *)self.sectionData[sectionId]) enumerateObjectsUsingBlock:^(id obj, NSUInteger cellId, BOOL *stop) {
-                    KDatabaseObject *currentObject = (KDatabaseObject *)obj;
-                    if([object.uniqueId isEqualToString:currentObject.uniqueId]) {
-                        updatedIndex = cellId;
-                        *stop = YES;
-                    }
-                }];
-                NSMutableArray *updatedData  = [[NSMutableArray alloc] initWithArray:self.sectionData];
-                NSMutableArray *updatedCells = [[NSMutableArray alloc] initWithArray:self.sectionData[sectionId]];
-                if(updatedIndex != -1) {
-                    [updatedCells removeObjectAtIndex:updatedIndex];
-                }
-                __block NSInteger newCellId = 0;
-                if(self.sortedByProperty) {
-                    [self.sectionData[sectionId] enumerateObjectsUsingBlock:^(id cell, NSUInteger replaceCellId, BOOL *stop) {
-                        KDatabaseObject *compareObject = (KDatabaseObject *)cell;
-                        NSLog(@"OBJECT PROPERTY: %@ COMPARE OBJECT PROPERTY: %@", [object valueForKey:self.sortedByProperty], [compareObject valueForKey:self.sortedByProperty]);
-                        if(self.sortDescending) {
-                            if([KDatabaseObject compareProperty:self.sortedByProperty object1:object object2:compareObject]) {
-                                newCellId = replaceCellId;
-                                *stop = YES;
-                            }
-                        }else {
-                            if(![KDatabaseObject compareProperty:self.sortedByProperty object1:object object2:compareObject]) {
-                                newCellId = replaceCellId;
-                                *stop = YES;
-                            }
-                        }
-                    }];
-                }
-                [updatedCells insertObject:object atIndex:newCellId];
-                [updatedData replaceObjectAtIndex:sectionId withObject:updatedCells];
-                self.sectionData = [updatedData copy];
+                NSInteger oldCellId = [self currentCellIdInSectionId:sectionId object:object];
+                NSInteger newCellId = [self destinationCellIdInSectionId:sectionId object:object];
+                self.sectionData = [self newDataForSectionId:sectionId oldCellId:oldCellId newCellId:newCellId object:object];
+                newCellId = [((NSArray *)self.sectionData[sectionId]) indexOfObject:object];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     while(self.tableView.numberOfSections <= sectionId) [self.tableView insertSections:[NSIndexSet indexSetWithIndex:self.tableView.numberOfSections] withRowAnimation:UITableViewRowAnimationAutomatic];
-                    if(updatedIndex != -1) {
-                        if(updatedIndex != newCellId) {
-                            [self.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:updatedIndex inSection:sectionId] toIndexPath:[NSIndexPath indexPathForRow:newCellId inSection:sectionId]];
+                    if(oldCellId != -1) {
+                        if(oldCellId != newCellId) {
+                            [self.tableView moveRowAtIndexPath:[NSIndexPath indexPathForRow:oldCellId inSection:sectionId] toIndexPath:[NSIndexPath indexPathForRow:newCellId inSection:sectionId]];
                             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:newCellId inSection:sectionId]] withRowAnimation:UITableViewRowAnimationAutomatic];
                         }else {
-                            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:updatedIndex inSection:sectionId]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:oldCellId inSection:sectionId]] withRowAnimation:UITableViewRowAnimationAutomatic];
                         }
                     }else {
                         [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:newCellId inSection:sectionId]] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -123,6 +93,54 @@
             }
         }];
     });
+}
+
+- (NSArray *)newDataForSectionId:(NSUInteger)sectionId oldCellId:(NSInteger)oldCellId newCellId:(NSInteger)newCellId object:(KDatabaseObject *)object {
+    NSMutableArray *updatedData  = [[NSMutableArray alloc] initWithArray:self.sectionData];
+    NSMutableArray *updatedCells = [[NSMutableArray alloc] initWithArray:self.sectionData[sectionId]];
+    if(oldCellId != -1) {
+        [updatedCells removeObjectAtIndex:oldCellId];
+    }
+    if(newCellId != -1) [updatedCells insertObject:object atIndex:newCellId];
+    else {
+        [updatedCells addObject:object];
+        newCellId = [updatedCells indexOfObject:object];
+    }
+    [updatedData replaceObjectAtIndex:sectionId withObject:updatedCells];
+    return [updatedData copy];
+}
+
+- (NSInteger)destinationCellIdInSectionId:(NSUInteger)sectionId object:(KDatabaseObject *)object {
+    __block NSInteger newCellId = -1;
+    if(self.sortedByProperty) {
+        [self.sectionData[sectionId] enumerateObjectsUsingBlock:^(id cell, NSUInteger replaceCellId, BOOL *stop) {
+            KDatabaseObject *compareObject = (KDatabaseObject *)cell;
+            if(self.sortDescending) {
+                if([KDatabaseObject compareProperty:self.sortedByProperty object1:object object2:compareObject]) {
+                    newCellId = replaceCellId;
+                    *stop = YES;
+                }
+            }else {
+                if(![KDatabaseObject compareProperty:self.sortedByProperty object1:object object2:compareObject]) {
+                    newCellId = replaceCellId;
+                    *stop = YES;
+                }
+            }
+        }];
+    }
+    return newCellId;
+}
+
+- (NSInteger)currentCellIdInSectionId:(NSUInteger)sectionId object:(KDatabaseObject *)object {
+    __block NSInteger updatedIndex = -1;
+    [((NSArray *)self.sectionData[sectionId]) enumerateObjectsUsingBlock:^(id obj, NSUInteger cellId, BOOL *stop) {
+        KDatabaseObject *currentObject = (KDatabaseObject *)obj;
+        if([object.uniqueId isEqualToString:currentObject.uniqueId]) {
+            updatedIndex = cellId;
+            *stop = YES;
+        }
+    }];
+    return updatedIndex;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)sender {
