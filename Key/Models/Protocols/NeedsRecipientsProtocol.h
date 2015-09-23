@@ -12,7 +12,10 @@
 
 @protocol NeedsRecipientsProtocol <NSObject>
 
-- (void)setSendableObject:(KDatabaseObject *)object;
+- (void)setRecipientIds:(NSArray *)recipientIds;
+- (void)setEphemeral:(BOOL)ephemeral;
 - (void)didCancel;
+- (BOOL)canSharePersistently;
+- (BOOL)canSendToEveryone;
 
 @end

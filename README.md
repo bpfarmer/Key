@@ -7,11 +7,11 @@ Key is built on top of the FreeKey encryption protocol, which is a descendant of
 
 FreeKey is designed to offer strong encryption, perfect forward secrecy, and replay protection, and relies on:
 
-- EC-25519 for Public/Private Key generation 
-- ECDH for Shared-Key Agreement 
-- ECDSA for signing
-- SHA-256 for MAC generation and verification
-- AES-128 for encryption
+- C25519 for Public/Private Key generation 
+- C25519 for DHE 
+- Ed25519 for signatures
+- HMAC for message authentication
+- AES-256 for encryption
 
 ####Running Locally####
 

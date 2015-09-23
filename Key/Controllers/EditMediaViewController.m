@@ -18,7 +18,7 @@
 #import "KObjectRecipient.h"
 #import "NeedsRecipientsProtocol.h"
 
-@interface EditMediaViewController () <DismissAndPresentProtocol, UIGestureRecognizerDelegate, UITextFieldDelegate>
+@interface EditMediaViewController () <DismissAndPresentProtocol, NeedsRecipientsProtocol, UIGestureRecognizerDelegate, UITextFieldDelegate>
 
 @property (nonatomic) IBOutlet UIView *overlayView;
 @property (nonatomic) IBOutlet UIButton *locationButton;
@@ -29,6 +29,9 @@
 @property (nonatomic) UIView *captionView;
 @property (nonatomic) CGPoint captionOriginalPosition;
 @property (nonatomic) BOOL captionDraggable;
+@property (nonatomic) KPost *post;
+@property (nonatomic) NSArray *attachableObjects;
+@property (nonatomic) BOOL ephemeral;
 
 @end
 
@@ -50,7 +53,6 @@
     [tapRec setCancelsTouchesInView:NO];
     tapRec.delegate = self;
     [self.view addGestureRecognizer:tapRec];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
@@ -159,22 +161,19 @@
     [self.view endEditing:YES];
     self.captionTextField.textAlignment = NSTextAlignmentCenter;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        KPost *post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId];
-        post.uniqueId = [KPost generateUniqueId];
-        NSArray *attachableObjects = [self setupAttachableObjectsForPost:post];
+        [self setupPost];
         if(!self.thread) {
             SelectRecipientViewController *selectRecipientView = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
-            [selectRecipientView setSendableObject:post];
-            [selectRecipientView setAttachableObjects:attachableObjects];
             selectRecipientView.delegate = self;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self presentViewController:selectRecipientView animated:NO completion:nil];
             });
         }else {
-            post.threadId = self.thread.uniqueId;
-            post.ephemeral = YES;
-            [post sendToRecipientIds:self.thread.recipientIds withAttachableObjects:attachableObjects];
-            [post save];
+            [self setupAttachableObjects];
+            self.post.threadId = self.thread.uniqueId;
+            self.post.ephemeral = YES;
+            [self.post save];
+            [self.post sendToRecipientIds:self.thread.recipientIds withAttachableObjects:self.attachableObjects];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self dismissViewControllerAnimated:NO completion:nil];
             });
@@ -182,7 +181,7 @@
     });
 }
 
-- (NSArray *)setupAttachableObjectsForPost:(KPost *)post {
+- (void)setupAttachableObjects {
     NSMutableArray *attachableObjects = [[NSMutableArray alloc] init];
     
     if(![self.captionTextField.text isEqual:@""]) {
@@ -194,9 +193,9 @@
         [attachableObjects addObject:location];
     }
     for(KDatabaseObject <KAttachable> *object in attachableObjects) {
-        [post addAttachment:object];
+        [self.post addAttachment:object];
     }
-    return [attachableObjects copy];
+    self.attachableObjects = [attachableObjects copy];
 }
 
 - (void)dismissAndPresentViewController:(UIViewController *)viewController {
@@ -204,6 +203,33 @@
         if(viewController != nil) [self presentViewController:viewController animated:YES completion:nil];
         else [self dismissViewControllerAnimated:NO completion:nil];
     }];
+}
+
+- (void)setupPost {
+    self.post = [[KPost alloc] initWithAuthorId:[KAccountManager sharedManager].uniqueId];
+    self.post.uniqueId = [KPost generateUniqueId];
+}
+
+- (BOOL)canSendToEveryone {
+    return YES;
+}
+
+- (BOOL)canSharePersistently {
+    return YES;
+}
+
+- (void)didCancel {
+}
+
+- (void)setEphemeral:(BOOL)ephemeral {
+    self.ephemeral = ephemeral;
+}
+
+- (void)setRecipientIds:(NSArray *)recipientIds {
+    [self setupPost];
+    [self setupAttachableObjects];
+    [self.post save];
+    [self.post sendToRecipientIds:recipientIds withAttachableObjects:self.attachableObjects];
 }
 
 

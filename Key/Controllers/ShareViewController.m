@@ -361,7 +361,7 @@
         NSString *barcodeString = metadataObj.stringValue;
         NSLog(@"Read barcode: %@", barcodeString);
         [QRReadRequest makeRequest];
-        self.readQRCode = YES;
+        //self.readQRCode = YES;
     }
 }
 

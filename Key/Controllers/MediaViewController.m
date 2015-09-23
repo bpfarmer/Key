@@ -107,7 +107,7 @@
 }
 
 - (void)mapViewDidFinishRenderingMap:(MKMapView *)mapView fullyRendered:(BOOL)fullyRendered {
-    if(self.mapZoom > 0 && self.mapZoom < 4) [NSTimer scheduledTimerWithTimeInterval:1.2 target:self selector:@selector(zoomMapRegion) userInfo:nil repeats:NO];
+    if(self.mapZoom > 0 && self.mapZoom < 4) [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(zoomMapRegion) userInfo:nil repeats:NO];
     else NSLog(@"MAP ZOOM TERMINATED: %u", self.mapZoom);
 }
 

@@ -55,7 +55,7 @@
                         </mask>
                     </variation>
                     <connections>
-                        <action selector="sendToRecipients:" destination="-1" eventType="touchUpInside" id="PeH-7t-Kuz"/>
+                        <action selector="selectRecipients:" destination="-1" eventType="touchUpInside" id="4W5-0J-Kyp"/>
                     </connections>
                 </button>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4AS-nt-7Pg">

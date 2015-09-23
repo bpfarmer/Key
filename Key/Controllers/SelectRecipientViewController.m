@@ -40,13 +40,14 @@
     [super viewDidLoad];
     self.ephemeral = NO;
     self.selectedRecipients = @[self.currentUser];
+    if(![self.delegate canSharePersistently]) [self.persistenceButton setHidden:YES];
 }
 
 - (NSArray *)modifySectionData:(NSArray *)sectionData {
     NSMutableArray *newData = [NSMutableArray arrayWithArray:sectionData];
     NSMutableArray *newSectionData = [NSMutableArray arrayWithArray:sectionData[0]];
     for(KUser *user in sectionData[0]) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [newSectionData removeObject:user];
-    if(!self.sendingDelegate) [newSectionData insertObject:@"Everyone" atIndex:0];
+    if([self.delegate canSendToEveryone]) [newSectionData insertObject:@"Everyone" atIndex:0];
     [newData replaceObjectAtIndex:0 withObject:newSectionData];
     return [newData copy];
 }
@@ -100,26 +101,18 @@
     }
 }
 
-- (IBAction)sendToRecipients:(id)sender {
+- (IBAction)selectRecipients:(id)sender {
     dispatch_async([self.class sharedQueue], ^{
         if(self.selectedRecipients.count > 1) {
             NSMutableArray *selectedRecipientIds = [NSMutableArray new];
             for(KDatabaseObject *recipient in self.selectedRecipients) [selectedRecipientIds addObject:recipient.uniqueId];
-            if(![self.sendableObject isKindOfClass:[KThread class]]) [self setThreadIdWithRecipientIds:selectedRecipientIds];
-            [self.sendableObject sendToRecipientIds:selectedRecipientIds withAttachableObjects:self.attachableObjects];
-            if(self.sendingDelegate) [self.sendingDelegate setSendableObject:self.sendableObject];
+            [self.delegate setEphemeral:self.ephemeral];
+            [self.delegate setRecipientIds:[selectedRecipientIds copy]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.delegate dismissAndPresentViewController:nil];
             });
         }
     });
-}
-
-- (void)setThreadIdWithRecipientIds:(NSArray *)recipientIds {
-    if(recipientIds.count > 1) {
-        KThread *thread = [KThread findById:[KThread uniqueIdFromUserIds:recipientIds]];
-        if(thread) self.sendableObject.threadId = thread.uniqueId;
-    }
 }
 
 - (IBAction)didPressEphemeral:(id)sender {
@@ -133,9 +126,7 @@
 }
 
 - (IBAction)didPressCancel:(id)sender {
-    if(self.sendingDelegate) {
-        [self.sendingDelegate didCancel];
-    }
+    [self.delegate didCancel];
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 

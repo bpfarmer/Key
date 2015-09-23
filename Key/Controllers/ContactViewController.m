@@ -71,6 +71,10 @@
     return newCellId;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 40.0;
+}
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     [textField becomeFirstResponder];
 }

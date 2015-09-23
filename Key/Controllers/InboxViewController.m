@@ -35,6 +35,16 @@
     self.sortDescending = YES;
     [super viewDidLoad];
     [UIView setAnimationsEnabled:NO];
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    
+    for(KThread *thread in self.sectionData[0]) {
+        NSLog(@"THREAD ID: %@", thread.uniqueId);
+        NSLog(@"THREAD DISPLAY NAME: %@", thread.displayName);
+        if([thread.displayName isEqualToString:@""]) {
+            //[thread remove];
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -44,9 +54,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [[KAccountManager sharedManager].user asyncGetFeed];
-    for(KThread *thread in [KThread all]) {
-        NSLog(@"THREAD NAME: %@ UPDATED AT: %@", [thread name], thread.updatedAt);
-    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,27 +70,10 @@
     KThread *thread = (KThread *)[self objectForIndexPath:indexPath];
     cell.textLabel.text = [NSString stringWithFormat:@"%@", thread.displayName];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", thread.latestMessageText];
-    cell.imageView.image = [self imageRead:thread.read];
+    if(!thread.read) [cell addUnreadImage];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [cell setRightDetailText:thread.displayDate];
     return cell;
-}
-
-- (UIImage *)imageRead:(BOOL)read {
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(7.f, 7.f), NO, 0.0f);
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
-    
-    CGRect rect = CGRectMake(0, 0, 7, 7);
-   
-    if(!read) CGContextSetFillColorWithColor(ctx, self.view.tintColor.CGColor);
-    else  CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
-    CGContextFillEllipseInRect(ctx, rect);
-    
-    CGContextRestoreGState(ctx);
-    UIImage *blueCircle = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return blueCircle;
 }
 
 - (IBAction)logout:(id)sender {

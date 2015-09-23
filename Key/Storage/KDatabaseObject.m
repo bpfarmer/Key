@@ -353,11 +353,7 @@
 }
 
 - (void)sendToRecipientIds:(NSArray *)recipientIds withAttachableObjects:(NSArray *)attachableObjects {
-    [self save];
     [self addRecipientIds:recipientIds];
-    for(KDatabaseObject *attachment in attachableObjects){
-        [attachment save];
-    }
     [self sendWithAttachableObjects:attachableObjects];
 }
 

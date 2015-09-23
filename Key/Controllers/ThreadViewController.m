@@ -54,8 +54,6 @@ static NSString *TableViewCellIdentifier = @"Messages";
     if(!self.thread && !self.thread.uniqueId) {
         self.thread = [[KThread alloc] init];
         SelectRecipientViewController *selectVC = [[SelectRecipientViewController alloc] initWithNibName:@"SelectRecipientsView" bundle:nil];
-        selectVC.sendableObject  = self.thread;
-        selectVC.sendingDelegate = self;
         selectVC.delegate = self;
         [self presentViewController:selectVC animated:NO completion:nil];
     }else {
@@ -74,11 +72,33 @@ static NSString *TableViewCellIdentifier = @"Messages";
     self.titleView = self.navigationItem.titleView;
     self.navigationItem.titleView = self.recipientTextField;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    //[self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)]];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KMessage notificationChannel] object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(databaseModified:) name:[KPost notificationChannel] object:nil];
+}
+
+- (void)setRecipientIds:(NSArray *)recipientIds {
+    KThread *existingThread = [KThread findWithUserIds:recipientIds];
+    if(existingThread) {
+        NSLog(@"RETRIEVED EXISTING THREAD");
+        self.thread = existingThread;
+        [self loadMessages];
+    }else {
+        self.thread = [[KThread alloc] initWithUserIds:recipientIds];
+        [self.thread save];
+    }
+    self.title = self.thread.displayName;
+}
+
+- (BOOL)canSendToEveryone {
+    return NO;
+}
+
+- (BOOL)canSharePersistently {
+    return NO;
+}
+
+- (void)setEphemeral:(BOOL)ephemeral {
 }
 
 - (void)loadMessages {
@@ -132,22 +152,14 @@ static NSString *TableViewCellIdentifier = @"Messages";
     });
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [self.thread setRead:YES];
+    [self.thread save];
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    
-    if(!self.cancelled) {
-        if(self.thread && self.thread.uniqueId) {
-            self.title = self.thread.displayName;
-            
-            if(!self.thread.read) {
-                [self.thread setRead:YES];
-                [self.thread save];
-            }
-        }
-    }else {
-        [self.navigationController popViewControllerAnimated:NO];
-    }
+    if(self.cancelled) [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)didReceiveMemoryWarning {

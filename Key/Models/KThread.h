@@ -33,11 +33,12 @@
 - (NSArray *)posts;
 - (NSString *)displayName;
 - (BOOL)saved;
-- (KMessage *)latestMessage;
+- (KDatabaseObject <KThreadable> *)latestMessage;
 - (NSString *)latestMessageText;
 + (KThread *)findWithUserIds:(NSArray *)userIds;
 - (BOOL)isMoreRecentThan:(KThread *)thread;
 - (NSArray *)userIds;
 + (NSString *)uniqueIdFromUserIds:(NSArray *)userIds;
+- (NSString *)displayDate;
 
 @end

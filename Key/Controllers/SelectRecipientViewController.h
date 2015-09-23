@@ -23,11 +23,8 @@
 
 @interface SelectRecipientViewController : KTableViewController
 
-@property (nonatomic, weak) id <DismissAndPresentProtocol> delegate;
-@property (nonatomic, weak) id <NeedsRecipientsProtocol> sendingDelegate;
+@property (nonatomic, weak) id <DismissAndPresentProtocol, NeedsRecipientsProtocol> delegate;
 @property (nonatomic) KUser *currentUser;
-@property (nonatomic) KDatabaseObject <KThreadable> *sendableObject;
-@property (nonatomic) NSArray *attachableObjects;
 @property (nonatomic) BOOL ephemeral;
 
 @end

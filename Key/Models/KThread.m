@@ -16,6 +16,7 @@
 #import "KPost.h"
 #import "KObjectRecipient.h"
 #import "CollapsingFutures.h"
+#import "NSDate+TimeAgo.h"
 
 @implementation KThread
 
@@ -148,12 +149,7 @@
 }
 
 + (KThread *)findWithUserIds:(NSArray *)userIds {
-    NSMutableArray *sortableUserIds = [NSMutableArray arrayWithArray:userIds];
-    [sortableUserIds sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-        return [obj1 compare:obj2];
-    }];
-    
-    return [self findById:[sortableUserIds componentsJoinedByString:@"_"]];
+    return [self findById:[self uniqueIdFromUserIds:userIds]];
 }
 
 - (NSArray *)messages {
@@ -182,7 +178,7 @@
 - (NSString *)latestMessageText {
     if(!self.latestMessageId) return @"";
     KDatabaseObject <KThreadable> *message = self.latestMessage;
-    if([message isKindOfClass:[KPost class]]) return @"New Photo";
+    if([message isKindOfClass:[KPost class]]) return [NSString stringWithFormat:@"%@ shared a photo.", [KUser findById:message.authorId].displayName];
     else return ((KMessage *)message).text;
 }
 
@@ -193,6 +189,10 @@
 
 - (BOOL)saved {
     return ([KThread findById:self.uniqueId] != nil);
+}
+
+- (NSString *)displayDate {
+    return self.updatedAt.formattedAsTimeAgo;
 }
 
 @end

@@ -23,6 +23,7 @@
     self.tableView.scrollEnabled = YES;
     self.tableView.allowsMultipleSelection = YES;
     [self.tableView registerClass:[SubtitleTableViewCell class] forCellReuseIdentifier:[self cellIdentifier]];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.sectionData = [self loadTableViewData];
 }
 
@@ -141,6 +142,10 @@
         }
     }];
     return updatedIndex;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 60.0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)sender {

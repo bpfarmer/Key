@@ -248,7 +248,6 @@
 - (void)processSavedAttachment:(KDatabaseObject<KAttachable> *)attachment {
     if([attachment isKindOfClass:[KPhoto class]]) {
         [self createThumbnailPreviewWithData:((KPhoto *)attachment).media];
-        [self save];
     }
 }
 
