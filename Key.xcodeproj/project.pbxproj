@@ -54,6 +54,9 @@
 		EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */; };
 		EF99E27F1ACB2BB9002583E2 /* SendPushTokenRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E27E1ACB2BB9002583E2 /* SendPushTokenRequest.m */; };
 		EFABC0281B39BEA50062B807 /* MediaView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFABC0271B39BEA50062B807 /* MediaView.xib */; };
+		EFB0F53D1BB56BDA004A79BD /* UIAlertController+Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB0F53C1BB56BDA004A79BD /* UIAlertController+Orientation.m */; };
+		EFB0F5411BBAF3CB004A79BD /* DatabaseDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB0F5401BBAF3CB004A79BD /* DatabaseDataSource.m */; };
+		EFB0F5441BBB05EE004A79BD /* DatabaseDataSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB0F5431BBB05EE004A79BD /* DatabaseDataSourceTests.m */; };
 		EFB225EF1B48853800D7E44B /* SelectRecipientViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */; };
 		EFB225F21B48C4EF00D7E44B /* MediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225F11B48C4EF00D7E44B /* MediaViewController.m */; };
 		EFB225F51B4984F200D7E44B /* KPhoto+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225F41B4984F200D7E44B /* KPhoto+Serialize.m */; };
@@ -238,6 +241,11 @@
 		EF99E2811ACB2D1F002583E2 /* PushTokenRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushTokenRequest.h; sourceTree = "<group>"; };
 		EF9A744E1B52B639009689A7 /* DismissAndPresentProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DismissAndPresentProtocol.h; path = Protocols/DismissAndPresentProtocol.h; sourceTree = "<group>"; };
 		EFABC0271B39BEA50062B807 /* MediaView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediaView.xib; sourceTree = "<group>"; };
+		EFB0F53B1BB56BDA004A79BD /* UIAlertController+Orientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertController+Orientation.h"; sourceTree = "<group>"; };
+		EFB0F53C1BB56BDA004A79BD /* UIAlertController+Orientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertController+Orientation.m"; sourceTree = "<group>"; };
+		EFB0F53F1BBAF3CB004A79BD /* DatabaseDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DatabaseDataSource.h; path = Classes/DatabaseDataSource.h; sourceTree = "<group>"; };
+		EFB0F5401BBAF3CB004A79BD /* DatabaseDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DatabaseDataSource.m; path = Classes/DatabaseDataSource.m; sourceTree = "<group>"; };
+		EFB0F5431BBB05EE004A79BD /* DatabaseDataSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DatabaseDataSourceTests.m; path = ControllerTests/DatabaseDataSourceTests.m; sourceTree = "<group>"; };
 		EFB225F01B48C4EF00D7E44B /* MediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaViewController.h; sourceTree = "<group>"; };
 		EFB225F11B48C4EF00D7E44B /* MediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaViewController.m; sourceTree = "<group>"; };
 		EFB225F31B4984F200D7E44B /* KPhoto+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KPhoto+Serialize.h"; path = "Network/Serializers/KPhoto+Serialize.h"; sourceTree = "<group>"; };
@@ -496,6 +504,8 @@
 				EFDDD9B41B595FAC00089124 /* NSData+gzip.m */,
 				EFEF48391B7D8BFB00E77113 /* NSDate+TimeAgo.h */,
 				EFEF483A1B7D8BFB00E77113 /* NSDate+TimeAgo.m */,
+				EFB0F53B1BB56BDA004A79BD /* UIAlertController+Orientation.h */,
+				EFB0F53C1BB56BDA004A79BD /* UIAlertController+Orientation.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -599,6 +609,23 @@
 			name = Protocols;
 			sourceTree = "<group>";
 		};
+		EFB0F53E1BBAF3A2004A79BD /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				EFB0F53F1BBAF3CB004A79BD /* DatabaseDataSource.h */,
+				EFB0F5401BBAF3CB004A79BD /* DatabaseDataSource.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		EFB0F5421BBB05C7004A79BD /* ControllerTests */ = {
+			isa = PBXGroup;
+			children = (
+				EFB0F5431BBB05EE004A79BD /* DatabaseDataSourceTests.m */,
+			);
+			name = ControllerTests;
+			sourceTree = "<group>";
+		};
 		EFB225FD1B4AD18800D7E44B /* FreeKeyTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -685,6 +712,7 @@
 		EFC6BEB91A6857D500B0EB8F /* KeyTests */ = {
 			isa = PBXGroup;
 			children = (
+				EFB0F5421BBB05C7004A79BD /* ControllerTests */,
 				EFEF482F1B7917C700E77113 /* ModelTests */,
 				EFDDD9BC1B5C2AEF00089124 /* NetworkTests */,
 				EFB225FD1B4AD18800D7E44B /* FreeKeyTests */,
@@ -852,6 +880,7 @@
 		EFF70AB01AAE1CBC006C10D2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				EFB0F53E1BBAF3A2004A79BD /* Classes */,
 				EFEF48321B7D39DF00E77113 /* Cells */,
 				EF9A744D1B52B60D009689A7 /* Protocols */,
 				EF6B44A61ABA2F8A00B88323 /* ContactViewController.h */,
@@ -1120,6 +1149,7 @@
 				EFB722711B41A25700E6DF7A /* EditMediaViewController.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
 				EFC181A11AC3715B00BE8B0B /* UpdateUserRequest.m in Sources */,
+				EFB0F5411BBAF3CB004A79BD /* DatabaseDataSource.m in Sources */,
 				EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
 				EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */,
 				EFC1819A1AC3412800BE8B0B /* HttpRequest.m in Sources */,
@@ -1146,6 +1176,7 @@
 				EFF70A8E1AAE19C3006C10D2 /* RootChain.m in Sources */,
 				EF6B44A81ABA2F8A00B88323 /* ContactViewController.m in Sources */,
 				EFC1819E1AC3534F00BE8B0B /* RegisterUsernameRequest.m in Sources */,
+				EFB0F53D1BB56BDA004A79BD /* UIAlertController+Orientation.m in Sources */,
 				EFEF483E1B7D9E3300E77113 /* ProfileViewController.m in Sources */,
 				EFDDD9C21B5ED1FF00089124 /* Attachment.m in Sources */,
 				EFB225F81B49851000D7E44B /* KLocation+Serialize.m in Sources */,
@@ -1173,6 +1204,7 @@
 				EF524B061AAF330A00F3B9AF /* PreKeyTests.m in Sources */,
 				EFEF48311B79188700E77113 /* KDeviceTests.m in Sources */,
 				EF6B44C21ABCDD3600B88323 /* FreeKeyTestExample.m in Sources */,
+				EFB0F5441BBB05EE004A79BD /* DatabaseDataSourceTests.m in Sources */,
 				EF0F9DF91B9A202000E835E9 /* KUserTests.m in Sources */,
 				EF6B44C41ABDAE1D00B88323 /* HttpManagerTests.m in Sources */,
 				EFB226001B4AD20A00D7E44B /* KStorageManagerTests.m in Sources */,

@@ -12,9 +12,9 @@
 
 @protocol NeedsRecipientsProtocol <NSObject>
 
+- (void)didCancel;
 - (void)setRecipientIds:(NSArray *)recipientIds;
 - (void)setEphemeral:(BOOL)ephemeral;
-- (void)didCancel;
 - (BOOL)canSharePersistently;
 - (BOOL)canSendToEveryone;
 

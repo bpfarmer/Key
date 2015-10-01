@@ -37,14 +37,6 @@
     [UIView setAnimationsEnabled:NO];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    
-    for(KThread *thread in self.sectionData[0]) {
-        NSLog(@"THREAD ID: %@", thread.uniqueId);
-        NSLog(@"THREAD DISPLAY NAME: %@", thread.displayName);
-        if([thread.displayName isEqualToString:@""]) {
-            //[thread remove];
-        }
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -72,7 +64,6 @@
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", thread.latestMessageText];
     if(!thread.read) [cell addUnreadImage];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    [cell setRightDetailText:thread.displayDate];
     return cell;
 }
 

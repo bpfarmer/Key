@@ -18,7 +18,7 @@
 #import "KObjectRecipient.h"
 #import "NeedsRecipientsProtocol.h"
 
-@interface EditMediaViewController () <DismissAndPresentProtocol, NeedsRecipientsProtocol, UIGestureRecognizerDelegate, UITextFieldDelegate>
+@interface EditMediaViewController () <DismissAndPresentProtocol, UIGestureRecognizerDelegate, UITextFieldDelegate>
 
 @property (nonatomic) IBOutlet UIView *overlayView;
 @property (nonatomic) IBOutlet UIButton *locationButton;
@@ -31,7 +31,6 @@
 @property (nonatomic) BOOL captionDraggable;
 @property (nonatomic) KPost *post;
 @property (nonatomic) NSArray *attachableObjects;
-@property (nonatomic) BOOL ephemeral;
 
 @end
 
@@ -219,10 +218,6 @@
 }
 
 - (void)didCancel {
-}
-
-- (void)setEphemeral:(BOOL)ephemeral {
-    self.ephemeral = ephemeral;
 }
 
 - (void)setRecipientIds:(NSArray *)recipientIds {

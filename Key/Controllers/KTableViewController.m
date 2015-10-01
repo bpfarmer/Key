@@ -24,6 +24,7 @@
     self.tableView.allowsMultipleSelection = YES;
     [self.tableView registerClass:[SubtitleTableViewCell class] forCellReuseIdentifier:[self cellIdentifier]];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.sectionData = [self loadTableViewData];
 }
 

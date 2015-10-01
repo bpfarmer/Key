@@ -106,9 +106,9 @@
         if(self.selectedRecipients.count > 1) {
             NSMutableArray *selectedRecipientIds = [NSMutableArray new];
             for(KDatabaseObject *recipient in self.selectedRecipients) [selectedRecipientIds addObject:recipient.uniqueId];
-            [self.delegate setEphemeral:self.ephemeral];
-            [self.delegate setRecipientIds:[selectedRecipientIds copy]];
+            //[self.delegate setEphemeral:self.ephemeral];
             dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate setRecipientIds:[selectedRecipientIds copy]];
                 [self.delegate dismissAndPresentViewController:nil];
             });
         }

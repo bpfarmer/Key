@@ -99,6 +99,12 @@
     XCTAssert([[KThread uniqueIdFromUserIds:userIds] isEqualToString:@"KThread_1_2_3"]);
 }
 
+- (void)testFindByUserIds {
+    NSArray *userIds = @[@"1", @"2", @"3"];
+    [[[KThread alloc] initWithUserIds:userIds] save];
+    XCTAssert([KThread findWithUserIds:userIds]);
+}
+
 
 
 @end

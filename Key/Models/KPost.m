@@ -209,7 +209,6 @@
     if(previewImage == NULL) {
         fprintf(stderr, "Thumbnail image not created from image source.");
     }
-    
     self.preview = UIImagePNGRepresentation([UIImage imageWithCGImage:previewImage]);
     [self.preview.gzippedData writeToFile:self.filePath atomically:YES];
     CFRelease(previewImage);
@@ -248,6 +247,7 @@
 - (void)processSavedAttachment:(KDatabaseObject<KAttachable> *)attachment {
     if([attachment isKindOfClass:[KPhoto class]]) {
         [self createThumbnailPreviewWithData:((KPhoto *)attachment).media];
+        [self save];
     }
 }
 

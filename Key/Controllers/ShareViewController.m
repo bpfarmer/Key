@@ -5,13 +5,14 @@
 #import "EditMediaViewController.h"
 #import "DismissAndPresentProtocol.h"
 #import "QRReadRequest.h"
+#import "UIAlertController+Orientation.h"
 
 #define kHomeViewPushSegue @"homeViewPush"
 #define kSocialViewPushSegue @"socialViewPush"
 
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
-@interface ShareViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, DismissAndPresentProtocol, AVCaptureMetadataOutputObjectsDelegate>
+@interface ShareViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate, DismissAndPresentProtocol, AVCaptureMetadataOutputObjectsDelegate>
 
 @property (nonatomic, strong) IBOutlet UIView *cameraOverlayView;
 
@@ -50,6 +51,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [self stopCamera];
+    self.readQRCode = NO;
 }
 
 - (UILabel *)noCameraInSimulatorMessage {
@@ -241,7 +243,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
     [self startCamera];
     if (![self.view.subviews containsObject:self.cameraOverlayView]) {
         CGRect frame = self.cameraOverlayView.frame;
@@ -362,7 +363,35 @@
         NSLog(@"Read barcode: %@", barcodeString);
         [QRReadRequest makeRequest];
         //self.readQRCode = YES;
+        //[self displayApprovalAlert];
     }
+}
+
+- (void)displayApprovalAlert {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if([UIAlertController class]) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Approve Transaction?"
+                                                                           message:@"Pay $1 to The New York Times?"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* approveAction = [UIAlertAction actionWithTitle:@"Approve" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {[QRReadRequest makeRequest];}];
+            UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Decline" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+            [alert addAction:approveAction];
+            [alert addAction:cancelAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }else {
+            UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Approve Transaction?"
+                                                             message:@"Pay $1 to The New York Times?"
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Decline"
+                                                   otherButtonTitles: nil];
+            [alert addButtonWithTitle:@"Approve"];
+            [alert show];
+        }
+    });
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    [QRReadRequest makeRequest];
 }
 
 - (void)didTakePhoto:(NSData *)photoData {
