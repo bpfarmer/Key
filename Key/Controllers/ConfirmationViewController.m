@@ -8,6 +8,7 @@
 
 #import "ConfirmationViewController.h"
 #import "QRReadRequest.h"
+#import "ShareViewController.h"
 
 @interface ConfirmationViewController ()
 
@@ -28,9 +29,9 @@
 }
 
 - (IBAction)approve:(id)sender {
-    NSLog(@"TRYING TO REMOVE VIEW");
     [self.view removeFromSuperview];
-    [QRReadRequest makeRequest];
+    [QRReadRequest makeRequestWithParameters:@{}];
+    [self.shareDelegate performSelector:@selector(didDismissPopup) withObject:nil afterDelay:5.0];
 }
 
 @end

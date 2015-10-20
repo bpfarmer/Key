@@ -19,5 +19,6 @@
 
 - (void)cameraOn;
 - (void)cameraOff;
+- (void)didDismissPopup;
 
 @end

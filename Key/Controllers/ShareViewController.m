@@ -29,7 +29,7 @@
 @property (nonatomic) BOOL readQRCode;
 @property (nonatomic) NSString *decodedQR;
 @property (nonatomic, strong) IBOutlet UIButton *backButton;
-@property (nonatomic, strong) UIViewController *confirmationPopup;
+@property (nonatomic, strong) ConfirmationViewController *confirmationPopup;
 
 @property (nonatomic) UILabel *noCameraInSimulatorMessage;
 
@@ -49,6 +49,7 @@
     frame.origin.x = frame.size.width;
     self.view.frame = frame;
     self.confirmationPopup = [[ConfirmationViewController alloc] init];
+    self.confirmationPopup.shareDelegate = self;
     self.confirmationPopup.view.center = CGPointMake(self.view.frame.size.width  / 2, self.view.frame.size.height / 2);
     self.confirmationPopup.view.layer.cornerRadius = 5;
     self.confirmationPopup.view.layer.shadowOpacity = 0.8;
@@ -363,40 +364,22 @@
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
+- (void)didDismissPopup {
+    self.readQRCode = NO;
+}
+
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
     if (metadataObjects != nil && [metadataObjects count] > 0 && !self.readQRCode) {
         self.readQRCode = YES;
+        AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
+        self.decodedQR = metadataObj.stringValue;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.view addSubview:self.confirmationPopup.view];
             [self.view bringSubviewToFront:self.confirmationPopup.view];
         });
-        AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
-        self.decodedQR = metadataObj.stringValue;
-        [self displayApprovalAlert];
     }
 }
 
-/*
-- (void)showAnimate {
-    self.view.transform = CGAffineTransformMakeScale(1.3, 1.3);
-    self.popupview.alpha = 0;
-    [UIView animateWithDuration:.25 animations:^{
-        self.view.alpha = 1;
-        self.view.transform = CGAffineTransformMakeScale(1, 1);
-    }];
-}
-
-- (void)removeAnimate {
-    [UIView animateWithDuration:.25 animations:^{
-        self.view.transform = CGAffineTransformMakeScale(1.3, 1.3);
-        self.view.alpha = 0.0;
-    } completion:^(BOOL finished) {
-        if (finished) {
-            [self.view removeFromSuperview];
-        }
-    }];
-}
-*/
 - (void)displayApprovalAlert {
     dispatch_async(dispatch_get_main_queue(), ^{
         if([UIAlertController class]) {
@@ -427,6 +410,7 @@
     KUser *currentUser = [KAccountManager sharedManager].user;
     NSData *signature = [Ed25519 sign:[self.decodedQR dataUsingEncoding:NSUTF8StringEncoding] withKeyPair:currentUser.identityKey];
     [QRReadRequest makeRequestWithParameters:@{@"signature" : signature, @"public_key" : currentUser.identityKey.publicKey}];
+    NSLog(@"%@", @{@"Amount" : @"$8.78", @"Sender" : currentUser.username, @"Recipient" : @"amazon", @"Transaction ID" : self.decodedQR, @"Signature" : signature});
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {

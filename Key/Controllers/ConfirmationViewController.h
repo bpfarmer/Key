@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class ShareViewController;
+
 @interface ConfirmationViewController : UIViewController
+
+@property ShareViewController *shareDelegate;
 
 @end
