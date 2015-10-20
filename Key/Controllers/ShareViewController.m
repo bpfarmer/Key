@@ -6,6 +6,11 @@
 #import "DismissAndPresentProtocol.h"
 #import "QRReadRequest.h"
 #import "UIAlertController+Orientation.h"
+#import "ConfirmationViewController.h"
+#import <25519/Ed25519.h>
+#import <25519/Curve25519.h>
+#import "KAccountManager.h"
+#import "KUser.h"
 
 #define kHomeViewPushSegue @"homeViewPush"
 #define kSocialViewPushSegue @"socialViewPush"
@@ -22,7 +27,9 @@
 @property (nonatomic) AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
 @property (nonatomic) BOOL flashOn;
 @property (nonatomic) BOOL readQRCode;
+@property (nonatomic) NSString *decodedQR;
 @property (nonatomic, strong) IBOutlet UIButton *backButton;
+@property (nonatomic, strong) UIViewController *confirmationPopup;
 
 @property (nonatomic) UILabel *noCameraInSimulatorMessage;
 
@@ -36,18 +43,32 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.noCameraInSimulatorMessage.hidden = !TARGET_IPHONE_SIMULATOR;
     self.readQRCode = NO;
-    
     CGRect frame = [UIScreen mainScreen].bounds;
     frame.origin.x = frame.size.width;
-    
     self.view.frame = frame;
-    
+    self.confirmationPopup = [[ConfirmationViewController alloc] init];
+    self.confirmationPopup.view.center = CGPointMake(self.view.frame.size.width  / 2, self.view.frame.size.height / 2);
+    self.confirmationPopup.view.layer.cornerRadius = 5;
+    self.confirmationPopup.view.layer.shadowOpacity = 0.8;
+    self.confirmationPopup.view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
     if(!self.thread) self.backButton.hidden = YES;
-    
 }
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self startCamera];
+    if (![self.view.subviews containsObject:self.cameraOverlayView]) {
+        CGRect frame = self.cameraOverlayView.frame;
+        frame.size.height = frame.size.height - 85;
+        self.cameraOverlayView.frame = frame;
+        [self.view addSubview:self.cameraOverlayView];
+        [self.cameraOverlayView setBackgroundColor:[UIColor clearColor]];
+        [self.view bringSubviewToFront:self.cameraOverlayView];
+    }
+}
+
 
 - (void)viewWillDisappear:(BOOL)animated {
     [self stopCamera];
@@ -241,19 +262,6 @@
     _cameraRunning = YES;
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self startCamera];
-    if (![self.view.subviews containsObject:self.cameraOverlayView]) {
-        CGRect frame = self.cameraOverlayView.frame;
-        frame.size.height = frame.size.height - 85;
-        self.cameraOverlayView.frame = frame;
-        [self.view addSubview:self.cameraOverlayView];
-        [self.cameraOverlayView setBackgroundColor:[UIColor clearColor]];
-        [self.view bringSubviewToFront:self.cameraOverlayView];
-    }
-}
-
 - (BOOL)cameraSupportsMedia:(NSString *)mediaType sourceType:(UIImagePickerControllerSourceType)sourceType {
     __block BOOL result = NO;
     
@@ -273,8 +281,7 @@
     return result;
 }
 
-- (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition) position
-{
+- (AVCaptureDevice *)cameraWithPosition:(AVCaptureDevicePosition) position {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     for (AVCaptureDevice *device in devices)
     {
@@ -358,22 +365,48 @@
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
     if (metadataObjects != nil && [metadataObjects count] > 0 && !self.readQRCode) {
+        self.readQRCode = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.view addSubview:self.confirmationPopup.view];
+            [self.view bringSubviewToFront:self.confirmationPopup.view];
+        });
         AVMetadataMachineReadableCodeObject *metadataObj = [metadataObjects objectAtIndex:0];
-        NSString *barcodeString = metadataObj.stringValue;
-        NSLog(@"Read barcode: %@", barcodeString);
-        [QRReadRequest makeRequest];
-        //self.readQRCode = YES;
-        //[self displayApprovalAlert];
+        self.decodedQR = metadataObj.stringValue;
+        [self displayApprovalAlert];
     }
 }
 
+/*
+- (void)showAnimate {
+    self.view.transform = CGAffineTransformMakeScale(1.3, 1.3);
+    self.popupview.alpha = 0;
+    [UIView animateWithDuration:.25 animations:^{
+        self.view.alpha = 1;
+        self.view.transform = CGAffineTransformMakeScale(1, 1);
+    }];
+}
+
+- (void)removeAnimate {
+    [UIView animateWithDuration:.25 animations:^{
+        self.view.transform = CGAffineTransformMakeScale(1.3, 1.3);
+        self.view.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [self.view removeFromSuperview];
+        }
+    }];
+}
+*/
 - (void)displayApprovalAlert {
     dispatch_async(dispatch_get_main_queue(), ^{
         if([UIAlertController class]) {
             UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Approve Transaction?"
                                                                            message:@"Pay $1 to The New York Times?"
                                                                     preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction* approveAction = [UIAlertAction actionWithTitle:@"Approve" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {[QRReadRequest makeRequest];}];
+            UIAlertAction* approveAction = [UIAlertAction actionWithTitle:@"Approve" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+                                                                      [self makeAuthenticationRequest];
+                                                                    }];
             UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Decline" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
             [alert addAction:approveAction];
             [alert addAction:cancelAction];
@@ -390,8 +423,14 @@
     });
 }
 
+- (void)makeAuthenticationRequest {
+    KUser *currentUser = [KAccountManager sharedManager].user;
+    NSData *signature = [Ed25519 sign:[self.decodedQR dataUsingEncoding:NSUTF8StringEncoding] withKeyPair:currentUser.identityKey];
+    [QRReadRequest makeRequestWithParameters:@{@"signature" : signature, @"public_key" : currentUser.identityKey.publicKey}];
+}
+
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    [QRReadRequest makeRequest];
+    self.readQRCode = NO;
 }
 
 - (void)didTakePhoto:(NSData *)photoData {

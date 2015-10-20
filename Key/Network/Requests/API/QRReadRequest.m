@@ -13,14 +13,14 @@
 
 @implementation QRReadRequest
 
-- (instancetype)init {
-    self = [super initWithHttpMethod:GET endpoint:kQRCodeEndpoint parameters:nil];
+- (instancetype)initWithParameters:(NSDictionary *)parameters {
+    self = [super initWithHttpMethod:GET endpoint:kQRCodeEndpoint parameters:parameters];
     return self;
 }
 
-+ (TOCFuture *)makeRequest {
++ (TOCFuture *)makeRequestWithParameters:(NSDictionary *)parameters {
     TOCFutureSource *resultSource = [TOCFutureSource new];
-    QRReadRequest *request = [self new];
+    QRReadRequest *request = [[self alloc] initWithParameters:parameters];
     void (^success)(AFHTTPRequestOperation *operation, id responseObject) = ^(AFHTTPRequestOperation *operation, id responseObject){
         [resultSource trySetResult:@YES];
     };

@@ -34,9 +34,6 @@
 - (void)viewDidLoad {
     self.currentUser = [KAccountManager sharedManager].user;
     self.tableView = self.contactsTableView;
-    self.sectionCriteria = @[@{@"class" : @"KUser", @"criteria" : @{}}];
-    self.sortedByProperty = @"username";
-    self.sortDescending   = NO;
     [super viewDidLoad];
     self.ephemeral = NO;
     self.selectedRecipients = @[self.currentUser];
@@ -54,18 +51,12 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSObject *object = [self objectForIndexPath:indexPath];
-    UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:[self cellIdentifier] forIndexPath:indexPath];
-    if([object isKindOfClass:[NSString class]]) {
-        cell.textLabel.text = (NSString *)object;
-    }else {
-        KUser *user = (KUser *)[self objectForIndexPath:indexPath];
-        cell.textLabel.text = [user displayName];
-    }
+    UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:@"Cells" forIndexPath:indexPath];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+    /*
     NSObject *object = [self objectForIndexPath:indexPath];
     if([object isKindOfClass:[NSString class]]) {
         for(int i = 0; i < ((NSArray *)self.sectionData[indexPath.section]).count; i++) {
@@ -73,9 +64,11 @@
             [self addObjectToSelectedRecipients:[self objectForIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section]]];
         }
     }else [self addObjectToSelectedRecipients:object];
+     */
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    /*
     NSObject *object = [self objectForIndexPath:indexPath];
     if([object isKindOfClass:[NSString class]]) {
         for(int i = 0; i < ((NSArray *)self.sectionData[indexPath.section]).count; i++) {
@@ -89,6 +82,7 @@
         [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] animated:NO];
         self.selectedRecipients = selected;
     }
+    */
 }
 
 - (void)addObjectToSelectedRecipients:(NSObject *)object {
@@ -102,6 +96,7 @@
 }
 
 - (IBAction)selectRecipients:(id)sender {
+    /*
     dispatch_async([self.class sharedQueue], ^{
         if(self.selectedRecipients.count > 1) {
             NSMutableArray *selectedRecipientIds = [NSMutableArray new];
@@ -113,6 +108,7 @@
             });
         }
     });
+    */
 }
 
 - (IBAction)didPressEphemeral:(id)sender {

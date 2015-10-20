@@ -15,7 +15,7 @@
 @property (nonatomic) NSArray *sectionData;
 
 @property (nonatomic, copy) NSString *cellIdentifier;
-@property (nonatomic, copy) TableViewCellConfigureBlock configureCellBlock;
+@property (nonatomic, copy) ConfigureCellBlock configureCellBlock;
 @property (nonatomic, copy) SectionCriteriaBlock sectionCriteriaBlock;
 @property (nonatomic, copy) SortBlock sortBlock;
 
@@ -26,7 +26,7 @@
 - (instancetype)initWithSectionData:(NSArray *)sectionData
                      cellIdentifier:(NSString *)cellIdentifier
                           tableView:(UITableView *)tableView
-                 configureCellBlock:(TableViewCellConfigureBlock)configureCellBlock
+                 configureCellBlock:(ConfigureCellBlock)configureCellBlock
                sectionCriteriaBlock:(SectionCriteriaBlock)sectionCriteriaBlock
                           sortBlock:(SortBlock)sortBlock{
     
@@ -52,28 +52,26 @@
 + (dispatch_queue_t)sharedQueue {
     static dispatch_once_t pred;
     static dispatch_queue_t sharedDispatchQueue;
-    
     dispatch_once(&pred, ^{
         sharedDispatchQueue = dispatch_queue_create("DataSourceQueue", NULL);
     });
-    
     return sharedDispatchQueue;
 }
 
-- (void)databaseNotification:(NSNotification *)notification {
-    dispatch_async([self.class sharedQueue], ^{
-        [self objectUpdated:notification.object];
-    });
+- (void)registerForUpdatesFromClasses:(NSArray *)classNames {
+    for(NSString *className in [classNames objectEnumerator]) {
+        [[NSNotificationCenter defaultCenter] addObserverForName:[NSClassFromString(className) notificationChannel] object:nil queue:[NSOperationQueue new] usingBlock:^(NSNotification *note) {
+            [self objectUpdated:note.object];
+        }];
+    }
 }
 
 - (void)objectUpdated:(KDatabaseObject *)object {
     [self.sectionData enumerateObjectsUsingBlock:^(id obj, NSUInteger sectionId, BOOL *stop) {
         if(self.sectionCriteriaBlock(object, sectionId)) {
             [self ensureSectionExists:sectionId];
-            
             NSArray *objectsInSection = self.sectionData[sectionId];
             NSMutableArray *updatedObjects = [NSMutableArray arrayWithArray:objectsInSection];
-            
             NSUInteger currentObjectIndex = [objectsInSection indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
                 if([((KDatabaseObject *)obj).uniqueId isEqualToString:object.uniqueId]) {
                     *stop = YES;
@@ -128,10 +126,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if(self.tableView) while(self.tableView.numberOfSections <= sectionId) [self.tableView insertSections:[NSIndexSet indexSetWithIndex:self.tableView.numberOfSections] withRowAnimation:UITableViewRowAnimationAutomatic];
     });
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60.0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)sender {

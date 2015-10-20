@@ -27,7 +27,7 @@
 @property (nonatomic) NSArray *sectionData;
 
 @property (nonatomic, copy) NSString *cellIdentifier;
-@property (nonatomic, copy) TableViewCellConfigureBlock configureCellBlock;
+@property (nonatomic, copy) ConfigureCellBlock configureCellBlock;
 @property (nonatomic, copy) SectionCriteriaBlock sectionCriteriaBlock;
 @property (nonatomic, copy) SortBlock sortBlock;
 
@@ -121,6 +121,14 @@
     [dataSource objectUpdated:newUser2];
     XCTAssert([dataSource tableView:nil numberOfRowsInSection:0] == 2);
     XCTAssert([dataSource tableView:nil numberOfRowsInSection:1] == 2);
+    XCTAssert([((KUser *)[dataSource objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]).username isEqualToString:@"2"]);
+    newUser1.username = @"5";
+    [dataSource objectUpdated:newUser1];
+    XCTAssert([((KUser *)[dataSource objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]).username isEqualToString:@"5"]);
+    KUser *user1 = [KUser findById:@"1"];
+    user1.username = @"4";
+    [dataSource objectUpdated:user1];
+    XCTAssert([((KUser *)[dataSource objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]]).username isEqualToString:@"4"]);
 }
 
 

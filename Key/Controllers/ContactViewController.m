@@ -15,6 +15,7 @@
 #import "CollapsingFutures.h"
 #import "KPost.h"
 #import "ProfileViewController.h"
+#import "DatabaseDataSource.h"
 
 @interface ContactViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *contactsTableView;
@@ -25,106 +26,57 @@
 @implementation ContactViewController
 
 - (void)viewDidLoad {
-    self.currentUser = [KAccountManager sharedManager].user;
-    self.tableView = self.contactsTableView;
-    self.sectionCriteria = @[@{@"class" : @"KUser",
-                               @"criteria" : @{}}];
-    self.sortedByProperty = @"username";
-    self.sortDescending   = NO;
     [super viewDidLoad];
+    self.currentUser = [KAccountManager sharedManager].user;
     self.contactTextField.delegate = self;
     
     UITapGestureRecognizer *tapRec = [[UITapGestureRecognizer alloc] initWithTarget:self.view action:@selector(endEditing:)];
     [tapRec setCancelsTouchesInView:NO];
     [self.view addGestureRecognizer:tapRec];
+    
+    DatabaseDataSource *dataSource = [[DatabaseDataSource alloc] initWithSectionData:[self tableData]
+                                                                      cellIdentifier:[self cellIdentifier]
+                                                                           tableView:self.contactsTableView
+                                                                  configureCellBlock:[self configureCellBlock]
+                                                                sectionCriteriaBlock:[self sectionCriteriaBlock]
+                                                                           sortBlock:[self sortBlock]];
+    [dataSource registerForUpdatesFromClasses:@[@"KUser"]];
+    self.contactsTableView.dataSource = dataSource;
 }
 
-- (NSArray *)modifySectionData:(NSArray *)sectionData {
-    NSMutableArray *data = [NSMutableArray arrayWithArray:sectionData];
-    NSMutableArray *newSectionData = [NSMutableArray arrayWithArray:sectionData[0]];
-    for(KUser *user in sectionData[0]) if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) [newSectionData removeObject:user];
-    [newSectionData insertObject:self.currentUser atIndex:0];
-    [data replaceObjectAtIndex:0 withObject:newSectionData];
-    return [data copy];
+- (NSArray *)tableData {
+    return [KUser all];
 }
 
-- (NSInteger)destinationCellIdInSectionId:(NSUInteger)sectionId object:(KDatabaseObject *)object {
-    __block NSInteger newCellId = -1;
-    if(self.sortedByProperty) {
-        [self.sectionData[sectionId] enumerateObjectsUsingBlock:^(id cell, NSUInteger replaceCellId, BOOL *stop) {
-            KDatabaseObject *compareObject = (KDatabaseObject *)cell;
-            if(![compareObject.uniqueId isEqualToString:self.currentUser.uniqueId]) {
-                if(self.sortDescending) {
-                    if([KDatabaseObject compareProperty:self.sortedByProperty object1:object object2:compareObject]) {
-                        newCellId = replaceCellId;
-                        *stop = YES;
-                    }
-                }else {
-                    if(![KDatabaseObject compareProperty:self.sortedByProperty object1:object object2:compareObject]) {
-                        newCellId = replaceCellId;
-                        *stop = YES;
-                    }
-                }
-            }
-        }];
-    }
-    return newCellId;
+- (NSString *)cellIdentifier {
+    return @"Cells";
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 40.0;
+- (NSComparisonResult (^)(KDatabaseObject*, KDatabaseObject*))sortBlock {
+    return ^(KDatabaseObject *object1, KDatabaseObject *object2) {
+        KUser *user1 = (KUser *)object1;
+        KUser *user2 = (KUser *)object2;
+        if([user1.uniqueId isEqualToString:self.currentUser.uniqueId]) {
+            return NSOrderedAscending;
+        }else if([user2.uniqueId isEqualToString:self.currentUser.uniqueId]) {
+            return NSOrderedDescending;
+        }else {
+            return [user1.username compare:user2.username];
+        }
+    };
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [textField becomeFirstResponder];
+- (BOOL (^)(KDatabaseObject*, NSUInteger))sectionCriteriaBlock {
+    return ^(KDatabaseObject *object, NSUInteger sectionId) {
+        return [object isKindOfClass:[KUser class]];
+    };
 }
 
-- (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [self.contactsTableView dequeueReusableCellWithIdentifier:[self cellIdentifier] forIndexPath:indexPath];
-    KUser *user = (KUser *)[self objectForIndexPath:indexPath];
-    if([user.uniqueId isEqualToString:self.currentUser.uniqueId]) cell.textLabel.text = @"Me";
-    else cell.textLabel.text = user.displayName;
-    /*KPost *post = [KPost findByDictionary:@{@"authorId" : user.uniqueId, @"ephemeral" : @NO}];
-    UIImage *preview;
-    if(post) {
-        preview = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];
-    }else {
-        preview = [self whiteImage];
-    }
-    cell.imageView.image = preview;*/
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    return cell;
-}
-
-- (UIImage *)whiteImage {
-    UIImage *image;
-    CGSize size = CGSizeMake(40, 40);
-    UIGraphicsBeginImageContextWithOptions(size, YES, 0);
-    [[UIColor whiteColor] setFill];
-    UIRectFill(CGRectMake(0, 0, size.width, size.height));
-    image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    KUser *user = (KUser *)[self objectForIndexPath:indexPath];
-    if(user) {
-        //[self presentProfileViewControllerForUser:user];
-    }
-}
-
-- (void)presentProfileViewControllerForUser:(KUser *)user {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        ProfileViewController *profileViewController = [[ProfileViewController alloc] initWithNibName:@"ProfileView" bundle:nil];
-        profileViewController.user = user;
-        [self addChildViewController:profileViewController];
-        profileViewController.view.frame = self.view.frame;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.view addSubview:profileViewController.view];
-        });
-        [profileViewController didMoveToParentViewController:self];
-    });
+- (UITableViewCell* (^)(UITableViewCell*, KDatabaseObject*))configureCellBlock {
+    return ^(UITableViewCell *cell, KDatabaseObject *object) {
+        
+        return cell;
+    };
 }
 
 - (IBAction)addContact:(id)sender {
@@ -139,12 +91,6 @@
         }
         self.contactTextField.text = @"";
     }
-}
-
-- (void)dismissProfileViewController:(UIViewController *)controller {
-    [controller willMoveToParentViewController:nil];
-    [controller.view removeFromSuperview];
-    [controller removeFromParentViewController];
 }
 
 @end

@@ -11,7 +11,7 @@
 
 @class KDatabaseObject;
 
-typedef UITableViewCell * (^TableViewCellConfigureBlock)(UITableViewCell *cell, KDatabaseObject *object);
+typedef UITableViewCell * (^ConfigureCellBlock)(UITableViewCell *cell, KDatabaseObject *object);
 typedef BOOL (^SectionCriteriaBlock)(KDatabaseObject *object, NSUInteger sectionId);
 typedef NSComparisonResult (^SortBlock)(KDatabaseObject *object1, KDatabaseObject *object2);
 
@@ -20,10 +20,10 @@ typedef NSComparisonResult (^SortBlock)(KDatabaseObject *object1, KDatabaseObjec
 - (instancetype)initWithSectionData:(NSArray *)sectionData
                      cellIdentifier:(NSString *)cellIdentifier
                           tableView:(UITableView *)tableView
-                 configureCellBlock:(TableViewCellConfigureBlock)configureCellBlock
+                 configureCellBlock:(ConfigureCellBlock)configureCellBlock
                sectionCriteriaBlock:(SectionCriteriaBlock)sectionCriteriaBlock
                           sortBlock:(SortBlock)sortBlock;
 
-- (void)databaseNotification:(NSNotification *)notification;
+- (void)registerForUpdatesFromClasses:(NSArray *)classNames;
 
 @end

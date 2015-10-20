@@ -47,7 +47,6 @@
 		EF8358261AE02AED00B631AB /* ShareView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF8358251AE02AED00B631AB /* ShareView.xib */; };
 		EF8358281AE02B0F00B631AB /* SocialView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF8358271AE02B0F00B631AB /* SocialView.xib */; };
 		EF855DD51B64644F006DEAE8 /* KeyExchange.m in Sources */ = {isa = PBXBuildFile; fileRef = EF855DD41B64644F006DEAE8 /* KeyExchange.m */; };
-		EF855DD71B65656F006DEAE8 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EF855DD61B65656F006DEAE8 /* Info.plist */; };
 		EF855DDB1B66A68D006DEAE8 /* QRReadRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF855DDA1B66A68D006DEAE8 /* QRReadRequest.m */; };
 		EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EF973FA41A7E8F5200D92A9E /* KAccountManager.m */; };
 		EF99E2701AC612EC002583E2 /* GetKeyExchangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = EF99E26F1AC612EC002583E2 /* GetKeyExchangeRequest.m */; };
@@ -56,6 +55,10 @@
 		EFB0F53D1BB56BDA004A79BD /* UIAlertController+Orientation.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB0F53C1BB56BDA004A79BD /* UIAlertController+Orientation.m */; };
 		EFB0F5411BBAF3CB004A79BD /* DatabaseDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB0F5401BBAF3CB004A79BD /* DatabaseDataSource.m */; };
 		EFB0F5441BBB05EE004A79BD /* DatabaseDataSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB0F5431BBB05EE004A79BD /* DatabaseDataSourceTests.m */; };
+		EFB0F5471BC433EB004A79BD /* KTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB0F5461BC433EB004A79BD /* KTableViewController.m */; };
+		EFB0F54A1BC75B7F004A79BD /* ConfirmationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB0F5491BC75B7F004A79BD /* ConfirmationViewController.m */; };
+		EFB0F54C1BC75BA8004A79BD /* ConfirmationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EFB0F54B1BC75BA8004A79BD /* ConfirmationView.xib */; };
+		EFB0F5521BC75CBC004A79BD /* amazon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EFB0F5511BC75CBC004A79BD /* amazon.jpg */; };
 		EFB225EF1B48853800D7E44B /* SelectRecipientViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = EFE5667A1AF1883E00FB1142 /* SelectRecipientViewController.h */; };
 		EFB225F21B48C4EF00D7E44B /* MediaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225F11B48C4EF00D7E44B /* MediaViewController.m */; };
 		EFB225F51B4984F200D7E44B /* KPhoto+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB225F41B4984F200D7E44B /* KPhoto+Serialize.m */; };
@@ -243,6 +246,12 @@
 		EFB0F53F1BBAF3CB004A79BD /* DatabaseDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DatabaseDataSource.h; path = Classes/DatabaseDataSource.h; sourceTree = "<group>"; };
 		EFB0F5401BBAF3CB004A79BD /* DatabaseDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DatabaseDataSource.m; path = Classes/DatabaseDataSource.m; sourceTree = "<group>"; };
 		EFB0F5431BBB05EE004A79BD /* DatabaseDataSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DatabaseDataSourceTests.m; path = ControllerTests/DatabaseDataSourceTests.m; sourceTree = "<group>"; };
+		EFB0F5451BC433EB004A79BD /* KTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KTableViewController.h; path = Classes/KTableViewController.h; sourceTree = "<group>"; };
+		EFB0F5461BC433EB004A79BD /* KTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KTableViewController.m; path = Classes/KTableViewController.m; sourceTree = "<group>"; };
+		EFB0F5481BC75B7F004A79BD /* ConfirmationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmationViewController.h; sourceTree = "<group>"; };
+		EFB0F5491BC75B7F004A79BD /* ConfirmationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmationViewController.m; sourceTree = "<group>"; };
+		EFB0F54B1BC75BA8004A79BD /* ConfirmationView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ConfirmationView.xib; path = Views/ConfirmationView.xib; sourceTree = "<group>"; };
+		EFB0F5511BC75CBC004A79BD /* amazon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = amazon.jpg; path = Key/Resources/Images/amazon.jpg; sourceTree = "<group>"; };
 		EFB225F01B48C4EF00D7E44B /* MediaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaViewController.h; sourceTree = "<group>"; };
 		EFB225F11B48C4EF00D7E44B /* MediaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaViewController.m; sourceTree = "<group>"; };
 		EFB225F31B4984F200D7E44B /* KPhoto+Serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "KPhoto+Serialize.h"; path = "Network/Serializers/KPhoto+Serialize.h"; sourceTree = "<group>"; };
@@ -442,16 +451,17 @@
 		EF4920701AD6973F00A9FE89 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EFB0F54B1BC75BA8004A79BD /* ConfirmationView.xib */,
+				EFE43D451B5837060092CAC5 /* ContactView.xib */,
+				EFE43D3D1B580F670092CAC5 /* ContentView.xib */,
+				EFB722721B42360300E6DF7A /* EditMediaView.xib */,
 				EF8358231AE02AD800B631AB /* InboxView.xib */,
+				EFABC0271B39BEA50062B807 /* MediaView.xib */,
+				EFEF483F1B7D9FA400E77113 /* ProfileView.xib */,
+				EFB7227E1B44324E00E6DF7A /* SelectRecipientsView.xib */,
 				EF8358251AE02AED00B631AB /* ShareView.xib */,
 				EF8358271AE02B0F00B631AB /* SocialView.xib */,
-				EFABC0271B39BEA50062B807 /* MediaView.xib */,
-				EFB722721B42360300E6DF7A /* EditMediaView.xib */,
-				EFB7227E1B44324E00E6DF7A /* SelectRecipientsView.xib */,
 				EFB4A2A61B5211580042F3DF /* ThreadView.xib */,
-				EFE43D3D1B580F670092CAC5 /* ContentView.xib */,
-				EFE43D451B5837060092CAC5 /* ContactView.xib */,
-				EFEF483F1B7D9FA400E77113 /* ProfileView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -736,6 +746,7 @@
 		EFCE58581B725EA200B39E39 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				EFB0F5511BC75CBC004A79BD /* amazon.jpg */,
 				EFF203451B98C4DE00487F7C /* beach.jpg */,
 				EFF203431B98C42C00487F7C /* stowe.jpg */,
 				EFCE58591B725EFF00B39E39 /* orwell.jpg */,
@@ -877,9 +888,11 @@
 		EFF70AB01AAE1CBC006C10D2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				EFB0F53E1BBAF3A2004A79BD /* Classes */,
 				EFEF48321B7D39DF00E77113 /* Cells */,
+				EFB0F53E1BBAF3A2004A79BD /* Classes */,
 				EF9A744D1B52B60D009689A7 /* Protocols */,
+				EFB0F5481BC75B7F004A79BD /* ConfirmationViewController.h */,
+				EFB0F5491BC75B7F004A79BD /* ConfirmationViewController.m */,
 				EF6B44A61ABA2F8A00B88323 /* ContactViewController.h */,
 				EF6B44A71ABA2F8A00B88323 /* ContactViewController.m */,
 				EFE43D421B581C840092CAC5 /* ContentTabBar.h */,
@@ -896,6 +909,8 @@
 				EF0F4DC31ABA19DE00BB2AFC /* HomeViewController.m */,
 				EF3D09E11AE036EB0044E9F6 /* InboxViewController.h */,
 				EF3D09E21AE036EB0044E9F6 /* InboxViewController.m */,
+				EFB0F5451BC433EB004A79BD /* KTableViewController.h */,
+				EFB0F5461BC433EB004A79BD /* KTableViewController.m */,
 				EFF70AB71AAE1CBC006C10D2 /* LoginViewController.h */,
 				EFF70AB81AAE1CBC006C10D2 /* LoginViewController.m */,
 				EFB225F01B48C4EF00D7E44B /* MediaViewController.h */,
@@ -964,7 +979,7 @@
 		EFC6BE951A6857D400B0EB8F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Brendan Farmer";
 				TargetAttributes = {
 					EFC6BE9C1A6857D400B0EB8F = {
@@ -1004,6 +1019,7 @@
 				EFC6BEAC1A6857D400B0EB8F /* Main.storyboard in Resources */,
 				EFB7227F1B44324E00E6DF7A /* SelectRecipientsView.xib in Resources */,
 				EF8358281AE02B0F00B631AB /* SocialView.xib in Resources */,
+				EFB0F5521BC75CBC004A79BD /* amazon.jpg in Resources */,
 				EFE43D3E1B580F670092CAC5 /* ContentView.xib in Resources */,
 				EFE43D461B5837060092CAC5 /* ContactView.xib in Resources */,
 				EFC6BEB11A6857D500B0EB8F /* LaunchScreen.xib in Resources */,
@@ -1012,6 +1028,7 @@
 				EFB722731B42360300E6DF7A /* EditMediaView.xib in Resources */,
 				EFF203461B98C4DE00487F7C /* beach.jpg in Resources */,
 				EFC6BEC71A6857E000B0EB8F /* Podfile in Resources */,
+				EFB0F54C1BC75BA8004A79BD /* ConfirmationView.xib in Resources */,
 				EFC6BEAE1A6857D500B0EB8F /* Images.xcassets in Resources */,
 				EFCE585A1B725EFF00B39E39 /* orwell.jpg in Resources */,
 				EF8358241AE02AD800B631AB /* InboxView.xib in Resources */,
@@ -1026,7 +1043,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EF855DD71B65656F006DEAE8 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1143,6 +1159,7 @@
 				EFB722711B41A25700E6DF7A /* EditMediaViewController.m in Sources */,
 				EFC6BEA61A6857D400B0EB8F /* AppDelegate.m in Sources */,
 				EFC181A11AC3715B00BE8B0B /* UpdateUserRequest.m in Sources */,
+				EFB0F54A1BC75B7F004A79BD /* ConfirmationViewController.m in Sources */,
 				EFB0F5411BBAF3CB004A79BD /* DatabaseDataSource.m in Sources */,
 				EFF70A931AAE19C3006C10D2 /* PreKeyExchangeReceipt.m in Sources */,
 				EF973FA51A7E8F5200D92A9E /* KAccountManager.m in Sources */,
@@ -1159,6 +1176,7 @@
 				EFC181AD1AC372F500BE8B0B /* GetUserRequest.m in Sources */,
 				EFC6BEA31A6857D400B0EB8F /* main.m in Sources */,
 				EF4920A11AD761F700A9FE89 /* UIImage+Messages.m in Sources */,
+				EFB0F5471BC433EB004A79BD /* KTableViewController.m in Sources */,
 				EFB226091B4D6E2E00D7E44B /* NSString+PropertyKVC.m in Sources */,
 				EFB2260C1B4F125B00D7E44B /* KStorageSchema.m in Sources */,
 				EFDDD9B21B59560600089124 /* AttachmentKey.m in Sources */,

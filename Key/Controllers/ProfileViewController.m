@@ -26,10 +26,6 @@
 
 - (void)viewDidLoad {
     self.tableView = self.postsTableView;
-    self.sectionCriteria = @[@{@"class" : @"KPost",
-                               @"criteria" : @{@"authorId" : self.user.uniqueId, @"ephemeral" : @NO, @"attachmentCount" : [NSNumber numberWithInteger:0]}}];
-    self.sortedByProperty = @"createdAt";
-    self.sortDescending   = YES;
     [super viewDidLoad];
     self.usernameLabel.text = self.user.username;
 }
@@ -40,19 +36,20 @@
 #pragma mark - Table view data source
 
 - (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    KPost *post = (KPost *)[self objectForIndexPath:indexPath];
-    SubtitleTableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:[self cellIdentifier] forIndexPath:indexPath];
-    
+    SubtitleTableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:@"Cells" forIndexPath:indexPath];
+    /*
     cell.imageView.image = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];
     cell.textLabel.text = [NSString stringWithFormat:@"%@", post.displayDate];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     NSArray *locations = [post attachmentsOfType:NSStringFromClass([KLocation class])];
     if(locations.count > 0) cell.detailTextLabel.text = ((KLocation *)locations.firstObject).shortAddress;
+    */
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+    /*
     KPost *post = (KPost *)[self objectForIndexPath:indexPath];
     if(post) {
         MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
@@ -60,10 +57,11 @@
         dispatch_async(dispatch_get_main_queue(), ^{});
         [self presentViewController:mediaViewController animated:NO completion:nil];
     }
+    */
 }
 
 - (IBAction)clickDone:(id)sender {
-    [(ContactViewController *)self.parentViewController dismissProfileViewController:self];
+    //[(ContactViewController *)self.parentViewController dismissProfileViewController:self];
 }
 
 

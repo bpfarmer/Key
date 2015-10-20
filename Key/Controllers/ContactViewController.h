@@ -11,6 +11,4 @@
 
 @interface ContactViewController : KTableViewController
 
-- (void)dismissProfileViewController:(UIViewController *)controller;
-
 @end

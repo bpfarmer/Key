@@ -20,6 +20,7 @@
 #import "SelectRecipientViewController.h"
 #import "KDevice.h"
 #import "SubtitleTableViewCell.h"
+#import "DatabaseDataSource.h"
 
 @interface InboxViewController ()
 @property (nonatomic, strong) IBOutlet UITableView *threadsTableView;
@@ -28,15 +29,56 @@
 @implementation InboxViewController
 
 - (void)viewDidLoad {
-    self.tableView = self.threadsTableView;
-    self.sectionCriteria = @[@{@"class" : @"KThread",
-                               @"criteria" : @{}}];
-    self.sortedByProperty = @"updatedAt";
-    self.sortDescending = YES;
     [super viewDidLoad];
     [UIView setAnimationsEnabled:NO];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    DatabaseDataSource *dataSource = [[DatabaseDataSource alloc] initWithSectionData:[self tableData]
+                                                                      cellIdentifier:[self cellIdentifier]
+                                                                           tableView:self.threadsTableView
+                                                                  configureCellBlock:[self configureCellBlock]
+                                                                sectionCriteriaBlock:[self sectionCriteriaBlock]
+                                                                           sortBlock:[self sortBlock]];
+    [dataSource registerForUpdatesFromClasses:@[@"KUser"]];
+    self.threadsTableView.dataSource = dataSource;
+}
+
+- (NSArray *)tableData {
+    return [KThread all];
+}
+
+- (NSString *)cellIdentifier {
+    return @"Threads";
+}
+
+- (NSComparisonResult (^)(KDatabaseObject*, KDatabaseObject*))sortBlock {
+    return ^(KDatabaseObject *object1, KDatabaseObject *object2) {
+        KThread *thread1 = (KThread *)object1;
+        KThread *thread2 = (KThread *)object2;
+        if(!thread1.read) {
+            return NSOrderedAscending;
+        }else if(!thread2.read) {
+            return NSOrderedDescending;
+        }else {
+            return [thread1.updatedAt compare:thread2.updatedAt];
+        }
+    };
+}
+
+- (BOOL (^)(KDatabaseObject*, NSUInteger))sectionCriteriaBlock {
+    return ^(KDatabaseObject *object, NSUInteger sectionId) {
+        return [object isKindOfClass:[KThread class]];
+    };
+}
+
+- (UITableViewCell* (^)(UITableViewCell*, KDatabaseObject*))configureCellBlock {
+    return ^(UITableViewCell *cell, KDatabaseObject *object) {
+        return cell;
+    };
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 60.0;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -57,16 +99,6 @@
     [self.homeViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SubtitleTableViewCell *cell = [self.threadsTableView dequeueReusableCellWithIdentifier:[self cellIdentifier] forIndexPath:indexPath];
-    KThread *thread = (KThread *)[self objectForIndexPath:indexPath];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", thread.displayName];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", thread.latestMessageText];
-    if(!thread.read) [cell addUnreadImage];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    return cell;
-}
-
 - (IBAction)logout:(id)sender {
     [[KAccountManager sharedManager] setUser:nil];
     [[KStorageManager sharedManager] resignDatabase];
@@ -78,15 +110,11 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    KThread *thread = (KThread *)[self objectForIndexPath:indexPath];
+    KThread *thread = (KThread *)[KThread new];
     if(thread) {
         self.homeViewController.selectedThread = thread;
         [self.homeViewController performSegueWithIdentifier:kThreadSeguePush sender:self];
     }
-}
-
-- (NSString *)cellIdentifier {
-    return @"Messages";
 }
 
 - (HomeViewController *)homeViewController {

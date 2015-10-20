@@ -12,6 +12,6 @@
 
 @interface QRReadRequest : HttpRequest
 
-+ (TOCFuture *)makeRequest;
++ (TOCFuture *)makeRequestWithParameters:(NSDictionary *)parameters;
 
 @end

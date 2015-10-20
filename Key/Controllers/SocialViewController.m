@@ -15,6 +15,7 @@
 #import "HomeViewController.h"
 #import "MediaViewController.h"
 #import "SubtitleTableViewCell.h"
+#import "DatabaseDataSource.h"
 
 @interface SocialViewController () <UITextViewDelegate>
 @property (nonatomic, strong) IBOutlet UITableView *postsTableView;
@@ -23,41 +24,66 @@
 @implementation SocialViewController
 
 - (void)viewDidLoad {
-    self.tableView = self.postsTableView;
-    NSString *where = @"ephemeral = 0 and (read_at > :yesterday or read_at is null) order by read_at asc, created_at asc";
-    self.sectionCriteria = @[@{@"class" : @"KPost", @"where" : where, @"parameters" : @{@"yesterday" : [NSNumber numberWithDouble:[[NSDate dateWithTimeIntervalSinceNow:(-60*60*24)] timeIntervalSinceReferenceDate]]}}];
-    self.sortedByProperty = @"readAt";
-    self.sortDescending   = NO;
     [super viewDidLoad];
-    
     self.currentUser = [KAccountManager sharedManager].user;
+    DatabaseDataSource *dataSource = [[DatabaseDataSource alloc] initWithSectionData:[self tableData]
+                                                                      cellIdentifier:[self cellIdentifier]
+                                                                           tableView:self.postsTableView
+                                                                  configureCellBlock:[self configureCellBlock]
+                                                                sectionCriteriaBlock:[self sectionCriteriaBlock]
+                                                                           sortBlock:[self sortBlock]];
+    [dataSource registerForUpdatesFromClasses:@[@"KUser"]];
+    self.postsTableView.dataSource = dataSource;
+}
+
+- (NSArray *)tableData {
+    return [KPost findAllWhere:@"ephemeral = 0 and (read_at > :yesterday or read_at is null)" parameters:@{@"yesterday" : [NSNumber numberWithDouble:[[NSDate dateWithTimeIntervalSinceNow:(-60*60*24)] timeIntervalSinceReferenceDate]]}];
+}
+
+- (NSString *)cellIdentifier {
+    return @"Posts";
+}
+
+- (NSComparisonResult (^)(KDatabaseObject*, KDatabaseObject*))sortBlock {
+    return ^(KDatabaseObject *object1, KDatabaseObject *object2) {
+        KPost *post1 = (KPost *)object1;
+        KPost *post2 = (KPost *)object2;
+        if(post1.readAt && !post2.readAt) {
+            return NSOrderedDescending;
+        }else if(!post1.readAt && post2.readAt) {
+            return NSOrderedAscending;
+        }else {
+            return [post1.createdAt compare:post2.createdAt];
+        }
+    };
+}
+
+- (BOOL (^)(KDatabaseObject*, NSUInteger))sectionCriteriaBlock {
+    return ^(KDatabaseObject *object, NSUInteger sectionId) {
+        KPost *post = (KPost *)object;
+        return post.ephemeral;
+    };
+}
+
+- (UITableViewCell* (^)(UITableViewCell*, KDatabaseObject*))configureCellBlock {
+    return ^(UITableViewCell *cell, KDatabaseObject *object) {
+        KPost *post = (KPost *)object;
+        cell.textLabel.text  = [NSString stringWithFormat:@"%@", post.author.username];
+        cell.imageView.image = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", post.displayDate];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+        return cell;
+    };
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
-- (BOOL)object:(KDatabaseObject *)object matchesCriteriaforSection:(NSUInteger)sectionId {
-    if(![object isKindOfClass:[KPost class]]) return NO;
-    KPost *post = (KPost *)object;
-    if(post.ephemeral) return NO;
-    return YES;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)sender cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    KPost *post = (KPost *)[self objectForIndexPath:indexPath];
-    SubtitleTableViewCell *cell = [self.postsTableView dequeueReusableCellWithIdentifier:[self cellIdentifier] forIndexPath:indexPath];
-    
-    cell.textLabel.text  = [NSString stringWithFormat:@"%@", post.author.username];
-    cell.imageView.image = [KPost imageWithImage:[UIImage imageWithData:post.previewImage] scaledToFillSize:CGSizeMake(40, 40)];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", post.displayDate];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    return cell;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    dispatch_async([self.class sharedQueue], ^{
-        KPost *post = (KPost *)[self objectForIndexPath:indexPath];
+    //dispatch_async([self.class sharedQueue], ^{
+        KPost *post = [KPost new];
         if(post) {
             MediaViewController *mediaViewController = [[MediaViewController alloc] initWithNibName:@"MediaView" bundle:nil];
             mediaViewController.post = post;
@@ -65,11 +91,7 @@
                 [self.parentViewController presentViewController:mediaViewController animated:NO completion:nil];
             });
         }
-    });
-}
-
-- (NSString *)cellIdentifier {
-    return @"SocialPosts";
+    //});
 }
 
 
