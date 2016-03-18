@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContentViewController">
+            <connections>
+                <outlet property="contentTC" destination="ebZ-3O-ajF" id="4Jr-C0-gGi"/>
+                <outlet property="view" destination="Qrn-CU-eK9" id="6tE-26-hgZ"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tabBarController id="ebZ-3O-ajF" customClass="ContentTabBarController">
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <tabBar key="tabBar" contentMode="scaleToFill" id="Oho-3a-ovV" customClass="ContentTabBar">
+                <rect key="frame" x="0.0" y="519" width="320" height="49"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </tabBar>
+            <viewControllers>
+                <viewController id="AhU-sv-CJq">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wYO-aI-Zcm"/>
+                        <viewControllerLayoutGuide type="bottom" id="BaB-Jw-lHs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5r1-8B-k8t">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item 1" id="Jte-ek-9Wm"/>
+                </viewController>
+                <viewController id="fpZ-Vd-Ig4">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6BO-ej-LbF"/>
+                        <viewControllerLayoutGuide type="bottom" id="Q4M-fR-Hbd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="eaW-eU-UWP">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Item 2" id="xyK-Yd-LWz"/>
+                </viewController>
+            </viewControllers>
+            <point key="canvasLocation" x="621" y="354"/>
+        </tabBarController>
+        <view contentMode="scaleToFill" id="Qrn-CU-eK9">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
+            <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
+            <point key="canvasLocation" x="1120" y="354"/>
+        </view>
+    </objects>
+</document>

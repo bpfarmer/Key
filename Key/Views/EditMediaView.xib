@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditMediaViewController">
+            <connections>
+                <outlet property="locationButton" destination="rUL-pV-58l" id="vqN-6n-ZU0"/>
+                <outlet property="mediaView" destination="mQa-im-KYz" id="bxq-Ix-DZE"/>
+                <outlet property="overlayView" destination="UU9-b6-HId" id="Vvn-ya-WoJ"/>
+                <outlet property="view" destination="iN0-l3-epB" id="aNM-py-efD"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mQa-im-KYz">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="mQa-im-KYz" secondAttribute="bottom" id="E08-Fx-SiS"/>
+                <constraint firstItem="mQa-im-KYz" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="N50-My-g0v"/>
+                <constraint firstItem="mQa-im-KYz" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="of9-wi-BhC"/>
+                <constraint firstAttribute="trailing" secondItem="mQa-im-KYz" secondAttribute="trailing" id="teZ-iG-kUF"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
+            <point key="canvasLocation" x="197" y="253"/>
+        </view>
+        <view contentMode="scaleToFill" id="UU9-b6-HId">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rUL-pV-58l">
+                    <rect key="frame" x="8" y="530" width="84" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="84" id="Qfk-ET-OvG"/>
+                    </constraints>
+                    <state key="normal" title="Location On">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="didPressLocation:" destination="-1" eventType="touchUpInside" id="Pwa-S5-K60"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fzV-72-KEt">
+                    <rect key="frame" x="8" y="8" width="48" height="30"/>
+                    <state key="normal" title="Cancel">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="didPressCancel:" destination="-1" eventType="touchUpInside" id="n7x-Eh-tf8"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p4U-24-NTX">
+                    <rect key="frame" x="280" y="530" width="32" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="32" id="BYH-cB-VYS"/>
+                    </constraints>
+                    <state key="normal" title="Post">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="didPressPost:" destination="-1" eventType="touchUpInside" id="r8F-Oe-gWG"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="rUL-pV-58l" secondAttribute="bottom" constant="8" id="47s-fD-Rx8"/>
+                <constraint firstItem="rUL-pV-58l" firstAttribute="leading" secondItem="UU9-b6-HId" secondAttribute="leading" constant="8" id="G2g-fJ-bpJ"/>
+                <constraint firstAttribute="trailing" secondItem="p4U-24-NTX" secondAttribute="trailing" constant="8" id="LRb-Pv-rsk"/>
+                <constraint firstAttribute="bottom" secondItem="p4U-24-NTX" secondAttribute="bottom" constant="8" id="lgy-mh-ee0"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
+            <point key="canvasLocation" x="617" y="253"/>
+        </view>
+    </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
