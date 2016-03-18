@@ -1,7 +1,7 @@
 ##key : share freely##
 
 ####About Key####
-Key is a communication app designed to offer strong encryption, forward secrecy, replay protection, deniability, self-healing, and relies on:
+Key is a communication app designed to offer strong encryption, forward secrecy, replay protection, and deniability.
 
 - X25519 for Public/Private Key generation
 - X25519 for DHE
