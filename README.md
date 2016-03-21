@@ -8,7 +8,7 @@ Key is a communication app designed to offer strong encryption, forward secrecy,
 - Signed Ephemeral PreKeys
 - Ed25519 for signatures
 - HMAC for message authentication
-- AES-256 CBC for encryption
+- AES-256 AEAD for encryption
 
 ####Running Locally####
 
