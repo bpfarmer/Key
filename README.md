@@ -3,6 +3,8 @@
 ####About Key####
 Key is a communication app designed to offer strong encryption, forward secrecy, replay protection, and deniability.
 
+Based on OTR/Axolotl by Open Whisper Systems.
+
 - X25519 for Public/Private Key generation
 - X25519 for DHE
 - Signed Ephemeral PreKeys
